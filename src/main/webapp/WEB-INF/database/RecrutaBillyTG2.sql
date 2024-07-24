@@ -102,6 +102,17 @@ FOREIGN KEY (codigoPedido) REFERENCES pedido (codigo),
 FOREIGN KEY (codigoProduto) REFERENCES produto (codigo)
 )
 GO
+CREATE TABLE despesa(
+codigo			INT				NOT NULL,
+nome			VARCHAR(200)	NOT NULL,
+tipo			VARCHAR(50)		NOT NULL,
+dataInicio		DATE			NOT NULL,
+dataVencimento	DATE			NOT NULL,
+valor			DECIMAL(12,2)	NOT NULL,
+estado			VARCHAR(50)		NOT NULL
+PRIMARY KEY(codigo)
+)
+GO
 -- Insert Usuario de Teste
 INSERT INTO usuario (CPF,nome, nivelAcesso, senha, email) VALUES 
 ('25525320045','Administrador', 'admin', 'admin', 'admin'),
