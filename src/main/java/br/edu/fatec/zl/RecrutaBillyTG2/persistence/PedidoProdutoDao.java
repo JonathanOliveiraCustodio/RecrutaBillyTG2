@@ -55,7 +55,7 @@ public class PedidoProdutoDao implements IPedidoProduto{
 	}
 
 	@Override
-	public List<PedidoProduto> listar(Pedido p) throws SQLException, ClassNotFoundException {
+	public List<PedidoProduto> findAll(Pedido p) throws SQLException, ClassNotFoundException {
 		List<PedidoProduto> pedidoProdutos = new ArrayList<>();
 		Connection c = gDao.getConnection();
 		String sql = "SELECT * FROM v_pedido_produto WHERE codigo_pedido = ?";
@@ -82,8 +82,4 @@ public class PedidoProdutoDao implements IPedidoProduto{
 		return pedidoProdutos;
 	}
 
-	@Override
-	public Produto consultar(Produto p) throws SQLException, ClassNotFoundException {
-		return null;
-	}
 }

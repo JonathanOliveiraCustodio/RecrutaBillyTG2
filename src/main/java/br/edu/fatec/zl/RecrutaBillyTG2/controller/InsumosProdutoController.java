@@ -174,17 +174,17 @@ public class InsumosProdutoController {
 	}
 	
 	private List<Insumo> listarInsumos() throws SQLException, ClassNotFoundException {
-		List<Insumo> insumos = iDao.listar();
+		List<Insumo> insumos = iDao.findAll();
 		return insumos;
 	}
 
 	private Insumo buscarInsumo(Insumo i) throws SQLException, ClassNotFoundException {
-		i = iDao.consultar(i);
+		i = iDao.findBy(i);
 		return i;
 	}
 	
 	private Produto buscarProduto(Produto p) throws SQLException, ClassNotFoundException {
-		p = pDao.consultar(p);
+		p = pDao.findBy(p);
 		return p;
 	}
 

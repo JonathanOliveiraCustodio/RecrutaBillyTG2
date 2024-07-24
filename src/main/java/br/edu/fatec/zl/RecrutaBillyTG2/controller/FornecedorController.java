@@ -162,12 +162,12 @@ public class FornecedorController {
 	}
 
 	private Fornecedor buscarFornecedor(Fornecedor f) throws SQLException, ClassNotFoundException {
-		f = fDao.consultar(f);
+		f = fDao.findBy(f);
 		return f;
 	}
 
 	private List<Fornecedor> listarFornecedores() throws SQLException, ClassNotFoundException {
-		List<Fornecedor> fornecedores = fDao.listar();
+		List<Fornecedor> fornecedores = fDao.findAll();
 		return fornecedores;
 	}
 

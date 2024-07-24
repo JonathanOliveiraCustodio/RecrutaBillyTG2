@@ -47,7 +47,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	}
 
 	@Override
-	public Produto consultar(Produto p) throws SQLException, ClassNotFoundException {
+	public Produto findBy(Produto p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "SELECT * FROM fn_consultar_produto(?)";
 		PreparedStatement ps = c.prepareStatement(sql.toString());
@@ -72,7 +72,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	}
 
 	@Override
-	public List<Produto> listar() throws SQLException, ClassNotFoundException {
+	public List<Produto> findAll() throws SQLException, ClassNotFoundException {
 
 		List<Produto> produtos = new ArrayList<>();
 		Connection c = gDao.getConnection();

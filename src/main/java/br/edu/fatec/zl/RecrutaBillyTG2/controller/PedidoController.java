@@ -49,7 +49,7 @@ public class PedidoController {
 		List<Pedido> pedidos = new ArrayList<>();
 		try {
 			//p = null;
-			clientes = cDao.listar();
+			clientes = cDao.findAll();
 
 			if (cmd != null) {
 				p.setCodigo(Integer.parseInt(codigo));
@@ -105,10 +105,10 @@ public class PedidoController {
 			p.setCodigo(Integer.parseInt(codigo));
 		}
 		try {
-			clientes = cDao.listar();
+			clientes = cDao.findAll();
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 				c.setCodigo(Integer.parseInt(cliente));
-				c = cDao.consultar(c);
+				c = cDao.findBy(c);
 				p.setCliente(c);
 				p.setCodigo(Integer.parseInt(codigo));
 				p.setNome(nome);
@@ -139,9 +139,10 @@ public class PedidoController {
 			}
 			if (cmd.contains("Finalizar Pedido")) {
 				c.setCodigo(Integer.parseInt(cliente));
-				c = cDao.consultar(c);
+				c = cDao.findBy(c);
 				p.setCliente(c);
 				saida = finalizarPedido(p);
+				p = null;
 			}
 			if (cmd.contains("Adicionar")) {
 				p = buscarPedido(p);
@@ -187,13 +188,13 @@ public class PedidoController {
 	}
 
 	private Pedido buscarPedido(Pedido p) throws ClassNotFoundException, SQLException {
-		p = pDao.consultar(p);
+		p = pDao.findBy(p);
 		return p;
 	}
 
 	private List<Pedido> listarPedidos() throws ClassNotFoundException, SQLException {
 		List<Pedido> pedidos = new ArrayList<>();
-		pedidos = pDao.listar();
+		pedidos = pDao.findAll();
 		return pedidos;
 
 	}

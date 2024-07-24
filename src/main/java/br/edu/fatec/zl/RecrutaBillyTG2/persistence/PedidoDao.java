@@ -43,7 +43,7 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 	}
 	
 	@Override
-	public Pedido consultar(Pedido p) throws SQLException, ClassNotFoundException {
+	public Pedido findBy(Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "SELECT * FROM v_pedidos WHERE codigo_pedido = ?";
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -73,7 +73,7 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 	}
 
 	@Override
-	public List<Pedido> listar() throws SQLException, ClassNotFoundException {
+	public List<Pedido> findAll() throws SQLException, ClassNotFoundException {
 		List<Pedido> pedidos = new ArrayList<>();
 		Connection c = gDao.getConnection();
 		String sql = "SELECT * FROM v_pedidos";

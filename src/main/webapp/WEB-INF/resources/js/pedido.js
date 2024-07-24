@@ -10,7 +10,7 @@ function validarBusca() {
 	}
 
 	function editarPedido(codigo) {
-		window.location.href = 'pedido?cmd=alterar&codigopedido=' + codigo;
+		window.location.href = 'pedido?cmd=alterar&codigo=' + codigo;
 	}
 
 	function excluirPedido(codigo) {

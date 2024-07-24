@@ -161,13 +161,13 @@ public class EquipamentoController {
 	}
 
 	private Equipamento buscarEquipamento(Equipamento e) throws SQLException, ClassNotFoundException {
-		e = eDao.consultar(e);
+		e = eDao.findBy(e);
 		return e;
 
 	}
 
 	private List<Equipamento> listarEquipamentos() throws SQLException, ClassNotFoundException {
-		List<Equipamento> equipamentos = eDao.listar();
+		List<Equipamento> equipamentos = eDao.findAll();
 		return equipamentos;
 	}
 

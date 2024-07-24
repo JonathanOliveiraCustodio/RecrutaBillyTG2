@@ -160,14 +160,14 @@ public class UsuarioController {
 	}
 
 	private Usuario buscarUsuario(Usuario u) throws ClassNotFoundException, SQLException {
-		u = uDao.consultar(u);
+		u = uDao.findBy(u);
 		return u;
 		
 	}
 
 	private List<Usuario> listarUsuarios() throws ClassNotFoundException, SQLException {
 		List<Usuario> usuarios = new ArrayList<>();
-		usuarios = uDao.listar();
+		usuarios = uDao.findAll();
 		return usuarios;
 	}
 }

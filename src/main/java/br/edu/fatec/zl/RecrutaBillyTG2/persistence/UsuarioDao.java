@@ -22,7 +22,7 @@ public class UsuarioDao implements ICrud<Usuario> {
 	}
 
 	@Override
-	public Usuario consultar(Usuario u) throws SQLException, ClassNotFoundException {
+	public Usuario findBy(Usuario u) throws SQLException, ClassNotFoundException {
 		String sql = "SELECT * FROM fn_listar_usuario_cpf(?)";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -49,7 +49,7 @@ public class UsuarioDao implements ICrud<Usuario> {
 	}
 
 	@Override
-	public List<Usuario> listar() throws SQLException, ClassNotFoundException {
+	public List<Usuario> findAll() throws SQLException, ClassNotFoundException {
 		List<Usuario> usuarios = new ArrayList<>();
 		String sql = "SELECT * FROM v_usuario";
 		Connection c = gDao.getConnection();

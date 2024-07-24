@@ -171,13 +171,13 @@ public class ProdutoController {
 	}
 
 	private Produto buscarProduto(Produto p) throws SQLException, ClassNotFoundException {
-		p = pDao.consultar(p);
+		p = pDao.findBy(p);
 		return p;
 
 	}
 
 	private List<Produto> listarProdutos() throws SQLException, ClassNotFoundException {
-		List<Produto> produtos = pDao.listar();
+		List<Produto> produtos = pDao.findAll();
 		return produtos;
 	}
 

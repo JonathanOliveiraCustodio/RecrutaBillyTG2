@@ -91,7 +91,7 @@ public class ClienteController {
 		String complemento = allRequestParam.get("complemento");
 		String numero = allRequestParam.get("numero");
 		String dataNascimento = allRequestParam.get("dataNascimento");
-		
+
 		// Parâmetros de saída
 		String saida = "";
 		String erro = "";
@@ -132,7 +132,7 @@ public class ClienteController {
 				c = null;
 			}
 			if (cmd.contains("Excluir")) {
-	          // Buscar um Cliente antes de Excluir para realizar a Validação
+				// Buscar um Cliente antes de Excluir para realizar a Validação
 				Cliente cli = buscarCliente(c);
 				if (cli != null) {
 					saida = excluirCliente(c);
@@ -177,14 +177,14 @@ public class ClienteController {
 	}
 
 	private Cliente buscarCliente(Cliente c) throws ClassNotFoundException, SQLException {
-		c = cDao.consultar(c);
+		c = cDao.findBy(c);
 		return c;
 
 	}
 
 	private List<Cliente> listarClientes() throws ClassNotFoundException, SQLException {
 		List<Cliente> clientes = new ArrayList<>();
-		clientes = cDao.listar();
+		clientes = cDao.findAll();
 		return clientes;
 	}
 }

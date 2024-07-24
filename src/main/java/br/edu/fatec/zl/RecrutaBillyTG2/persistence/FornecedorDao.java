@@ -24,7 +24,7 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 	}
 
 	@Override
-	public Fornecedor consultar(Fornecedor f) throws SQLException, ClassNotFoundException {
+	public Fornecedor findBy(Fornecedor f) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "SELECT codigo, nome, endereco, telefone, email, empresa FROM fornecedor WHERE codigo = ?";
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -51,7 +51,7 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 	}
 
 	@Override
-	public List<Fornecedor> listar() throws SQLException, ClassNotFoundException {
+	public List<Fornecedor> findAll() throws SQLException, ClassNotFoundException {
 
 		List<Fornecedor> fornecedores = new ArrayList<>();
 		Connection c = gDao.getConnection();

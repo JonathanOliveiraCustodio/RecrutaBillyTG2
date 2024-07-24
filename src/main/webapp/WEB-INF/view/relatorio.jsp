@@ -1,56 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
-<title>Relatórios</title>
-<script>
-	function atualizarOpcoes() {
-		var categoria = document.getElementById("categoria").value;
-		var opcaoSelect = document.getElementById("opcao");
-
-		// Limpa as opções existentes
-		while (opcaoSelect.options.length > 0) {
-			opcaoSelect.remove(0);
-		}
-
-		// Adiciona as novas opções dependendo da categoria selecionada
-		if (categoria === "cliente") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-			opcaoSelect.add(new Option("Telefone", "telefone"));
-			opcaoSelect.add(new Option("E-mail", "email"));
-		} else if (categoria === "produto") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		} else if (categoria === "equipamento") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		} else if (categoria === "insumo") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		} else if (categoria === "fornecedor") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		} else if (categoria === "pedido") {
-
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		} else if (categoria === "usuario") {
-
-			opcaoSelect.add(new Option("CPF", "cpf"));
-			opcaoSelect.add(new Option("Nome", "nome"));
-		}
-	}
-</script>
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
+<title>RelatÃ³rios</title>
+<script src="${pageContext.request.contextPath}/resources/js/relatorio.js"></script>
 </head>
 <body>
 	<div>
@@ -59,9 +21,10 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
-				<h1 class="display-6 fw-bold">Gerar Relatório</h1>
-				<form action="relatorio" method="post" class="row g-3 mt-3">
-					<!-- Linha do Formulário -->
+				<h1 class="display-6 fw-bold">Gerar RelatÃ³rio</h1>
+				<form action="relatorioCliente" method="post" class="row g-3 mt-3" target="_blank">
+			
+					<!-- Linha do FormulÃ¡rio -->
 					<div class="row g-3">
 						<!-- Categoria -->
 						<div class="col-md-4 d-flex align-items-center">
@@ -75,33 +38,33 @@
 								<option value="fornecedor">Fornecedor</option>
 								<option value="insumo">Insumo</option>
 								<option value="equipamento">Equipamento</option>
-								<option value="usuario">Usuário</option>
+								<option value="usuario">UsuÃ¡rio</option>
 							</select>
 						</div>
 
-						<!-- Opção -->
+						<!-- OpÃ§Ã£o -->
 						<div class="col-md-4 d-flex align-items-center">
-							<label for="opcao" class="form-label">Opção:</label> <select
+							<label for="opcao" class="form-label">OpÃ§Ã£o:</label> <select
 								class="form-select ms-2" id="opcao" name="opcao">
-								<!-- As opções serão preenchidas dinamicamente com base na categoria selecionada -->
+								<!-- As opÃ§Ãµes serÃ£o preenchidas dinamicamente com base na categoria selecionada -->
 							</select>
 						</div>
 
-						<!-- Parâmetro de Pesquisa -->
+						<!-- ParÃ¢metro de Pesquisa -->
 						<div class="col-md-4 d-flex align-items-center">
-							<label for="parametro" class="form-label">Parâmetro de
+							<label for="parametro" class="form-label">ParÃ¢metro de
 								Pesquisa:</label> <input type="text" id="parametro" name="parametro"
-								class="form-control ms-2" placeholder="Digite o parâmetro">
+								class="form-control ms-2" placeholder="Digite o parÃ¢metro">
 						</div>
 					</div>
 
-					<!-- Linha do Botão -->
+					<!-- Linha do BotÃ£o -->
 
 					<div class="row g-3 mt-3">
 						<div class="col-md-5 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao"
-								value="Gerar Relatório" class="btn btn-success">
+								value="Gerar RelatÃ³rio" class="btn btn-success">
 						</div>
 
 					</div>

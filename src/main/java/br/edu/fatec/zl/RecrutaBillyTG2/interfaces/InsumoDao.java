@@ -46,7 +46,7 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 	}
 
 	@Override
-	public Insumo consultar(Insumo i) throws SQLException, ClassNotFoundException {
+	public Insumo findBy(Insumo i) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT i.codigo AS codigoInsumo, f.codigo AS codigoFornecedor, f.nome AS nomeFornecedor, ");
@@ -82,7 +82,7 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 	}
 
 	@Override
-	public List<Insumo> listar() throws SQLException, ClassNotFoundException {
+	public List<Insumo> findAll() throws SQLException, ClassNotFoundException {
 
 		List<Insumo> insumos = new ArrayList<>();
 		Connection c = gDao.getConnection();

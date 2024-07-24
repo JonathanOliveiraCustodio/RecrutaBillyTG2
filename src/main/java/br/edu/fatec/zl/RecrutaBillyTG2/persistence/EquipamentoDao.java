@@ -25,7 +25,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 	}
 
 	@Override
-	public Equipamento consultar(Equipamento e) throws SQLException, ClassNotFoundException {
+	public Equipamento findBy(Equipamento e) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "SELECT * FROM fn_consultar_equipamento(?)";
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -51,7 +51,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 	}
 
 	@Override
-	public List<Equipamento> listar() throws SQLException, ClassNotFoundException {
+	public List<Equipamento> findAll() throws SQLException, ClassNotFoundException {
 
 		List<Equipamento> equipamentos = new ArrayList<>();
 		Connection c = gDao.getConnection();

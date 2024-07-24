@@ -52,7 +52,7 @@ public class ProdutosPedidoController {
 			pe.setCodigo(Integer.parseInt(pedido));
 			pe = buscarPedido(pe);
 			pedidoProdutos = listarProdutos(pe);
-			produtos = proDao.listar();
+			produtos = proDao.findAll();
 		} catch(SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
 		} finally {
@@ -82,11 +82,11 @@ public class ProdutosPedidoController {
 		
 		try { 
 			pedidoProdutos = listarProdutos(pe);
-			produtos = proDao.listar();
+			produtos = proDao.findAll();
 			pe.setCodigo(Integer.parseInt(codigoPedido));
 			if(!cmd.contains("Listar")) {
 				pr.setCodigo(Integer.parseInt(codigoProduto));
-				pr = proDao.consultar(pr);
+				pr = proDao.findBy(pr);
 				pp.setProduto(pr);
 				pp.setCodigoPedido(Integer.parseInt(codigoPedido));
 				pp.setCodigoProduto(Integer.parseInt(codigoProduto));
@@ -121,7 +121,7 @@ public class ProdutosPedidoController {
 
 
 	private List<PedidoProduto> listarProdutos(Pedido pe) throws ClassNotFoundException, SQLException {
-		return ppDao.listar(pe);
+		return ppDao.findAll(pe);
 	}
 
 	private String adicionarProduto(PedidoProduto pp) throws ClassNotFoundException, SQLException {
@@ -133,7 +133,7 @@ public class ProdutosPedidoController {
 	}
 	
 	private Pedido buscarPedido(Pedido p) throws SQLException, ClassNotFoundException {
-		p = pedDao.consultar(p);
+		p = pedDao.findBy(p);
 		return p;
 	}
 }

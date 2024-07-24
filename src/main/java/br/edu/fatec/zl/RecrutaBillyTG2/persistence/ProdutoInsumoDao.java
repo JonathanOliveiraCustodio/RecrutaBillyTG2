@@ -8,16 +8,16 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
-import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IProdutoInsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Insumo;
-import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.InsumoProduto;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 
 @Repository
-public class ProdutoInsumoDao implements ICrud<InsumoProduto>, IProdutoInsumoDao {
+public class ProdutoInsumoDao implements IProdutoInsumoDao {
 
 	private GenericDao gDao;
 
@@ -121,10 +121,6 @@ public class ProdutoInsumoDao implements ICrud<InsumoProduto>, IProdutoInsumoDao
 		return saida;
 	}
 
-	@Override
-	public List<InsumoProduto> listar() throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }

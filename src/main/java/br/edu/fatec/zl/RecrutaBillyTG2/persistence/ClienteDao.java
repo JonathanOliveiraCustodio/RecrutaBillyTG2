@@ -24,7 +24,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 	}
 
 	@Override
-	public Cliente consultar(Cliente cl) throws SQLException, ClassNotFoundException {
+	public Cliente findBy(Cliente cl) throws SQLException, ClassNotFoundException {
 		String sql = "SELECT * FROM cliente WHERE codigo = ?";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 	}
 
 	@Override
-	public List<Cliente> listar() throws SQLException, ClassNotFoundException {
+	public List<Cliente> findAll() throws SQLException, ClassNotFoundException {
 		List<Cliente> clientes = new ArrayList<>();
 		String sql = "SELECT * FROM cliente";
 		Connection c = gDao.getConnection();
