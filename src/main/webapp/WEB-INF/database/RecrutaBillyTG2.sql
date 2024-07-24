@@ -1,5 +1,5 @@
 USE master
---DROP DATABASE RecrutaBillyTG2
+DROP DATABASE RecrutaBillyTG2
 CREATE DATABASE RecrutaBillyTG2
 GO
 USE RecrutaBillyTG2 
@@ -67,7 +67,7 @@ GO
 CREATE TABLE cliente(
 codigo			INT				NOT NULL,
 nome			VARCHAR(100)	NOT NULL,
-telefone		CHAR(12)		NOT NULL,
+telefone		CHAR(11)		NOT NULL,
 email			VARCHAR(100)	NOT NULL,
 tipo			VARCHAR(10)	    NOT NULL,
 documento		CHAR(14)	    NOT NULL,
@@ -881,5 +881,3 @@ BEGIN
     WHERE codigo IN (SELECT codigo FROM deleted);
 END
 GO
-
-SELECT * FROM insumosProduto

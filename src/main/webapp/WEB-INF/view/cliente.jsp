@@ -211,7 +211,7 @@
 							</div>
 							<div class="col-md-3">
 								<input type="text" id="telefone" name="telefone"
-									class="form-control" placeholder="Telefone" maxlength="12"
+									class="form-control" placeholder="Telefone" maxlength="11"
 									value='<c:out value="${cliente.telefone }"></c:out>'>
 							</div>
 						</div>

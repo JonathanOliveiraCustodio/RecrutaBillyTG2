@@ -42,7 +42,7 @@
 							</div>
 							
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="saldo" class="form-label">% de Gastos:</label>
+								<label for="saldo" class="form-label">Saldo Geral:</label>
 							</div>
 							<div class="col-md-1">
 								<input type="text" id="saldo" name="saldo" class="form-control" placeholder="R$ 0,00" disabled >
@@ -57,7 +57,10 @@
 							<div class="cod-md-3">
 								<input type="number" min="0" step="1" id="codigo" name="codigo"
 									class="form-control" placeholder="Código"
-									value='<c:out value="${cliente.codigo }"></c:out>'>
+									value='<c:out value="${despesa.codigo }"></c:out>'>
+							</div>
+							<div>
+							
 							</div>
 						</div>
 					</form>
