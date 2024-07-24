@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.PedidoProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
@@ -24,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class PedidoProdutoController {
+public class ProdutosPedidoController {
 	@Autowired
 	ProdutoDao proDao;
 	
@@ -34,8 +33,8 @@ public class PedidoProdutoController {
 	@Autowired
 	PedidoProdutoDao ppDao;
 	
-	@RequestMapping(name = "pedidoProduto", value = "/pedidoProduto", method = RequestMethod.GET)
-	public ModelAndView pedidoProdutoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
+	@RequestMapping(name = "produtosPedido", value = "/produtosPedido", method = RequestMethod.GET)
+	public ModelAndView produtosPedidoet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
 		
 		String pedido = allRequestParam.get("pedido");
@@ -62,11 +61,11 @@ public class PedidoProdutoController {
 			model.addAttribute("pedidoProdutos", pedidoProdutos);
 		}
 		
-		return new ModelAndView("pedidoProduto");
+		return new ModelAndView("produtosPedido");
 	}
 	
-	@RequestMapping(name = "pedidoProduto", value = "/pedidoProduto", method = RequestMethod.POST)
-	public ModelAndView pedidoProdutoPost(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
+	@RequestMapping(name = "produtosPedido", value = "/produtosPedido", method = RequestMethod.POST)
+	public ModelAndView produtosPedidoPost(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
 		String cmd = allRequestParam.get("botao");
 		String codigoPedido = (String) session.getAttribute("pedido");
@@ -92,11 +91,11 @@ public class PedidoProdutoController {
 				pp.setCodigoPedido(Integer.parseInt(codigoPedido));
 				pp.setCodigoProduto(Integer.parseInt(codigoProduto));
 			}
-			if(cmd.contains("Adicionar") || cmd.contains("Alterar")) {
+			if(cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 				pp.setCodigoProduto(Integer.parseInt(codigoProduto));
 				pp.setQuantidade(Integer.parseInt(quantidade));				
 			}
-			if(cmd.contains("Adicionar")) {
+			if(cmd.contains("Cadastrar")) {
 				saida = adicionarProduto(pp);
 			}
 			if(cmd.contains("Excluir")) {
@@ -117,7 +116,7 @@ public class PedidoProdutoController {
 			model.addAttribute("pedidoProdutos", pedidoProdutos);
 			model.addAttribute("produtos", produtos);
 		}
-		return new ModelAndView("pedidoProduto");
+		return new ModelAndView("produtosPedido");
 	}
 
 

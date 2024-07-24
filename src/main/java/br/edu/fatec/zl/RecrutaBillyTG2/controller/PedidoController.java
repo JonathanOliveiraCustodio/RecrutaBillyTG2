@@ -143,6 +143,16 @@ public class PedidoController {
 				p.setCliente(c);
 				saida = finalizarPedido(p);
 			}
+			if (cmd.contains("Adicionar")) {
+				p = buscarPedido(p);
+				if (p == null) {
+					saida = "Nenhum Pedido encontrado com o codigo especificado.";
+					p = null;
+				} else {
+					model.addAttribute("pedido", p);
+					return new ModelAndView("forward:/produtosPedido", model);
+				}
+			}
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
 		} finally {

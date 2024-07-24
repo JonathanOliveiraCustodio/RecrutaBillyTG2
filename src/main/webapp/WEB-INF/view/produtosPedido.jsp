@@ -1,50 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
-<title>Adicionar Produtos para Pedidos</title>
-<script>
-	function validarFormulario(event) {
-		var botao = event.submitter.value;
-		if (botao === "Adicionar") {
-			var campos = [ "produto", "quantidade" ];
-			for (var i = 0; i < campos.length; i++) {
-				var campo = document.getElementById(campos[i]).value.trim();
-				if (campo === "") {
-					alert("Por favor, preencha todos os campos.");
-					event.preventDefault();
-					return false;
-				}
-			}
-		} else if (botao === "Excluir") {
-			var produto = document.getElementById("produto").value.trim();
-			var quantidade = document.getElementById("quantidade").value.trim();
-
-			if (produto === "" || isNaN(produto) || parseInt(produto) <= 0) {
-				alert("Por favor, preencha o campo de código.");
-				event.preventDefault();
-				return false;
-			}
-
-			if (quantidade === "" || isNaN(quantidade)
-					|| parseInt(quantidade) === 0) {
-				alert("A quantidade deve ser diferente de 0.");
-				event.preventDefault();
-				return false;
-			}
-		}
-		return true;
-	}
-</script>
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
+<title>Gerenciar Produtos Pedido</title>
+<script src="${pageContext.request.contextPath}/resources/js/produtosPedido.js"></script>
 </head>
 <body>
 	<div>
@@ -54,7 +22,7 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Gerenciar Produtos de um Pedido</h1>
-				<form action="pedidoProduto" method="post"
+				<form action="produtosPedido" method="post"
 					onsubmit="return validarFormulario(event);" class="container mt-3">
 					<input type="hidden" id="pedido" name="pedido"
 						value='<c:out value="${pedido}"></c:out>'>
@@ -152,7 +120,7 @@
 										type="currency" currencySymbol="R$" /></td>
 								<td><c:out value="${p.quantidade }" /></td>
 								<td>
-									<form action="pedidoProduto" method="post">
+									<form action="produtosPedido" method="post">
 										<input type="hidden" name="produto" value="${p.codigoProduto}">
 										<input type="hidden" name="pedido" value="${p.codigoPedido}">
 										<input type="hidden" name="botao" value="Excluir">

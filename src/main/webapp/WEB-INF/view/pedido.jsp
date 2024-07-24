@@ -1,64 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
 <title>Pedido</title>
-<script>
-	function validarBusca() {
-		var codigo = document.getElementById("pedido").value;
-		if (codigo.trim() === "") {
-			alert("Por favor, insira um Código.");
-			return false;
-		}
-		return true;
-	}
-
-	function editarPedido(codigo) {
-		window.location.href = 'pedido?cmd=alterar&codigo=' + codigo;
-	}
-
-	function excluirPedido(codigo) {
-		if (confirm("Tem certeza que deseja excluir este Pedido?")) {
-			window.location.href = 'pedido?cmd=Excluir&codigo=' + codigo;
-		}
-	}
-
-	function mostrarValor(codigo) {
-		console.log(codigo);
-	}
-
-	function validarFormulario(event) {
-		var botao = event.submitter.value;
-		if (botao === "Cadastrar" || botao === "Alterar") {
-			var campos = [ "nome", "codigoCliente", "estado" ];
-			for (var i = 0; i < campos.length; i++) {
-				var campo = document.getElementById(campos[i]).value.trim();
-				if (campo === "") {
-					alert("Por favor, preencha todos os campos.");
-					event.preventDefault();
-					return false;
-				}
-			}
-		} else if (botao === "Excluir") {
-			var codigo = document.getElementById("codigo").value.trim();
-			if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
-				alert("Por favor, preencha o campo de código.");
-				event.preventDefault();
-				return false;
-			}
-		}
-		return true;
-	}
-</script>
+<script src="${pageContext.request.contextPath}/resources/js/pedido.js"></script>
 </head>
 <body>
 	<div>
@@ -112,8 +66,8 @@
 							<label for="codigoCliente" class="form-label">Cliente:</label>
 						</div>
 						<div class="col-md-3">
-							<select class="form-select" id="cliente"
-								name="cliente" onclick="mostrarValor(this.value)">
+							<select class="form-select" id="cliente" name="cliente"
+								onclick="mostrarValor(this.value)">
 								<option value="0">Escolha um Cliente</option>
 								<c:forEach var="c" items="${clientes}">
 									<c:if
@@ -161,7 +115,7 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning">
 						</div>
-						
+
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
@@ -203,7 +157,7 @@
 							<th colspan="10" class="text-center">Lista de Pedidos</th>
 						</tr>
 						<tr class="table-dark">
-							<th> </th>
+							<th></th>
 							<th>Código</th>
 							<th>Nome Pedido</th>
 							<th>Código Cliente</th>
@@ -219,11 +173,13 @@
 						<c:forEach var="p" items="${pedidos }">
 							<tr>
 								<td style="text-align: center;">
-									<button class="btn btn-outline-info" name="opcao" value="${p.codigo}"
-										onclick="editarPedido(this.value)"
+									<button class="btn btn-outline-info" name="opcao"
+										value="${p.codigo}" onclick="editarPedido(this.value)"
 										${p.codigo eq codigoEdicao ? 'checked' : ''}>
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-										  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+											fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+										  <path
+												d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
 										</svg>
 									</button>
 								</td>
@@ -235,26 +191,26 @@
 										pattern="dd/MM/yyyy" /></td>
 								<td>
 									<button
-										onclick="window.location.href='pedidoProduto?pedido=${p.codigo}'"
+										onclick="window.location.href='produtosPedido?pedido=${p.codigo}'"
 										class="btn btn-info">Adicionar</button>
 								</td>
-						
-								
+
+
 								<td><fmt:formatNumber value="${p.valorTotal}"
-									type="currency" currencySymbol="R$" /></td>
-								
+										type="currency" currencySymbol="R$" /></td>
+
 								<td><c:out value="${p.estado}" /></td>
 								<td>
-								<form action="pedido" method="post">
-									<input type="hidden" name="codigo" value="${p.codigo}">
-									<input type="hidden" name="cliente"
-										value="${p.cliente.codigo}"> 
-										 <input
-										type="hidden" id="botao" name="botao" value="Finalizar Pedido">
-									<button type="submit" class="btn btn-outline-dark">Finalizar Pedido</button>
-									
-																
-								</form>
+									<form action="pedido" method="post">
+										<input type="hidden" name="codigo" value="${p.codigo}">
+										<input type="hidden" name="cliente"
+											value="${p.cliente.codigo}"> <input type="hidden"
+											id="botao" name="botao" value="Finalizar Pedido">
+										<button type="submit" class="btn btn-outline-dark">Finalizar
+											Pedido</button>
+
+
+									</form>
 								<td>
 							</tr>
 						</c:forEach>
@@ -263,9 +219,9 @@
 			</c:if>
 		</div>
 	</div>
-	  <div>
-        <jsp:include page="footer.jsp" />
-    </div>
+	<div>
+		<jsp:include page="footer.jsp" />
+	</div>
 
 </body>
 </html>

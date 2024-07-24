@@ -1,67 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
 <title>Equipamento</title>
-<script>
-	function consultarEquipamento(codigo) {
-		window.location.href = 'consulta?codigo=' + codigo;
-	}
-
-	function editarEquipamento(codigo) {
-		window.location.href = 'equipamento?cmd=alterar&codigo=' + codigo;
-	}
-
-	function excluirEquipamento(codigo) {
-		if (confirm("Tem certeza que deseja excluir este equipamento?")) {
-			window.location.href = 'equipamento?cmd=excluir&codigo=' + codigo;
-		}
-	}
-
-	function validarBusca() {
-		var codigo = document.getElementById("codigo").value;
-		if (codigo.trim() === "") {
-			alert("Por favor, insira um código.");
-			return false;
-		}
-		return true;
-	}
-
-	function validarFormulario(event) {
-		var botao = event.submitter.value;
-		if (botao === "Cadastrar" || botao === "Alterar") {
-			var campos = [ "nome", "valor", "descricao", "fabricante",
-					"dataManutencao" ];
-			for (var i = 0; i < campos.length; i++) {
-				var campo = document.getElementById(campos[i]).value.trim();
-				if (campo === "") {
-					alert("Por favor, preencha todos os campos.");
-					event.preventDefault();
-					return false;
-				}
-			}
-		} else if (botao === "Excluir") {
-			var codigo = document.getElementById("codigo").value.trim();
-			if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
-				alert("Por favor, preencha o campo de código.");
-				event.preventDefault();
-				return false;
-			}
-		}
-		// Se todos os campos estiverem preenchidos, permitir o envio do formulário
-		return true;
-	}
-</script>
-
+<script src="${pageContext.request.contextPath}/resources/js/equipamento.js"></script>
 </head>
 <body>
 	<div>
@@ -71,17 +22,17 @@
 		<c:if test="${nivelAcesso == 'admin'}">
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
-					<h1 class="display-6 fw-bold">Manutenção de Equipamento</h1>
+					<h1 class="display-6 fw-bold">ManutenÃ§Ã£o de Equipamento</h1>
 					<form action="equipamento" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
-						<!-- Primeira Linha: Código, Nome, Fabricante -->
+						<!-- Primeira Linha: CÃ³digo, Nome, Fabricante -->
 						<div class="row g-3">
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="codigo" class="form-label">Código:</label>
+								<label for="codigo" class="form-label">CÃ³digo:</label>
 							</div>
 							<div class="col-md-2">
 								<input type="number" min="0" step="1" id="codigo" name="codigo"
-									class="form-control" placeholder="Código"
+									class="form-control" placeholder="CÃ³digo"
 									value='<c:out value="${equipamento.codigo}"></c:out>'>
 							</div>
 							<div class="col-md-1">
@@ -109,21 +60,21 @@
 							</div>
 						</div>
 
-						<!-- Segunda Linha: Descrição -->
+						<!-- Segunda Linha: DescriÃ§Ã£o -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="descricao" class="form-label">Descrição:</label>
+								<label for="descricao" class="form-label">DescriÃ§Ã£o:</label>
 							</div>
 							<div class="col-md-11">
 								<textarea class="form-control" id="descricao" name="descricao"
-									placeholder="Descrição">${equipamento.descricao}</textarea>
+									placeholder="DescriÃ§Ã£o">${equipamento.descricao}</textarea>
 							</div>
 						</div>
 
-						<!-- Terceira Linha: Data de Manutenção -->
+						<!-- Terceira Linha: Data de ManutenÃ§Ã£o -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="dataManutencao" class="form-label">Manutenção:</label>
+								<label for="dataManutencao" class="form-label">ManutenÃ§Ã£o:</label>
 							</div>
 							<div class="col-md-3">
 								<input type="date" id="dataManutencao" name="dataManutencao"
@@ -132,7 +83,7 @@
 							</div>
 						</div>
 
-						<!-- Linha dos Botões -->
+						<!-- Linha dos BotÃµes -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
@@ -189,11 +140,11 @@
 					</tr>
 					<tr class="table-dark">
 						<th> </th>
-						<th>Código</th>
+						<th>CÃ³digo</th>
 						<th>Nome</th>
-						<th>Descrição</th>
+						<th>DescriÃ§Ã£o</th>
 						<th>Fabricante</th>
-						<th>Manutenção</th>
+						<th>ManutenÃ§Ã£o</th>
 						<th>Excluir</th>
 
 					</tr>

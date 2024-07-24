@@ -30,7 +30,7 @@ public class PedidoProdutoDao implements IPedidoProduto{
 	    String saida = "";
 	    try {
 	        c = gDao.getConnection();
-	        String sql = "{CALL sp_iud_pedido_produto(?,?,?,?,?)}";
+	        String sql = "{CALL sp_iud_produtos_pedido(?,?,?,?,?)}";
 	        cs = c.prepareCall(sql);
 	        cs.setString(1, acao);
 	        cs.setInt(2, pp.getCodigoPedido());

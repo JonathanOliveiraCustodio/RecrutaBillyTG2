@@ -1,48 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
-<title>Adicionar Insumos</title>
-<script>
-	function updateUnidade() {
-		var insumoSelect = document.getElementById('insumo');
-		var selectedOption = insumoSelect.options[insumoSelect.selectedIndex];
-		var unidade = selectedOption.getAttribute('data-unidade');
-		document.getElementById('unidade').value = unidade;
-	}
-
-	function validarFormulario(event) {
-		var botao = event.submitter.value;
-		if (botao === "Cadastrar") {
-			var campos = [ "insumo" ];
-			for (var i = 0; i < campos.length; i++) {
-				var campo = document.getElementById(campos[i]).value.trim();
-				if (campo === "") {
-					alert("Por favor, preencha todos os campos.");
-					event.preventDefault();
-					return false;
-				}
-			}
-		} else if (botao === "Excluir") {
-			var insumo = document.getElementById("insumo").value.trim();
-			if (insumo === "" || isNaN(insumo) || parseInt(insumo) <= 0) {
-				alert("Por favor, preencha o campo de código.");
-				event.preventDefault();
-				return false;
-			}
-		}
-		return true;
-	}
-</script>
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
+<title>Gerenciar Insumos Produto</title>
+<script src="${pageContext.request.contextPath}/resources/js/insumosProduto.js"></script>
 </head>
 <body>
 	<div>

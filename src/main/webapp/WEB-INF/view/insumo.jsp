@@ -1,64 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
 <title>Insumo</title>
-<script>
-	function consultarInsumo(codigo) {
-		window.location.href = 'consulta?codigo=' + codigo;
-	}
-
-	function editarInsumo(codigo) {
-		window.location.href = 'insumo?cmd=alterar&codigo=' + codigo;
-	}
-
-	function excluirInsumo(codigo) {
-		if (confirm("Tem certeza que deseja excluir este insumo?")) {
-			window.location.href = 'insumo?cmd=excluir&codigo=' + codigo;
-		}
-	}
-
-	function validarBusca() {
-		var codigo = document.getElementById("codigo").value;
-		if (codigo.trim() === "") {
-			alert("Por favor, insira um Código.");
-			return false;
-		}
-		return true;
-	}
-	function validarFormulario(event) {
-		var botao = event.submitter.value;
-		if (botao === "Cadastrar" || botao === "Alterar") {
-			var campos = [ "nome", "valor", "quantidade", "fornecedor" ];
-			for (var i = 0; i < campos.length; i++) {
-				var campo = document.getElementById(campos[i]).value.trim();
-				if (campo === "") {
-					alert("Por favor, preencha todos os campos.");
-					event.preventDefault();
-					return false;
-				}
-			}
-		} else if (botao === "Excluir") {
-			var codigo = document.getElementById("codigo").value.trim();
-			if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
-				alert("Por favor, preencha o campo de código.");
-				event.preventDefault();
-				return false;
-			}
-		}
-		// Se todos os campos estiverem preenchidos, permitir o envio do formulário
-		return true;
-	}
-</script>
+<script src="${pageContext.request.contextPath}/resources/js/insumo.js"></script>
 </head>
 <body>
 	<div>
@@ -68,17 +22,17 @@
 		<c:if test="${nivelAcesso == 'admin'}">
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
-					<h1 class="display-6 fw-bold">Manutenção de Insumo</h1>
+					<h1 class="display-6 fw-bold">ManutenÃ§Ã£o de Insumo</h1>
 					<form action="insumo" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
-						<!-- Primeira Linha: Código, Nome, Valor -->
+						<!-- Primeira Linha: CÃ³digo, Nome, Valor -->
 						<div class="row g-3">
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="codigo" class="form-label">Código:</label>
+								<label for="codigo" class="form-label">CÃ³digo:</label>
 							</div>
 							<div class="col-md-2">
 								<input class="form-control" type="number" min="0" step="1"
-									id="codigo" name="codigo" placeholder="Código"
+									id="codigo" name="codigo" placeholder="CÃ³digo"
 									value='<c:out value="${insumo.codigo}"></c:out>'>
 							</div>
 							<div class="col-md-1">
@@ -129,8 +83,8 @@
 										<c:if test="${insumo.unidade eq 'kg'}">selected</c:if>>kg</option>
 									<option value="unidade"
 										<c:if test="${insumo.unidade eq 'unidade'}">selected</c:if>>unidade</option>
-									<option value="m²"
-										<c:if test="${insumo.unidade eq 'm²'}">selected</c:if>>m²</option>
+									<option value="mÂ²"
+										<c:if test="${insumo.unidade eq 'mÂ²'}">selected</c:if>>mÂ²</option>
 								</select>
 							</div>
 
@@ -150,7 +104,7 @@
 							</div>
 						</div>
 
-						<!-- Linha dos Botões -->
+						<!-- Linha dos BotÃµes -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
@@ -211,7 +165,7 @@
 					</tr>
 					<tr class="table-dark">
 						<th> </th>
-						<th>Código</th>
+						<th>CÃ³digo</th>
 						<th>Nome</th>
 						<th>Valor</th>
 						<th>Quantidade</th>

@@ -18,7 +18,7 @@
 				<a href="#">Política de Privacidade</a> | <a href="#">Termos de
 					Serviço</a>
 			</p>
-			<p>Desenvolvido por Luiz Antonio, Davi Romão e Jonathan Custodio</p>
+			<p>Desenvolvido por Davi Romão, Jonathan Custodio e Luiz Antonio,</p>
 		</div>
 	</footer>
 	<!-- Bootstrap JavaScript Bundle with Popper -->
