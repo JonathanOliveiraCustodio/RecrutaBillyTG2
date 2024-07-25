@@ -6,13 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous">
-<title>Relatórios</title>
+<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/relatorio.js"></script>
+<title>Relatórios</title>
+
 </head>
 <body>
 	<div>
@@ -22,8 +19,7 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Gerar Relatório</h1>
-				<form action="relatorioCliente" method="post" class="row g-3 mt-3" target="_blank">
-			
+				<form action="relatorioCliente" method="post" class="row g-3 mt-3" target="_blank">			
 					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<!-- Categoria -->

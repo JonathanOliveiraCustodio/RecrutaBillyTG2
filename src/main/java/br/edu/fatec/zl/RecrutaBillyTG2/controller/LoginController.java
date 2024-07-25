@@ -15,38 +15,48 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class LoginController {
 
-    @Autowired
-    LoginDao loginDao;
+	@Autowired
+	LoginDao loginDao;
 
-    @RequestMapping(name = "login", value = "/login", method = RequestMethod.GET)
-    public ModelAndView loginGet(ModelMap model) {
-        return new ModelAndView("login");
-    }
+	@RequestMapping(name = "login", value = "/login", method = RequestMethod.GET)
+	public ModelAndView loginGet(ModelMap model) {
+		return new ModelAndView("login");
+	}
 
-    @RequestMapping(name = "login", value = "/login", method = RequestMethod.POST)
-    public ModelAndView loginPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
-        String email = allRequestParam.get("email");
-        String senha = allRequestParam.get("senha");
-        String mensagem = "";
+	@RequestMapping(name = "login", value = "/login", method = RequestMethod.POST)
+	public ModelAndView loginPost(@RequestParam Map<String, String> allRequestParam, ModelMap model,
+			HttpSession session) {
+		String email = allRequestParam.get("email");
+		String senha = allRequestParam.get("senha");
+		String mensagem = "";
+		String cmd = allRequestParam.get("botao");
 
-        try {
-            Map<String, String> resultado = loginDao.validarCredenciais(email, senha);
-            String nivelAcesso = resultado.get("nivelAcesso");
+		if ("Login".equals(cmd)) {
+			try {
+				Map<String, String> resultado = loginDao.validarCredenciais(email, senha);
+				String nivelAcesso = resultado.get("nivelAcesso");
 
-            if ("Login bem-sucedido".equals(resultado.get("mensagem"))) {
-           
-                session.setAttribute("usuarioLogado", email);
-                session.setAttribute("nivelAcesso", nivelAcesso);
-        
-                return new ModelAndView("redirect:/index");
-            } else {
-                mensagem = resultado.get("mensagem");
-            }
-        } catch (Exception e) {
-            mensagem = "Ocorreu um erro: " + e.getMessage();
-        }
+				if ("Login bem-sucedido".equals(resultado.get("mensagem"))) {
+					session.setAttribute("usuarioLogado", email);
+					session.setAttribute("nivelAcesso", nivelAcesso);
 
-        model.addAttribute("errorMessage", mensagem);
-        return new ModelAndView("login");
-    }
-    }
+					return new ModelAndView("redirect:/index");
+				} else {
+					mensagem = resultado.get("mensagem");
+				}
+			} catch (Exception e) {
+				mensagem = "Ocorreu um erro: " + e.getMessage();
+			}
+
+			model.addAttribute("errorMessage", mensagem);
+			return new ModelAndView("login");
+		} else if ("Esqueceu a Senha?".equals(cmd)) {
+		
+			return new ModelAndView("redirect:/esqueceuSenha");
+		} else {
+			model.addAttribute("errorMessage", "Ação não reconhecida.");
+			return new ModelAndView("login");
+		}
+	}
+
+}

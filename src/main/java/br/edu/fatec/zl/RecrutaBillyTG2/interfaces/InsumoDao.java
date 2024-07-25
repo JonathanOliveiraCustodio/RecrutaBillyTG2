@@ -27,18 +27,20 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 	@Override
 	public String iudInsumo(String acao, Insumo i) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "{CALL sp_iud_insumo (?,?,?,?,?,?,?,?)}";
+		String sql = "{CALL sp_iud_insumo (?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, i.getCodigo());
 		cs.setString(3, i.getNome());
-		cs.setFloat(4, i.getValor());
-		cs.setInt(5, i.getQuantidade());
-		cs.setString(6, i.getUnidade());
-		cs.setInt(7, i.getFornecedor().getCodigo());
-		cs.registerOutParameter(8, Types.VARCHAR);
+		cs.setFloat(4, i.getPrecoCompra());
+		cs.setFloat(5, i.getPrecoVenda());
+		cs.setInt(6, i.getQuantidade());
+		cs.setString(7, i.getUnidade());
+		cs.setInt(8, i.getFornecedor().getCodigo());
+		cs.setDate(9, i.getDataCompra());
+		cs.registerOutParameter(10, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(8);
+		String saida = cs.getString(10);
 		cs.close();
 		c.close();
 
@@ -50,7 +52,8 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT i.codigo AS codigoInsumo, f.codigo AS codigoFornecedor, f.nome AS nomeFornecedor, ");
-		sql.append("i.nome AS nomeInsumo,i.valor AS valorInsumo, i.quantidade AS quantidadeInsumo, i.unidade AS unidadeInsumo ");
+		sql.append("i.nome AS nomeInsumo,i.precoCompra AS precoCompraInsumo, i.precoVenda AS precoVendaInsumo, ");
+		sql.append("i.quantidade AS quantidadeInsumo, i.unidade AS unidadeInsumo, i.dataCompra AS dataCompraInsumo ");
 		sql.append("FROM insumo i INNER JOIN fornecedor f ON i.fornecedor = f.codigo  ");
 		sql.append("WHERE i.codigo = ?");
 
@@ -64,11 +67,12 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 			f.setNome(rs.getString("nomeFornecedor"));
 			i.setCodigo(rs.getInt("codigoInsumo"));
 			i.setNome(rs.getString("nomeInsumo"));
-			i.setValor(rs.getFloat("valorInsumo"));
+			i.setPrecoCompra(rs.getFloat("precoCompraInsumo"));
+			i.setPrecoVenda(rs.getFloat("precoVendaInsumo"));
 			i.setQuantidade(rs.getInt("quantidadeInsumo"));
 			i.setUnidade(rs.getString("unidadeInsumo"));
 			i.setFornecedor(f);
-
+            i.setDataCompra(rs.getDate("dataCompraInsumo"));
 			rs.close();
 			ps.close();
 			c.close();
@@ -83,7 +87,6 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 
 	@Override
 	public List<Insumo> findAll() throws SQLException, ClassNotFoundException {
-
 		List<Insumo> insumos = new ArrayList<>();
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
@@ -97,10 +100,12 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 			Insumo i = new Insumo();
 			i.setCodigo(rs.getInt("codigoInsumo"));
 			i.setNome(rs.getString("nomeInsumo"));
-			i.setValor(rs.getFloat("valorInsumo"));
+			i.setPrecoCompra(rs.getFloat("precoCompraInsumo"));
+			i.setPrecoVenda(rs.getFloat("precoVendaInsumo"));
 			i.setQuantidade(rs.getInt("quantidadeInsumo"));
 			i.setUnidade(rs.getString("unidadeInsumo"));
 			i.setFornecedor(f);
+			i.setDataCompra(rs.getDate("dataCompraInsumo"));
 			insumos.add(i);
 		}
 		rs.close();

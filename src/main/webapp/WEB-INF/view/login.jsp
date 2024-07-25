@@ -15,7 +15,10 @@
 
 </head>
 <body>
-	<br />
+	<div>
+		<jsp:include page="menuLogin.jsp" />
+	</div>
+
 	<div class="container py-4">
 		<div
 			class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow center-form">
@@ -28,13 +31,13 @@
 						<label for="email" class="form-label col-md-2">E-mail:</label>
 						<div class="col-md-4">
 							<input type="text" id="email" name="email" class="form-control"
-								placeholder="E-mail" required>
+								placeholder="E-mail">
 						</div>
 						<div class="col-md-0"></div>
 						<label for="senha" class="form-label col-md-2">Senha:</label>
 						<div class="col-md-4">
 							<input type="password" id="senha" name="senha"
-								class="form-control" placeholder="Senha" required>
+								class="form-control" placeholder="Senha">
 						</div>
 						<div class="col-md-0"></div>
 
@@ -42,6 +45,13 @@
 							<input type="submit" id="botao" name="botao" value="Login"
 								class="btn btn-primary">
 						</div>
+						<div class="col-md-0"></div>
+						<div class="col-md-0 d-grid">
+							<input type="submit" id="botao" name="botao" value="Esqueceu a Senha?"
+								class="btn btn-link">
+						</div>
+						
+						
 					</form>
 
 					<div>
