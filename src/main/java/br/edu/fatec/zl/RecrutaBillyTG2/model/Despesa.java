@@ -1,6 +1,6 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,8 @@ import lombok.Setter;
 public class Despesa {
 	private int codigo;
 	private String nome;
-	private LocalDate data;
+	private Date data;
+	private Date dataVencimento;
 	private String tipo;
 	private float valor;
 	private String estado;
