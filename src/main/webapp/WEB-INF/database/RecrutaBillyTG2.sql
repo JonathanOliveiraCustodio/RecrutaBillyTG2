@@ -655,6 +655,29 @@ BEGIN
 END
 GO
 -- Fim da Procedure
+-- Inicio Procedure para alterar senha
+CREATE PROCEDURE sp_alterar_senha
+    @Email NVARCHAR(100),
+    @CPF NVARCHAR(11),
+    @NovaSenha NVARCHAR(30),
+    @Resultado NVARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM usuario WHERE email = @Email AND cpf = @CPF)
+    BEGIN
+        UPDATE usuario
+        SET senha = @NovaSenha
+        WHERE email = @Email AND cpf = @CPF    
+        SET @Resultado = 'Senha alterada com sucesso'
+    END
+    ELSE
+    BEGIN
+        SET @Resultado = 'Email ou CPF incorretos'
+    END
+END
+GO
+-- Fim da Procedure
+
 CREATE PROCEDURE sp_finalizar_pedido(
 @codigopedido INT, 
 @codigocliente INT, 
