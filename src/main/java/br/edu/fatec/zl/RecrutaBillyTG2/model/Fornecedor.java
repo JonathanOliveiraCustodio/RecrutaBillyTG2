@@ -12,10 +12,18 @@ import lombok.Setter;
 public class Fornecedor {
 	int codigo;
 	String nome;
-	String endereco;
 	String telefone;
 	String email;
 	String empresa;
+	String CEP;
+	String logradouro;
+	String numero;
+	String bairro;
+	String complemento;
+	String cidade;
+	String UF;
+	
+	
 	
 	@Override
 	public String toString() {

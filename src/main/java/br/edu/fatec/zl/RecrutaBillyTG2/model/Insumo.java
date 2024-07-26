@@ -16,12 +16,11 @@ public class Insumo {
 	String nome;
 	float precoCompra;
 	float precoVenda;
-	int quantidade;
+	float quantidade;
 	String unidade;
 	Fornecedor fornecedor;
 	Date dataCompra;
-	
-	
+
 	@Override
 	public String toString() {
 		return nome;

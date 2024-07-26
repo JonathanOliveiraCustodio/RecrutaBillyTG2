@@ -29,12 +29,18 @@
 			opcaoSelect.add(new Option("Nome", "nome"));
 			
 		} else if (categoria === "insumo") {
-			opcaoSelect.add(new Option("Código", "codigo"));
-			opcaoSelect.add(new Option("Nome", "nome"));
+				opcaoSelect.add(new Option("Nome", "Nome"));
+				opcaoSelect.add(new Option("Unidade", "Unidade"));
+				opcaoSelect.add(new Option("Fornecedor", "Fornecedor"));
+				opcaoSelect.add(new Option("Preço Compra", "Preço Compra"));
+				opcaoSelect.add(new Option("Preço Venda", "Preço Venda"));
 			
 		} else if (categoria === "fornecedor") {
+			opcaoSelect.add(new Option("Todos", "Todos"));
 			opcaoSelect.add(new Option("Nome", "Nome"));
-			opcaoSelect.add(new Option("Empresa", "Empresa"));
+			opcaoSelect.add(new Option("Bairro", "Bairro"));
+			opcaoSelect.add(new Option("Cidade", "Cidade"));
+			opcaoSelect.add(new Option("UF", "UF"));
 			
 		} else if (categoria === "pedido") {
 

@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -34,8 +33,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 public class RelatorioController {
 
 	@Autowired
-    GenericDao gDao;
-
+	GenericDao gDao;
 
 	@RequestMapping(name = "relatorio", value = "/relatorio", method = RequestMethod.GET)
 	public ModelAndView relatorioGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
@@ -44,44 +42,54 @@ public class RelatorioController {
 		return new ModelAndView("relatorio");
 	}
 
+	@SuppressWarnings({ "rawtypes" })
+	@RequestMapping(name = "relatorioCategoria", value = "/relatorioCategoria", method = RequestMethod.POST)
+	public ResponseEntity relatorioPost(@RequestParam Map<String, String> allRequestParam) {
 
-	
-	 @SuppressWarnings({ "rawtypes" })
-	    @RequestMapping(name = "relatorioCliente", value = "/relatorioCliente", method = RequestMethod.POST)
-	    public ResponseEntity relatorioPost(@RequestParam Map<String, String> allRequestParam) {
-	        
-		 String erro = "";
-	        String categoria = allRequestParam.get("categoria");
-	        System.out.println(categoria);
-	     
-	        Map<String, Object> paramRelatorio = new HashMap<String, Object>();
-	        paramRelatorio.put("opcao", allRequestParam.get("opcao"));
-	        paramRelatorio.put("parametro",allRequestParam.get("parametro"));
-	        byte[] bytes = null;
+		String erro = "";
 
-	        InputStreamResource resource = null;
-	        HttpStatus status = null;
-	        HttpHeaders header = new HttpHeaders();
+		String categoria = allRequestParam.get("categoria");
+		System.out.println(categoria);
 
-	        try {
-	            Connection c = gDao.getConnection();
-	            File arquivo = ResourceUtils.getFile("classpath:reports/RelatorioCliente.jasper");
-	            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(arquivo.getAbsolutePath());
-	            bytes = JasperRunManager.runReportToPdf(report, paramRelatorio, c);
-	        } catch (ClassNotFoundException | SQLException | FileNotFoundException | JRException e) {
-	            e.printStackTrace();
-	            erro = e.getMessage();
-	            status = HttpStatus.BAD_REQUEST;
-	        } finally {
-	            if (erro.equals("")) {
-	                InputStream inputStream = new ByteArrayInputStream(bytes);
-	                resource = new InputStreamResource(inputStream);
-	                header.setContentLength(bytes.length);
-	                header.setContentType(MediaType.APPLICATION_PDF);
-	                status = HttpStatus.OK;
-	            }
-	        }
-	        return new ResponseEntity<>(resource, header, status);
-	    }
+		Map<String, Object> paramRelatorio = new HashMap<String, Object>();
+		paramRelatorio.put("opcao", allRequestParam.get("opcao"));
+		paramRelatorio.put("parametro", allRequestParam.get("parametro"));
+		byte[] bytes = null;
+
+		InputStreamResource resource = null;
+		HttpStatus status = null;
+		HttpHeaders header = new HttpHeaders();
+
+		try {
+			String reportPath = "";
+			if (categoria.equals("cliente")) {
+				reportPath = "classpath:reports/RelatorioCliente.jasper";
+
+			} else if (categoria.equals("fornecedor")) {
+				reportPath = "classpath:reports/RelatorioFornecedor.jasper";
+				
+			}else if (categoria.equals("insumo")) {
+				reportPath = "classpath:reports/RelatorioInsumo.jasper";
+			}
+			
+			Connection c = gDao.getConnection();
+			File arquivo = ResourceUtils.getFile(reportPath);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(arquivo.getAbsolutePath());
+			bytes = JasperRunManager.runReportToPdf(report, paramRelatorio, c);
+		} catch (ClassNotFoundException | SQLException | FileNotFoundException | JRException e) {
+			e.printStackTrace();
+			erro = e.getMessage();
+			status = HttpStatus.BAD_REQUEST;
+		} finally {
+			if (erro.equals("")) {
+				InputStream inputStream = new ByteArrayInputStream(bytes);
+				resource = new InputStreamResource(inputStream);
+				header.setContentLength(bytes.length);
+				header.setContentType(MediaType.APPLICATION_PDF);
+				status = HttpStatus.OK;
+			}
+		}
+		return new ResponseEntity<>(resource, header, status);
+	}
 
 }

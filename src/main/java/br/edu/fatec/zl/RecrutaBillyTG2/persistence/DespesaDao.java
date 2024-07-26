@@ -87,7 +87,4 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		c.close();
 		return despesas;
 	}
-
-	
-	
 }
