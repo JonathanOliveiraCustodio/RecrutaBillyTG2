@@ -5,12 +5,18 @@ GO
 USE RecrutaBillyTG2 
 GO
 CREATE TABLE fornecedor(
-codigo       INT           NOT NULL,
-nome	     VARCHAR(50)   NOT NULL,
-endereco     VARCHAR(50)   NOT NULL,
-telefone	 CHAR(12)	   NOT NULL,
-email         VARCHAR(100) NOT NULL, 
-empresa		 VARCHAR(50)   NOT NULL
+codigo			INT				NOT NULL,
+nome			VARCHAR(50)		NOT NULL,
+telefone		CHAR(12)		NOT NULL,
+email			VARCHAR(100)	NOT NULL, 
+empresa			VARCHAR(50)		NOT NULL,
+CEP		        CHAR(09)	    NOT NULL,
+logradouro      VARCHAR(150)	NOT NULL, 
+numero          VARCHAR (20)	NOT NULL,
+bairro          VARCHAR(150)	NOT NULL,
+complemento     VARCHAR(100)	NULL,
+cidade          VARCHAR(100)	NOT NULL,
+UF              CHAR(02)	    NOT NULL,
 PRIMARY KEY (codigo)
 )
 GO
@@ -28,7 +34,7 @@ codigo			INT	        	NOT NULL,
 nome			VARCHAR(100)    NOT NULL,
 precoCompra		DECIMAL(10,2)	NOT NULL,
 precoVenda     DECIMAL(10,2)	NOT NULL,
-quantidade		INT				NOT NULL,
+quantidade		DECIMAL(10,2)	NOT NULL,
 unidade	     	VARCHAR(15)     NOT NULL,
 fornecedor		INT				NOT NULL,
 dataCompra      DATE            NOT NULL   
@@ -129,29 +135,29 @@ INSERT INTO cliente (codigo, nome, telefone, email, tipo, documento, CEP, lograd
 (5, 'Yasmin Ribeiro Faganello', '11912438547', 'yasribeiro@email.com', 'CPF', '61837422010', '04050001', 'Avenida Jabaquara', 'Mirandópolis', 'São Paulo', 'SP', NULL, '452A','1984-02-02'),
 (6, 'Rafaela Ferrari', '11943758121', 'raferrari@email.com', 'CPF', '28348483004', '01310000', 'Avenida Paulista', 'Bela Vista', 'São Paulo', 'SP', 'Apt 202', '1500','1945-08-08')
 GO
-INSERT INTO fornecedor (codigo, nome, endereco, telefone, email, empresa) VALUES
-(1, 'Tech Solutions Ltda.', 'Rua das Inovações, 123', '1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções'),
-(2, 'Eco Supply Co.', 'Avenida Sustentável, 456', '2345678901', 'contato@ecosupply.com', 'Fornecimento Ecológico'),
-(3, 'ArtisanCraft Inc.', 'Praça dos Artesãos, 789', '3456789012', 'contato@artisancraft.com', 'Arte e Design'),
-(4, 'Gourmet Essentials', 'Travessa dos Sabores, 101', '4567890123', 'contato@gourmetessentials.com', 'Alimentos Gourmet'),
-(5, 'BioTech Innovations', 'Alameda da Ciência, 202', '5678901234', 'contato@biotechinnovations.com', 'Inovações Biomédicas'),
-(6, 'EduSmart Solutions', 'Avenida do Conhecimento, 303', '6789012345', 'contato@edusmart.com', 'Soluções Educacionais'),
-(7, 'Fashion Trends Inc.', 'Rua da Moda, 404', '7890123456', 'contato@fashiontrends.com', 'Tendências de Moda'),
-(8, 'GreenGrow Gardens', 'Estrada das Plantas, 505', '8901234567', 'contato@greengrowgardens.com', 'Jardins Sustentáveis'),
-(9, 'TechNova Industries', 'Boulevard da Tecnologia, 606', '9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica'),
-(10, 'Tranquil Retreats Ltd.', 'Rua da Serenidade, 707', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos');
+INSERT INTO fornecedor (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF) VALUES
+(1, 'Tech Solutions Ltda.','1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções', '12345-678', 'Rua das Inovações', '123', 'Centro', NULL, 'São Paulo', 'SP'),
+(2, 'Eco Supply Co.', '2345678901', 'contato@ecosupply.com', 'Fornecimento Ecológico', '23456-789', 'Avenida Sustentável', '456', 'Jardim', NULL, 'Rio de Janeiro', 'RJ'),
+(3, 'ArtisanCraft Inc.', '3456789012', 'contato@artisancraft.com', 'Arte e Design', '34567-890', 'Praça dos Artesãos', '789', 'Vila', NULL, 'Belo Horizonte', 'MG'),
+(4, 'Gourmet Essentials', '4567890123', 'contato@gourmetessentials.com', 'Alimentos Gourmet', '45678-901', 'Travessa dos Sabores', '101', 'Centro', NULL, 'Curitiba', 'PR'),
+(5, 'BioTech Innovations', '5678901234', 'contato@biotechinnovations.com', 'Inovações Biomédicas', '56789-012', 'Alameda da Ciência', '202', 'Zona Industrial', NULL, 'Porto Alegre', 'RS'),
+(6, 'EduSmart Solutions', '6789012345', 'contato@edusmart.com', 'Soluções Educacionais', '67890-123', 'Avenida do Conhecimento', '303', 'Bairro Universitário', NULL, 'Brasília', 'DF'),
+(7, 'Fashion Trends Inc.', '7890123456', 'contato@fashiontrends.com', 'Tendências de Moda', '78901-234', 'Rua da Moda', '404', 'Centro', NULL, 'Florianópolis', 'SC'),
+(8, 'GreenGrow Gardens', '8901234567', 'contato@greengrowgardens.com', 'Jardins Sustentáveis', '89012-345', 'Estrada das Plantas', '505', 'Jardins', NULL, 'Salvador', 'BA'),
+(9, 'TechNova Industries','9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica', '90123-456', 'Boulevard da Tecnologia', '606', 'Distrito Tecnológico', NULL, 'Campinas', 'SP'),
+(10, 'Tranquil Retreats Ltd.', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos', '01234-567', 'Rua da Serenidade', '707', 'Centro', NULL, 'Fortaleza', 'CE');
 GO
 INSERT INTO insumo (codigo, nome, precoCompra,precoVenda, quantidade,unidade, fornecedor,dataCompra) VALUES
-(1, 'Solvente', 30.00,35.00, 500,'ml', 1,'2024-05-05'),
-(2, 'Verniz', 50.00,55.00, 100,'ml', 2,'2024-04-07'),
+(1, 'Solvente', 30.00,35.00, 500,'un', 1.5,'2024-05-05'),
+(2, 'Verniz', 50.00,55.00, 100,'un', 2,'2024-04-07'),
 (3, 'Papel Offset', 15.00,20.00, 1000,'unidade', 3,'2024-11-10'),
-(4, 'Tinta Branca PU', 50.00,55.00, 50,'ml', 4,'2024-02-01'),
+(4, 'Tinta Branca PU', 50.00,55.00, 50,'un', 4,'2024-02-01'),
 (5, 'Tinta Preta PU', 40.00,45.00, 300,'ml', 5,'2024-09-03'),
 (6, 'Molecula Verrmelha', 25.00,30.00, 400,'kg', 1,'2024-06-04'),
-(7, 'Molecula Cinza', 120.00,150.00, 50,'kg', 8,'2024-06-03'),
+(7, 'Molecula Cinza', 120.00,150.00, 5.5,'kg', 8,'2024-06-03'),
 (8, 'Filamento Azul', 42.50, 48.90,200,'kg', 7,'2023-12-12'),
 (9, 'Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
-(10, 'Tinta Metálica', 20.10,27.50, 20,'ml', 6, '2024-07-10');
+(10, 'Tinta Metálica', 20.10,27.50, 20,'un', 6, '2024-07-10');
 GO
 INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataManutencao) VALUES 
 (1, 'Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
@@ -180,10 +186,16 @@ CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
     @codigo INT,
     @nome VARCHAR(50),
-    @endereco VARCHAR(50),
     @telefone CHAR(12),
     @email VARCHAR(100),
     @empresa VARCHAR(50),
+    @CEP CHAR(9),
+    @logradouro VARCHAR(150),
+    @numero VARCHAR(20),
+    @bairro VARCHAR(150),
+    @complemento VARCHAR(100),
+    @cidade VARCHAR(100),
+    @UF CHAR(2),
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -194,8 +206,8 @@ BEGIN
             RAISERROR('Código já existe. Não é possível inserir o fornecedor.', 16, 1)
             RETURN
         END
-        INSERT INTO fornecedor (codigo, nome, endereco, telefone, email, empresa)
-        VALUES (@codigo, @nome, @endereco, @telefone, @email, @empresa)
+        INSERT INTO fornecedor (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF)
+        VALUES (@codigo, @nome, @telefone, @email, @empresa, @CEP, @logradouro, @numero, @bairro, @complemento, @cidade, @UF)
         SET @saida = 'Fornecedor inserido com sucesso'
     END
     ELSE IF (@acao = 'U')
@@ -207,7 +219,7 @@ BEGIN
         END
 
         UPDATE fornecedor
-        SET nome = @nome, endereco = @endereco, telefone = @telefone, email = @email, empresa = @empresa
+        SET nome = @nome, telefone = @telefone, email = @email, empresa = @empresa, CEP = @CEP, logradouro = @logradouro, numero = @numero, bairro = @bairro, complemento = @complemento, cidade = @cidade, UF = @UF
         WHERE codigo = @codigo
         SET @saida = 'Fornecedor alterado com sucesso'
     END
@@ -229,6 +241,7 @@ BEGIN
     END
 END
 GO
+
 CREATE PROCEDURE sp_iud_equipamento
     @acao CHAR(1),
     @codigo INT,
@@ -292,7 +305,7 @@ CREATE PROCEDURE sp_iud_insumo
     @nome VARCHAR(100),
     @precoCompra DECIMAL(10,2),
 	@precoVenda DECIMAL(10,2),
-    @quantidade INT,
+    @quantidade DECIMAL(10,2),
 	@unidade VARCHAR(15),
     @fornecedor INT,
 	@dataCompra DATE,
@@ -555,6 +568,42 @@ BEGIN
         RAISERROR('Operação inválida', 16, 1)
         RETURN
     END
+END
+GO
+CREATE PROCEDURE sp_iud_despesa(@acao CHAR(1), @codigo INT, @nome VARCHAR(200), @dataInicio DATE, @dataVencimento DATE, @valor DECIMAL(12,2), @tipo VARCHAR(50), @estado VARCHAR(50), @saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(UPPER(@acao) = 'I')
+	BEGIN
+		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, estado) VALUES
+		(@codigo, @nome, @dataInicio, @dataVencimento, @valor, @tipo, @estado)
+		SET @saida = 'Despesa inserida com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'U')
+	BEGIN
+		UPDATE despesa
+		SET nome = @nome,
+			dataInicio = @dataInicio,
+			dataVencimento = @dataVencimento,
+			valor = @valor,
+			tipo = @tipo,
+			estado = @estado
+		WHERE codigo = @codigo
+		SET @saida = 'Despesa atualizada com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'D')
+	BEGIN
+		DELETE FROM despesa
+		WHERE codigo = @codigo
+		SET @saida = 'Despesa excluida com sucesso.'
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+		RETURN
+	END
 END
 GO
 CREATE PROCEDURE sp_iud_pedido(@acao CHAR(1), 
@@ -928,6 +977,42 @@ BEGIN
 END
 GO
 
+
+CREATE VIEW vw_insumo AS
+SELECT 
+    i.codigo,
+    i.nome,
+    i.precoCompra,
+    i.precoVenda,
+    i.quantidade,
+    i.unidade,
+	i.dataCompra,
+    f.nome AS nomeFornecedor,
+    f.codigo AS codigoFornecedor  
+FROM 
+    insumo i
+JOIN 
+    fornecedor f ON i.fornecedor = f.codigo;
+GO
+
+CREATE VIEW vw_fornecedor AS
+SELECT
+    codigo,
+    nome,
+    telefone,
+    email,
+    empresa,
+    CEP,
+    logradouro,
+    numero,
+    bairro,
+    complemento,
+    cidade,
+    UF
+FROM
+    fornecedor;
+GO
+
 CREATE VIEW vw_buscar_cliente AS
 SELECT 
     codigo,
@@ -984,5 +1069,78 @@ RETURN
         (@tipoPesquisa = 'Todos')
 );
 GO
+
+CREATE FUNCTION fn_buscar_fornecedor (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        codigo,
+        nome,
+        telefone,
+        email,
+        empresa,
+        CEP,
+        logradouro,
+        numero,
+        bairro,
+        complemento,
+        cidade,
+        UF
+    FROM fornecedor
+    WHERE 
+        (@tipoPesquisa = 'Nome' AND nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'CEP' AND CEP LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Bairro' AND bairro LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Cidade' AND cidade LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'UF' AND UF = @valorPesquisa) OR
+        (@tipoPesquisa = 'Todos')
+);
+GO
+
+CREATE FUNCTION fn_buscar_insumo (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    WITH Insumos AS (
+        SELECT 
+            i.codigo,
+            i.nome,
+            i.precoCompra,
+            i.precoVenda,
+            i.quantidade,
+            i.unidade,
+            f.nome AS nomeFornecedor,
+            f.codigo AS codigoFornecedor,
+            CONVERT(VARCHAR(10), i.dataCompra, 103) AS dataCompra
+        FROM 
+            insumo i
+        JOIN 
+            fornecedor f ON i.fornecedor = f.codigo
+        WHERE 
+            (@tipoPesquisa = 'Nome' AND i.nome LIKE '%' + @valorPesquisa + '%') OR
+            (@tipoPesquisa = 'Unidade' AND i.unidade LIKE '%' + @valorPesquisa + '%') OR
+            (@tipoPesquisa = 'Fornecedor' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
+            (@tipoPesquisa = 'Preço Compra' AND i.precoCompra = CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+            (@tipoPesquisa = 'Preço Venda' AND i.precoVenda = CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+            (@tipoPesquisa = 'Todos')
+    )
+    SELECT 
+        *,
+        (SELECT COUNT(*) FROM Insumos) AS quantidadeRegistros
+    FROM 
+        Insumos
+);
+GO
+
+
 
 

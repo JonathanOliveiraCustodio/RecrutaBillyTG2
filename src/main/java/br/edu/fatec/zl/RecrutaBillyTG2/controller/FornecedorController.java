@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FornecedorDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
@@ -78,11 +76,18 @@ public class FornecedorController {
 		String cmd = allRequestParam.get("botao");
 		String codigo = allRequestParam.get("codigo");
 		String nome = allRequestParam.get("nome");
-		String endereco = allRequestParam.get("endereco");
 		String telefone = allRequestParam.get("telefone");
 		String email = allRequestParam.get("email");
 		String empresa = allRequestParam.get("empresa");
-
+		String cep = allRequestParam.get("CEP");
+		String logradouro = allRequestParam.get("logradouro");
+		String numero = allRequestParam.get("numero");
+		String bairro = allRequestParam.get("bairro");
+		String complemento = allRequestParam.get("complemento");
+		String cidade = allRequestParam.get("cidade");
+		String UF = allRequestParam.get("UF");
+		
+		
 		String saida = "";
 		String erro = "";
 
@@ -98,10 +103,16 @@ public class FornecedorController {
 		try {
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 				f.setNome(nome);
-				f.setEndereco(endereco);
 				f.setTelefone(telefone);
 				f.setEmail(email);
 				f.setEmpresa(empresa);
+				f.setCEP(cep);
+				f.setLogradouro(logradouro);
+				f.setNumero(numero);
+				f.setBairro(bairro);
+				f.setComplemento(complemento);
+				f.setCidade(cidade);
+				f.setUF(UF);
 			}
 			if (cmd.contains("Cadastrar")) {
 				cadastrarFornecedor(f);

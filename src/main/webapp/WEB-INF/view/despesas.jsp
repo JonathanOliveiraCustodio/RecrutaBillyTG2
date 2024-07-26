@@ -130,7 +130,7 @@
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<select id="filtro" name="filtro" class="form-select">
-									<option value="">Mês</option>
+									<option value="0">Mês</option>
 									<option value="1">Janeiro</option>
 									<option value="2">Fevereiro</option>
 									<option value="3">Março</option>

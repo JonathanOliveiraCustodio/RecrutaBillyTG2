@@ -1,13 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${pageContext.request.contextPath}/resources/js/fornecedor.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/fornecedor.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <title>Fornecedor</title>
 
 </head>
@@ -22,74 +24,145 @@
 					<h1 class="display-6 fw-bold">Manutenção de Fornecedor</h1>
 					<form action="fornecedor" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
-						<label for="codigo" class="form-label col-md-1">Código:</label>
-						<div class="col-md-2">
-							<input type="number" min="0" step="1" id="codigo" name="codigo"
-								class="form-control" placeholder="Código"
-								value='<c:out value="${fornecedor.codigo }"></c:out>'>
-						</div>
-						<div class="col-md-1">
-							<input type="submit" id="botao" name="botao" value="Buscar"
-								class="btn btn-primary mb-3" onclick="return validarBusca()">
-						</div>
-
-						<label for="nome" class="form-label col-md-1">Nome:</label>
-						<div class="col-md-3">
-							<input type="text" id="nome" name="nome" class="form-control"
-								placeholder="Nome"
-								value='<c:out value="${fornecedor.nome }"></c:out>'>
-						</div>
-
-						<label for="endereco" class="form-label col-md-1">Endereço:</label>
-						<div class="col-md-3">
-							<input type="text" id="endereco" name="endereco"
-								class="form-control" placeholder="Endereço"
-								value='<c:out value="${fornecedor.endereco }"></c:out>'>
-						</div>
-
-						<label for="telefone" class="form-label col-md-1">Telefone:</label>
-						<div class="col-md-3">
-							<input type="text" id="telefone" name="telefone"
-								class="form-control" placeholder="Telefone"
-								value='<c:out value="${fornecedor.telefone }"></c:out>'>
-						</div>
-
-						<label for="email" class="form-label col-md-1">Email:</label>
-						<div class="col-md-3">
-							<input type="text" id="email" name="email" class="form-control"
-								placeholder="E-mail"
-								value='<c:out value="${fornecedor.email }"></c:out>'>
+						<!-- Primeira Linha: Código, Nome, Telefone -->
+						<div class="row g-3">
+							<div class="col-md-1">
+								<label for="codigo" class="form-label">Código:</label>
+							</div>
+							<div class="col-md-2">
+								<input type="number" min="0" step="1" id="codigo" name="codigo"
+									class="form-control" placeholder="Código"
+									value='<c:out value="${fornecedor.codigo}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<input type="submit" id="botao" name="botao" value="Buscar"
+									class="btn btn-primary mb-3" onclick="return validarBusca()">
+							</div>
+							<div class="col-md-1">
+								<label for="nome" class="form-label">Nome:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="nome" name="nome" class="form-control"
+									placeholder="Nome"
+									value='<c:out value="${fornecedor.nome}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="telefone" class="form-label">Telefone:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="telefone" name="telefone"
+									class="form-control" placeholder="Telefone"
+									value='<c:out value="${fornecedor.telefone}"></c:out>'>
+							</div>
 						</div>
 
-						<label for="empresa" class="form-label col-md-1">Empresa:</label>
-						<div class="col-md-3">
-							<input type="text" id="empresa" name="empresa"
-								class="form-control" placeholder="Empresa"
-								value='<c:out value="${fornecedor.empresa }"></c:out>'>
+						<!-- Segunda Linha: Email, Empresa, CEP -->
+						<div class="row g-3 mt-2">
+							<div class="col-md-1">
+								<label for="email" class="form-label">Email:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="email" name="email" class="form-control"
+									placeholder="E-mail"
+									value='<c:out value="${fornecedor.email}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="empresa" class="form-label">Empresa:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="empresa" name="empresa"
+									class="form-control" placeholder="Empresa"
+									value='<c:out value="${fornecedor.empresa}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="cep" class="form-label">CEP:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="CEP" name="CEP" class="form-control"
+									placeholder="CEP"
+									value='<c:out value="${fornecedor.CEP}"></c:out>'>
+							</div>
 						</div>
 
-						<div class="col-md-0"></div>
+						<!-- Terceira Linha: Logradouro, Número, Bairro -->
+						<div class="row g-3 mt-2">
+							<div class="col-md-1">
+								<label for="logradouro" class="form-label">Logradouro:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="logradouro" name="logradouro"
+									class="form-control" placeholder="Logradouro"
+									value='<c:out value="${fornecedor.logradouro}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="numero" class="form-label">Número:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="numero" name="numero"
+									class="form-control" placeholder="Número"
+									value='<c:out value="${fornecedor.numero}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="bairro" class="form-label">Bairro:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="bairro" name="bairro"
+									class="form-control" placeholder="Bairro"
+									value='<c:out value="${fornecedor.bairro}"></c:out>'>
+							</div>
+						</div>
 
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+						<!-- Quarta Linha: Localidade, UF -->
+						<div class="row g-3 mt-2">
+							<div class="col-md-1">
+								<label for="complemento" class="form-label">Compl:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="complemento" name="complemento"
+									class="form-control" placeholder="Complemento"
+									value='<c:out value="${fornecedor.complemento}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="cidade" class="form-label">Cidade:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="cidade" name="cidade"
+									class="form-control" placeholder="Localidade"
+									value='<c:out value="${fornecedor.cidade}"></c:out>'>
+							</div>
+							<div class="col-md-1">
+								<label for="uf" class="form-label">UF:</label>
+							</div>
+							<div class="col-md-3">
+								<input type="text" id="UF" name="UF" class="form-control"
+									placeholder="UF"
+									value='<c:out value="${fornecedor.UF}"></c:out>'>
+							</div>
 						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Alterar"
-								class="btn btn-warning">
-						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Excluir"
-								class="btn btn-danger">
-						</div>
-						<div class="col-md-2 d-grid text-center"></div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Listar"
-								class="btn btn-dark">
-						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Limpar"
-								class="btn btn-secondary">
+
+						<!-- Linha dos Botões -->
+						<div class="row g-3 mt-3">
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Cadastrar"
+									class="btn btn-success">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Alterar"
+									class="btn btn-warning">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Excluir"
+									class="btn btn-danger">
+							</div>
+							<div class="col-md-2 d-grid text-center"></div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Listar"
+									class="btn btn-dark">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Limpar"
+									class="btn btn-secondary">
+							</div>
 						</div>
 					</form>
 				</div>
@@ -121,7 +194,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="8"
+						<th class="titulo-tabela" colspan="14"
 							style="text-align: center; font-size: 23px;">Lista de
 							Fornecedores</th>
 					</tr>
@@ -129,10 +202,16 @@
 						<th></th>
 						<th>Código</th>
 						<th>Nome</th>
-						<th>Endereço</th>
 						<th>Telefone</th>
 						<th>E-mail</th>
 						<th>Empresa</th>
+						<th>CEP</th>
+						<th>Logradouro</th>
+						<th>Número</th>
+						<th>Empresa</th>
+						<th>Complemento</th>
+						<th>Cidade</th>
+						<th>UF</th>
 						<th>Excluir</th>
 					</tr>
 				</thead>
@@ -140,8 +219,8 @@
 					<c:forEach var="f" items="${fornecedores}">
 						<tr>
 							<td style="text-align: center;">
-								<button class="btn btn-outline-info" name="opcao" value="${f.codigo}"
-									onclick="editarFornecedor(this.value)"
+								<button class="btn btn-outline-info" name="opcao"
+									value="${f.codigo}" onclick="editarFornecedor(this.value)"
 									${f.codigo eq codigoEdicao ? 'checked' : ''}>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -152,10 +231,16 @@
 							</td>
 							<td><c:out value="${f.codigo}" /></td>
 							<td><c:out value="${f.nome}" /></td>
-							<td><c:out value="${f.endereco}" /></td>
 							<td><c:out value="${f.telefone}" /></td>
 							<td><c:out value="${f.email}" /></td>
 							<td><c:out value="${f.empresa}" /></td>
+							<td><c:out value="${f.CEP}" /></td>
+							<td><c:out value="${f.logradouro}" /></td>
+							<td><c:out value="${f.numero}" /></td>
+							<td><c:out value="${f.bairro}" /></td>
+							<td><c:out value="${f.complemento}" /></td>
+							<td><c:out value="${f.cidade}" /></td>
+							<td><c:out value="${f.UF}" /></td>
 							<td style="text-align: center;">
 								<button class="btn btn-danger"
 									onclick="excluirFornecedor('${f.codigo}')">Excluir</button>
