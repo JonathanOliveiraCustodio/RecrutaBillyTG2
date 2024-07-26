@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +15,59 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Despesa;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.DespesaDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class DespesaController {
+	
+	@Autowired
+	GenericDao gDao;
+	
+	@Autowired 
+	DespesaDao dDao;
+	
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.GET)
 	public ModelAndView despesasGet(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
+		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
+		String erro = "";
+		String saida = "";
+		
+		List<Despesa> despesas = new ArrayList<>();
+		Despesa d = null;
+		
+		try {
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+			String filtro = allRequestParam.get("filtro");
+			
+			if(cmd != null) {
+				if(cmd.contains("alterar")) {
+					d = new Despesa();
+					d.setCodigo(Integer.parseInt(codigo));
+					d = buscarDespesa(d);
+				}else {
+					if(cmd.contains("excluir")) {
+						d = new Despesa();
+						d.setCodigo(Integer.parseInt(codigo));
+						saida = excluirDespesa(d);
+						d = null;
+					}
+				}
+				despesas = listarDespesas(Integer.parseInt(filtro));
+			}
+		} catch(ClassNotFoundException | SQLException e) {
+			erro = e.getMessage();
+		}finally {
+			if(nivelAcesso == null || !nivelAcesso.equals("admin")) {
+				saida = "Você não possui acesso para visualizar esta página.";
+			}
+			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
+			model.addAttribute("despesa", d);
+			model.addAttribute("despesas", despesas);
+		}
 		return new ModelAndView("despesas");
 	}
 	
@@ -66,7 +114,7 @@ public class DespesaController {
 				d = null;
 			}
 			if(cmd.contains("Excluir")) {
-				d = excluirDespesa(d);
+				saida = excluirDespesa(d);
 				d = null;
 			}
 			if(cmd.contains("Buscar")) {
@@ -76,7 +124,7 @@ public class DespesaController {
 				}
 			}
 			if(cmd.contains("Listar")) {
-				despesas = listarDespesas(filtro);
+				despesas = listarDespesas(Integer.parseInt(filtro));
 			}
 		} catch(ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
@@ -89,28 +137,43 @@ public class DespesaController {
 		return new ModelAndView("despesas");
 	}
 
-	private String cadastrarDespesa(Despesa d) {
-		// TODO Auto-generated method stub
-		return null;
+	private String cadastrarDespesa(Despesa d) throws ClassNotFoundException, SQLException {
+		String saida = dDao.iudDespesa("I", d);
+		return saida;
 	}
 
-	private String alterarDespesa(Despesa d) {
-		// TODO Auto-generated method stub
-		return null;
+	private String alterarDespesa(Despesa d) throws ClassNotFoundException, SQLException {
+		String saida = dDao.iudDespesa("U", d);
+		return saida;
 	}
 
-	private Despesa excluirDespesa(Despesa d) {
-		// TODO Auto-generated method stub
-		return null;
+	private String excluirDespesa(Despesa d) throws ClassNotFoundException, SQLException {
+		String saida = dDao.iudDespesa("D", d);
+		return saida;
 	}
 
-	private Despesa buscarDespesa(Despesa d) {
-		// TODO Auto-generated method stub
-		return null;
+	private Despesa buscarDespesa(Despesa d) throws ClassNotFoundException, SQLException {
+		d = dDao.findBy(d);
+		return d;
 	}
 
-	private List<Despesa> listarDespesas(String filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	private List<Despesa> listarDespesas(int filtro) throws ClassNotFoundException, SQLException {
+		List<Despesa> despesas = new ArrayList<>();
+		List<Despesa> auxDespesas = new ArrayList<>();
+		despesas = dDao.findAll();
+		
+		// Aplicação do filtro
+		if(filtro != 0) {
+			for(Despesa d : despesas) {
+				if(d.getData().getMonth() + 1 == filtro) {
+					auxDespesas.add(d);
+				}
+			}
+		}
+		if (!auxDespesas.isEmpty()){
+			return auxDespesas;
+		}else {			
+			return despesas;
+		}
 	}
 }

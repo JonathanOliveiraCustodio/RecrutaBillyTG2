@@ -557,6 +557,42 @@ BEGIN
     END
 END
 GO
+CREATE PROCEDURE sp_iud_despesa(@acao CHAR(1), @codigo INT, @nome VARCHAR(200), @dataInicio DATE, @dataVencimento DATE, @valor DECIMAL(12,2), @tipo VARCHAR(50), @estado VARCHAR(50), @saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(UPPER(@acao) = 'I')
+	BEGIN
+		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, estado) VALUES
+		(@codigo, @nome, @dataInicio, @dataVencimento, @valor, @tipo, @estado)
+		SET @saida = 'Despesa inserida com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'U')
+	BEGIN
+		UPDATE despesa
+		SET nome = @nome,
+			dataInicio = @dataInicio,
+			dataVencimento = @dataVencimento,
+			valor = @valor,
+			tipo = @tipo,
+			estado = @estado
+		WHERE codigo = @codigo
+		SET @saida = 'Despesa atualizada com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'D')
+	BEGIN
+		DELETE FROM despesa
+		WHERE codigo = @codigo
+		SET @saida = 'Despesa excluida com sucesso.'
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+		RETURN
+	END
+END
+GO
 CREATE PROCEDURE sp_iud_pedido(@acao CHAR(1), 
 @codigopedido INT, 
 @nomepedido VARCHAR(MAX),

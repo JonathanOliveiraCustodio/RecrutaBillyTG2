@@ -2,8 +2,11 @@ package br.edu.fatec.zl.RecrutaBillyTG2.persistence;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -41,14 +44,48 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 	}
 	
 	@Override
-	public Despesa findBy(Despesa t) throws SQLException, ClassNotFoundException {
+	public Despesa findBy(Despesa d) throws SQLException, ClassNotFoundException {
 		String sql = "SELECT * FROM despesa WHERE codigo = ?";
+		Connection c = gDao.getConnection();
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next()) {
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			d.setData(rs.getDate("dataInicial"));
+			d.setDataVencimento(rs.getDate("dataVencimento"));
+			d.setValor(rs.getFloat("valor"));
+			d.setTipo(rs.getString("tipo"));
+			d.setEstado(rs.getString("estado"));
+		}
+		rs.close();
+		ps.close();
+		c.close();
+		return d;
 	}
 
 	@Override
 	public List<Despesa> findAll() throws SQLException, ClassNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Despesa> despesas = new ArrayList<>();
+		String sql = "SELECT * FROM despesa";
+		Connection c = gDao.getConnection();
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			Despesa d = new Despesa();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			d.setData(rs.getDate("dataInicial"));
+			d.setDataVencimento(rs.getDate("dataVencimento"));
+			d.setValor(rs.getFloat("valor"));
+			d.setTipo(rs.getString("tipo"));
+			d.setEstado(rs.getString("estado"));
+			despesas.add(d);
+		}
+		ps.close();
+		rs.close();
+		c.close();
+		return despesas;
 	}
 
 	
