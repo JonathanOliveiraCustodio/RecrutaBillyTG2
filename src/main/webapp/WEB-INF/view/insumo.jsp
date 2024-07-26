@@ -75,7 +75,7 @@
 								<label for="quantidade" class="form-label">Quantidade:</label>
 							</div>
 							<div class="col-md-3">
-								<input type="number" id="quantidade" name="quantidade"
+								<input type="text" id="quantidade" name="quantidade"
 									class="form-control" placeholder="Quantidade"
 									value='<c:out value="${insumo.quantidade}"></c:out>'>
 							</div>

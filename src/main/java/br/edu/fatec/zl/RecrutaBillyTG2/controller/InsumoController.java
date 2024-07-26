@@ -120,7 +120,7 @@ public class InsumoController {
 				i.setNome(nome);
 				i.setPrecoCompra(Float.parseFloat(precoCompra));
 				i.setPrecoVenda(Float.parseFloat(precoVenda));
-				i.setQuantidade(Integer.parseInt(quantidade));
+				i.setQuantidade(Float.parseFloat(quantidade));
 				i.setUnidade(unidade);
 				i.setDataCompra(Date.valueOf(dataCompra));
 				Fornecedor f = new Fornecedor();

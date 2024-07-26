@@ -24,7 +24,7 @@ public class DespesaController {
 	}
 	
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.POST)
-	public ModelAndView despesasPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
+	public ModelAndView despesasPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) throws SQLException, ClassNotFoundException {
 		String cmd = allRequestParam.get("botao");
 		String codigo = allRequestParam.get("codigo");
 		String nome = allRequestParam.get("nome");
@@ -78,17 +78,15 @@ public class DespesaController {
 			if(cmd.contains("Listar")) {
 				despesas = listarDespesas(filtro);
 			}
-		} catch(ClassNotFoundException | SQLException e) {
-			erro = e.getMessage();
 		} finally {
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
 			model.addAttribute("despesa", d);
 			model.addAttribute("despesas", despesas);
 		}
-		return new ModelAndView("despesas");
+		return new ModelAndView("despesa");
 	}
-
+	
 	private String cadastrarDespesa(Despesa d) {
 		// TODO Auto-generated method stub
 		return null;

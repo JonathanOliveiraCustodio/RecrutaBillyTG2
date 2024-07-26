@@ -34,7 +34,7 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 		cs.setString(3, i.getNome());
 		cs.setFloat(4, i.getPrecoCompra());
 		cs.setFloat(5, i.getPrecoVenda());
-		cs.setInt(6, i.getQuantidade());
+		cs.setFloat(6, i.getQuantidade());
 		cs.setString(7, i.getUnidade());
 		cs.setInt(8, i.getFornecedor().getCodigo());
 		cs.setDate(9, i.getDataCompra());
@@ -51,12 +51,8 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 	public Insumo findBy(Insumo i) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT i.codigo AS codigoInsumo, f.codigo AS codigoFornecedor, f.nome AS nomeFornecedor, ");
-		sql.append("i.nome AS nomeInsumo,i.precoCompra AS precoCompraInsumo, i.precoVenda AS precoVendaInsumo, ");
-		sql.append("i.quantidade AS quantidadeInsumo, i.unidade AS unidadeInsumo, i.dataCompra AS dataCompraInsumo ");
-		sql.append("FROM insumo i INNER JOIN fornecedor f ON i.fornecedor = f.codigo  ");
-		sql.append("WHERE i.codigo = ?");
-
+		sql.append("SELECT * FROM vw_insumo WHERE codigo = ?");
+		
 		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ps.setInt(1, i.getCodigo());
 
@@ -65,14 +61,15 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 			Fornecedor f = new Fornecedor();
 			f.setCodigo(rs.getInt("codigoFornecedor"));
 			f.setNome(rs.getString("nomeFornecedor"));
-			i.setCodigo(rs.getInt("codigoInsumo"));
-			i.setNome(rs.getString("nomeInsumo"));
-			i.setPrecoCompra(rs.getFloat("precoCompraInsumo"));
-			i.setPrecoVenda(rs.getFloat("precoVendaInsumo"));
-			i.setQuantidade(rs.getInt("quantidadeInsumo"));
-			i.setUnidade(rs.getString("unidadeInsumo"));
+			
+			i.setCodigo(rs.getInt("codigo"));
+			i.setNome(rs.getString("nome"));
+			i.setPrecoCompra(rs.getFloat("precoCompra"));
+			i.setPrecoVenda(rs.getFloat("precoVenda"));
+			i.setQuantidade(rs.getFloat("quantidade"));
+			i.setUnidade(rs.getString("unidade"));
 			i.setFornecedor(f);
-            i.setDataCompra(rs.getDate("dataCompraInsumo"));
+            i.setDataCompra(rs.getDate("dataCompra"));
 			rs.close();
 			ps.close();
 			c.close();
@@ -90,7 +87,7 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 		List<Insumo> insumos = new ArrayList<>();
 		Connection c = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT * FROM fn_insumo_funcionario() ");
+		sql.append("SELECT * FROM vw_insumo");
 		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
@@ -98,14 +95,14 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 			f.setCodigo(rs.getInt("codigoFornecedor"));
 			f.setNome(rs.getString("nomeFornecedor"));
 			Insumo i = new Insumo();
-			i.setCodigo(rs.getInt("codigoInsumo"));
-			i.setNome(rs.getString("nomeInsumo"));
-			i.setPrecoCompra(rs.getFloat("precoCompraInsumo"));
-			i.setPrecoVenda(rs.getFloat("precoVendaInsumo"));
-			i.setQuantidade(rs.getInt("quantidadeInsumo"));
-			i.setUnidade(rs.getString("unidadeInsumo"));
+			i.setCodigo(rs.getInt("codigo"));
+			i.setNome(rs.getString("nome"));
+			i.setPrecoCompra(rs.getFloat("precoCompra"));
+			i.setPrecoVenda(rs.getFloat("precoVenda"));
+			i.setQuantidade(rs.getFloat("quantidade"));
+			i.setUnidade(rs.getString("unidade"));
 			i.setFornecedor(f);
-			i.setDataCompra(rs.getDate("dataCompraInsumo"));
+			i.setDataCompra(rs.getDate("dataCompra"));
 			insumos.add(i);
 		}
 		rs.close();

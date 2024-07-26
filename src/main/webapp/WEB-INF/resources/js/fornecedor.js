@@ -43,3 +43,5 @@ function consultarFornecedor(codigo) {
 	    // Se todos os campos estiverem preenchidos, permitir o envio do formulário
 	    return true;
 	}
+	
+	

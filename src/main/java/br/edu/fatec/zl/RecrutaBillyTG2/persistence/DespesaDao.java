@@ -42,7 +42,8 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 	
 	@Override
 	public Despesa findBy(Despesa t) throws SQLException, ClassNotFoundException {
-		String sql = "SELECT * FROM despesa WHERE codigo = ?";
+		//String sql = "SELECT * FROM despesa WHERE codigo = ?";
+		return t;
 	}
 
 	@Override
