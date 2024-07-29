@@ -154,7 +154,7 @@
 					<c:forEach var="e" items="${equipamentos}">
 						<tr>
 							<td style="text-align: center;">
-								<button class="btn btn-info" name="opcao" value="${e.codigo}"
+								<button class="btn btn-outline-info" name="opcao" value="${e.codigo}"
 									onclick="editarEquipamento(this.value)"
 									${e.codigo eq codigoEdicao ? 'checked' : ''}>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"

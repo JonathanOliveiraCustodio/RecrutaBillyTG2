@@ -25,7 +25,7 @@
 				<form action="manutencoesEquipamento" method="post"
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
 					<input type="hidden" id="equipamento" name="equipamento"
-						value='<c:out value="${equipamento}"></c:out>'>
+						value='<c:out value="${equipamento.codigo}"></c:out>'>
 					<!-- Linha do Formulário -->
 					<div class="row justify-content-center g-3">
 						<!-- Descrição -->

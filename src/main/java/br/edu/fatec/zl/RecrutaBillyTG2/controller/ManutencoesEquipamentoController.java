@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.ManutencaoEquipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ManutencaoEquipamentoDao;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ManutencoesEquipamentoController {
@@ -30,15 +30,13 @@ public class ManutencoesEquipamentoController {
 	@RequestMapping(name = "manutencoesEquipamento", value = "/manutencoesEquipamento", method = RequestMethod.GET)
 	public ModelAndView manutencoesEquipamentoGet(@RequestParam Map<String, String> allRequestParam,
 			HttpServletRequest request, ModelMap model) {
-		HttpSession session = request.getSession();
+	//	HttpSession session = request.getSession();
 
-		String equipamento = allRequestParam.get("equipamento");
-		if (equipamento == null) {
-			equipamento = (String) session.getAttribute("equipamento");
-		} else {
-			session.setAttribute("equipamento", equipamento);
-		}
 		String erro = "";
+		String equipamento = allRequestParam.get("equipamento");
+			
+		Equipamento e = new Equipamento();
+		e.setCodigo(Integer.parseInt(equipamento));
 
 		List<ManutencaoEquipamento> equipamentoManutencoes = new ArrayList<>();
 
@@ -50,6 +48,7 @@ public class ManutencoesEquipamentoController {
 			erro = error.getMessage();
 		} finally {
 			model.addAttribute("erro", erro);
+			model.addAttribute("equipamento", e);
 			model.addAttribute("equipamentoManutencoes", equipamentoManutencoes);
 		}
 
@@ -59,10 +58,9 @@ public class ManutencoesEquipamentoController {
 	@RequestMapping(name = "manutencoesEquipamento", value = "/manutencoesEquipamento", method = RequestMethod.POST)
 	public ModelAndView manutencoesEquipamentoPost(@RequestParam Map<String, String> allRequestParam,
 			HttpServletRequest request, ModelMap model) {
-		HttpSession session = request.getSession();
 
 		String cmd = allRequestParam.get("botao");
-		String codigoEquipamento = (String) session.getAttribute("equipamento");
+		String codigoEquipamento = allRequestParam.get("equipamento");
 		String codigoManutencao = allRequestParam.get("codigoManutencao");
 		String descricaoManutencao = allRequestParam.get("descricao");
 
