@@ -35,13 +35,14 @@ public class EquipamentoController {
 		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
 		String erro = "";
 		String saida = "";
+		String cmd = allRequestParam.get("cmd");
+		String codigo = allRequestParam.get("codigo");
 
 		List<Equipamento> equipamentos = new ArrayList<>();
 		Equipamento e = null; 
 		//e = null;
 		try {
-			String cmd = allRequestParam.get("cmd");
-			String codigo = allRequestParam.get("codigo");
+			
 
 			if (cmd != null) {
 	            if (cmd.contains("alterar")) {
@@ -129,6 +130,17 @@ public class EquipamentoController {
 			}
 			if (cmd.contains("Listar")) {
 				equipamentos = listarEquipamentos();
+			}
+			
+			if (cmd.contains("Adicionar")) {
+				e = buscarEquipamento(e);
+				if (e == null) {
+					saida = "Nenhum equipamento encontrado com o codigo especificado.";
+					e = null;
+				} else {
+					model.addAttribute("equipamento", e);
+					return new ModelAndView("forward:/manutencoesEquipamento", model);
+				}
 			}
 
 		} catch (SQLException | ClassNotFoundException error) {

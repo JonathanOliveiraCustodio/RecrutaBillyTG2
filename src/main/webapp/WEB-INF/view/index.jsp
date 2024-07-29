@@ -14,7 +14,7 @@
 		<jsp:include page="menu.jsp" />
 	</div>
 
-	<div class="container py-4">
+	<div class="container py-4" >
 		<h1 class="display-4 text-center">Bem-vindo Recruta Billy!</h1>
 		<p class="lead text-center">Aqui você pode acessar as principais
 			funcionalidades.</p>

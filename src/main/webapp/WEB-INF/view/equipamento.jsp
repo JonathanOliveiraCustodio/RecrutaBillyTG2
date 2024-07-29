@@ -1,14 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
-<script src="${pageContext.request.contextPath}/resources/js/equipamento.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/equipamento.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <title>Equipamento</title>
 
 </head>
@@ -44,7 +46,7 @@
 							</div>
 							<div class="col-md-3">
 								<input type="text" id="nome" name="nome" class="form-control"
-									placeholder="Nome do insumo" maxlength="100"
+									placeholder="Nome do Equipamento" maxlength="100"
 									value='<c:out value="${equipamento.nome}"></c:out>'>
 							</div>
 
@@ -132,17 +134,18 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="7"
+						<th class="titulo-tabela" colspan="8"
 							style="text-align: center; font-size: 23px;">Lista de
 							Equipamentos</th>
 					</tr>
 					<tr class="table-dark">
-						<th> </th>
+						<th></th>
 						<th>Código</th>
 						<th>Nome</th>
 						<th>Descrição</th>
 						<th>Fabricante</th>
-						<th>Manutenção</th>
+						<th>Data Aquisição</th>
+						<th>Manutenções</th>
 						<th>Excluir</th>
 
 					</tr>
@@ -154,8 +157,10 @@
 								<button class="btn btn-info" name="opcao" value="${e.codigo}"
 									onclick="editarEquipamento(this.value)"
 									${e.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-									  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+									  <path
+											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
 									</svg>
 								</button>
 							</td>
@@ -166,11 +171,17 @@
 
 							<td><fmt:formatDate value="${e.dataManutencao}"
 									pattern="dd/MM/yyyy" /></td>
-
+							<td>
+								<button
+									onclick="window.location.href='manutencoesEquipamento?equipamento=${e.codigo}'"
+									class="btn btn-info">Adicionar</button>
+							</td>
+							
 							<td style="text-align: center;">
 								<button class="btn btn-danger"
 									onclick="excluirEquipamento('${e.codigo}')">Excluir</button>
 							</td>
+
 
 						</tr>
 					</c:forEach>

@@ -34,7 +34,7 @@ public class ProdutosPedidoController {
 	PedidoProdutoDao ppDao;
 	
 	@RequestMapping(name = "produtosPedido", value = "/produtosPedido", method = RequestMethod.GET)
-	public ModelAndView produtosPedidoet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
+	public ModelAndView produtosPedidoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
 		
 		String pedido = allRequestParam.get("pedido");

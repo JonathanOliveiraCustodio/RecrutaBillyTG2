@@ -62,6 +62,8 @@
 							<input type="submit" id="botao" name="botao"
 								value="Gerar Relatório" class="btn btn-success">
 						</div>
+						
+						
 
 					</div>
 
