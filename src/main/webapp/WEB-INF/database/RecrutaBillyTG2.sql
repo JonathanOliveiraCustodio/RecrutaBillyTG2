@@ -1,5 +1,5 @@
 USE master
---DROP DATABASE RecrutaBillyTG2
+DROP DATABASE RecrutaBillyTG2
 CREATE DATABASE RecrutaBillyTG2
 GO
 USE RecrutaBillyTG2 
@@ -111,11 +111,12 @@ FOREIGN KEY (codigoProduto) REFERENCES produto (codigo)
 )
 GO
 CREATE TABLE despesa(
-codigo			INT				NOT NULL,
+codigo			INT				NOT NULL		IDENTITY,
 nome			VARCHAR(200)	NOT NULL,
 tipo			VARCHAR(50)		NOT NULL,
+pagamento		VARCHAR(50)		NOT NULL,
 dataInicio		DATE			NOT NULL,
-dataVencimento	DATE			NOT NULL,
+dataVencimento	DATE			NULL,
 valor			DECIMAL(12,2)	NOT NULL,
 estado			VARCHAR(50)		NOT NULL
 PRIMARY KEY(codigo)
@@ -736,8 +737,45 @@ BEGIN
         SET @Resultado = 'Login bem-sucedido'
     END
 END
-GO
 -- Fim da Procedure
+GO
+-- Inicio procedure IUD Despesa
+CREATE PROCEDURE sp_iud_despesa(@acao CHAR(1), @codigo INT, @nome VARCHAR(200), @data DATE, @dataVencimento DATE, @valor DECIMAL(12,2), @tipo VARCHAR(50), @pagamento VARCHAR(50), @estado VARCHAR(50), @saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(UPPER(@acao) = 'I')
+	BEGIN
+		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, pagamento, estado) VALUES
+		(@codigo, @nome, @data, @dataVencimento, @valor, @tipo, @pagamento, @estado)
+		SET @saida = 'Despesa inserida com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'U')
+	BEGIN
+		UPDATE despesa
+		SET nome = @nome,
+			dataInicio = @data,
+			dataVencimento = @dataVencimento,
+			valor = @valor,
+			tipo = @tipo,
+			pagamento = @pagamento,
+			estado = @estado
+		WHERE codigo = @codigo
+	END
+	ELSE
+	IF(UPPER(@acao) = 'D')
+	BEGIN
+		DELETE despesa
+		WHERE codigo = @codigo
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+		RETURN
+	END
+END
+-- Fim da procedure
+GO
 CREATE PROCEDURE sp_finalizar_pedido(
 @codigopedido INT, 
 @codigocliente INT, 
@@ -1075,7 +1113,30 @@ BEGIN
     WHERE codigo IN (SELECT codigo FROM deleted);
 END
 GO
+CREATE TRIGGER t_despesa_pedido
+ON pedido
+AFTER UPDATE
+AS
+BEGIN
+	DECLARE @estado VARCHAR(50),
+			@codPedido INT,
+			@nome VARCHAR(200),
+			@valorTotal DECIMAL(10,2),
+			@dataPedido DATE,
+			@cliente INT,
+			@nomeCliente VARCHAR(200),
+			@nomePedido VARCHAR(200)
 
+	SELECT @estado = estado, @cliente = cliente, @valorTotal = valorTotal, @dataPedido = dataPedido, @codPedido = codigo FROM inserted
+	SELECT @nomeCliente = nome FROM cliente where codigo = @cliente
+	SELECT @nomePedido = nome FROM pedido WHERE codigo = @codPedido
+
+	IF @estado LIKE '%Finalizado'
+	BEGIN
+		INSERT INTO despesa (nome, dataInicio, dataVencimento, tipo, pagamento, valor, estado) VALUES
+		(@nomePedido + ' - ' + @nomeCliente, @dataPedido, null, 'Entrada', 'PIX', @valorTotal, 'Pendente')
+	END
+END
 
 CREATE VIEW vw_insumo AS
 SELECT 

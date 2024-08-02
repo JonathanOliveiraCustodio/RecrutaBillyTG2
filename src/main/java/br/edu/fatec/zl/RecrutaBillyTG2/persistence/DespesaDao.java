@@ -25,7 +25,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 
 	@Override
 	public String iudDespesa(String acao, Despesa d) throws SQLException, ClassNotFoundException {
-		String sql = "CALL sp_iud_despesa(?,?,?,?,?,?,?,?,?)";
+		String sql = "CALL sp_iud_despesa(?,?,?,?,?,?,?,?,?,?)";
 		Connection c = gDao.getConnection();
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
@@ -35,9 +35,12 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		cs.setDate(5, d.getDataVencimento());
 		cs.setFloat(6, d.getValor());
 		cs.setString(7, d.getTipo());
-		cs.setString(8, d.getEstado());
-		cs.registerOutParameter(9, Types.VARCHAR);
+		cs.setString(8, d.getPagamento());
+		cs.setString(9, d.getEstado());
+		cs.registerOutParameter(10, Types.VARCHAR);
+		cs.execute();
 		String saida = cs.getString(8);
+		
 		cs.close();
 		c.close();
 		return saida;
@@ -52,10 +55,11 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		if(rs.next()) {
 			d.setCodigo(rs.getInt("codigo"));
 			d.setNome(rs.getString("nome"));
-			d.setData(rs.getDate("dataInicial"));
+			d.setData(rs.getDate("dataInicio"));
 			d.setDataVencimento(rs.getDate("dataVencimento"));
 			d.setValor(rs.getFloat("valor"));
 			d.setTipo(rs.getString("tipo"));
+			d.setPagamento(rs.getString("pagamento"));
 			d.setEstado(rs.getString("estado"));
 		}
 		rs.close();
@@ -75,10 +79,11 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 			Despesa d = new Despesa();
 			d.setCodigo(rs.getInt("codigo"));
 			d.setNome(rs.getString("nome"));
-			d.setData(rs.getDate("dataInicial"));
+			d.setData(rs.getDate("dataInicio"));
 			d.setDataVencimento(rs.getDate("dataVencimento"));
 			d.setValor(rs.getFloat("valor"));
 			d.setTipo(rs.getString("tipo"));
+			d.setPagamento(rs.getString("pagamento"));
 			d.setEstado(rs.getString("estado"));
 			despesas.add(d);
 		}

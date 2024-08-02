@@ -17,6 +17,7 @@ public class Despesa {
 	private Date data;
 	private Date dataVencimento;
 	private String tipo;
+	private String pagamento;
 	private float valor;
 	private String estado;
 }

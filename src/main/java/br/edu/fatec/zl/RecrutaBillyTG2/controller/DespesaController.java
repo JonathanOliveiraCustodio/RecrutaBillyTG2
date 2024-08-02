@@ -31,6 +31,9 @@ public class DespesaController {
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.GET)
 	public ModelAndView despesasGet(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
 		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
+		String entrada = allRequestParam.get("entrada");
+		String gasto = allRequestParam.get("gasto");
+		String saldo = allRequestParam.get("entrada");
 		String erro = "";
 		String saida = "";
 		
@@ -63,8 +66,14 @@ public class DespesaController {
 			if(nivelAcesso == null || !nivelAcesso.equals("admin")) {
 				saida = "Você não possui acesso para visualizar esta página.";
 			}
+			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
+			gasto = "R$ " + Float.toString(calcularSaida(despesas));
+			saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
 			model.addAttribute("erro", erro);
 			model.addAttribute("saida", saida);
+			model.addAttribute("entrada", entrada);
+			model.addAttribute("gasto", gasto);
+			model.addAttribute("saldo", saldo);
 			model.addAttribute("despesa", d);
 			model.addAttribute("despesas", despesas);
 		}
@@ -80,8 +89,12 @@ public class DespesaController {
 		String dataVencimento = allRequestParam.get("dataVencimento");
 		String valor = allRequestParam.get("valor");
 		String tipo = allRequestParam.get("tipo");
+		String pagamento = allRequestParam.get("pagamento");
 		String estado = allRequestParam.get("estado");
 		String filtro = allRequestParam.get("filtro");
+		String entrada = allRequestParam.get("entrada");
+		String gasto = allRequestParam.get("gasto");
+		String saldo = allRequestParam.get("entrada");
 		
 		String saida = "";
 		String erro = "";
@@ -102,6 +115,7 @@ public class DespesaController {
 			d.setDataVencimento(Date.valueOf(dataVencimento));
 			d.setValor(Float.parseFloat(valor));
 			d.setTipo(tipo);
+			d.setPagamento(pagamento);
 			d.setEstado(estado);
 		}
 		try {
@@ -129,10 +143,16 @@ public class DespesaController {
 		} catch(ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
 		} finally {
+			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
+			gasto = "R$ " + Float.toString(calcularSaida(despesas));
+			saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
 			model.addAttribute("despesa", d);
 			model.addAttribute("despesas", despesas);
+			model.addAttribute("entrada", entrada);
+			model.addAttribute("gasto", gasto);
+			model.addAttribute("saldo", saldo);
 		}
 		return new ModelAndView("despesas");
 	}
@@ -175,5 +195,25 @@ public class DespesaController {
 		}else {			
 			return despesas;
 		}
+	}
+	
+	private float calcularEntrada(List<Despesa> despesas) {
+		float entrada = 0;
+		for(Despesa d : despesas) {
+			if(d.getTipo().equals("Entrada")) {
+				entrada += d.getValor();
+			}
+		}
+		return entrada;
+	}
+	
+	private float calcularSaida(List<Despesa> despesas) {
+		float saida = 0;
+		for(Despesa d : despesas) {
+			if(d.getTipo().equals("Saida")) {
+				saida += d.getValor();
+			}
+		}
+		return saida;
 	}
 }
