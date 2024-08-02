@@ -174,18 +174,18 @@ public class InsumoController {
 	}
 
 	private String cadastrarInsumo(Insumo i) throws SQLException, ClassNotFoundException {
-		String saida = iDao.iudInsumo("I", i);
+		String saida = iDao.sp_iud_Insumo("I", i);
 		return saida;
 	}
 
 	private String alterarInsumo(Insumo i) throws SQLException, ClassNotFoundException {
-		String saida = iDao.iudInsumo("U", i);
+		String saida = iDao.sp_iud_Insumo("U", i);
 		return saida;
 
 	}
 
 	private String excluirInsumo(Insumo i) throws SQLException, ClassNotFoundException {
-		String saida = iDao.iudInsumo("D", i);
+		String saida = iDao.sp_iud_Insumo("D", i);
 		return saida;
 
 	}

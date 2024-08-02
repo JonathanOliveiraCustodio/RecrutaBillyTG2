@@ -86,7 +86,7 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 	}
 
 	@Override
-	public String iudFornecedor(String acao, Fornecedor f) throws SQLException, ClassNotFoundException {
+	public String sp_iud_fornecedor(String acao, Fornecedor f) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "{CALL sp_iud_fornecedor (?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
@@ -109,6 +109,43 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 		cs.close();
 		c.close();
 		return saida;
+	}
+	
+	@Override
+	public List<Fornecedor> findFornecedoresByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Fornecedor> fornecedores = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_fornecedor(?,?) ");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Fornecedor f = new Fornecedor();
+			f.setCodigo(rs.getInt("codigo"));
+			f.setNome(rs.getString("nome"));
+			f.setTelefone(rs.getString("telefone"));
+			f.setEmail(rs.getString("email"));
+			f.setEmpresa(rs.getString("empresa"));
+			f.setCEP(rs.getString("CEP"));
+			f.setLogradouro(rs.getString("logradouro"));
+			f.setNumero(rs.getString("numero"));
+			f.setBairro(rs.getString("bairro"));
+			f.setComplemento(rs.getString("complemento"));
+			f.setCidade(rs.getString("cidade"));
+			f.setUF(rs.getString("UF"));
+			fornecedores.add(f);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return fornecedores;
 	}
 
 }

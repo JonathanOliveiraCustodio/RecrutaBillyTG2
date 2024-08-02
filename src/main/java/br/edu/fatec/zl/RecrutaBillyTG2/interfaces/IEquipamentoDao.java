@@ -6,6 +6,6 @@ import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 
 public interface IEquipamentoDao {
 
-	public String iudEquipamento(String acao, Equipamento e) throws SQLException, ClassNotFoundException;
+	public String sp_iud_equipamento(String acao, Equipamento e) throws SQLException, ClassNotFoundException;
 
 }

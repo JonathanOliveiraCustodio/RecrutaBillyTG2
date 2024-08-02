@@ -24,7 +24,7 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 	}
 	
 	@Override
-	public String iudPedido(String acao, Pedido p) throws SQLException, ClassNotFoundException {
+	public String sp_iud_pedido(String acao, Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "CALL sp_iud_pedido(?,?,?,?,?,?,?)";
 		CallableStatement cs = c.prepareCall(sql);
@@ -98,6 +98,43 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		c.close();
 		return pedidos;
 	}
+	
+	@Override
+	public List<Pedido> findPedidosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Pedido> pedidos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_pedido(?,?)");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {		
+			Pedido p = new Pedido();
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			p.setCliente(cl);
+			
+			p.setDescricao(rs.getString("descricao"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			pedidos.add(p);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return pedidos;
+	}
 
 	public String finalizar(Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
@@ -112,4 +149,6 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		c.close();
 		return saida;
 	}
+	
+	
 }

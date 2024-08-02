@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
@@ -24,7 +25,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	}
 
 	@Override
-	public String iudProduto(String acao, Produto p) throws SQLException, ClassNotFoundException {
+	public String sp_iud_produto(String acao, Produto p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "{CALL sp_iud_produto (?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
@@ -95,6 +96,40 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		rs.close();
 		ps.close();
 		c.close();
+		return produtos;
+	}
+	
+	@Override
+	public List<Produto> findProdutosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Produto> produtos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_produto(?,?)");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {	
+			Produto p = new Produto();
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nome"));
+			p.setCategoria(rs.getString("categoria"));
+			p.setDescricao(rs.getString("descricao"));
+			p.setValorUnitario(rs.getFloat("valorUnitario"));
+			p.setStatus(rs.getString("status"));
+			p.setQuantidade(rs.getInt("quantidade"));
+			p.setRefEstoque(rs.getString("refEstoque"));
+			produtos.add(p);
+			
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
 		return produtos;
 	}
 }

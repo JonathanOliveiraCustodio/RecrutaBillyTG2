@@ -36,7 +36,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 			e.setNome(rs.getString("nome"));
 			e.setDescricao(rs.getString("descricao"));
 			e.setFabricante(rs.getString("fabricante"));
-			e.setDataManutencao(rs.getDate("dataManutencao"));
+			e.setDataAquisicao(rs.getDate("dataAquisicao"));
 
 			rs.close();
 			ps.close();
@@ -65,7 +65,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 			e.setNome(rs.getString("nome"));
 			e.setDescricao(rs.getString("descricao"));
 			e.setFabricante(rs.getString("fabricante"));
-			e.setDataManutencao(rs.getDate("dataManutencao"));
+			e.setDataAquisicao(rs.getDate("dataAquisicao"));
 			equipamentos.add(e);
 		}
 		rs.close();
@@ -75,7 +75,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 	}
 
 	@Override
-	public String iudEquipamento(String acao, Equipamento e) throws SQLException, ClassNotFoundException {
+	public String sp_iud_equipamento(String acao, Equipamento e) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "{CALL sp_iud_equipamento (?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
@@ -84,7 +84,7 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 		cs.setString(3, e.getNome());
 		cs.setString(4, e.getDescricao());
 		cs.setString(5, e.getFabricante());
-		cs.setDate(6, e.getDataManutencao());
+		cs.setDate(6, e.getDataAquisicao());
 		cs.registerOutParameter(7, Types.VARCHAR);
 		cs.execute();
 		String saida = cs.getString(7);

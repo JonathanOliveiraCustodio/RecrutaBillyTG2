@@ -155,20 +155,20 @@ public class FornecedorController {
 	}
 
 	private String cadastrarFornecedor(Fornecedor f) throws SQLException, ClassNotFoundException {
-		String saida = fDao.iudFornecedor("I", f);
+		String saida = fDao.sp_iud_fornecedor("I", f);
 		return saida;
 
 	}
 
 	private String alterarFornecedor(Fornecedor f) throws SQLException, ClassNotFoundException {
-		String saida = fDao.iudFornecedor("U", f);
+		String saida = fDao.sp_iud_fornecedor("U", f);
 		return saida;
 
 	}
 
 	private String excluirFornecedor(Fornecedor f) throws SQLException, ClassNotFoundException {
 
-		String saida = fDao.iudFornecedor("D", f);
+		String saida = fDao.sp_iud_fornecedor("D", f);
 		return saida;
 	}
 

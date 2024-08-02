@@ -42,8 +42,10 @@ function atualizarOpcoes() {
 		opcaoSelect.add(new Option("Escolha Uma opção", ""));
 		opcaoSelect.add(new Option("Todos", "Todos"));
 		
-		opcaoSelect.add(new Option("Código", "codigo"));
+		opcaoSelect.add(new Option("Código", "Código"));
 		opcaoSelect.add(new Option("Nome", "nome"));
+		opcaoSelect.add(new Option("Descrição", "Descricao"));
+		opcaoSelect.add(new Option("Fabricante", "Fabricante"));
 
 	} else if (categoria === "insumo") {
 		opcaoSelect.add(new Option("Escolha Uma opção", ""));

@@ -173,17 +173,17 @@ public class PedidoController {
 	}
 
 	private String cadastrarPedido(Pedido p) throws ClassNotFoundException, SQLException {
-		String saida = pDao.iudPedido("I", p);
+		String saida = pDao.sp_iud_pedido("I", p);
 		return saida;
 	}
 
 	private String alterarPedido(Pedido p) throws ClassNotFoundException, SQLException {
-		String saida = pDao.iudPedido("U", p);
+		String saida = pDao.sp_iud_pedido("U", p);
 		return saida;
 	}
 
 	private String excluirPedido(Pedido p) throws ClassNotFoundException, SQLException {
-		String saida = pDao.iudPedido("D", p);
+		String saida = pDao.sp_iud_pedido("D", p);
 		return saida;
 	}
 

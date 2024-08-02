@@ -25,7 +25,7 @@ public class LoginDao {
 			conn = gDao.getConnection(); // Obtém uma conexão com o banco de dados
 
 			// Chama o procedimento armazenado sp_login_usuario
-			String sql = "{CALL sp_login_usuario(?, ?, ?, ?)}";
+			String sql = "{CALL sp_login_funcionario(?, ?, ?, ?)}";
 			cstmt = conn.prepareCall(sql);
 			cstmt.setString(1, email);
 			cstmt.setString(2, senha);

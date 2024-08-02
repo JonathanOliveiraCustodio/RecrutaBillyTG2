@@ -1,5 +1,5 @@
 USE master
-DROP DATABASE RecrutaBillyTG2
+--DROP DATABASE RecrutaBillyTG2
 CREATE DATABASE RecrutaBillyTG2
 GO
 USE RecrutaBillyTG2 
@@ -25,7 +25,7 @@ codigo				INT				NOT NULL,
 nome				VARCHAR(50)		NOT NULL,
 descricao			VARCHAR(100)	NOT NULL,
 fabricante			VARCHAR(50)		NOT NULL,
-dataManutencao		DATE			NOT NULL
+dataAquisicao		DATE			NOT NULL
 PRIMARY KEY (codigo)
 )
 GO
@@ -42,24 +42,32 @@ PRIMARY KEY (codigo)
 FOREIGN KEY (fornecedor) REFERENCES fornecedor (codigo)
 )
 GO
-CREATE TABLE usuario(
-CPF         CHAR(11)		NOT NULL,
-nome		VARCHAR(100)    NOT NULL,
-nivelAcesso VARCHAR(30)     NOT NULL,
-senha		VARCHAR(30)		NOT NULL,
-email		varchar(100)	NOT NULL
+CREATE TABLE funcionario(
+CPF					CHAR(11)		NOT NULL,
+nome				VARCHAR(100)    NOT NULL,
+nivelAcesso			VARCHAR(30)     NOT NULL,
+senha				VARCHAR(30)		NOT NULL,
+email				VARCHAR(100)	NOT NULL,
+dataNascimento      DATE			NOT NULL,
+telefone		    CHAR(12)		NOT NULL,
+cargo               VARCHAR(30)     NOT NULL,
+horario             VARCHAR(30)     NOT NULL,
+salario				DECIMAL (10,1)  NOT NULL,
+dataAdmissao        DATE			NOT NULL,
+dataDesligamento    DATE            NULL,
+observacao          VARCHAR(200)    NULL,
 PRIMARY KEY (CPF)
 )
 GO
 CREATE TABLE produto(
 codigo		   INT	         	NOT NULL,
-nome		   VARCHAR(50)     NOT NULL,
-categoria      VARCHAR(30) NOT NULL,
-descricao      VARCHAR(100) NOT NULL,
-valorUnitario  DECIMAL (10,2)  NOT NULL,
+nome		   VARCHAR(50)      NOT NULL,
+categoria      VARCHAR(30)      NOT NULL,
+descricao      VARCHAR(100)     NOT NULL,
+valorUnitario  DECIMAL (10,2)   NOT NULL,
 status		   VARCHAR(30)		NOT NULL,
 quantidade	   INT				NOT NULL,
-refEstoque     VARCHAR(50)     NOT NULL 
+refEstoque     VARCHAR(50)      NOT NULL 
 PRIMARY KEY (codigo)
 )
 GO
@@ -132,10 +140,10 @@ FOREIGN KEY (codigoEquipamento) REFERENCES equipamento (codigo),
 )
 GO
 -- Insert Usuario de Teste
-INSERT INTO usuario (CPF,nome, nivelAcesso, senha, email) VALUES 
-('25525320045','Administrador', 'admin', 'admin', 'admin'),
-('76368440015','Evandro', 'admin', '123456', 'teste@teste.com'),
-('37848890007','John', 'Funcionário', '123456', 'john@john.com')
+INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao) VALUES
+('25525320045', 'Administrador', 'admin', 'admin', 'admin', '2000-01-01', '12345678901', 'Gerente', '08:00 às 17:00', 5000.0, '2020-01-01', NULL, NULL),
+('76368440015', 'Evandro', 'admin', '123456', 'teste@teste.com', '1985-05-20', '12345678902', 'Supervisor', '09:00 às 18:00', 4000.0, '2021-01-01', NULL, NULL),
+('37848890007', 'John', 'Funcionário', '123456', 'john@john.com', '1990-08-15', '12345678903', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
 GO
 INSERT INTO cliente (codigo, nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento) VALUES
 (1, 'Fabio de Lima', '11956432345', 'fdelima@email.com', 'CPF', '45230955074', '08120300', 'Rua Nogueira Viotti', 'Itaim Paulista', 'São Paulo', 'SP', NULL, '156B','1990-08-01'),
@@ -184,7 +192,7 @@ INSERT INTO insumo (codigo, nome, precoCompra,precoVenda, quantidade,unidade, fo
 (9, 'Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
 (10, 'Tinta Metálica', 20.10,27.50, 20,'un', 6, '2024-07-10');
 GO
-INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataManutencao) VALUES 
+INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataAquisicao) VALUES 
 (1, 'Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
 (2, 'Guilhotina', 'Guilhotina de corte automático', 'Guilhotinas S.A.', '2024-04-27'),
 (3, 'Encadernadora', 'Encadernadora para acabamento de livros', 'Encadernações Ltda.', '2024-04-27'),
@@ -319,7 +327,7 @@ CREATE PROCEDURE sp_iud_equipamento
     @nome VARCHAR(50),
     @descricao VARCHAR(100),
     @fabricante VARCHAR(50),
-    @dataManutencao DATE,
+    @dataAquisicao DATE,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -331,8 +339,8 @@ BEGIN
             RETURN
         END
 
-        INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataManutencao)
-        VALUES (@codigo, @nome, @descricao, @fabricante, @dataManutencao)
+        INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataAquisicao)
+        VALUES (@codigo, @nome, @descricao, @fabricante, @dataAquisicao)
         SET @saida = 'Equipamento inserido com sucesso'
     END
     ELSE IF (@acao = 'U')
@@ -347,7 +355,7 @@ BEGIN
         SET nome = @nome,
             descricao = @descricao,
             fabricante = @fabricante,
-            dataManutencao = @dataManutencao
+            dataAquisicao = @dataAquisicao
         WHERE codigo = @codigo
         SET @saida = 'Equipamento alterado com sucesso'
     END
@@ -424,59 +432,82 @@ BEGIN
     END
 END
 GO
-CREATE PROCEDURE sp_iud_usuario
+CREATE PROCEDURE sp_iud_funcionario
     @acao CHAR(1),
     @CPF CHAR(11),
     @nome VARCHAR(100),
     @nivelAcesso VARCHAR(30),
     @senha VARCHAR(30),
     @email VARCHAR(100),
+    @dataNascimento DATE,
+    @telefone CHAR(12),
+    @cargo VARCHAR(30),
+    @horario VARCHAR(30),
+    @salario DECIMAL(10,1),
+    @dataAdmissao DATE,
+    @dataDesligamento DATE NULL,
+    @observacao VARCHAR(200) NULL,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
     IF (@acao = 'I')
     BEGIN
-        IF EXISTS (SELECT 1 FROM usuario WHERE CPF = @CPF)
+        IF EXISTS (SELECT 1 FROM funcionario WHERE CPF = @CPF)
         BEGIN
-            RAISERROR('CPF já existe. Não é possível inserir o usuário.', 16, 1)
-            RETURN
+            RAISERROR('CPF já existe. Não é possível inserir o funcionário.', 16, 1);
+            RETURN;
         END
 
-        INSERT INTO usuario (CPF, nome, nivelAcesso, senha, email)
-        VALUES (@CPF, @nome, @nivelAcesso, @senha, @email)
-        SET @saida = 'Usuário inserido com sucesso'
+        INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao)
+        VALUES (@CPF, @nome, @nivelAcesso, @senha, @email, @dataNascimento, @telefone, @cargo, @horario, @salario, @dataAdmissao, @dataDesligamento, @observacao);
+
+        SET @saida = 'Funcionário inserido com sucesso';
     END
     ELSE IF (@acao = 'U')
     BEGIN
-        IF NOT EXISTS (SELECT 1 FROM usuario WHERE CPF = @CPF)
+        IF NOT EXISTS (SELECT 1 FROM funcionario WHERE CPF = @CPF)
         BEGIN
-            RAISERROR('CPF não existe. Não é possível atualizar o usuário.', 16, 1)
-            RETURN
+            RAISERROR('CPF não existe. Não é possível atualizar o funcionário.', 16, 1);
+            RETURN;
         END
 
-        UPDATE usuario
-        SET nome = @nome, nivelAcesso = @nivelAcesso, senha = @senha, email = @email
-        WHERE CPF = @CPF
-        SET @saida = 'Usuário alterado com sucesso'
+        UPDATE funcionario
+        SET nome = @nome, 
+            nivelAcesso = @nivelAcesso, 
+            senha = @senha, 
+            email = @email,
+            dataNascimento = @dataNascimento, 
+            telefone = @telefone, 
+            cargo = @cargo, 
+            horario = @horario, 
+            salario = @salario, 
+            dataAdmissao = @dataAdmissao, 
+            dataDesligamento = @dataDesligamento, 
+            observacao = @observacao
+        WHERE CPF = @CPF;
+
+        SET @saida = 'Funcionário atualizado com sucesso';
     END
     ELSE IF (@acao = 'D')
     BEGIN
-        IF NOT EXISTS (SELECT 1 FROM usuario WHERE CPF = @CPF)
+        IF NOT EXISTS (SELECT 1 FROM funcionario WHERE CPF = @CPF)
         BEGIN
-            RAISERROR('CPF não existe. Não é possível excluir o usuário.', 16, 1)
-            RETURN
+            RAISERROR('CPF não existe. Não é possível excluir o funcionário.', 16, 1);
+            RETURN;
         END
 
-        DELETE FROM usuario WHERE CPF = @CPF
-        SET @saida = 'Usuário excluído com sucesso'
+        DELETE FROM funcionario WHERE CPF = @CPF;
+
+        SET @saida = 'Funcionário excluído com sucesso';
     END
     ELSE
     BEGIN
-        RAISERROR('Operação inválida', 16, 1)
-        RETURN
+        RAISERROR('Operação inválida', 16, 1);
+        RETURN;
     END
 END
 GO
+
 CREATE PROCEDURE sp_iud_produto
 @acao CHAR(1),
 @codigo INT,
@@ -713,7 +744,7 @@ BEGIN
 END
 GO
 -- Inicio Procedure de Login 
-CREATE PROCEDURE sp_login_usuario
+CREATE PROCEDURE sp_login_funcionario
     @Email NVARCHAR(100),
     @Senha NVARCHAR(30),
     @Resultado NVARCHAR(100) OUTPUT,
@@ -723,7 +754,7 @@ BEGIN
     DECLARE @SenhaDb NVARCHAR(30)  
     -- Verifica se o usuário existe e obtém a senha armazenada
     SELECT @SenhaDb = senha, @NivelAcesso = nivelAcesso
-    FROM usuario
+    FROM funcionario
     WHERE email = @Email
 
     -- Verifica se o usuário existe e a senha está correta
@@ -737,45 +768,8 @@ BEGIN
         SET @Resultado = 'Login bem-sucedido'
     END
 END
+GO
 -- Fim da Procedure
-GO
--- Inicio procedure IUD Despesa
-CREATE PROCEDURE sp_iud_despesa(@acao CHAR(1), @codigo INT, @nome VARCHAR(200), @data DATE, @dataVencimento DATE, @valor DECIMAL(12,2), @tipo VARCHAR(50), @pagamento VARCHAR(50), @estado VARCHAR(50), @saida VARCHAR(200) OUTPUT)
-AS
-BEGIN
-	IF(UPPER(@acao) = 'I')
-	BEGIN
-		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, pagamento, estado) VALUES
-		(@codigo, @nome, @data, @dataVencimento, @valor, @tipo, @pagamento, @estado)
-		SET @saida = 'Despesa inserida com sucesso.'
-	END
-	ELSE
-	IF(UPPER(@acao) = 'U')
-	BEGIN
-		UPDATE despesa
-		SET nome = @nome,
-			dataInicio = @data,
-			dataVencimento = @dataVencimento,
-			valor = @valor,
-			tipo = @tipo,
-			pagamento = @pagamento,
-			estado = @estado
-		WHERE codigo = @codigo
-	END
-	ELSE
-	IF(UPPER(@acao) = 'D')
-	BEGIN
-		DELETE despesa
-		WHERE codigo = @codigo
-	END
-	ELSE
-	BEGIN
-		RAISERROR('Operação inválida', 16, 1)
-		RETURN
-	END
-END
--- Fim da procedure
-GO
 CREATE PROCEDURE sp_finalizar_pedido(
 @codigopedido INT, 
 @codigocliente INT, 
@@ -859,6 +853,43 @@ BEGIN
     END
 END;
 GO
+-- Inicio procedure IUD Despesa
+CREATE PROCEDURE sp_iud_despesa(@acao CHAR(1), @codigo INT, @nome VARCHAR(200), @data DATE, @dataVencimento DATE, @valor DECIMAL(12,2), @tipo VARCHAR(50), @pagamento VARCHAR(50), @estado VARCHAR(50), @saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(UPPER(@acao) = 'I')
+	BEGIN
+		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, pagamento, estado) VALUES
+		(@codigo, @nome, @data, @dataVencimento, @valor, @tipo, @pagamento, @estado)
+		SET @saida = 'Despesa inserida com sucesso.'
+	END
+	ELSE
+	IF(UPPER(@acao) = 'U')
+	BEGIN
+		UPDATE despesa
+		SET nome = @nome,
+			dataInicio = @data,
+			dataVencimento = @dataVencimento,
+			valor = @valor,
+			tipo = @tipo,
+			pagamento = @pagamento,
+			estado = @estado
+		WHERE codigo = @codigo
+	END
+	ELSE
+	IF(UPPER(@acao) = 'D')
+	BEGIN
+		DELETE despesa
+		WHERE codigo = @codigo
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+		RETURN
+	END
+END
+-- Fim da procedure
+GO
 CREATE FUNCTION fn_insumo_funcionario()
 RETURNS TABLE
 AS
@@ -883,7 +914,7 @@ RETURNS TABLE
 AS
 RETURN
 (
- SELECT codigo, nome, descricao, fabricante, dataManutencao FROM equipamento
+ SELECT codigo, nome, descricao, fabricante, dataAquisicao FROM equipamento
 );
 GO
 CREATE FUNCTION fn_produto()
@@ -904,7 +935,7 @@ RETURN
         nome,
         descricao,
         fabricante,
-        dataManutencao
+        dataAquisicao
     FROM 
         equipamento
     WHERE
@@ -973,17 +1004,26 @@ SELECT pp.codigoPedido AS codigo_pedido, p.codigo AS codigo_produto, p.nome AS n
 FROM produtosPedido pp, produto p
 WHERE p.codigo = pp.codigoProduto
 GO
-CREATE VIEW v_usuario AS
+
+CREATE VIEW v_funcionario AS
 SELECT 
     CPF,
     nome,
     nivelAcesso,
     senha,
-    email
+    email,
+	dataNascimento,
+	telefone,
+	cargo,
+	horario,
+	salario,
+	dataAdmissao,
+	dataDesligamento,
+	observacao
 FROM 
-    usuario;
+    funcionario;
 GO
-CREATE FUNCTION fn_listar_usuario_cpf(@CPF CHAR(11))
+CREATE FUNCTION fn_listar_funcionario_cpf(@CPF CHAR(11))
 RETURNS TABLE
 AS
 RETURN
@@ -993,9 +1033,17 @@ RETURN
         nome,
         nivelAcesso,
         senha,
-        email
+        email,
+		telefone,
+		dataNascimento,
+		cargo,
+		horario,
+		salario,
+		dataAdmissao,
+		dataDesligamento,
+		observacao
     FROM 
-        usuario
+        funcionario
     WHERE 
         CPF = @CPF
 );
@@ -1283,7 +1331,6 @@ BEGIN
 END;
 GO
 
-
 CREATE FUNCTION fn_buscar_fornecedor (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
@@ -1357,6 +1404,7 @@ RETURN
         Insumos
 );
 GO
+
 CREATE FUNCTION fn_buscar_pedido (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
@@ -1373,6 +1421,7 @@ RETURN
             p.cliente,
             p.valorTotal,
             p.estado,
+			c.codigo AS codigoCliente,
             c.nome AS nomeCliente,
             CONVERT(VARCHAR(10), p.dataPedido, 103) AS dataPedido
         FROM 
@@ -1467,5 +1516,59 @@ END;
 GO
 -- Fim Funções para o Relatorio
 
+CREATE FUNCTION fn_buscar_equipamento (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS @resultado TABLE (
+    codigo INT,
+    nome VARCHAR(50),
+    descricao VARCHAR(100),
+    fabricante VARCHAR(50),
+    dataAquisicao DATE,
+    quantidadeRegistros INT
+)
+AS
+BEGIN
+    DECLARE @count INT;
+    DECLARE @equipamentos TABLE (
+        codigo INT,
+        nome VARCHAR(50),
+        descricao VARCHAR(100),
+        fabricante VARCHAR(50),
+        dataAquisicao DATE
+    );
 
---SELECT * FROM fn_buscar_cliente('Todos','10')
+    INSERT INTO @equipamentos
+    SELECT 
+        e.codigo,
+        e.nome,
+        e.descricao,
+        e.fabricante,
+        e.dataAquisicao
+    FROM 
+        equipamento e
+    WHERE 
+        (@tipoPesquisa = 'Código' AND e.codigo = TRY_CAST(@valorPesquisa AS INT)) OR
+        (@tipoPesquisa = 'Nome' AND e.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Descricao' AND e.descricao LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Fabricante' AND e.fabricante LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @equipamentos);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nome, descricao, fabricante, dataAquisicao, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', '', '', NULL, 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT *, @count AS quantidadeRegistros
+        FROM @equipamentos;
+    END
+
+    RETURN;
+END;
+GO

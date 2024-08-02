@@ -52,11 +52,10 @@
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/cliente">Cliente</a></li>
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/equipamento">Equipamento</a></li>
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/fornecedor">Fornecedor</a></li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/insumo">Insumo</a></li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/usuario">Usuário</a></li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/funcionario">Funcionário</a></li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/insumo">Insumo</a></li>							
 						</ul></li>
-				
-				
+								
 					<li class="nav-item"><a
 						class="nav-link px-3 link-body-emphasis"
 						href="${pageContext.request.contextPath}/despesas">Despesas</a></li>
@@ -68,14 +67,9 @@
 						class="nav-link px-3 link-body-emphasis"
 						href="${pageContext.request.contextPath}/produto">Produto</a></li>
 						
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
-						id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-						aria-expanded="false"> Relatório </a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/relatorio">Simples</a></li>
-							<li><a class="dropdown-item" href="#">Analítico</a></li>
-						</ul></li>
+				<li class="nav-item"><a
+						class="nav-link px-3 link-body-emphasis"
+						href="${pageContext.request.contextPath}/relatorio">Relatório</a></li>
 					<li class="nav-item"><a
 						class="nav-link px-3 link-body-emphasis" href="#"
 						onclick="logout()">Logout</a></li>

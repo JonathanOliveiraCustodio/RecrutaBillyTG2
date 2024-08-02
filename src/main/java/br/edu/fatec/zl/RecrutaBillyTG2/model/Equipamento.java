@@ -16,5 +16,5 @@ public class Equipamento {
 	String nome;
 	String descricao;
 	String fabricante;
-	Date dataManutencao;
+	Date dataAquisicao;
 }

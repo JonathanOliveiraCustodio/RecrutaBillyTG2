@@ -74,12 +74,12 @@
 						<!-- Terceira Linha: Data de Manutenção -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-1 d-flex align-items-center">
-								<label for="dataManutencao" class="form-label">Manutenção:</label>
+								<label for="dataAquisicao" class="form-label">Aquisição:</label>
 							</div>
 							<div class="col-md-3">
-								<input type="date" id="dataManutencao" name="dataManutencao"
+								<input type="date" id="dataAquisicao" name="dataAquisicao"
 									class="form-control"
-									value='<c:out value="${equipamento.dataManutencao}"></c:out>'>
+									value='<c:out value="${equipamento.dataAquisicao}"></c:out>'>
 							</div>
 						</div>
 
@@ -169,7 +169,7 @@
 							<td><c:out value="${e.descricao}" /></td>
 							<td><c:out value="${e.fabricante}" /></td>
 
-							<td><fmt:formatDate value="${e.dataManutencao}"
+							<td><fmt:formatDate value="${e.dataAquisicao}"
 									pattern="dd/MM/yyyy" /></td>
 							<td>
 								<button

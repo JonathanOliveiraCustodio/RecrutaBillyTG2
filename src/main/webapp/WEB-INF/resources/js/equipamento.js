@@ -27,7 +27,7 @@ function consultarEquipamento(codigo) {
 		var botao = event.submitter.value;
 		if (botao === "Cadastrar" || botao === "Alterar") {
 			var campos = [ "nome", "valor", "descricao", "fabricante",
-					"dataManutencao" ];
+					"dataAquisicao" ];
 			for (var i = 0; i < campos.length; i++) {
 				var campo = document.getElementById(campos[i]).value.trim();
 				if (campo === "") {

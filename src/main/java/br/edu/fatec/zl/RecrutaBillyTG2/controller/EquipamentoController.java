@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -84,7 +83,7 @@ public class EquipamentoController {
 		String nome = allRequestParam.get("nome");
 		String descricao = allRequestParam.get("descricao");
 		String fabricante = allRequestParam.get("fabricante");
-		String dataManutencao = allRequestParam.get("dataManutencao");
+		String dataAquisicao= allRequestParam.get("dataAquisicao");
 
 		String saida = "";
 		String erro = "";
@@ -102,7 +101,7 @@ public class EquipamentoController {
 				e.setNome(nome);
 				e.setDescricao(descricao);
 				e.setFabricante(fabricante);
-				e.setDataManutencao(Date.valueOf(dataManutencao));
+				e.setDataAquisicao(Date.valueOf(dataAquisicao));
 			}
 			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarEquipamento(e);
@@ -156,18 +155,18 @@ public class EquipamentoController {
 	}
 
 	private String cadastrarEquipamento(Equipamento e) throws SQLException, ClassNotFoundException {
-		String saida = eDao.iudEquipamento("I", e);
+		String saida = eDao.sp_iud_equipamento("I", e);
 		return saida;
 	}
 
 	private String alterarEquipamento(Equipamento e) throws SQLException, ClassNotFoundException {
-		String saida = eDao.iudEquipamento("U", e);
+		String saida = eDao.sp_iud_equipamento("U", e);
 		return saida;
 
 	}
 
 	private String excluirEquipamento(Equipamento e) throws SQLException, ClassNotFoundException {
-		String saida = eDao.iudEquipamento("D", e);
+		String saida = eDao.sp_iud_equipamento("D", e);
 		return saida;
 
 	}

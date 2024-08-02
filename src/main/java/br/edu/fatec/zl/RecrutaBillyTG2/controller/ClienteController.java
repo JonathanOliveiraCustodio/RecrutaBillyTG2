@@ -162,17 +162,17 @@ public class ClienteController {
 	}
 
 	private String cadastrarCliente(Cliente c) throws ClassNotFoundException, SQLException {
-		String saida = cDao.iudCliente("I", c);
+		String saida = cDao.sp_iud_cliente("I", c);
 		return saida;
 	}
 
 	private String alterarCliente(Cliente c) throws ClassNotFoundException, SQLException {
-		String saida = cDao.iudCliente("U", c);
+		String saida = cDao.sp_iud_cliente("U", c);
 		return saida;
 	}
 
 	private String excluirCliente(Cliente c) throws ClassNotFoundException, SQLException {
-		String saida = cDao.iudCliente("D", c);
+		String saida = cDao.sp_iud_cliente("D", c);
 		return saida;
 	}
 

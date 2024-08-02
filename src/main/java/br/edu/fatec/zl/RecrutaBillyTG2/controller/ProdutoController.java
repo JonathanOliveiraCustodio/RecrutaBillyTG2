@@ -154,18 +154,18 @@ public class ProdutoController {
 	}
 
 	private String cadastrarProduto(Produto p) throws SQLException, ClassNotFoundException {
-		String saida = pDao.iudProduto("I", p);
+		String saida = pDao.sp_iud_produto("I", p);
 		return saida;
 	}
 
 	private String alterarProduto(Produto p) throws SQLException, ClassNotFoundException {
-		String saida = pDao.iudProduto("U", p);
+		String saida = pDao.sp_iud_produto("U", p);
 		return saida;
 
 	}
 
 	private String excluirProduto(Produto p) throws SQLException, ClassNotFoundException {
-		String saida = pDao.iudProduto("D", p);
+		String saida = pDao.sp_iud_produto("D", p);
 		return saida;
 
 	}
