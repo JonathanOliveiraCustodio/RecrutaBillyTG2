@@ -95,6 +95,7 @@ public class DespesaController {
 		String gasto = allRequestParam.get("gasto");
 		String saldo = allRequestParam.get("entrada");
 		String pesquisa = allRequestParam.get("pesquisa");
+		String[] meses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 		
 		String saida = "";
 		String erro = "";
@@ -114,7 +115,9 @@ public class DespesaController {
 			d.setCodigo(Integer.parseInt(codigo));
 			d.setNome(nome);
 			d.setData(Date.valueOf(dataInicio));
-			d.setDataVencimento(Date.valueOf(dataVencimento));
+			if(dataVencimento != null && !dataVencimento.isEmpty()) {			
+				d.setDataVencimento(Date.valueOf(dataVencimento));
+			}
 			d.setValor(Float.parseFloat(valor));
 			d.setTipo(tipo);
 			d.setPagamento(pagamento);
@@ -141,9 +144,12 @@ public class DespesaController {
 			}
 			if(cmd.contains("Listar")) {
 				despesas = listarDespesas(Integer.parseInt(filtro));
+				if(despesas.isEmpty()) {
+					saida = "Nenhuma despesa para o mês de "+meses[Integer.parseInt(filtro)-1];
+				}
 			}
 			if(cmd.contains("Pesquisar")) {
-				despesas = pesquisarDespesas(pesquisa);
+				despesas = pesquisarDespesas(pesquisa, Integer.parseInt(filtro));
 				if(despesas.isEmpty()) {
 					saida = "Nenhuma entrada encontrada com o parâmetro \""+pesquisa+"\"";
 				}
@@ -162,13 +168,13 @@ public class DespesaController {
 			model.addAttribute("gasto", gasto);
 			model.addAttribute("saldo", saldo);
 		}
-		return new ModelAndView("despesas");
+ 		return new ModelAndView("despesas");
 	}
 
-	private List<Despesa> pesquisarDespesas(String pesquisa) throws ClassNotFoundException, SQLException {
+	private List<Despesa> pesquisarDespesas(String pesquisa, int filtro) throws ClassNotFoundException, SQLException {
 		List<Despesa> despesas = new ArrayList<>();
 		List<Despesa> aux = new ArrayList<>();
-		despesas = listarDespesas(0);
+		despesas = listarDespesas(filtro);
 		for(Despesa d : despesas) {
 			if(d.getNome().toUpperCase().contains(pesquisa.toUpperCase())) {
 				aux.add(d);
@@ -209,12 +215,9 @@ public class DespesaController {
 					auxDespesas.add(d);
 				}
 			}
-		}
-		if (!auxDespesas.isEmpty()){
 			return auxDespesas;
-		}else {			
-			return despesas;
 		}
+		return despesas;
 	}
 	
 	private float calcularEntrada(List<Despesa> despesas) {

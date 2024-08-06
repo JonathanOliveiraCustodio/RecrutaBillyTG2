@@ -875,12 +875,14 @@ BEGIN
 			pagamento = @pagamento,
 			estado = @estado
 		WHERE codigo = @codigo
+		SET @saida = 'Despesa alterada com sucesso.'
 	END
 	ELSE
 	IF(UPPER(@acao) = 'D')
 	BEGIN
 		DELETE despesa
 		WHERE codigo = @codigo
+		SET @saida = 'Despesa excluida com sucesso.'
 	END
 	ELSE
 	BEGIN

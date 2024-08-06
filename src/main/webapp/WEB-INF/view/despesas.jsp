@@ -28,36 +28,33 @@
 								<label for="entrada" class="form-label">R$ de Entrada:</label>
 							</div>
 							<div class="col-md-2">
-								<input type="text" id="entrada" name="entrada" class="form-control" placeholder="R$ 0,00" disabled >
+								<input type="text" id="entrada" name="entrada" class="form-control" 
+								placeholder="R$ 0,00" value="${entrada }" disabled >
 							</div> 
 							
 							<div class="col-md-1 d-flex align-items-center">
 								<label for="gasto" class="form-label">R$ de Saída:</label>
 							</div>
 							<div class="col-md-2">
-								<input type="text" id="gasto" name="gasto" class="form-control" placeholder="R$ 0,00" disabled >
+								<input type="text" id="gasto" name="gasto" class="form-control"]
+								 placeholder="R$ 0,00" value="${gasto }" disabled >
 							</div>
 							
 							<div class="col-md-1 d-flex align-items-center">
 								<label for="saldo" class="form-label">Saldo Geral:</label>
 							</div>
 							<div class="col-md-1">
-								<input type="text" id="saldo" name="saldo" class="form-control" placeholder="R$ 0,00" disabled >
+								<input type="text" id="saldo" name="saldo" class="form-control" 
+								placeholder="R$ 0,00" value="${saldo }" disabled >
 							</div>
 						</div>
 						
 						<!-- O resto para operação de CRUD -->
 						<div class="row g-4 mt-2">
-							<div class="cod-md-1 d-flex align-items-center">
-								<label for="codigo" class="form-label"></label>
-							</div>
-							<div class="col-md-3">
-								<input type="number" min="0" step="1" id="codigo" name="codigo"
+							<div>
+								<input type="hidden" min="0" step="1" id="codigo" name="codigo"
 									class="form-control" placeholder="Código"
 									value='<c:out value="${despesa.codigo}"></c:out>'>
-							</div>
-							<div class="col-md-1">
-								<input type="submit" id="botao" name="botao" value="Buscar" class="btn btn-info">
 							</div>
 							
 							<div class="col-md-1 d-flex align-items-center">
@@ -133,29 +130,7 @@
 								</select>
 							</div>
 						</div>
-						
-						<div class="row g-3 mt-3 align-items-right">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="filtro" class="form-label">Filtrar por:</label>
-							</div>
-							<div class="col-md-2 d-grid text-center">
-								<select id="filtro" name="filtro" class="form-select">
-									<option value="0">Mês</option>
-									<option value="1">Janeiro</option>
-									<option value="2">Fevereiro</option>
-									<option value="3">Março</option>
-									<option value="4">Abril</option>
-									<option value="5">Maio</option>
-									<option value="6">Junho</option>
-									<option value="7">Julho</option>
-									<option value="8">Agosto</option>
-									<option value="9">Setembro</option>
-									<option value="10">Outubro</option>
-									<option value="11">Novembro</option>
-									<option value="12">Dezembro</option>
-								</select>
-							</div>
-						</div>
+					
 						
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
@@ -171,19 +146,16 @@
 									class="btn btn-danger">
 							</div>
 							<div class="col-md-2 d-grid text-center"></div>
+
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-dark">
-							</div>
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Limpar"
+								<input type="submit" id="botao" name="botao" value="Limpar Campos"
 									class="btn btn-secondary">
 							</div>
 						</div>
 						
 						<!-- sessão de pesquisa previa, para completar a função primeiro -->
-						<div class="row g-3 mt-3 align-items-center">
-							<div class="col-md-4 align-text-center">
+						<div class="row g-3 mt-3 justify-items-center">
+							<div class="col-md-4 offset-sm-1 align-text-center">
 								<input type="text" id="pesquisa" name="pesquisa" class="form-control" 
 								placeholder="Pesquisar por...">
 							</div>
@@ -191,6 +163,32 @@
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Pesquisar"
 									class="btn btn-info">
+							</div>
+							
+							<div class="col-md-1 d-flex align-items-center">
+								<label for="filtro" class="form-label">Filtrar por:</label>
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<select id="filtro" name="filtro" class="form-select">
+									<option value="0">Todos</option>
+									<option value="1">Janeiro</option>
+									<option value="2">Fevereiro</option>
+									<option value="3">Março</option>
+									<option value="4">Abril</option>
+									<option value="5">Maio</option>
+									<option value="6">Junho</option>
+									<option value="7">Julho</option>
+									<option value="8">Agosto</option>
+									<option value="9">Setembro</option>
+									<option value="10">Outubro</option>
+									<option value="11">Novembro</option>
+									<option value="12">Dezembro</option>
+								</select>
+							</div>
+							
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Listar Tudo"
+									class="btn btn-dark">
 							</div>
 						</div>
 					</form>
