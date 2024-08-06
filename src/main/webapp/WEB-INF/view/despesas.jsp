@@ -180,6 +180,19 @@
 									class="btn btn-secondary">
 							</div>
 						</div>
+						
+						<!-- sessão de pesquisa previa, para completar a função primeiro -->
+						<div class="row g-3 mt-3 align-items-center">
+							<div class="col-md-4 align-text-center">
+								<input type="text" id="pesquisa" name="pesquisa" class="form-control" 
+								placeholder="Pesquisar por...">
+							</div>
+							
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Pesquisar"
+									class="btn btn-info">
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>

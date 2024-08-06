@@ -58,7 +58,6 @@ public class DespesaController {
 						d = null;
 					}
 				}
-				despesas = listarDespesas(Integer.parseInt(filtro));
 			}
 		} catch(ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
@@ -95,6 +94,7 @@ public class DespesaController {
 		String entrada = allRequestParam.get("entrada");
 		String gasto = allRequestParam.get("gasto");
 		String saldo = allRequestParam.get("entrada");
+		String pesquisa = allRequestParam.get("pesquisa");
 		
 		String saida = "";
 		String erro = "";
@@ -105,7 +105,9 @@ public class DespesaController {
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			d = null;
 		} else if (!cmd.contains("Listar")) {
-			d.setCodigo(Integer.parseInt(codigo));
+			if(codigo != null && codigo.isEmpty()) {				
+				d.setCodigo(Integer.parseInt(codigo));
+			}
 		}
 		
 		if(cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
@@ -140,6 +142,12 @@ public class DespesaController {
 			if(cmd.contains("Listar")) {
 				despesas = listarDespesas(Integer.parseInt(filtro));
 			}
+			if(cmd.contains("Pesquisar")) {
+				despesas = pesquisarDespesas(pesquisa);
+				if(despesas.isEmpty()) {
+					saida = "Nenhuma entrada encontrada com o parâmetro \""+pesquisa+"\"";
+				}
+			}
 		} catch(ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
 		} finally {
@@ -155,6 +163,18 @@ public class DespesaController {
 			model.addAttribute("saldo", saldo);
 		}
 		return new ModelAndView("despesas");
+	}
+
+	private List<Despesa> pesquisarDespesas(String pesquisa) throws ClassNotFoundException, SQLException {
+		List<Despesa> despesas = new ArrayList<>();
+		List<Despesa> aux = new ArrayList<>();
+		despesas = listarDespesas(0);
+		for(Despesa d : despesas) {
+			if(d.getNome().toUpperCase().contains(pesquisa.toUpperCase())) {
+				aux.add(d);
+			}
+		}
+		return aux;
 	}
 
 	private String cadastrarDespesa(Despesa d) throws ClassNotFoundException, SQLException {

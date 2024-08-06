@@ -1,5 +1,5 @@
 USE master
---DROP DATABASE RecrutaBillyTG2
+DROP DATABASE RecrutaBillyTG2
 CREATE DATABASE RecrutaBillyTG2
 GO
 USE RecrutaBillyTG2 
@@ -859,8 +859,8 @@ AS
 BEGIN
 	IF(UPPER(@acao) = 'I')
 	BEGIN
-		INSERT INTO despesa (codigo, nome, dataInicio, dataVencimento, valor, tipo, pagamento, estado) VALUES
-		(@codigo, @nome, @data, @dataVencimento, @valor, @tipo, @pagamento, @estado)
+		INSERT INTO despesa (nome, dataInicio, dataVencimento, valor, tipo, pagamento, estado) VALUES
+		(@nome, @data, @dataVencimento, @valor, @tipo, @pagamento, @estado)
 		SET @saida = 'Despesa inserida com sucesso.'
 	END
 	ELSE
@@ -1185,7 +1185,7 @@ BEGIN
 		(@nomePedido + ' - ' + @nomeCliente, @dataPedido, null, 'Entrada', 'PIX', @valorTotal, 'Pendente')
 	END
 END
-
+GO
 CREATE VIEW vw_insumo AS
 SELECT 
     i.codigo,

@@ -39,7 +39,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		cs.setString(9, d.getEstado());
 		cs.registerOutParameter(10, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(8);
+		String saida = cs.getString(10);
 		
 		cs.close();
 		c.close();
@@ -51,6 +51,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		String sql = "SELECT * FROM despesa WHERE codigo = ?";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
+		ps.setInt(1, d.getCodigo());
 		ResultSet rs = ps.executeQuery();
 		if(rs.next()) {
 			d.setCodigo(rs.getInt("codigo"));
