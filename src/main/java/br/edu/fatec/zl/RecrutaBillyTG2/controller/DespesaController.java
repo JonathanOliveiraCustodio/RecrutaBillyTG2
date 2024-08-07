@@ -144,7 +144,7 @@ public class DespesaController {
 			}
 			if(cmd.contains("Listar")) {
 				despesas = listarDespesas(Integer.parseInt(filtro));
-				if(despesas.isEmpty()) {
+				if(despesas.isEmpty() && Integer.parseInt(filtro) != 0) {
 					saida = "Nenhuma despesa para o mês de "+meses[Integer.parseInt(filtro)-1];
 				}
 			}
