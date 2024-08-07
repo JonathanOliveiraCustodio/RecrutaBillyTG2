@@ -8,8 +8,9 @@
 <meta charset="UTF-8">
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/pedido.js"></script>
-<title>Pedido</title>
+<script
+	src="${pageContext.request.contextPath}/resources/js/orcamento.js"></script>
+<title>Orçamento</title>
 
 </head>
 <body>
@@ -19,33 +20,33 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
-				<h1 class="display-6 fw-bold">Manutenção de Pedido</h1>
-
-				<form action="pedido" method="post"
+				<h1 class="display-6 fw-bold">Manutenção de Orçamento</h1>
+				<form action="orcamento" method="post"
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
+
 					<!-- Primeira Linha: Código, Nome, Descrição -->
 					<div class="row g-3">
 						<div class="col-md-1 d-flex align-items-center">
-							<label for="pedido" class="form-label">Código:</label>
+							<label for="orcamento" class="form-label">Código:</label>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<input class="form-control" type="number" min="0" step="1"
 								id="codigo" name="codigo" placeholder="Código"
-								value='<c:out value="${pedido.codigo}"></c:out>'>
-						</div>
-						<div class="col-md-1">
-							<input type="submit" id="botaoBuscar" name="botao"
-								class="btn btn-primary" value="Buscar"
-								onclick="return validarBusca()">
+								value='<c:out value="${orcamento.codigo}"></c:out>'readonly>
 						</div>
 
 						<div class="col-md-1 d-flex align-items-center">
 							<label for="nome" class="form-label">Nome:</label>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-2">
 							<input class="form-control" type="text" id="nome" name="nome"
-								placeholder="Nome do Pedido"
-								value='<c:out value="${pedido.nome}"></c:out>'>
+								placeholder="Nome do Orçamento"
+								value='<c:out value="${orcamento.nome}"></c:out>'>
+						</div>
+						<div class="col-md-1 d-flex align-items-center">
+							<input type="submit" id="botaoBuscar" name="botao"
+								class="btn btn-primary" value="Buscar">
+							<!-- onclick="return validarBusca()"> -->
 						</div>
 
 						<div class="col-md-1 d-flex align-items-center">
@@ -54,7 +55,7 @@
 						<div class="col-md-3">
 							<input class="form-control" type="text" id="descricao"
 								name="descricao" placeholder="Descrição"
-								value='<c:out value="${pedido.descricao}"></c:out>'>
+								value='<c:out value="${orcamento.descricao}"></c:out>'>
 						</div>
 					</div>
 
@@ -69,12 +70,12 @@
 								<option value="0">Escolha um Cliente</option>
 								<c:forEach var="c" items="${clientes}">
 									<c:if
-										test="${empty cliente or c.codigo ne pedido.cliente.codigo}">
+										test="${empty cliente or c.codigo ne orcamento.cliente.codigo}">
 										<option value="${c.codigo}">
 											<c:out value="${c.nome}" />
 										</option>
 									</c:if>
-									<c:if test="${c.codigo eq pedido.cliente.codigo}">
+									<c:if test="${c.codigo eq orcamento.cliente.codigo}">
 										<option value="${c.codigo}" selected>
 											<c:out value="${c.nome}" />
 										</option>
@@ -84,22 +85,37 @@
 						</div>
 
 						<div class="col-md-1 d-flex align-items-center">
-							<label for="estado" class="form-label">Estado:</label>
+							<label for="status" class="form-label">Status:</label>
 						</div>
 						<div class="col-md-3">
-							<select class="form-select" id="estado" name="estado">
-								<option value="">Escolha um Estado</option>
-								<option value="Em andamento"
-									<c:if test="${pedido.estado eq 'Em andamento'}">selected</c:if>>Em
-									andamento</option>
-								<option value="Recebido"
-									<c:if test="${pedido.estado eq 'Recebido'}">selected</c:if>>Recebido</option>
-								<option value="Pedido Finalizado"
-									<c:if test="${pedido.estado eq 'Pedido Finalizado'}">selected</c:if>>Pedido
-									Finalizado</option>
-								<option value="Despachado"
-									<c:if test="${pedido.estado eq 'Despachado'}">selected</c:if>>Despachado</option>
+							<select class="form-select" id="status" name="status">
+								<option value="">Escolha um Status</option>
+								<option value="Orçamento"
+									<c:if test="${orcamento.status eq 'Orçamento'}">selected</c:if>>Orçamento</option>
+								<option value="Pedido"
+									<c:if test="${orcamento.status eq 'Pedido'}">selected</c:if>>Pedido</option>
 							</select>
+						</div>
+
+						<div class="col-md-1 d-flex align-items-center">
+							<label for="valorTotal" class="form-label">Valor Total:</label>
+						</div>
+						<div class="col-md-3">
+							<input class="form-control" type="text" id="valorTotal"
+								name="valorTotal" placeholder="Valor Total"
+								value='<c:out value="${orcamento.valorTotal}"></c:out>'>
+						</div>
+					</div>
+
+					<!-- Terceira Linha: Observação -->
+					<div class="row g-3 mt-2">
+						<div class="col-md-1 d-flex align-items-center">
+							<label for="observacao" class="form-label">Observação:</label>
+						</div>
+						<div class="col-md-11">
+							<textarea id="observacao" name="observacao" class="form-control"
+								placeholder="Observações" rows="3"><c:out
+									value="${orcamento.observacao}"></c:out></textarea>
 						</div>
 					</div>
 
@@ -113,9 +129,9 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning">
 						</div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
 
-						<div class="col-md-2 d-grid text-center"></div>
-						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
 								class="btn btn-dark">
@@ -148,34 +164,34 @@
 		</div>
 
 		<div class="container py-4 text-center d-flex justify-content-center">
-			<c:if test="${not empty pedidos }">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="titulo-tabela" colspan="10"
-								style="text-align: center; font-size: 25px;">Lista de
-								Pedidos</th>
-						</tr>
+		<c:if test="${not empty orcamentos }">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="titulo-tabela" colspan="10"
+							style="text-align: center; font-size: 25px;">Lista de
+							Orçamentos</th>
+					</tr>
 						<tr class="table-dark">
 							<th></th>
 							<th>Código</th>
-							<th>Nome Pedido</th>
+							<th>Nome Orçamento</th>
 							<th>Código Cliente</th>
 							<th>Nome Cliente</th>
-							<th>Data Pedido</th>
+							<th>Data Orçamento</th>
 							<th>Produtos</th>
 							<th>Valor Total</th>
-							<th>Estado Atual</th>
-							<th>Finalizar</th>
+							<th>Status</th>
+							<th>Efetivar</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="p" items="${pedidos }">
+						<c:forEach var="o" items="${orcamentos }">
 							<tr>
 								<td style="text-align: center;">
-									<button class="btn btn-outline-info" name="opcao"
-										value="${p.codigo}" onclick="editarPedido(this.value)"
-										${p.codigo eq codigoEdicao ? 'checked' : ''}>
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${o.codigo}" onclick="editarOrcamento(this.value)"
+										${o.codigo eq codigoEdicao ? 'checked' : ''}>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 											fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
 										  <path
@@ -183,33 +199,30 @@
 										</svg>
 									</button>
 								</td>
-								<td><c:out value="${p.codigo}" /></td>
-								<td><c:out value="${p.nome}" /></td>
-								<td><c:out value="${p.cliente.codigo}" /></td>
-								<td><c:out value="${p.cliente.nome}" /></td>
-								<td><fmt:formatDate value="${p.dataPedido}"
+								<td><c:out value="${o.codigo}" /></td>
+								<td><c:out value="${o.nome}" /></td>
+								<td><c:out value="${o.cliente.codigo}" /></td>
+								<td><c:out value="${o.cliente.nome}" /></td>
+								<td><fmt:formatDate value="${o.dataOrcamento}"
 										pattern="dd/MM/yyyy" /></td>
 								<td>
 									<button
-										onclick="window.location.href='produtosPedido?pedido=${p.codigo}'"
+										onclick="window.location.href='produtosPedido?pedido=${o.codigo}'"
 										class="btn btn-info">Adicionar</button>
 								</td>
-
-
-								<td><fmt:formatNumber value="${p.valorTotal}"
+								<td><fmt:formatNumber value="${o.valorTotal}"
 										type="currency" currencySymbol="R$" /></td>
 
-								<td><c:out value="${p.estado}" /></td>
+								<td><c:out value="${o.status}" /></td>
 								<td>
-									<form action="pedido" method="post">
-										<input type="hidden" name="codigo" value="${p.codigo}">
+								
+									<form action="orcamento" method="post">
+										<input type="hidden" name="codigo" value="${o.codigo}">
 										<input type="hidden" name="cliente"
-											value="${p.cliente.codigo}"> <input type="hidden"
-											id="botao" name="botao" value="Finalizar Pedido">
-										<button type="submit" class="btn btn-outline-dark">Finalizar
+											value="${o.cliente.codigo}"> <input type="hidden"
+											id="botao" name="botao" value=Efetivar>
+										<button type="submit" class="btn btn-outline-dark">Efetivar
 											Pedido</button>
-
-
 									</form>
 								<td>
 							</tr>
@@ -222,6 +235,5 @@
 	<div>
 		<jsp:include page="footer.jsp" />
 	</div>
-
 </body>
 </html>

@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Repository;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IEquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
@@ -92,5 +90,35 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 		c.close();
 
 		return saida;
+	}
+	
+	@Override
+	public List<Equipamento> findEquipamentosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Equipamento> equipamentos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_equipamento(?,?) ");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Equipamento e = new Equipamento();
+			e.setCodigo(rs.getInt("codigo"));
+			e.setNome(rs.getString("nome"));
+			e.setDescricao(rs.getString("descricao"));
+			e.setFabricante(rs.getString("fabricante"));
+			e.setDataAquisicao(rs.getDate("dataAquisicao"));
+			equipamentos.add(e);		
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return equipamentos;
 	}
 }

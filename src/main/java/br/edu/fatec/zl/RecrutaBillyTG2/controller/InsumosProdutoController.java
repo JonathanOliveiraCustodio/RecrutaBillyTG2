@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.InsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Insumo;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.InsumoProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.InsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoInsumoDao;
 

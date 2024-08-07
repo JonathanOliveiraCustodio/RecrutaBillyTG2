@@ -1,4 +1,4 @@
-package br.edu.fatec.zl.RecrutaBillyTG2.interfaces;
+package br.edu.fatec.zl.RecrutaBillyTG2.persistence;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -9,9 +9,11 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+
+import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
+import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IInsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Insumo;
-import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 
 @Repository
 public class InsumoDao implements ICrud<Insumo>, IInsumoDao {

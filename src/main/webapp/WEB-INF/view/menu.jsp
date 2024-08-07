@@ -53,12 +53,17 @@
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/equipamento">Equipamento</a></li>
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/fornecedor">Fornecedor</a></li>
 							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/funcionario">Funcionário</a></li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/insumo">Insumo</a></li>							
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/insumo">Insumo</a></li>		
+											
 						</ul></li>
 								
 					<li class="nav-item"><a
 						class="nav-link px-3 link-body-emphasis"
 						href="${pageContext.request.contextPath}/despesas">Despesas</a></li>
+						
+						<li class="nav-item"><a
+						class="nav-link px-3 link-body-emphasis"
+						href="${pageContext.request.contextPath}/orcamento">Orçamento</a></li>
 						
 					<li class="nav-item"><a
 						class="nav-link px-3 link-body-emphasis"

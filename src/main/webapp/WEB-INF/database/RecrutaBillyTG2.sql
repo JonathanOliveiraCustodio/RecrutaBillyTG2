@@ -1,5 +1,5 @@
 USE master
-DROP DATABASE RecrutaBillyTG2
+--DROP DATABASE RecrutaBillyTG2
 CREATE DATABASE RecrutaBillyTG2
 GO
 USE RecrutaBillyTG2 
@@ -99,13 +99,13 @@ PRIMARY KEY (codigo)
 )
 GO 
 CREATE TABLE pedido(
-codigo	   INT		     		NOT NULL,
-nome	   VARCHAR(100)		    NOT NULL,
-descricao  VARCHAR(200)		    NOT NULL,
-cliente    INT  		  	    NOT NULL,
-valorTotal DECIMAL(10,2)		NULL,
-estado	   VARCHAR(100)		    NOT NULL,
-dataPedido DATE					NULL	
+codigo	          INT		     		NOT NULL,
+nome	          VARCHAR(100)		    NOT NULL,
+descricao         VARCHAR(200)		    NOT NULL,
+cliente           INT  		  	        NOT NULL,
+valorTotal		  DECIMAL(10,2)		    NULL,
+estado			  VARCHAR(100)		    NOT NULL,
+dataPedido		  DATE					NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (cliente) REFERENCES cliente (codigo)
 )
@@ -137,6 +137,19 @@ dataManutencao		DATE				NOT NULL,
 descricaoManutencao VARCHAR(100)	    NOT NULL
 PRIMARY KEY (codigoManutencao,codigoEquipamento)
 FOREIGN KEY (codigoEquipamento) REFERENCES equipamento (codigo),
+)
+GO
+CREATE TABLE orcamento (
+    codigo        INT             NOT NULL IDENTITY(1,1),
+    nome          VARCHAR(100)    NOT NULL,
+    descricao     VARCHAR(200)    NOT NULL,
+    cliente       INT             NOT NULL,
+    valorTotal    DECIMAL(10,2)   NULL,
+    status        VARCHAR(50)     NOT NULL,
+    observacao    VARCHAR(200)    NULL,
+    dataOrcamento DATE            NOT NULL,
+    PRIMARY KEY (codigo),
+    FOREIGN KEY (cliente) REFERENCES cliente (codigo)
 )
 GO
 -- Insert Usuario de Teste
@@ -259,6 +272,28 @@ INSERT INTO manutencoesEquipamento (codigoEquipamento, dataManutencao, descricao
 (8, '2024-06-30', 'Atualização de firmware'),
 (9, '2024-07-15', 'Inspeção de cabos e conexões'),
 (10, '2024-08-20', 'Reparo em componentes desgastados');
+GO
+INSERT INTO orcamento (nome, descricao, cliente, valorTotal, status, observacao, dataOrcamento) VALUES
+('Orçamento A', 'Descrição do orçamento A', 1, 1500.00, 'Orçamento', 'Observação A', '2024-08-01'),
+('Orçamento B', 'Descrição do orçamento B', 2, 2500.50, 'Orçamento', 'Observação B', '2024-08-02'),
+('Orçamento C', 'Descrição do orçamento C', 3, 3200.75, 'Orçamento', 'Observação C', '2024-08-03'),
+('Orçamento D', 'Descrição do orçamento D', 4, 450.30, 'Orçamento', 'Observação D', '2024-08-04'),
+('Orçamento E', 'Descrição do orçamento E', 5, 5700.80, 'Orçamento', 'Observação E', '2024-08-05'),
+('Orçamento F', 'Descrição do orçamento F', 6, 1200.40, 'Orçamento', 'Observação F', '2024-08-06'),
+('Orçamento G', 'Descrição do orçamento G', 7, 2300.90, 'Orçamento', 'Observação G', '2024-08-07'),
+('Orçamento H', 'Descrição do orçamento H', 8, 750.00, 'Orçamento', 'Observação H', '2024-08-08'),
+('Orçamento I', 'Descrição do orçamento I', 9, 1340.10, 'Orçamento', 'Observação I', '2024-08-09'),
+('Orçamento J', 'Descrição do orçamento J', 10, 250.20, 'Orçamento', 'Observação J', '2024-08-10'),
+('Orçamento K', 'Descrição do orçamento K', 11, 4900.30, 'Orçamento', 'Observação K', '2024-08-11'),
+('Orçamento L', 'Descrição do orçamento L', 12, 3100.00, 'Orçamento', 'Observação L', '2024-08-12'),
+('Orçamento M', 'Descrição do orçamento M', 13, 870.70,  'Orçamento', 'Observação M', '2024-08-13'),
+('Orçamento N', 'Descrição do orçamento N', 14, 670.80, 'Aprovado', 'Observação N', '2024-08-14'),
+('Orçamento O', 'Descrição do orçamento O', 15, 2950.20, 'Em aberto', 'Observação O', '2024-08-15'),
+('Orçamento P', 'Descrição do orçamento P', 16, 1450.60, 'Rejeitado', 'Observação P', '2024-08-16'),
+('Orçamento Q', 'Descrição do orçamento Q', 17, 2000.00, 'Em aberto', 'Observação Q', '2024-08-17'),
+('Orçamento R', 'Descrição do orçamento R', 18, 5000.50, 'Aprovado', 'Observação R', '2024-08-18'),
+('Orçamento S', 'Descrição do orçamento S', 19, 330.00, 'Em aberto', 'Observação S', '2024-08-19'),
+('Orçamento T', 'Descrição do orçamento T', 20, 7700.90, 'Rejeitado', 'Observação T', '2024-08-20')
 GO
 
 CREATE PROCEDURE sp_iud_fornecedor
@@ -672,42 +707,53 @@ BEGIN
     END
 END
 GO
-CREATE PROCEDURE sp_iud_pedido(@acao CHAR(1), 
-@codigopedido INT, 
-@nomepedido VARCHAR(MAX),
-@descricao VARCHAR(MAX),
-@codigocliente INT,
-@estado VARCHAR(100),
-@saida VARCHAR(200) OUTPUT)
+CREATE PROCEDURE sp_iud_pedido
+    @acao CHAR(1), 
+    @codigopedido INT, 
+    @nomepedido VARCHAR(100),
+    @descricao VARCHAR(200),
+    @codigocliente INT,
+    @estado VARCHAR(100),
+    @saida VARCHAR(200) OUTPUT
 AS
 BEGIN
-	IF(@acao = 'I')
-	BEGIN
-		INSERT INTO pedido (codigo, nome,descricao, cliente, estado,dataPedido) VALUES
-		(@codigopedido, @nomepedido,@descricao, @codigocliente, @estado,GETDATE())
-		SET @saida = 'Pedido inserido com sucesso'
-	END
-	ELSE
-	IF(@acao = 'U')
-	BEGIN
-		UPDATE pedido
-		SET nome = @nomepedido,
-		    descricao=@descricao,
-			cliente = @codigocliente,
-			estado = @estado
-		WHERE codigo = @codigopedido
-	END
-	ELSE
-	IF(@acao = 'D')
-	BEGIN
-		DELETE pedido
-		WHERE codigo = @codigopedido
-	END
-	ELSE
-	BEGIN
-		RAISERROR('Operação inválida', 16, 1)
-		RETURN
-	END
+    IF (@acao = 'I') -- Inserir
+    BEGIN
+        INSERT INTO pedido (codigo, nome, descricao, cliente, estado, dataPedido) 
+        VALUES (@codigopedido, @nomepedido, @descricao, @codigocliente, @estado, GETDATE())
+        SET @saida = 'Pedido inserido com sucesso'
+    END
+    ELSE IF (@acao = 'U') -- Atualizar
+    BEGIN
+        UPDATE pedido
+        SET nome = @nomepedido,
+            descricao = @descricao,
+            cliente = @codigocliente,
+            estado = @estado
+        WHERE codigo = @codigopedido
+        
+        -- Verificar se a atualização afetou alguma linha
+        IF @@ROWCOUNT > 0
+            SET @saida = 'Pedido atualizado com sucesso'
+        ELSE
+            SET @saida = 'Nenhum pedido encontrado para atualizar'
+    END
+    ELSE IF (@acao = 'D') -- Excluir
+    BEGIN
+        DELETE FROM pedido
+        WHERE codigo = @codigopedido
+        
+        -- Verificar se a exclusão afetou alguma linha
+        IF @@ROWCOUNT > 0
+            SET @saida = 'Pedido excluído com sucesso'
+        ELSE
+            SET @saida = 'Nenhum pedido encontrado para excluir'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
 END
 GO
 CREATE PROCEDURE sp_iud_produtos_pedido(
@@ -892,6 +938,80 @@ BEGIN
 END
 -- Fim da procedure
 GO
+CREATE PROCEDURE sp_iud_orcamento
+    @acao CHAR(1),
+    @codigo INT = NULL, -- O parâmetro pode ser NULL se não for usado
+    @nome VARCHAR(100),
+    @descricao VARCHAR(200),
+    @cliente INT,
+    @valorTotal DECIMAL(10,2),
+    @status VARCHAR(50),
+    @observacao VARCHAR(200),
+    @saida VARCHAR(200) OUTPUT
+AS
+BEGIN
+    IF (@acao = 'I') -- Inserir
+    BEGIN
+        INSERT INTO orcamento (nome, descricao, cliente, valorTotal, status, observacao, dataOrcamento)
+        VALUES (@nome, @descricao, @cliente, @valorTotal, @status, @observacao, GETDATE())
+        
+        -- Retornar o valor do código gerado
+        SET @codigo = SCOPE_IDENTITY()
+        SET @saida = 'Orçamento inserido com sucesso. Código gerado: ' + CAST(@codigo AS VARCHAR(10))
+    END
+    ELSE IF (@acao = 'U') -- Atualizar
+    BEGIN
+        UPDATE orcamento
+        SET nome = @nome,
+            descricao = @descricao,
+            cliente = @cliente,
+            valorTotal = @valorTotal,
+            status = @status,
+            observacao = @observacao
+        WHERE codigo = @codigo
+
+        -- Verificar se a atualização afetou alguma linha
+        IF @@ROWCOUNT > 0
+            SET @saida = 'Orçamento atualizado com sucesso'
+        ELSE
+            SET @saida = 'Nenhum orçamento encontrado para atualizar'
+    END
+    ELSE IF (@acao = 'D') -- Excluir
+    BEGIN
+        DELETE FROM orcamento
+        WHERE codigo = @codigo
+        
+        -- Verificar se a exclusão afetou alguma linha
+        IF @@ROWCOUNT > 0
+            SET @saida = 'Orçamento excluído com sucesso'
+        ELSE
+            SET @saida = 'Nenhum orçamento encontrado para excluir'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
+GO
+CREATE PROCEDURE sp_orcamento_pedido
+    @codigo INT, 
+    @saida VARCHAR(200) OUTPUT 
+AS
+BEGIN
+    -- Atualiza o status do orçamento para 'Pedido'
+    UPDATE orcamento
+    SET status = 'Pedido'
+    WHERE codigo = @codigo;
+    -- Verifica se a atualização afetou alguma linha
+    IF @@ROWCOUNT > 0
+        SET @saida = 'Status do orçamento alterado para "Pedido" com sucesso.'
+    ELSE
+        SET @saida = 'Nenhum orçamento encontrado com o código especificado para atualizar.'
+END
+GO
+
+
 CREATE FUNCTION fn_insumo_funcionario()
 RETURNS TABLE
 AS
@@ -1241,11 +1361,27 @@ SELECT
     UF,
     complemento,
     numero,
-    CONVERT(VARCHAR(10), dataNascimento, 103) AS dataNascimento
+    dataNascimento
 FROM 
     cliente;
 GO
-
+CREATE VIEW vw_orcamento AS
+SELECT 
+    o.codigo,
+    o.nome,
+    o.descricao,
+    o.cliente,
+    o.valorTotal,
+    o.status,
+    o.observacao,
+    o.dataOrcamento,
+    e.nome AS nomeCliente,
+    e.codigo AS codigoCliente 
+FROM 
+    orcamento o
+JOIN 
+    cliente e ON o.cliente = e.codigo;
+GO
 -- Inicio Funções para o Relatorio
 CREATE FUNCTION fn_buscar_cliente (
     @tipoPesquisa VARCHAR(50),
@@ -1265,7 +1401,7 @@ RETURNS @resultado TABLE (
     UF VARCHAR(2),
     complemento VARCHAR(50),
     numero VARCHAR(10),
-    dataNascimento VARCHAR(10),
+    dataNascimento DATE,
     quantidadeRegistros INT
 )
 AS
@@ -1303,9 +1439,9 @@ BEGIN
         c.UF,
         c.complemento,
         c.numero,
-        CONVERT(VARCHAR(10), c.dataNascimento, 103) AS dataNascimento
+        c.dataNascimento
     FROM 
-        vw_buscar_cliente c
+        cliente c
     WHERE 
         (@tipoPesquisa = 'Nome' AND c.nome LIKE '%' + @valorPesquisa + '%') OR
         (@tipoPesquisa = 'CEP' AND c.CEP LIKE '%' + @valorPesquisa + '%') OR
@@ -1320,7 +1456,7 @@ BEGIN
     IF @count = 0
     BEGIN
         INSERT INTO @resultado (codigo, nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento, quantidadeRegistros)
-        VALUES (0, 'Nenhum registro encontrado', '', '', '', '', '', '', '', '', '', '', '', '', 0);
+        VALUES (0, 'Nenhum registro encontrado', '', '', '', '', '', '', '', '', '', '', '', GETDATE(), 0);
     END
     ELSE
     BEGIN
@@ -1337,113 +1473,248 @@ CREATE FUNCTION fn_buscar_fornecedor (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
 )
-RETURNS TABLE
+RETURNS @resultado TABLE (
+    codigo INT,
+    nome VARCHAR(50),
+    telefone VARCHAR(20),
+    email VARCHAR(100),
+    empresa VARCHAR(100),
+    CEP VARCHAR(10),
+    logradouro VARCHAR(100),
+    numero VARCHAR(10),
+    bairro VARCHAR(50),
+    complemento VARCHAR(50),
+    cidade VARCHAR(50),
+    UF VARCHAR(2),
+    quantidadeRegistros INT
+)
 AS
-RETURN
-(
+BEGIN
+    DECLARE @count INT;
+    DECLARE @fornecedores TABLE (
+        codigo INT,
+        nome VARCHAR(50),
+        telefone VARCHAR(20),
+        email VARCHAR(100),
+        empresa VARCHAR(100),
+        CEP VARCHAR(10),
+        logradouro VARCHAR(100),
+        numero VARCHAR(10),
+        bairro VARCHAR(50),
+        complemento VARCHAR(50),
+        cidade VARCHAR(50),
+        UF VARCHAR(2)
+    );
+
+    INSERT INTO @fornecedores
     SELECT 
-        codigo,
-        nome,
-        telefone,
-        email,
-        empresa,
-        CEP,
-        logradouro,
-        numero,
-        bairro,
-        complemento,
-        cidade,
-        UF
-    FROM fornecedor
+        f.codigo,
+        f.nome,
+        f.telefone,
+        f.email,
+        f.empresa,
+        f.CEP,
+        f.logradouro,
+        f.numero,
+        f.bairro,
+        f.complemento,
+        f.cidade,
+        f.UF
+    FROM fornecedor f
     WHERE 
-        (@tipoPesquisa = 'Nome' AND nome LIKE '%' + @valorPesquisa + '%') OR
-        (@tipoPesquisa = 'CEP' AND CEP LIKE '%' + @valorPesquisa + '%') OR
-        (@tipoPesquisa = 'Bairro' AND bairro LIKE '%' + @valorPesquisa + '%') OR
-        (@tipoPesquisa = 'Cidade' AND cidade LIKE '%' + @valorPesquisa + '%') OR
-        (@tipoPesquisa = 'UF' AND UF = @valorPesquisa) OR
-        (@tipoPesquisa = 'Todos')
-);
+        (@tipoPesquisa = 'Nome' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'CEP' AND f.CEP LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Bairro' AND f.bairro LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Cidade' AND f.cidade LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'UF' AND f.UF = @valorPesquisa) OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @fornecedores);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', '', '', '', '', '', '', '', '', '', '', 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT *, @count AS quantidadeRegistros
+        FROM @fornecedores;
+    END
+
+    RETURN;
+END;
 GO
+
 
 CREATE FUNCTION fn_buscar_insumo (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
 )
-RETURNS TABLE
+RETURNS @resultado TABLE (
+    codigo INT,
+    nome VARCHAR(100),
+    precoCompra DECIMAL(10,2),
+    precoVenda DECIMAL(10,2),
+    quantidade INT,
+    unidade VARCHAR(50),
+    nomeFornecedor VARCHAR(100),
+    codigoFornecedor INT,
+    dataCompra DATE,
+    quantidadeRegistros INT
+)
 AS
-RETURN
-(
-    WITH Insumos AS (
-        SELECT 
-            i.codigo,
-            i.nome,
-            i.precoCompra,
-            i.precoVenda,
-            i.quantidade,
-            i.unidade,
-            f.nome AS nomeFornecedor,
-            f.codigo AS codigoFornecedor,
-            CONVERT(VARCHAR(10), i.dataCompra, 103) AS dataCompra
-        FROM 
-            insumo i
-            JOIN fornecedor f ON i.fornecedor = f.codigo
-        WHERE 
-            (@tipoPesquisa = 'Nome' AND i.nome LIKE '%' + @valorPesquisa + '%') OR
-            (@tipoPesquisa = 'Unidade' AND i.unidade LIKE '%' + @valorPesquisa + '%') OR
-            (@tipoPesquisa = 'Fornecedor' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
-            (@tipoPesquisa = 'Preço Compra Igual' AND i.precoCompra = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Preço Compra Maior Que' AND i.precoCompra > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Preço Compra Menor Que' AND i.precoCompra < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Preço Venda Igual' AND i.precoVenda = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Preço Venda Maior Que' AND i.precoVenda > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Preço Venda Menor Que' AND i.precoVenda < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Todos')
-    )
+BEGIN
+    DECLARE @count INT;
+    DECLARE @insumos TABLE (
+        codigo INT,
+        nome VARCHAR(100),
+        precoCompra DECIMAL(10,2),
+        precoVenda DECIMAL(10,2),
+        quantidade INT,
+        unidade VARCHAR(50),
+        nomeFornecedor VARCHAR(100),
+        codigoFornecedor INT,
+        dataCompra DATE
+    );
+
+    INSERT INTO @insumos
     SELECT 
-        *,
-        (SELECT COUNT(*) FROM Insumos) AS quantidadeRegistros
+        i.codigo,
+        i.nome,
+        i.precoCompra,
+        i.precoVenda,
+        i.quantidade,
+        i.unidade,
+        f.nome AS nomeFornecedor,
+        f.codigo AS codigoFornecedor,
+        i.dataCompra
     FROM 
-        Insumos
-);
+        insumo i
+        JOIN fornecedor f ON i.fornecedor = f.codigo
+    WHERE 
+        (@tipoPesquisa = 'Nome' AND i.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Unidade' AND i.unidade LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Fornecedor' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Preço Compra Igual' AND i.precoCompra = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Preço Compra Maior Que' AND i.precoCompra > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Preço Compra Menor Que' AND i.precoCompra < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Preço Venda Igual' AND i.precoVenda = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Preço Venda Maior Que' AND i.precoVenda > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Preço Venda Menor Que' AND i.precoVenda < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @insumos);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nome, precoCompra, precoVenda, quantidade, unidade, nomeFornecedor, codigoFornecedor, dataCompra, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', 0.0, 0.0, 0, '', '', 0, NULL, 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT 
+            codigo,
+            nome,
+            precoCompra,
+            precoVenda,
+            quantidade,
+            unidade,
+            nomeFornecedor,
+            codigoFornecedor,
+            dataCompra,
+            @count AS quantidadeRegistros
+        FROM @insumos;
+    END
+
+    RETURN;
+END;
 GO
+
 
 CREATE FUNCTION fn_buscar_pedido (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
 )
-RETURNS TABLE
+RETURNS @resultado TABLE (
+    codigo INT,
+    nomePedido VARCHAR(100),
+    descricao VARCHAR(255),
+    cliente INT,
+    valorTotal DECIMAL(10,2),
+    estado VARCHAR(50),
+    codigoCliente INT,
+    nomeCliente VARCHAR(100),
+    dataPedido DATE,
+    quantidadeRegistros INT
+)
 AS
-RETURN
-(
-    WITH Pedidos AS (
-        SELECT 
-            p.codigo,
-            p.nome AS nomePedido,
-            p.descricao,
-            p.cliente,
-            p.valorTotal,
-            p.estado,
-			c.codigo AS codigoCliente,
-            c.nome AS nomeCliente,
-            CONVERT(VARCHAR(10), p.dataPedido, 103) AS dataPedido
-        FROM 
-            pedido p
-            JOIN cliente c ON p.cliente = c.codigo
-        WHERE 
-            (@tipoPesquisa = 'Cliente' AND p.cliente = TRY_CAST(@valorPesquisa AS INT)) OR
-            (@tipoPesquisa = 'Estado' AND p.estado LIKE '%' + @valorPesquisa + '%') OR
-            (@tipoPesquisa = 'Data' AND p.dataPedido = TRY_CAST(@valorPesquisa AS DATE)) OR
-            (@tipoPesquisa = 'Maior Que' AND p.valorTotal > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-            (@tipoPesquisa = 'Menor Que' AND p.valorTotal < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR    
-            (@tipoPesquisa = 'Todos')
-    )
+BEGIN
+    DECLARE @count INT;
+    DECLARE @pedidos TABLE (
+        codigo INT,
+        nomePedido VARCHAR(100),
+        descricao VARCHAR(255),
+        cliente INT,
+        valorTotal DECIMAL(10,2),
+        estado VARCHAR(50),
+        codigoCliente INT,
+        nomeCliente VARCHAR(100),
+        dataPedido DATE
+    );
+
+    INSERT INTO @pedidos
     SELECT 
-        *,
-        (SELECT COUNT(*) FROM Pedidos) AS quantidadeRegistros
+        p.codigo,
+        p.nome AS nomePedido,
+        p.descricao,
+        p.cliente,
+        p.valorTotal,
+        p.estado,
+        c.codigo AS codigoCliente,
+        c.nome AS nomeCliente,
+        p.dataPedido
     FROM 
-        Pedidos
-);
+        pedido p
+        JOIN cliente c ON p.cliente = c.codigo
+    WHERE 
+        (@tipoPesquisa = 'Cliente' AND p.cliente = TRY_CAST(@valorPesquisa AS INT)) OR
+        (@tipoPesquisa = 'Estado' AND p.estado LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Data' AND p.dataPedido = TRY_CAST(@valorPesquisa AS DATE)) OR
+        (@tipoPesquisa = 'Maior Que' AND p.valorTotal > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Menor Que' AND p.valorTotal < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR    
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @pedidos);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nomePedido, descricao, cliente, valorTotal, estado, codigoCliente, nomeCliente, dataPedido, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', '', 0, 0.0, '', 0, '', NULL, 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT 
+            codigo,
+            nomePedido,
+            descricao,
+            cliente,
+            valorTotal,
+            estado,
+            codigoCliente,
+            nomeCliente,
+            dataPedido,
+            @count AS quantidadeRegistros
+        FROM @pedidos;
+    END
+
+    RETURN;
+END;
 GO
+
 
 CREATE FUNCTION fn_buscar_produto (
     @tipoPesquisa VARCHAR(50),
@@ -1516,7 +1787,6 @@ BEGIN
     RETURN;
 END;
 GO
--- Fim Funções para o Relatorio
 
 CREATE FUNCTION fn_buscar_equipamento (
     @tipoPesquisa VARCHAR(50),
@@ -1574,3 +1844,106 @@ BEGIN
     RETURN;
 END;
 GO
+
+CREATE FUNCTION fn_buscar_funcionario (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS @resultado TABLE (
+    CPF CHAR(11),
+    nome VARCHAR(100),
+    nivelAcesso VARCHAR(30),
+    email VARCHAR(100),
+    senha VARCHAR(30),
+    dataNascimento DATE,
+    telefone CHAR(12),
+    cargo VARCHAR(30),
+    horario VARCHAR(30),
+    salario DECIMAL(10,1),
+    dataAdmissao DATE,
+    dataDesligamento DATE NULL,
+    observacao VARCHAR(200) NULL,
+    quantidadeRegistros INT
+)
+AS
+BEGIN
+    DECLARE @count INT;
+    DECLARE @funcionarios TABLE (
+        CPF CHAR(11),
+        nome VARCHAR(100),
+        nivelAcesso VARCHAR(30),
+        email VARCHAR(100),
+        senha VARCHAR(30),
+        dataNascimento DATE,
+        telefone CHAR(12),
+        cargo VARCHAR(30),
+        horario VARCHAR(30),
+        salario DECIMAL(10,1),
+        dataAdmissao DATE,
+        dataDesligamento DATE NULL,
+        observacao VARCHAR(200) NULL
+    );
+
+    INSERT INTO @funcionarios
+    SELECT 
+        f.CPF,
+        f.nome,
+        f.nivelAcesso,
+        f.email,
+        f.senha,
+        f.dataNascimento,
+        f.telefone,
+        f.cargo,
+        f.horario,
+        f.salario,
+        f.dataAdmissao,
+        f.dataDesligamento,
+        f.observacao
+    FROM 
+        funcionario f
+    WHERE 
+        (@tipoPesquisa = 'nivelAcesso' AND f.nivelAcesso LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'cargo' AND f.cargo LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'horario' AND f.horario LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'salario igual' AND f.salario = TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
+        (@tipoPesquisa = 'salario maior que' AND f.salario > TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
+        (@tipoPesquisa = 'salario menor que' AND f.salario < TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
+        (@tipoPesquisa = 'dataAdmissao' AND f.dataAdmissao = TRY_CAST(@valorPesquisa AS DATE)) OR
+        (@tipoPesquisa = 'nome' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @funcionarios);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (CPF, nome, nivelAcesso, email, senha, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao, quantidadeRegistros)
+        VALUES ('', 'Nenhum registro encontrado', '', '', '', NULL, '', '', '', 0.0, NULL, NULL, '', 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT 
+            CPF,
+            nome,
+            nivelAcesso,
+            email,
+            senha,
+            dataNascimento,
+            telefone,
+            cargo,
+            horario,
+            salario,
+            dataAdmissao,
+            dataDesligamento,
+            observacao,
+            @count AS quantidadeRegistros
+        FROM @funcionarios;
+    END
+
+    RETURN;
+END;
+GO
+--SELECT * FROM vw_orcamento WHERE nome = 'Orçamento B'
+-- Fim Funções para o Relatorio
+--SELECT * FROM fn_buscar_fornecedor('Todos','')
+
