@@ -100,6 +100,8 @@ public class DespesaController {
 		String saida = "";
 		String erro = "";
 		
+		
+		
 		Despesa d = new Despesa();
 		List<Despesa> despesas = new ArrayList<>();	
 		
@@ -112,7 +114,9 @@ public class DespesaController {
 		}
 		
 		if(cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-			d.setCodigo(Integer.parseInt(codigo));
+			if(codigo != null && codigo.isEmpty()) {				
+				d.setCodigo(Integer.parseInt(codigo));
+			}
 			d.setNome(nome);
 			d.setData(Date.valueOf(dataInicio));
 			if(dataVencimento != null && !dataVencimento.isEmpty()) {			
