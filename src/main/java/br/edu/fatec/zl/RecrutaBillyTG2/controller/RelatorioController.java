@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.InsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
@@ -37,6 +36,7 @@ import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FornecedorDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.InsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FuncionarioDao;
@@ -94,56 +94,64 @@ public class RelatorioController {
 		String saida = "";
 		String erro = "";
 
-		Cliente c = new Cliente();
-		Produto pro = new Produto();
-		Pedido ped = new Pedido();
-		Fornecedor f = new Fornecedor();
-		Insumo i = new Insumo();
-		Equipamento e = new Equipamento();
-		Funcionario u = new Funcionario();
-
 		List<Cliente> clientes = new ArrayList<>();
 		List<Produto> produtos = new ArrayList<>();
 		List<Pedido> pedidos = new ArrayList<>();
 		List<Fornecedor> fornecedores = new ArrayList<>();
 		List<Insumo> insumos = new ArrayList<>();
 		List<Equipamento> equipamentos = new ArrayList<>();
-		List<Funcionario> usuarios = new ArrayList<>();
-
-		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
-			c = null;
-
-		} else if (!cmd.contains("Listar")) {
-			// c.setCodigo(Integer.parseInt(codigo));
-		}
-
-		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-
-		}
+		List<Funcionario> funcionarios = new ArrayList<>();
 
 		try {
+			if (cmd.contains("Limpar")) {
+				categoria = "";
+				opcao = "";
+				parametro = "";
+			} else if (cmd.contains("Visualizar Relatório")) {
+				switch (categoria) {
+				case "cliente":
+					clientes = listarClientes(opcao, parametro);
+					break;
+				case "fornecedor":
+					fornecedores = listarFornecedores(opcao, parametro);
+					break;
+				case "insumo":
+					insumos = listarInsumos(opcao, parametro);
+					break;
+				case "equipamento":
+					equipamentos = listarEquipamentos(opcao, parametro);
+					break;
+				case "funcionario":
+					funcionarios = listarFuncionarios(opcao, parametro);
+					break;
+				case "pedido":
+					pedidos = listarPedidos(opcao, parametro);
+					break;
+				case "produto":
+					produtos = listarProdutos(opcao, parametro);
+					break;
 
-			if (cmd.contains("Visualizar")) {
-
-				// clientes = listarClientes();
+				default:
+					erro = "Categoria desconhecida: " + categoria;
+					break;
+				}
 			}
+		} catch (SQLException | ClassNotFoundException error) {
+			erro = error.getMessage();
 		} finally {
+
+			model.addAttribute("categoria", categoria);
+			model.addAttribute("opcao", opcao);
+			model.addAttribute("parametro", parametro);
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
-			model.addAttribute("cliente", c);
 			model.addAttribute("clientes", clientes);
-			model.addAttribute("produto", pro);
 			model.addAttribute("produtos", produtos);
-			model.addAttribute("pedido", ped);
 			model.addAttribute("pedidos", pedidos);
-			model.addAttribute("fornecedor", f);
 			model.addAttribute("fornecedores", fornecedores);
-			model.addAttribute("insumo", i);
 			model.addAttribute("insumos", insumos);
-			model.addAttribute("equipamento", e);
 			model.addAttribute("equipamentos", equipamentos);
-			model.addAttribute("usuario", u);
-			model.addAttribute("usuarios", usuarios);
+			model.addAttribute("funcionarios", funcionarios);
 		}
 		return new ModelAndView("relatorio");
 	}
@@ -173,23 +181,30 @@ public class RelatorioController {
 		HttpHeaders header = new HttpHeaders();
 
 		String reportPath = "";
-		if (categoria.equals("cliente")) {
+		switch (categoria) {
+		case "cliente":
 			reportPath = "classpath:reports/RelatorioCliente.jasper";
-
-		} else if (categoria.equals("fornecedor")) {
+			break;
+		case "fornecedor":
 			reportPath = "classpath:reports/RelatorioFornecedor.jasper";
-
-		} else if (categoria.equals("insumo")) {
+			break;
+		case "insumo":
 			reportPath = "classpath:reports/RelatorioInsumo.jasper";
-
-		} else if (categoria.equals("pedido")) {
+			break;
+		case "pedido":
 			reportPath = "classpath:reports/RelatorioPedidos.jasper";
-		}
-
-		else if (categoria.equals("produto")) {
+			break;
+		case "produto":
 			reportPath = "classpath:reports/RelatorioProduto.jasper";
-		} else if (categoria.equals("equipamento")) {
+			break;
+		case "equipamento":
 			reportPath = "classpath:reports/RelatorioEquipamento.jasper";
+			break;
+		case "funcionario":
+			reportPath = "classpath:reports/RelatorioFuncionario.jasper";
+			break;
+		default:
+			throw new IllegalArgumentException("Categoria desconhecida " + categoria);
 		}
 
 		try {
@@ -214,46 +229,49 @@ public class RelatorioController {
 		return new ResponseEntity<>(resource, header, status);
 	}
 
-	private List<Cliente> listarClientes() throws ClassNotFoundException, SQLException {
+	private List<Cliente> listarClientes(String opcao, String parametro) throws ClassNotFoundException, SQLException {
 		List<Cliente> clientes = new ArrayList<>();
-		clientes = cDao.findAll();
+		clientes = cDao.findClientesByOption(opcao, parametro);
 		return clientes;
 	}
 
-	private List<Produto> listarProdutos() throws ClassNotFoundException, SQLException {
+	private List<Produto> listarProdutos(String opcao, String parametro) throws ClassNotFoundException, SQLException {
 		List<Produto> produtos = new ArrayList<>();
-		produtos = pDao.findAll();
+		produtos = pDao.findProdutosByOption(opcao, parametro);
 		return produtos;
 	}
 
-	private List<Pedido> listarPedidos() throws ClassNotFoundException, SQLException {
+	private List<Pedido> listarPedidos(String opcao, String parametro) throws ClassNotFoundException, SQLException {
 		List<Pedido> pedidos = new ArrayList<>();
-		pedidos = pedDao.findAll();
+		pedidos = pedDao.findPedidosByOption(opcao, parametro);
 		return pedidos;
 	}
 
-	private List<Fornecedor> listarFornecedores() throws ClassNotFoundException, SQLException {
+	private List<Fornecedor> listarFornecedores(String opcao, String parametro)
+			throws ClassNotFoundException, SQLException {
 		List<Fornecedor> fornecedores = new ArrayList<>();
-		fornecedores = fDao.findAll();
+		fornecedores = fDao.findFornecedoresByOption(opcao, parametro);
 		return fornecedores;
 	}
 
-	private List<Insumo> listarInsumos() throws ClassNotFoundException, SQLException {
+	private List<Insumo> listarInsumos(String opcao, String parametro) throws ClassNotFoundException, SQLException {
 		List<Insumo> insumos = new ArrayList<>();
-		insumos = iDao.findAll();
+		insumos = iDao.findInsumosByOption(opcao, parametro);
 		return insumos;
 	}
 
-	private List<Equipamento> listarEquipamentos() throws ClassNotFoundException, SQLException {
+	private List<Equipamento> listarEquipamentos(String opcao, String parametro)
+			throws ClassNotFoundException, SQLException {
 		List<Equipamento> equipamentos = new ArrayList<>();
-		equipamentos = eDao.findAll();
+		equipamentos = eDao.findEquipamentosByOption(opcao, parametro);
 		return equipamentos;
 	}
 
-	private List<Funcionario> listarUsuarios() throws ClassNotFoundException, SQLException {
-		List<Funcionario> usuarios = new ArrayList<>();
-		usuarios = uDao.findAll();
-		return usuarios;
+	private List<Funcionario> listarFuncionarios(String opcao, String parametro)
+			throws ClassNotFoundException, SQLException {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		funcionarios = uDao.findFuncionariosByOption(opcao, parametro);
+		return funcionarios;
 	}
 
 }

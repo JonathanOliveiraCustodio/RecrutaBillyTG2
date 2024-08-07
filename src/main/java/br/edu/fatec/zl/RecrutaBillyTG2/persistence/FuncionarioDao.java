@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
+import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IFuncionarioDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Funcionario;
 
 @Repository
-public class FuncionarioDao implements ICrud<Funcionario> {
+public class FuncionarioDao implements ICrud<Funcionario>, IFuncionarioDao {
 	private GenericDao gDao;
 
 	public FuncionarioDao(GenericDao gDao) {
@@ -58,7 +60,7 @@ public class FuncionarioDao implements ICrud<Funcionario> {
 
 	@Override
 	public List<Funcionario> findAll() throws SQLException, ClassNotFoundException {
-		List<Funcionario> usuarios = new ArrayList<>();
+		List<Funcionario> funcionarios = new ArrayList<>();
 		String sql = "SELECT * FROM v_funcionario";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
@@ -78,12 +80,12 @@ public class FuncionarioDao implements ICrud<Funcionario> {
 			f.setDataAdmissao(rs.getDate("dataAdmissao"));
 			f.setDataDesligamento(rs.getDate("dataDesligamento"));
 			f.setObservacao(rs.getString("observacao"));
-			usuarios.add(f);
+			funcionarios.add(f);
 		}
 		ps.close();
 		rs.close();
 		c.close();
-		return usuarios;
+		return funcionarios;
 	}
 
 	// @Override
@@ -113,5 +115,44 @@ public class FuncionarioDao implements ICrud<Funcionario> {
 		cs.close();
 		c.close();
 		return saida;
+	}
+	
+	@Override
+	public List<Funcionario> findFuncionariosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_funcionario(?,?) ");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {	
+			Funcionario f = new Funcionario();
+			f.setCPF(rs.getString("CPF"));
+			f.setNome(rs.getString("nome"));
+			f.setNivelAcesso(rs.getString("nivelAcesso"));
+			f.setSenha(rs.getString("senha"));
+			f.setEmail(rs.getString("email"));
+			f.setDataNascimento(rs.getDate("dataNascimento"));
+			f.setTelefone(rs.getString("telefone"));
+			f.setCargo(rs.getString("cargo"));
+			f.setHorario(rs.getString("horario"));
+			f.setSalario(rs.getFloat("salario"));
+			f.setDataAdmissao(rs.getDate("dataAdmissao"));
+			f.setDataDesligamento(rs.getDate("dataDesligamento"));
+			f.setObservacao(rs.getString("observacao"));
+			funcionarios.add(f);
+		
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return funcionarios;
 	}
 }

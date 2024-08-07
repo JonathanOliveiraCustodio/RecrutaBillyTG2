@@ -185,8 +185,6 @@
 							</div>
 						</div>
 
-
-
 						<!-- Linha dos Botões -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">

@@ -37,7 +37,6 @@ function atualizarOpcoes() {
 		opcaoSelect.add(new Option("Valor Unitario Menor Que", "Valor Unitario Menor Que"));
 		
 	
-
 	} else if (categoria === "equipamento") {
 		opcaoSelect.add(new Option("Escolha Uma opção", ""));
 		opcaoSelect.add(new Option("Todos", "Todos"));
@@ -82,12 +81,35 @@ function atualizarOpcoes() {
 		opcaoSelect.add(new Option("Valor Maior que", "Valor Maior que"));
 		opcaoSelect.add(new Option("Valor Menor que", "Valor Menor que"));
 		
-	} else if (categoria === "usuario") {
+	} else if (categoria === "funcionario") {
 		opcaoSelect.add(new Option("Escolha Uma opção", ""));
-
-		opcaoSelect.add(new Option("CPF", "cpf"));
+        opcaoSelect.add(new Option("Todos", "Todos"));
+		opcaoSelect.add(new Option("Cargo", "cargo"));
+		opcaoSelect.add(new Option("CPF", "nivelAcesso"));
 		opcaoSelect.add(new Option("Nome", "nome"));
+		opcaoSelect.add(new Option("Horário", "horario"));
+		opcaoSelect.add(new Option("Salário Igual", "salario igual"));
+		opcaoSelect.add(new Option("Salário Maior Que", "salario maior que"));
+		opcaoSelect.add(new Option("Salário Menor Que", "salario menor que"));	
 	}
 }
+    function gerarRelatorioPDF() {
+        const form = document.getElementById("form-relatorio");
+        form.action = "relatorioCategoria";
+        form.method = "post";
+        form.target = "_blank";
+        form.submit();
+        atualizarOpcoes();
+    }
+
+    function resetarFormulario() {
+        const form = document.getElementById("form-relatorio");
+        form.action = "relatorio";
+        form.method = "post";
+        form.target = "_self";
+        
+        }
+
+
 
 
