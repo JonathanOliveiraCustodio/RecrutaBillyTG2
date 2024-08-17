@@ -1,5 +1,6 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class PedidoController {
 		HttpSession session = request.getSession();
 		session.removeAttribute("pedido");
 		String cmd = allRequestParam.get("cmd");
-		
+
 		String codigo = allRequestParam.get("codigo");
 
 		String saida = "";
@@ -48,7 +49,7 @@ public class PedidoController {
 		List<Cliente> clientes = new ArrayList<>();
 		List<Pedido> pedidos = new ArrayList<>();
 		try {
-			//p = null;
+			// p = null;
 			clientes = cDao.findAll();
 
 			if (cmd != null) {
@@ -89,6 +90,11 @@ public class PedidoController {
 		String cliente = allRequestParam.get("cliente");
 		String estado = allRequestParam.get("estado");
 		String descricao = allRequestParam.get("descricao");
+		String valorTotal = allRequestParam.get("valorTotal");
+		String tipoPagemento = allRequestParam.get("tipoPagemento");
+		String observacao = allRequestParam.get("observacao");
+		String statusPagamento = allRequestParam.get("statusPagamento");
+		String dataPagamento = allRequestParam.get("dataPagamento");
 
 		// Parâmetros de saida
 		String saida = "";
@@ -102,18 +108,35 @@ public class PedidoController {
 			p = null;
 
 		} else if (!cmd.contains("Listar")) {
-			p.setCodigo(Integer.parseInt(codigo));
+			if (codigo != null && !codigo.isEmpty()) {
+				p.setCodigo(Integer.parseInt(codigo));
+			}
+
 		}
 		try {
 			clientes = cDao.findAll();
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				if (codigo != null && !codigo.isEmpty()) {
+					p.setCodigo(Integer.parseInt(codigo));
+				}
+				p.setNome(nome);
+				p.setDescricao(descricao);
 				c.setCodigo(Integer.parseInt(cliente));
 				c = cDao.findBy(c);
 				p.setCliente(c);
-				p.setCodigo(Integer.parseInt(codigo));
-				p.setNome(nome);
+				p.setValorTotal(Float.parseFloat(valorTotal));
 				p.setEstado(estado);
-				p.setDescricao(descricao);
+				p.setTipoPagamento(tipoPagemento);
+				p.setObservacao(observacao);
+				p.setStatusPagamento(statusPagamento);
+
+				// A Data do Pagamento pode ser vazia
+				if (dataPagamento != null && !dataPagamento.isEmpty()) {
+					p.setDataPagamento(Date.valueOf(dataPagamento));
+				} else {
+					p.setDataPagamento(null);
+				}
+
 			}
 
 			if (cmd.contains("Cadastrar")) {
@@ -131,7 +154,7 @@ public class PedidoController {
 			if (cmd.contains("Buscar")) {
 				p = buscarPedido(p);
 				if (p == null) {
-					saida = "Nenhum Pedido encontrado com o código " + codigo ;
+					saida = "Nenhum Pedido encontrado com o código " + codigo;
 				}
 			}
 			if (cmd.contains("Listar")) {

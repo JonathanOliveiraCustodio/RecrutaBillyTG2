@@ -8,5 +8,6 @@ public interface IClienteDao{
 	
 	public String sp_iud_cliente (String acao, Cliente c) throws SQLException, ClassNotFoundException;
 	public List<Cliente> findClientesByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException;
+	public List<Cliente> findByName(String nome) throws SQLException, ClassNotFoundException;
 
 }

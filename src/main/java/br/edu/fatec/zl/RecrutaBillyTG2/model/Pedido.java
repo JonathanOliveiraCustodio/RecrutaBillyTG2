@@ -18,5 +18,9 @@ public class Pedido {
 	float valorTotal;
 	String estado;
 	Date dataPedido;
+	String tipoPagamento;
+	String observacao;
+	Date dataPagamento;
+	String statusPagamento;
 	Cliente cliente;
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
@@ -103,10 +105,15 @@ public class ClienteController {
 			c = null;
 
 		} else if (!cmd.contains("Listar")) {
-			c.setCodigo(Integer.parseInt(codigo));
+			c.setNome(nome);
 		}
 
 		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+			
+			if (codigo != null && !codigo.isEmpty()) {
+				c.setCodigo(Integer.parseInt(codigo));
+			}
+			
 			c.setNome(nome);
 			c.setTelefone(telefone);
 			c.setEmail(email);
@@ -132,21 +139,29 @@ public class ClienteController {
 				c = null;
 			}
 			if (cmd.contains("Excluir")) {
-				// Buscar um Cliente antes de Excluir para realizar a Validação
-				Cliente cli = buscarCliente(c);
-				if (cli != null) {
-					saida = excluirCliente(c);
-					c = null;
-				} else {
-					saida = "Nenhum Cliente encontrado com o código " + codigo;
-				}
+				c = new Cliente();
+				c.setCodigo(Integer.parseInt(codigo));
+				saida = excluirCliente(c);
+				c = null;
 			}
 			if (cmd.contains("Buscar")) {
-				c = buscarCliente(c);
-				if (c == null) {
-					saida = "Nenhum Cliente encontrado com o código " + codigo;
+				// Buscar clientes pelo nome
+				clientes = buscarClienteNome(nome);
+				// Verificar o número de registros retornados
+				if (clientes.isEmpty()) {
+					// Caso não encontre nenhum cliente
+					saida = "Nenhum Cliente encontrado com o Nome '" + nome + "'";
+				} else if (clientes.size() == 1) {
+					Cliente cliente = clientes.get(0);
+					saida = "Cliente encontrado: " + cliente.getNome();
+					c = buscarCliente(cliente);
+				} else {
+					// Caso encontre mais de um cliente
+					saida = "Foram encontrados " + clientes.size() + " clientes com o Nome '" + nome + "'";
+
 				}
 			}
+
 			if (cmd.contains("Listar")) {
 				clientes = listarClientes();
 			}
@@ -179,7 +194,12 @@ public class ClienteController {
 	private Cliente buscarCliente(Cliente c) throws ClassNotFoundException, SQLException {
 		c = cDao.findBy(c);
 		return c;
+	}
 
+	private List<Cliente> buscarClienteNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Cliente> clientes = new ArrayList<>();
+		clientes = cDao.findByName(nome);
+		return clientes;
 	}
 
 	private List<Cliente> listarClientes() throws ClassNotFoundException, SQLException {

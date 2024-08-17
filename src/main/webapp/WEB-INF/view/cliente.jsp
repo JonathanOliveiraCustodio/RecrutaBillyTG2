@@ -1,16 +1,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/cliente.js"></script>
+
+
 <title>Cliente</title>
 </head>
+
+<script>
+	
+</script>
+
 <body>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/cliente.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 	<div>
 		<jsp:include page="menu.jsp" />
 	</div>
@@ -19,162 +28,160 @@
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
 					<h1 class="display-6 fw-bold">Manutenção de Cliente</h1>
-
 					<form action="cliente" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
 						<!-- Primeira Linha: Código, Nome, Telefone -->
 						<div class="row g-3">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="codigo" class="form-label">Código:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="number" min="0" step="1" id="codigo" name="codigo"
+										class="form-control" placeholder="Código"
+										value='<c:out value="${cliente.codigo }"></c:out>'readonly> 
+										<label
+										for="codigo">Código</label>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<input type="number" min="0" step="1" id="codigo" name="codigo"
-									class="form-control" placeholder="Código"
-									value='<c:out value="${cliente.codigo }"></c:out>'>
-							</div>
-							<div class="col-md-1">
-								<input type="submit" id="botao" name="botao" value="Buscar"
-									class="btn btn-primary mb-3" onclick="return validarBusca()">
-							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="nome" class="form-label">Nome:</label>
-							</div>
+			
 							<div class="col-md-3">
-								<input type="text" id="nome" name="nome" class="form-control"
-									placeholder="Nome" maxlength="100"
-									value='<c:out value="${cliente.nome }"></c:out>'>
+								<div class="form-floating">
+									<input type="text" id="nome" name="nome" class="form-control"
+										placeholder="Nome" maxlength="100"
+										value='<c:out value="${cliente.nome }"></c:out>'> <label
+										for="nome">Nome</label>
+								</div>
 							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="telefone" class="form-label">Telefone:</label>
+											<div class="col-md-1">
+								<button type="submit" id="botao" name="botao" value="Buscar"
+									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()" style="height: 56px;">
+									<!-- Ícone SVG dentro do botão -->
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+								</button>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="telefone" name="telefone"
-									class="form-control" placeholder="Telefone" maxlength="11"
-									value='<c:out value="${cliente.telefone }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="telefone" name="telefone"
+										class="form-control" placeholder="Telefone" maxlength="11"
+										value='<c:out value="${cliente.telefone }"></c:out>'>
+									<label for="telefone">Telefone</label>
+								</div>
 							</div>
 						</div>
-
 						<!-- Segunda Linha: Email, Tipo, Documento -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="email" class="form-label">Email:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="email" name="email" class="form-control"
+										placeholder="Email" maxlength="100"
+										value='<c:out value="${cliente.email }"></c:out>'> <label
+										for="email">Email</label>
+								</div>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="email" name="email" class="form-control"
-									placeholder="Email" maxlength="100"
-									value='<c:out value="${cliente.email }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select id="tipo" name="tipo" class="form-select"
+										onclick="ajustarMaxlength(this.value)">
+										<option value="">Escolha um Tipo de Documento</option>
+										<option value="CPF"
+											<c:if test="${cliente.tipo eq 'CPF'}">selected</c:if>>CPF</option>
+										<option value="CNPJ"
+											<c:if test="${cliente.tipo eq 'CNPJ'}">selected</c:if>>CNPJ</option>
+									</select> <label for="tipo">Tipo</label>
+								</div>
 							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="tipo" class="form-label">Tipo:</label>
-							</div>
-							<div class="col-md-3">
-								<select id="tipo" name="tipo" class="form-select"
-									onclick="ajustarMaxlength(this.value)">
-									<option value="">Escolha um Tipo de Documento</option>
-									<option value="CPF"
-										<c:if test="${cliente.tipo eq 'CPF'}">selected</c:if>>CPF</option>
-									<option value="CNPJ"
-										<c:if test="${cliente.tipo eq 'CNPJ'}">selected</c:if>>CNPJ</option>
-								</select>
-							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="documento" class="form-label">Documento:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="documento" name="documento"
-									class="form-control" placeholder="Documento" maxlength="14"
-									value='<c:out value="${cliente.documento }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="documento" name="documento"
+										class="form-control" placeholder="Documento" maxlength="14"
+										value='<c:out value="${cliente.documento }"></c:out>'>
+									<label for="documento">Documento</label>
+								</div>
 							</div>
 						</div>
 
 						<!-- Terceira Linha: CEP, Logradouro, Número -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="cep" class="form-label">CEP:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="CEP" name="CEP" class="form-control"
+										placeholder="CEP" maxlength="9"
+										value='<c:out value="${cliente.CEP }"></c:out>'
+										onblur="buscarEndereco()"> <label for="cep">CEP</label>
+								</div>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="CEP" name="CEP" class="form-control"
-									placeholder="CEP" maxlength="9"
-									value='<c:out value="${cliente.CEP }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="logradouro" name="logradouro"
+										class="form-control" placeholder="Logradouro" maxlength="100"
+										value='<c:out value="${cliente.logradouro }"></c:out>'
+										readonly> <label for="logradouro">Logradouro</label>
+								</div>
 							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="logradouro" class="form-label">Logradouro:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="logradouro" name="logradouro"
-									class="form-control" placeholder="Logradouro" maxlength="100"
-									value='<c:out value="${cliente.logradouro }"></c:out>'>
-							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="numero" class="form-label">Número:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="numero" name="numero"
-									class="form-control" placeholder="Número" maxlength="10"
-									value='<c:out value="${cliente.numero }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="numero" name="numero"
+										class="form-control" placeholder="Número" maxlength="10"
+										value='<c:out value="${cliente.numero }"></c:out>'> <label
+										for="numero">Número</label>
+								</div>
 							</div>
 						</div>
 
 						<!-- Quarta Linha: UF, Localidade, Bairro -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="uf" class="form-label">UF:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="UF" name="UF" class="form-control"
+										placeholder="UF" maxlength="2"
+										value='<c:out value="${cliente.UF }"></c:out>' readonly>
+									<label for="uf">UF</label>
+								</div>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="UF" name="UF" class="form-control"
-									placeholder="UF" maxlength="2"
-									value='<c:out value="${cliente.UF }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="localidade" name="localidade"
+										class="form-control" placeholder="Localidade" maxlength="100"
+										value='<c:out value="${cliente.localidade }"></c:out>'
+										readonly> <label for="localidade">Localidade</label>
+								</div>
 							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="localidade" class="form-label">Localidade:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="localidade" name="localidade"
-									class="form-control" placeholder="Localidade" maxlength="100"
-									value='<c:out value="${cliente.localidade }"></c:out>'>
-							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="bairro" class="form-label">Bairro:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="bairro" name="bairro"
-									class="form-control" placeholder="Bairro" maxlength="100"
-									value='<c:out value="${cliente.bairro }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="bairro" name="bairro"
+										class="form-control" placeholder="Bairro" maxlength="100"
+										value='<c:out value="${cliente.bairro }"></c:out>' readonly>
+									<label for="bairro">Bairro</label>
+								</div>
 							</div>
 						</div>
 
 						<!-- Quinta Linha: Complemento, Data Nascimento e Botão Contato por WhatsApp -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="complemento" class="form-label">Compl:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="complemento" name="complemento"
+										class="form-control" placeholder="Complemento"
+										value='<c:out value="${cliente.complemento }"></c:out>'>
+									<label for="complemento">Complemento</label>
+								</div>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="complemento" name="complemento"
-									class="form-control" placeholder="Complemento"
-									value='<c:out value="${cliente.complemento }"></c:out>'>
-							</div>
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="dataNascimento" class="form-label">
-									Nascimento:</label>
-							</div>
-							<div class="col-md-3">
-								<input class="form-control" type="date" id="dataNascimento"
-									name="dataNascimento" placeholder="Data Nascimento"
-									value='<c:out value="${cliente.dataNascimento }"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input class="form-control" type="date" id="dataNascimento"
+										name="dataNascimento" placeholder="Data Nascimento"
+										value='<c:out value="${cliente.dataNascimento }"></c:out>'>
+									<label for="dataNascimento">Data Nascimento</label>
+								</div>
 							</div>
 							<div class="col-md-4 d-flex align-items-center">
 								<button type="button"
 									class="btn btn-outline-success d-flex align-items-center"
-									onclick="redirectToWhatsApp()">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+									onclick="redirectToWhatsApp()" style="height: 56px;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16"
 										style="margin-right: 5px;">
                     <path
@@ -257,14 +264,17 @@
 					<c:forEach var="c" items="${clientes }">
 						<tr>
 							<td style="text-align: center;">
-								<button class="btn btn-info" name="opcao" value="${c.codigo}"
-									onclick="editarCliente(this.value)"
+								<button class="btn btn-outline-dark" name="opcao"
+									value="${c.codigo}" onclick="editarCliente(this.value)"
 									${c.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-									  <path
-											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+										fill="currentColor" class="bi bi-pencil-square"
+										viewBox="0 0 16 16">
+						<path
+											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
 								</button>
 							</td>
 							<td><c:out value="${c.codigo }" /></td>

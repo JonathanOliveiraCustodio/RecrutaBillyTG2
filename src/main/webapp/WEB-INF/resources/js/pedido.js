@@ -45,3 +45,29 @@ function validarBusca() {
 		// Se todos os campos estiverem preenchidos, permitir o envio do formulário
 		return true;
 	}
+	
+	function redirectToWhatsApp() {
+	    // Obtém o valor do campo de telefone
+	    var phoneNumber = document.getElementById('telefone').value;
+
+	    if (phoneNumber) {
+	        // Construa a URL do WhatsApp
+	        var url = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(phoneNumber);
+	        window.open(url, "_blank");
+	    } else {
+	        alert("Número de telefone não encontrado.");
+	    }
+	}
+	
+	 function updateEndereco() {
+        var clienteSelect = document.getElementById('cliente');
+        var selectedOption = clienteSelect.options[clienteSelect.selectedIndex];
+        document.getElementById('CEP').value = selectedOption.getAttribute('data-cep');
+        document.getElementById('logradouro').value = selectedOption.getAttribute('data-logradouro');
+        document.getElementById('numero').value = selectedOption.getAttribute('data-numero');
+        document.getElementById('UF').value = selectedOption.getAttribute('data-uf');
+        document.getElementById('localidade').value = selectedOption.getAttribute('data-localidade');
+        document.getElementById('bairro').value = selectedOption.getAttribute('data-bairro');
+        document.getElementById('complemento').value = selectedOption.getAttribute('data-complemento');
+        document.getElementById('telefone').value = selectedOption.getAttribute('data-telefone');
+    }

@@ -103,11 +103,13 @@ public class RelatorioController {
 		List<Funcionario> funcionarios = new ArrayList<>();
 
 		try {
-			if (cmd.contains("Limpar")) {
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 				categoria = "";
 				opcao = "";
 				parametro = "";
-			} else if (cmd.contains("Visualizar Relatório")) {
+			} else
+				
+				if (cmd.contains("Visualizar Relatório")) {
 				switch (categoria) {
 				case "cliente":
 					clientes = listarClientes(opcao, parametro);

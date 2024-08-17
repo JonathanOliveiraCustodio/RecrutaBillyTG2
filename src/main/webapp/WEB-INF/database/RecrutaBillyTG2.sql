@@ -81,7 +81,7 @@ FOREIGN KEY (codigoInsumo) REFERENCES insumo (codigo)
 )
 GO
 CREATE TABLE cliente(
-codigo			INT				NOT NULL,
+codigo			INT				NOT NULL IDENTITY (1,1),
 nome			VARCHAR(100)	NOT NULL,
 telefone		CHAR(11)		NOT NULL,
 email			VARCHAR(100)	NOT NULL,
@@ -99,13 +99,17 @@ PRIMARY KEY (codigo)
 )
 GO 
 CREATE TABLE pedido(
-codigo	          INT		     		NOT NULL,
+codigo	          INT		     		NOT NULL IDENTITY (1,1),
 nome	          VARCHAR(100)		    NOT NULL,
 descricao         VARCHAR(200)		    NOT NULL,
 cliente           INT  		  	        NOT NULL,
 valorTotal		  DECIMAL(10,2)		    NULL,
 estado			  VARCHAR(100)		    NOT NULL,
-dataPedido		  DATE					NULL
+dataPedido		  DATE					NULL,
+tipoPagamento     VARCHAR(30)		    NOT NULL,
+observacao        VARCHAR(200)		    NULL,
+statusPagamento   VARCHAR(30)		    NOT NULL, 
+dataPagamento     DATE					NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (cliente) REFERENCES cliente (codigo)
 )
@@ -158,28 +162,28 @@ INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, t
 ('76368440015', 'Evandro', 'admin', '123456', 'teste@teste.com', '1985-05-20', '12345678902', 'Supervisor', '09:00 às 18:00', 4000.0, '2021-01-01', NULL, NULL),
 ('37848890007', 'John', 'Funcionário', '123456', 'john@john.com', '1990-08-15', '12345678903', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
 GO
-INSERT INTO cliente (codigo, nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento) VALUES
-(1, 'Fabio de Lima', '11956432345', 'fdelima@email.com', 'CPF', '45230955074', '08120300', 'Rua Nogueira Viotti', 'Itaim Paulista', 'São Paulo', 'SP', NULL, '156B','1990-08-01'),
-(2, 'Manoel Gonçalves Costa', '11983774561', 'manoelgoncosta@email.com', 'CPF', '14568711029', '09154900', 'Estrada de Ferro Santos Jundiaí', 'Vila Elclor', 'Santo André', 'SP', NULL, '45','1996-10-03'),
-(3, 'Astolfo Melo de Cunha', '11984823716', 'astolfocunha@email.com', 'CNPJ', '70295892000180', '01531000', 'Rua da Glória', 'Liberdade', 'São Paulo', 'SP', NULL, '234','2000-05-03'),
-(4, 'Gabriela Bittencourt', '11965428657', 'gabiit@email.com', 'CNPJ', '32596552000109', '01002000', 'Rua Boa Vista', 'Centro', 'São Paulo', 'SP', NULL, '90','1997-11-01'),
-(5, 'Yasmin Ribeiro Faganello', '11912438547', 'yasribeiro@email.com', 'CPF', '61837422010', '04050001', 'Avenida Jabaquara', 'Mirandópolis', 'São Paulo', 'SP', NULL, '452A','1984-02-02'),
-(6, 'Rafaela Ferrari', '11943758121', 'raferrari@email.com', 'CPF', '28348483004', '01310000', 'Avenida Paulista', 'Bela Vista', 'São Paulo', 'SP', 'Apt 202', '1500','1945-08-08'),
-(7, 'Carlos Eduardo Mendes', '11976543210', 'carlosmendes@email.com', 'CPF', '32856987001', '04534011', 'Rua Bandeira Paulista', 'Itaim Bibi', 'São Paulo', 'SP', NULL, '123','1978-12-12'),
-(8, 'Mariana Alves', '11987654321', 'marianaalves@email.com', 'CPF', '42396587002', '01323001', 'Rua Haddock Lobo', 'Cerqueira César', 'São Paulo', 'SP', NULL, '456','1985-03-15'),
-(9, 'Fernando Pereira', '11998765432', 'fernandopereira@email.com', 'CPF', '53048792003', '01402001', 'Alameda Santos', 'Jardim Paulista', 'São Paulo', 'SP', NULL, '789','1992-07-23'),
-(10, 'Ana Beatriz Rocha', '11909876543', 'anabrocha@email.com', 'CPF', '61934876004', '01310930', 'Rua Bela Cintra', 'Consolação', 'São Paulo', 'SP', NULL, '101','1980-01-05'),
-(11, 'Pedro Henrique Costa', '11921098765', 'pedrohcosta@email.com', 'CPF', '79856723005', '05414020', 'Rua Teodoro Sampaio', 'Pinheiros', 'São Paulo', 'SP', NULL, '202','1975-05-25'),
-(12, 'Lucas Silva', '11932109876', 'lucassilva@email.com', 'CPF', '88745632006', '05013020', 'Rua Caiubi', 'Perdizes', 'São Paulo', 'SP', NULL, '303','1988-10-10'),
-(13, 'Joana Souza', '11943210987', 'joanasouza@email.com', 'CPF', '97634541007', '02012001', 'Rua Voluntários da Pátria', 'Santana', 'São Paulo', 'SP', NULL, '404','1995-11-11'),
-(14, 'Thiago Santos', '11954321098', 'thiagosantos@email.com', 'CPF', '35467829008', '03015001', 'Rua Siqueira Bueno', 'Belenzinho', 'São Paulo', 'SP', NULL, '505','1983-09-09'),
-(15, 'Laura Martins', '11965432109', 'lauramartins@email.com', 'CPF', '22345678009', '04013002', 'Avenida Indianópolis', 'Indianópolis', 'São Paulo', 'SP', NULL, '606','1990-04-04'),
-(16, 'Bruno Oliveira', '11976543201', 'brunooliveira@email.com', 'CPF', '89234567010', '05015020', 'Rua Turiassu', 'Perdizes', 'São Paulo', 'SP', NULL, '707','1982-12-20'),
-(17, 'Julia Rodrigues', '11987654320', 'juliarodrigues@email.com', 'CPF', '98123456011', '03012001', 'Rua Tobias Barreto', 'Belém', 'São Paulo', 'SP', NULL, '808','1987-07-17'),
-(18, 'Marcelo Lima', '11998765421', 'marcelolima@email.com', 'CPF', '01234567012', '04012002', 'Avenida Jurema', 'Indianópolis', 'São Paulo', 'SP', NULL, '909','1991-03-03'),
-(19, 'Patricia Andrade', '11909876542', 'patriciaandrade@email.com', 'CPF', '54321098013', '05017030', 'Rua Apinajés', 'Perdizes', 'São Paulo', 'SP', NULL, '1010','1979-08-18'),
-(20, 'Felipe Costa', '11921098754', 'felipecosta@email.com', 'CPF', '65432109014', '03012002', 'Rua Tuiuti', 'Tatuapé', 'São Paulo', 'SP', NULL, '1111','1986-02-22'),
-(21, 'Amanda Silva', '11932109865', 'amandasilva@email.com', 'CPF', '76543210015', '04012003', 'Avenida Moreira Guimarães', 'Moema', 'São Paulo', 'SP', NULL, '1212','1993-05-09');
+INSERT INTO cliente (nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento) VALUES
+('Fabio de Lima', '11956432345', 'fdelima@email.com', 'CPF', '45230955074', '08120300', 'Rua Nogueira Viotti', 'Itaim Paulista', 'São Paulo', 'SP', NULL, '156B','1990-08-01'),
+('Manoel Gonçalves Costa', '11983774561', 'manoelgoncosta@email.com', 'CPF', '14568711029', '09154900', 'Estrada de Ferro Santos Jundiaí', 'Vila Elclor', 'Santo André', 'SP', NULL, '45','1996-10-03'),
+('Astolfo Melo de Cunha', '11984823716', 'astolfocunha@email.com', 'CNPJ', '70295892000180', '01531000', 'Rua da Glória', 'Liberdade', 'São Paulo', 'SP', NULL, '234','2000-05-03'),
+('Gabriela Bittencourt', '11965428657', 'gabiit@email.com', 'CNPJ', '32596552000109', '01002000', 'Rua Boa Vista', 'Centro', 'São Paulo', 'SP', NULL, '90','1997-11-01'),
+('Yasmin Ribeiro Faganello', '11912438547', 'yasribeiro@email.com', 'CPF', '61837422010', '04050001', 'Avenida Jabaquara', 'Mirandópolis', 'São Paulo', 'SP', NULL, '452A','1984-02-02'),
+('Rafaela Ferrari', '11943758121', 'raferrari@email.com', 'CPF', '28348483004', '01310000', 'Avenida Paulista', 'Bela Vista', 'São Paulo', 'SP', 'Apt 202', '1500','1945-08-08'),
+('Carlos Eduardo Mendes', '11976543210', 'carlosmendes@email.com', 'CPF', '32856987001', '04534011', 'Rua Bandeira Paulista', 'Itaim Bibi', 'São Paulo', 'SP', NULL, '123','1978-12-12'),
+('Mariana Alves', '11987654321', 'marianaalves@email.com', 'CPF', '42396587002', '01323001', 'Rua Haddock Lobo', 'Cerqueira César', 'São Paulo', 'SP', NULL, '456','1985-03-15'),
+('Fernando Pereira', '11998765432', 'fernandopereira@email.com', 'CPF', '53048792003', '01402001', 'Alameda Santos', 'Jardim Paulista', 'São Paulo', 'SP', NULL, '789','1992-07-23'),
+('Ana Beatriz Rocha', '11909876543', 'anabrocha@email.com', 'CPF', '61934876004', '01310930', 'Rua Bela Cintra', 'Consolação', 'São Paulo', 'SP', NULL, '101','1980-01-05'),
+('Pedro Henrique Costa', '11921098765', 'pedrohcosta@email.com', 'CPF', '79856723005', '05414020', 'Rua Teodoro Sampaio', 'Pinheiros', 'São Paulo', 'SP', NULL, '202','1975-05-25'),
+('Lucas Silva', '11932109876', 'lucassilva@email.com', 'CPF', '98366168026', '05013020', 'Rua Caiubi', 'Perdizes', 'São Paulo', 'SP', NULL, '303','1988-10-10'),
+('Joana Souza', '11943210987', 'joanasouza@email.com', 'CPF', '24228714021', '02012001', 'Rua Voluntários da Pátria', 'Santana', 'São Paulo', 'SP', NULL, '404','1995-11-11'),
+('Thiago Santos', '11954321098', 'thiagosantos@email.com', 'CPF', '14532477000', '03015001', 'Rua Siqueira Bueno', 'Belenzinho', 'São Paulo', 'SP', NULL, '505','1983-09-09'),
+('Laura Martins', '11965432109', 'lauramartins@email.com', 'CPF', '30269360069', '04013002', 'Avenida Indianópolis', 'Indianópolis', 'São Paulo', 'SP', NULL, '606','1990-04-04'),
+('Bruno Oliveira', '11976543201', 'brunooliveira@email.com', 'CPF', '08971895071', '05015020', 'Rua Turiassu', 'Perdizes', 'São Paulo', 'SP', NULL, '707','1982-12-20'),
+('Julia Rodrigues', '11987654320', 'juliarodrigues@email.com', 'CPF', '47648143070', '03012001', 'Rua Tobias Barreto', 'Belém', 'São Paulo', 'SP', NULL, '808','1987-07-17'),
+('Marcelo Lima', '11998765421', 'marcelolima@email.com', 'CPF', '93240037041', '04012002', 'Avenida Jurema', 'Indianópolis', 'São Paulo', 'SP', NULL, '909','1991-03-03'),
+('Patricia Andrade', '11909876542', 'patriciaandrade@email.com', 'CPF', '72410957072', '05017030', 'Rua Apinajés', 'Perdizes', 'São Paulo', 'SP', NULL, '1010','1979-08-18'),
+('Felipe Costa', '11921098754', 'felipecosta@email.com', 'CPF', '50794757065', '03012002', 'Rua Tuiuti', 'Tatuapé', 'São Paulo', 'SP', NULL, '1111','1986-02-22'),
+('Amanda Silva', '11932109865', 'amandasilva@email.com', 'CPF', '24872469011', '04012003', 'Avenida Moreira Guimarães', 'Moema', 'São Paulo', 'SP', NULL, '1212','1993-05-09');
 GO
 INSERT INTO fornecedor (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF) VALUES
 (1, 'Tech Solutions Ltda.','1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções', '12345-678', 'Rua das Inovações', '123', 'Centro', NULL, 'São Paulo', 'SP'),
@@ -228,28 +232,28 @@ INSERT INTO produto (codigo, nome, categoria, descricao, valorUnitario,status, q
 (9, 'Chaveiro Personalizado', 'Acessório', 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01'),
 (10, 'Patach emborrados', 'Emborachados', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01');
 GO
-INSERT INTO pedido (codigo, nome, descricao, cliente, valorTotal, estado, dataPedido)
+INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
 VALUES
-(1, 'Pedido 001', 'Descrição do Pedido 001', 1, 150.00, 'Em andamento', '2024-07-01'),
-(2, 'Pedido 002', 'Descrição do Pedido 002', 2, 200.00, 'Recebido', '2024-07-02'),
-(3, 'Pedido 003', 'Descrição do Pedido 003', 3, 50.00, 'Pedido Finalizado', '2024-07-03'),
-(4, 'Pedido 004', 'Descrição do Pedido 004', 4, 300.00, 'Despachado', '2024-07-04'),
-(5, 'Pedido 005', 'Descrição do Pedido 005', 5, 120.00, 'Em andamento', '2024-07-05'),
-(6, 'Pedido 006', 'Descrição do Pedido 006', 6, 180.00, 'Recebido', '2024-07-06'),
-(7, 'Pedido 007', 'Descrição do Pedido 007', 1, 90.00, 'Pedido Finalizado', '2024-07-07'),
-(8, 'Pedido 008', 'Descrição do Pedido 008', 2, 220.00, 'Despachado', '2024-07-08'),
-(9, 'Pedido 009', 'Descrição do Pedido 009', 3, 110.00, 'Em andamento', '2024-07-09'),
-(10, 'Pedido 010', 'Descrição do Pedido 010', 4, 250.00, 'Recebido', '2024-07-10'),
-(11, 'Pedido 011', 'Descrição do Pedido 011', 5, 130.00, 'Pedido Finalizado', '2024-07-11'),
-(12, 'Pedido 012', 'Descrição do Pedido 012', 6, 160.00, 'Despachado', '2024-07-12'),
-(13, 'Pedido 013', 'Descrição do Pedido 013', 1, 200.00, 'Em andamento', '2024-07-13'),
-(14, 'Pedido 014', 'Descrição do Pedido 014', 2, 80.00, 'Recebido', '2024-07-14'),
-(15, 'Pedido 015', 'Descrição do Pedido 015', 3, 220.00, 'Pedido Finalizado', '2024-07-15'),
-(16, 'Pedido 016', 'Descrição do Pedido 016', 4, 140.00, 'Despachado', '2024-07-16'),
-(17, 'Pedido 017', 'Descrição do Pedido 017', 5, 170.00, 'Em andamento', '2024-07-17'),
-(18, 'Pedido 018', 'Descrição do Pedido 018', 6, 190.00, 'Recebido', '2024-07-18'),
-(19, 'Pedido 019', 'Descrição do Pedido 019', 1, 210.00, 'Pedido Finalizado', '2024-07-19'),
-(20, 'Pedido 020', 'Descrição do Pedido 020', 2, 230.00, 'Despachado', '2024-07-20');
+('Pedido 001', 'Descrição do Pedido 001', 1, 150.00, 'Em andamento', '2024-07-01', 'PIX', NULL, 'Pago', '2024-07-02'),
+('Pedido 002', 'Descrição do Pedido 002', 2, 200.00, 'Recebido', '2024-07-02', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 003', 'Descrição do Pedido 003', 3, 50.00, 'Pedido Finalizado', '2024-07-03', 'Dinheiro', NULL, 'Pago', '2024-07-03'),
+('Pedido 004', 'Descrição do Pedido 004', 4, 300.00, 'Despachado', '2024-07-04', 'Cartão de Crédito', NULL, 'Pendente', NULL),
+('Pedido 005', 'Descrição do Pedido 005', 5, 120.00, 'Em andamento', '2024-07-05', 'Transferência Bancária', NULL, 'Pago', '2024-07-06'),
+('Pedido 006', 'Descrição do Pedido 006', 6, 180.00, 'Recebido', '2024-07-06', 'Mercado Pago', NULL, 'Pendente', NULL),
+('Pedido 007', 'Descrição do Pedido 007', 1, 90.00, 'Pedido Finalizado', '2024-07-07', 'PIX', NULL, 'Pago', '2024-07-08'),
+('Pedido 008', 'Descrição do Pedido 008', 2, 220.00, 'Despachado', '2024-07-08', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 009', 'Descrição do Pedido 009', 3, 110.00, 'Em andamento', '2024-07-09', 'Cartão de Crédito', NULL, 'Pago', '2024-07-10'),
+('Pedido 010', 'Descrição do Pedido 010', 4, 250.00, 'Recebido', '2024-07-10', 'Transferência Bancária', NULL, 'Pendente', NULL),
+('Pedido 011', 'Descrição do Pedido 011', 5, 130.00, 'Pedido Finalizado', '2024-07-11', 'Mercado Pago', NULL, 'Pago', '2024-07-12'),
+('Pedido 012', 'Descrição do Pedido 012', 6, 160.00, 'Despachado', '2024-07-12', 'PIX', NULL, 'Pendente', NULL),
+('Pedido 013', 'Descrição do Pedido 013', 1, 200.00, 'Em andamento', '2024-07-13', 'Boleto', NULL, 'Pago', '2024-07-14'),
+('Pedido 014', 'Descrição do Pedido 014', 2, 80.00, 'Recebido', '2024-07-14', 'Cartão de Crédito', NULL, 'Pendente', NULL),
+('Pedido 015', 'Descrição do Pedido 015', 3, 220.00, 'Pedido Finalizado', '2024-07-15', 'Transferência Bancária', NULL, 'Pago', '2024-07-16'),
+('Pedido 016', 'Descrição do Pedido 016', 4, 140.00, 'Despachado', '2024-07-16', 'Mercado Pago', NULL, 'Pendente', NULL),
+('Pedido 017', 'Descrição do Pedido 017', 5, 170.00, 'Em andamento', '2024-07-17', 'PIX', NULL, 'Pago', '2024-07-18'),
+('Pedido 018', 'Descrição do Pedido 018', 6, 190.00, 'Recebido', '2024-07-18', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 019', 'Descrição do Pedido 019', 1, 210.00, 'Pedido Finalizado', '2024-07-19', 'Cartão de Crédito', NULL, 'Pago', '2024-07-20'),
+('Pedido 020', 'Descrição do Pedido 020', 2, 230.00, 'Despachado', '2024-07-20', 'Transferência Bancária', NULL, 'Pendente', NULL);
 GO
 INSERT INTO manutencoesEquipamento (codigoEquipamento, dataManutencao, descricaoManutencao) VALUES
 (1, '2023-01-15', 'Substituição de peças desgastadas'),
@@ -634,7 +638,7 @@ END
 GO
 CREATE PROCEDURE sp_iud_cliente(
     @acao CHAR(1), 
-    @codigocliente INT, 
+    @codigocliente INT NULL, 
     @nome VARCHAR(100), 
     @telefone CHAR(12), 
     @email VARCHAR(100), 
@@ -660,8 +664,8 @@ BEGIN
             RETURN
         END
 
-        INSERT INTO cliente (codigo, nome, telefone, email, tipo, documento,CEP,logradouro,bairro,localidade,UF,complemento,numero,dataNascimento)
-        VALUES (@codigocliente, @nome, @telefone, @email, @tipo, @documento,@CEP,@logradouro,@bairro,@localidade,@UF,@complemento,@numero,@dataNascimento)
+        INSERT INTO cliente (nome, telefone, email, tipo, documento,CEP,logradouro,bairro,localidade,UF,complemento,numero,dataNascimento)
+        VALUES (@nome, @telefone, @email, @tipo, @documento,@CEP,@logradouro,@bairro,@localidade,@UF,@complemento,@numero,@dataNascimento)
         SET @saida = 'Cliente inserido com sucesso'
     END
     ELSE IF (@acao = 'U')
@@ -709,28 +713,41 @@ END
 GO
 CREATE PROCEDURE sp_iud_pedido
     @acao CHAR(1), 
-    @codigopedido INT, 
-    @nomepedido VARCHAR(100),
+    @codigo INT = NULL, -- O parâmetro pode ser NULL se não for usado
+    @nome VARCHAR(100),
     @descricao VARCHAR(200),
-    @codigocliente INT,
+    @cliente INT,
+    @valorTotal DECIMAL(10,2) = NULL,
     @estado VARCHAR(100),
+    @tipoPagamento VARCHAR(30),
+    @observacao VARCHAR(200) = NULL,
+    @statusPagamento VARCHAR(30),
+    @dataPagamento DATE = NULL,
     @saida VARCHAR(200) OUTPUT
 AS
 BEGIN
     IF (@acao = 'I') -- Inserir
     BEGIN
-        INSERT INTO pedido (codigo, nome, descricao, cliente, estado, dataPedido) 
-        VALUES (@codigopedido, @nomepedido, @descricao, @codigocliente, @estado, GETDATE())
-        SET @saida = 'Pedido inserido com sucesso'
+        INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento) 
+        VALUES (@nome, @descricao, @cliente, @valorTotal, @estado, GETDATE(), @tipoPagamento, @observacao, @statusPagamento, @dataPagamento)
+        
+        -- Retornar o valor do código gerado
+        SET @codigo = SCOPE_IDENTITY()
+        SET @saida = 'Pedido inserido com sucesso. Código gerado: ' + CAST(@codigo AS VARCHAR(10))
     END
     ELSE IF (@acao = 'U') -- Atualizar
     BEGIN
         UPDATE pedido
-        SET nome = @nomepedido,
+        SET nome = @nome,
             descricao = @descricao,
-            cliente = @codigocliente,
-            estado = @estado
-        WHERE codigo = @codigopedido
+            cliente = @cliente,
+            valorTotal = @valorTotal,
+            estado = @estado,
+            tipoPagamento = @tipoPagamento,
+            observacao = @observacao,
+            statusPagamento = @statusPagamento,
+            dataPagamento = @dataPagamento
+        WHERE codigo = @codigo
         
         -- Verificar se a atualização afetou alguma linha
         IF @@ROWCOUNT > 0
@@ -741,7 +758,7 @@ BEGIN
     ELSE IF (@acao = 'D') -- Excluir
     BEGIN
         DELETE FROM pedido
-        WHERE codigo = @codigopedido
+        WHERE codigo = @codigo
         
         -- Verificar se a exclusão afetou alguma linha
         IF @@ROWCOUNT > 0
@@ -756,6 +773,7 @@ BEGIN
     END
 END
 GO
+
 CREATE PROCEDURE sp_iud_produtos_pedido(
 @acao CHAR(1), 
 @codigopedido INT, 
@@ -953,7 +971,7 @@ BEGIN
     IF (@acao = 'I') -- Inserir
     BEGIN
         INSERT INTO orcamento (nome, descricao, cliente, valorTotal, status, observacao, dataOrcamento)
-        VALUES (@nome, @descricao, @cliente, @valorTotal, @status, @observacao, GETDATE())
+        VALUES (@nome, @descricao, @cliente, @valorTotal, 'Orçamento', @observacao, GETDATE())
         
         -- Retornar o valor do código gerado
         SET @codigo = SCOPE_IDENTITY()
@@ -1112,14 +1130,34 @@ RETURN
 );
 GO
 
-
 CREATE VIEW v_pedidos
 AS
-SELECT p.codigo AS codigo_pedido, p.nome AS nome_pedido, p.cliente AS cliente_pedido, c.nome AS cliente_nome, 
-p.estado AS estado, p.valorTotal, p.dataPedido, p.descricao
+SELECT 
+p.codigo,
+p.nome AS nomePedido, 
+p.descricao,
+p.cliente AS codigoCliente, 
+p.valorTotal, 
+p.estado, 
+p.dataPedido,
+p.tipoPagamento,
+p.observacao,
+p.statusPagamento,
+p.dataPagamento,
+
+c.nome AS nomeCliente, 
+c.CEP,
+c.logradouro,
+c.numero,
+c.UF,
+c.localidade,
+c.bairro,
+c.complemento,
+c.telefone
 FROM pedido p, cliente c
 WHERE p.cliente = c.codigo
 GO
+
 CREATE VIEW v_pedido_produto
 AS
 SELECT pp.codigoPedido AS codigo_pedido, p.codigo AS codigo_produto, p.nome AS nome_produto, p.categoria AS categoria_produto, p.descricao AS descricao_produto, p.valorUnitario AS valor_unitario, pp.quantidade
@@ -1939,7 +1977,6 @@ BEGIN
             @count AS quantidadeRegistros
         FROM @funcionarios;
     END
-
     RETURN;
 END;
 GO

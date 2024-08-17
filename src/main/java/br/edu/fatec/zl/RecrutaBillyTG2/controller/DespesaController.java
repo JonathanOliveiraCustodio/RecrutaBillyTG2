@@ -21,37 +21,38 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class DespesaController {
-	
+
 	@Autowired
 	GenericDao gDao;
-	
-	@Autowired 
+
+	@Autowired
 	DespesaDao dDao;
-	
+
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.GET)
-	public ModelAndView despesasGet(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
+	public ModelAndView despesasGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
+			HttpSession session) {
 		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
 		String entrada = allRequestParam.get("entrada");
 		String gasto = allRequestParam.get("gasto");
 		String saldo = allRequestParam.get("entrada");
 		String erro = "";
 		String saida = "";
-		
+
 		List<Despesa> despesas = new ArrayList<>();
 		Despesa d = null;
-		
+
 		try {
 			String cmd = allRequestParam.get("cmd");
 			String codigo = allRequestParam.get("codigo");
 			String filtro = allRequestParam.get("filtro");
-			
-			if(cmd != null) {
-				if(cmd.contains("alterar")) {
+
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
 					d = new Despesa();
 					d.setCodigo(Integer.parseInt(codigo));
 					d = buscarDespesa(d);
-				}else {
-					if(cmd.contains("excluir")) {
+				} else {
+					if (cmd.contains("excluir")) {
 						d = new Despesa();
 						d.setCodigo(Integer.parseInt(codigo));
 						saida = excluirDespesa(d);
@@ -59,10 +60,10 @@ public class DespesaController {
 					}
 				}
 			}
-		} catch(ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
-		}finally {
-			if(nivelAcesso == null || !nivelAcesso.equals("admin")) {
+		} finally {
+			if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
 				saida = "Você não possui acesso para visualizar esta página.";
 			}
 			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
@@ -78,9 +79,10 @@ public class DespesaController {
 		}
 		return new ModelAndView("despesas");
 	}
-	
+
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.POST)
-	public ModelAndView despesasPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
+	public ModelAndView despesasPost(@RequestParam Map<String, String> allRequestParam, ModelMap model,
+			HttpSession session) {
 		String cmd = allRequestParam.get("botao");
 		String codigo = allRequestParam.get("codigo");
 		String nome = allRequestParam.get("nome");
@@ -95,31 +97,30 @@ public class DespesaController {
 		String gasto = allRequestParam.get("gasto");
 		String saldo = allRequestParam.get("entrada");
 		String pesquisa = allRequestParam.get("pesquisa");
-		String[] meses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
-		
+		String[] meses = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
+				"Outubro", "Novembro", "Dezembro" };
+
 		String saida = "";
 		String erro = "";
-		
-		
-		
+
 		Despesa d = new Despesa();
-		List<Despesa> despesas = new ArrayList<>();	
-		
+		List<Despesa> despesas = new ArrayList<>();
+
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			d = null;
 		} else if (!cmd.contains("Listar")) {
-			if(codigo != null && codigo.isEmpty()) {				
+			if (codigo != null && !codigo.isEmpty()) {
 				d.setCodigo(Integer.parseInt(codigo));
 			}
 		}
-		
-		if(cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-			if(codigo != null && codigo.isEmpty()) {				
+
+		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+			if (codigo != null && !codigo.isEmpty()) {
 				d.setCodigo(Integer.parseInt(codigo));
 			}
 			d.setNome(nome);
 			d.setData(Date.valueOf(dataInicio));
-			if(dataVencimento != null && !dataVencimento.isEmpty()) {			
+			if (dataVencimento != null && !dataVencimento.isEmpty()) {
 				d.setDataVencimento(Date.valueOf(dataVencimento));
 			}
 			d.setValor(Float.parseFloat(valor));
@@ -128,37 +129,37 @@ public class DespesaController {
 			d.setEstado(estado);
 		}
 		try {
-			if(cmd.contains("Cadastrar")) {
+			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarDespesa(d);
 				d = null;
 			}
-			if(cmd.contains("Alterar")) {
+			if (cmd.contains("Alterar")) {
 				saida = alterarDespesa(d);
 				d = null;
 			}
-			if(cmd.contains("Excluir")) {
+			if (cmd.contains("Excluir")) {
 				saida = excluirDespesa(d);
 				d = null;
 			}
-			if(cmd.contains("Buscar")) {
+			if (cmd.contains("Buscar")) {
 				d = buscarDespesa(d);
-				if(d==null) {
+				if (d == null) {
 					erro = "Despesa não encontrada";
 				}
 			}
-			if(cmd.contains("Listar")) {
+			if (cmd.contains("Listar")) {
 				despesas = listarDespesas(Integer.parseInt(filtro));
-				if(despesas.isEmpty() && Integer.parseInt(filtro) != 0) {
-					saida = "Nenhuma despesa para o mês de "+meses[Integer.parseInt(filtro)-1];
+				if (despesas.isEmpty() && Integer.parseInt(filtro) != 0) {
+					saida = "Nenhuma despesa para o mês de " + meses[Integer.parseInt(filtro) - 1];
 				}
 			}
-			if(cmd.contains("Pesquisar")) {
+			if (cmd.contains("Pesquisar")) {
 				despesas = pesquisarDespesas(pesquisa, Integer.parseInt(filtro));
-				if(despesas.isEmpty()) {
-					saida = "Nenhuma entrada encontrada com o parâmetro \""+pesquisa+"\"";
+				if (despesas.isEmpty()) {
+					saida = "Nenhuma entrada encontrada com o parâmetro \"" + pesquisa + "\"";
 				}
 			}
-		} catch(ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
 		} finally {
 			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
@@ -172,15 +173,15 @@ public class DespesaController {
 			model.addAttribute("gasto", gasto);
 			model.addAttribute("saldo", saldo);
 		}
- 		return new ModelAndView("despesas");
+		return new ModelAndView("despesas");
 	}
 
 	private List<Despesa> pesquisarDespesas(String pesquisa, int filtro) throws ClassNotFoundException, SQLException {
 		List<Despesa> despesas = new ArrayList<>();
 		List<Despesa> aux = new ArrayList<>();
 		despesas = listarDespesas(filtro);
-		for(Despesa d : despesas) {
-			if(d.getNome().toUpperCase().contains(pesquisa.toUpperCase())) {
+		for (Despesa d : despesas) {
+			if (d.getNome().toUpperCase().contains(pesquisa.toUpperCase())) {
 				aux.add(d);
 			}
 		}
@@ -211,11 +212,11 @@ public class DespesaController {
 		List<Despesa> despesas = new ArrayList<>();
 		List<Despesa> auxDespesas = new ArrayList<>();
 		despesas = dDao.findAll();
-		
+
 		// Aplicação do filtro
-		if(filtro != 0) {
-			for(Despesa d : despesas) {
-				if(d.getData().getMonth() + 1 == filtro) {
+		if (filtro != 0) {
+			for (Despesa d : despesas) {
+				if (d.getData().getMonth() + 1 == filtro) {
 					auxDespesas.add(d);
 				}
 			}
@@ -223,21 +224,21 @@ public class DespesaController {
 		}
 		return despesas;
 	}
-	
+
 	private float calcularEntrada(List<Despesa> despesas) {
 		float entrada = 0;
-		for(Despesa d : despesas) {
-			if(d.getTipo().equals("Entrada")) {
+		for (Despesa d : despesas) {
+			if (d.getTipo().equals("Entrada")) {
 				entrada += d.getValor();
 			}
 		}
 		return entrada;
 	}
-	
+
 	private float calcularSaida(List<Despesa> despesas) {
 		float saida = 0;
-		for(Despesa d : despesas) {
-			if(d.getTipo().equals("Saida")) {
+		for (Despesa d : despesas) {
+			if (d.getTipo().equals("Saida")) {
 				saida += d.getValor();
 			}
 		}

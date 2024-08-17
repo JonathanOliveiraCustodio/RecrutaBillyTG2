@@ -76,10 +76,11 @@
 								value="Visualizar Relatório" class="btn btn-warning"
 								onclick="resetarFormulario()">
 						</div>
-					<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Limpar"
-									class="btn btn-secondary">
-							</div>
+
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" value="Limpar"
+								class="btn btn-secondary" onclick="resetarFormulario()">
+						</div>
 					</div>
 				</form>
 			</div>

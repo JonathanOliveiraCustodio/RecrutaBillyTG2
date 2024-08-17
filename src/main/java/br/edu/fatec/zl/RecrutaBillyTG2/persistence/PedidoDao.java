@@ -26,17 +26,23 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 	@Override
 	public String sp_iud_pedido(String acao, Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "CALL sp_iud_pedido(?,?,?,?,?,?,?)";
+		String sql = "CALL sp_iud_pedido(?,?,?,?,?,?,?,?,?,?,?,?)";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, p.getCodigo());
 		cs.setString(3, p.getNome());
 		cs.setString(4, p.getDescricao());
 		cs.setInt(5, p.getCliente().getCodigo());
-		cs.setString(6, p.getEstado());
-		cs.registerOutParameter(7, Types.VARCHAR);
+		cs.setFloat(6, p.getValorTotal());
+		cs.setString(7, p.getEstado());
+		cs.setString(8, p.getTipoPagamento());
+		cs.setString(9, p.getObservacao());
+		cs.setString(10, p.getStatusPagamento());
+		cs.setDate(11, p.getDataPagamento());
+		
+		cs.registerOutParameter(12, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(7);
+		String saida = cs.getString(12);
 		cs.close();
 		c.close();
 		return saida;
@@ -45,18 +51,36 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 	@Override
 	public Pedido findBy(Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "SELECT * FROM v_pedidos WHERE codigo_pedido = ?";
+		String sql = "SELECT * FROM v_pedidos WHERE codigo = ?";
 		PreparedStatement ps = c.prepareStatement(sql);
 		ps.setInt(1, p.getCodigo());
 		ResultSet rs = ps.executeQuery();
 		if(rs.next()) {
-			p.setCodigo(rs.getInt("codigo_pedido"));
-			p.setNome(rs.getString("nome_pedido"));
+		
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
+			p.setDescricao(rs.getString("descricao"));
 			p.setEstado(rs.getString("estado"));
 			p.setDescricao(rs.getString("descricao"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setTipoPagamento(rs.getString("tipoPagamento"));
+			p.setObservacao(rs.getString("observacao"));
+			p.setStatusPagamento(rs.getString("statusPagamento"));
+			p.setDataPagamento(rs.getDate("dataPagamento"));
+			
 			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("cliente_pedido"));
-			cl.setNome(rs.getString("cliente_nome"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("Telefone"));
 			
 			p.setCliente(cl);
 			rs.close();
@@ -81,16 +105,35 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			Pedido p = new Pedido();
-			p.setCodigo(rs.getInt("codigo_pedido"));
-			p.setNome(rs.getString("nome_pedido"));
-			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("cliente_pedido"));
-			cl.setNome(rs.getString("cliente_nome"));
-			p.setCliente(cl);
+			
+			
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
 			p.setDescricao(rs.getString("descricao"));
 			p.setEstado(rs.getString("estado"));
-			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setDescricao(rs.getString("descricao"));
 			p.setValorTotal(rs.getFloat("valorTotal"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setTipoPagamento(rs.getString("tipoPagamento"));
+			p.setObservacao(rs.getString("observacao"));
+			p.setStatusPagamento(rs.getString("statusPagamento"));
+			p.setDataPagamento(rs.getDate("dataPagamento"));
+			
+			Cliente cl = new Cliente();
+			
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("Telefone"));
+			
+			p.setCliente(cl);
 			pedidos.add(p);
 		}
 		rs.close();

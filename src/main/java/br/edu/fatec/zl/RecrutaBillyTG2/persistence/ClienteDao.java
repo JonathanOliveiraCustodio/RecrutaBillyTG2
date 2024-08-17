@@ -155,5 +155,44 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 		return clientes;
 	}
 
+	@Override
+	public List<Cliente> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Cliente> clientes = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM cliente WHERE nome LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigo"));
+			cl.setNome(rs.getString("nome"));
+			cl.setTelefone(rs.getString("telefone"));
+			cl.setEmail(rs.getString("email"));
+			cl.setTipo(rs.getString("tipo"));
+			cl.setDocumento(rs.getString("documento"));			
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setUF(rs.getString("UF"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setNumero(rs.getString("numero"));	
+			cl.setDataNascimento(rs.getDate("dataNascimento"));
+			clientes.add(cl);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return clientes;
+	}
+
 	
 }

@@ -88,6 +88,7 @@ public class OrcamentoController {
 		String cliente = allRequestParam.get("cliente");
 		String status = allRequestParam.get("status");
 		String descricao = allRequestParam.get("descricao");
+		String valorTotal = allRequestParam.get("valorTotal");
 		String observacao = allRequestParam.get("observacao");
 
 		// Parâmetros de saida
@@ -107,22 +108,20 @@ public class OrcamentoController {
 		try {
 			clientes = cDao.findAll();
 
-			// Verificar e converter clienteStr e codigoStr para inteiros
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 				if (cliente != null && !cliente.isEmpty()) {
 					c.setCodigo(Integer.parseInt(cliente));
 					c = cDao.findBy(c);
 					o.setCliente(c);
 				}
-
 				if (codigo != null && !codigo.isEmpty()) {
 					o.setCodigo(Integer.parseInt(codigo));
 				}
-
 				o.setNome(nome);
 				o.setStatus(status);
 				o.setDescricao(descricao);
 				o.setObservacao(observacao);
+				o.setValorTotal(Float.parseFloat(valorTotal));
 			}
 
 			if (cmd.contains("Cadastrar")) {
@@ -152,10 +151,10 @@ public class OrcamentoController {
 				orcamentos = listarOrcamentos();
 			}
 			if (cmd.contains("Efetivar Pedido")) {
-				if (cliente != null && !cliente.isEmpty()) {
-					c.setCodigo(Integer.parseInt(cliente));
-					c = cDao.findBy(c);
-					o.setCliente(c);
+				if (codigo != null && !codigo.isEmpty()) {
+					o.setCodigo(Integer.parseInt(codigo));
+					// c = oDao.findBy(o);
+					// o.setCliente(c);
 					saida = efetivarPedido(o);
 					o = null;
 				}

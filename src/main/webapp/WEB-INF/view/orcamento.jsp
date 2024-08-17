@@ -32,7 +32,7 @@
 						<div class="col-md-3">
 							<input class="form-control" type="number" min="0" step="1"
 								id="codigo" name="codigo" placeholder="Código"
-								value='<c:out value="${orcamento.codigo}"></c:out>'readonly>
+								value='<c:out value="${orcamento.codigo}"></c:out>' readonly>
 						</div>
 
 						<div class="col-md-1 d-flex align-items-center">
@@ -88,13 +88,9 @@
 							<label for="status" class="form-label">Status:</label>
 						</div>
 						<div class="col-md-3">
-							<select class="form-select" id="status" name="status">
-								<option value="">Escolha um Status</option>
-								<option value="Orçamento"
-									<c:if test="${orcamento.status eq 'Orçamento'}">selected</c:if>>Orçamento</option>
-								<option value="Pedido"
-									<c:if test="${orcamento.status eq 'Pedido'}">selected</c:if>>Pedido</option>
-							</select>
+							<input class="form-control" type="text" id="status" name="status"
+								placeholder="Pedido"
+								value='<c:out value="${orcamento.status}"></c:out>' readonly>
 						</div>
 
 						<div class="col-md-1 d-flex align-items-center">
@@ -142,8 +138,6 @@
 						</div>
 					</div>
 				</form>
-
-
 			</div>
 		</div>
 
@@ -164,14 +158,14 @@
 		</div>
 
 		<div class="container py-4 text-center d-flex justify-content-center">
-		<c:if test="${not empty orcamentos }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="10"
-							style="text-align: center; font-size: 25px;">Lista de
-							Orçamentos</th>
-					</tr>
+			<c:if test="${not empty orcamentos }">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th class="titulo-tabela" colspan="10"
+								style="text-align: center; font-size: 25px;">Lista de
+								Orçamentos</th>
+						</tr>
 						<tr class="table-dark">
 							<th></th>
 							<th>Código</th>
@@ -215,12 +209,12 @@
 
 								<td><c:out value="${o.status}" /></td>
 								<td>
-								
+
 									<form action="orcamento" method="post">
 										<input type="hidden" name="codigo" value="${o.codigo}">
-										<input type="hidden" name="cliente"
-											value="${o.cliente.codigo}"> <input type="hidden"
-											id="botao" name="botao" value=Efetivar>
+										<input type="hidden" name="cliente" value="${o.codigo}">
+										<input type="hidden" id="botao" name="botao"
+											value="Efetivar Pedido">
 										<button type="submit" class="btn btn-outline-dark">Efetivar
 											Pedido</button>
 									</form>
