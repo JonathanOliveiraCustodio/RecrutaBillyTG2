@@ -6,15 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
-
 <title>Cliente</title>
 </head>
-
-<script>
-	
-</script>
-
 <body>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/cliente.js"></script>
@@ -64,7 +57,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="telefone" name="telefone"
+									<input type="number" id="telefone" name="telefone"
 										class="form-control" placeholder="Telefone" maxlength="11"
 										value='<c:out value="${cliente.telefone }"></c:out>'>
 									<label for="telefone">Telefone</label>
@@ -103,7 +96,7 @@
 							</div>
 						</div>
 
-						<!-- Terceira Linha: CEP, Logradouro, Número -->
+						<!-- Terceira Linha: CEP, Logradouro, Bairro -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -121,17 +114,17 @@
 										readonly> <label for="logradouro">Logradouro</label>
 								</div>
 							</div>
-							<div class="col-md-4">
+							
+									<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="numero" name="numero"
-										class="form-control" placeholder="Número" maxlength="10"
-										value='<c:out value="${cliente.numero }"></c:out>'> <label
-										for="numero">Número</label>
+									<input type="text" id="bairro" name="bairro"
+										class="form-control" placeholder="Bairro" maxlength="100"
+										value='<c:out value="${cliente.bairro }"></c:out>' readonly>
+									<label for="bairro">Bairro</label>
 								</div>
-							</div>
+							</div>						
 						</div>
-
-						<!-- Quarta Linha: UF, Localidade, Bairro -->
+						<!-- Quarta Linha: UF, Localidade, Numero -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -151,10 +144,10 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="bairro" name="bairro"
-										class="form-control" placeholder="Bairro" maxlength="100"
-										value='<c:out value="${cliente.bairro }"></c:out>' readonly>
-									<label for="bairro">Bairro</label>
+									<input type="text" id="numero" name="numero"
+										class="form-control" placeholder="Número" maxlength="10"
+										value='<c:out value="${cliente.numero }"></c:out>'> <label
+										for="numero">Número</label>
 								</div>
 							</div>
 						</div>

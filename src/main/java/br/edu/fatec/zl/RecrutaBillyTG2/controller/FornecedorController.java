@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FornecedorDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
@@ -98,10 +100,13 @@ public class FornecedorController {
 			f = null;
 
 		} else if (!cmd.contains("Listar")) {
-			f.setCodigo(Integer.parseInt(codigo));
+			f.setNome(nome);
 		}
 		try {
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				if (codigo != null && !codigo.isEmpty()) {
+					f.setCodigo(Integer.parseInt(codigo));
+				}
 				f.setNome(nome);
 				f.setTelefone(telefone);
 				f.setEmail(email);
@@ -124,21 +129,28 @@ public class FornecedorController {
 				saida = "Fornecedor Alterado com sucesso!";
 				f = null;
 			}
-			if (cmd.contains("Excluir")) {
-				// Buscar um Fornecedor antes de Excluir para realizar a Validação
-				Fornecedor forn = buscarFornecedor(f);
-				if (forn != null) {
-					saida = excluirFornecedor(f);
-					f = null;
-				} else {
-					saida = "Nenhum Fornecedor encontrado com o código " + codigo;
-				}
-			}
 			if (cmd.contains("Buscar")) {
-				f = buscarFornecedor(f);
-				if (f == null) {
-					saida = "Nenhum Fornecedor encontrado com o código " + codigo;
+				// Buscar equipamentos pelo nome
+				fornecedores = buscarFornecedorNome(nome);
+				// Verificar o número de registros retornados
+				if (fornecedores.isEmpty()) {
+					// Caso não encontre nenhum Equipamento
+					saida = "Nenhum Fornecedor encontrado com o Nome '" + nome + "'";
+				} else if (fornecedores.size() == 1) {
+					Fornecedor fornecedor = fornecedores.get(0);
+					saida = "Fornecedor encontrado: " + fornecedor.getNome();
+					f = buscarFornecedor(fornecedor);
+				} else {
+					// Caso encontre mais de um Equipamento
+					saida = "Foram encontrados " + fornecedores.size() + " fornecedores com o Nome '" + nome + "'";
+
 				}
+			}			
+			if (cmd.contains("Excluir")) {
+				f = new Fornecedor();
+				f.setCodigo(Integer.parseInt(codigo));
+				saida = excluirFornecedor(f);
+				f = null;
 			}
 			if (cmd.contains("Listar")) {
 				fornecedores = listarFornecedores();
@@ -179,6 +191,12 @@ public class FornecedorController {
 
 	private List<Fornecedor> listarFornecedores() throws SQLException, ClassNotFoundException {
 		List<Fornecedor> fornecedores = fDao.findAll();
+		return fornecedores;
+	}
+	
+	private List<Fornecedor> buscarFornecedorNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Fornecedor> fornecedores = new ArrayList<>();
+		fornecedores = fDao.findByName(nome);
 		return fornecedores;
 	}
 

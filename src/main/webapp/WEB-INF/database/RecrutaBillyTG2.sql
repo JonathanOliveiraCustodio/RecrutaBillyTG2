@@ -5,8 +5,8 @@ GO
 USE RecrutaBillyTG2 
 GO
 CREATE TABLE fornecedor(
-codigo			INT				NOT NULL,
-nome			VARCHAR(50)		NOT NULL,
+codigo			INT				NOT NULL IDENTITY(1,1),
+nome			VARCHAR(70)		NOT NULL,
 telefone		CHAR(12)		NOT NULL,
 email			VARCHAR(100)	NOT NULL, 
 empresa			VARCHAR(50)		NOT NULL,
@@ -21,8 +21,8 @@ PRIMARY KEY (codigo)
 )
 GO
 CREATE TABLE equipamento(
-codigo				INT				NOT NULL,
-nome				VARCHAR(50)		NOT NULL,
+codigo				INT				NOT NULL IDENTITY (1,1),
+nome				VARCHAR(100)	NOT NULL,
 descricao			VARCHAR(100)	NOT NULL,
 fabricante			VARCHAR(50)		NOT NULL,
 dataAquisicao		DATE			NOT NULL
@@ -185,17 +185,17 @@ INSERT INTO cliente (nome, telefone, email, tipo, documento, CEP, logradouro, ba
 ('Felipe Costa', '11921098754', 'felipecosta@email.com', 'CPF', '50794757065', '03012002', 'Rua Tuiuti', 'Tatuapé', 'São Paulo', 'SP', NULL, '1111','1986-02-22'),
 ('Amanda Silva', '11932109865', 'amandasilva@email.com', 'CPF', '24872469011', '04012003', 'Avenida Moreira Guimarães', 'Moema', 'São Paulo', 'SP', NULL, '1212','1993-05-09');
 GO
-INSERT INTO fornecedor (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF) VALUES
-(1, 'Tech Solutions Ltda.','1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções', '12345-678', 'Rua das Inovações', '123', 'Centro', NULL, 'São Paulo', 'SP'),
-(2, 'Eco Supply Co.', '2345678901', 'contato@ecosupply.com', 'Fornecimento Ecológico', '23456-789', 'Avenida Sustentável', '456', 'Jardim', NULL, 'Rio de Janeiro', 'RJ'),
-(3, 'ArtisanCraft Inc.', '3456789012', 'contato@artisancraft.com', 'Arte e Design', '34567-890', 'Praça dos Artesãos', '789', 'Vila', NULL, 'Belo Horizonte', 'MG'),
-(4, 'Gourmet Essentials', '4567890123', 'contato@gourmetessentials.com', 'Alimentos Gourmet', '45678-901', 'Travessa dos Sabores', '101', 'Centro', NULL, 'Curitiba', 'PR'),
-(5, 'BioTech Innovations', '5678901234', 'contato@biotechinnovations.com', 'Inovações Biomédicas', '56789-012', 'Alameda da Ciência', '202', 'Zona Industrial', NULL, 'Porto Alegre', 'RS'),
-(6, 'EduSmart Solutions', '6789012345', 'contato@edusmart.com', 'Soluções Educacionais', '67890-123', 'Avenida do Conhecimento', '303', 'Bairro Universitário', NULL, 'Brasília', 'DF'),
-(7, 'Fashion Trends Inc.', '7890123456', 'contato@fashiontrends.com', 'Tendências de Moda', '78901-234', 'Rua da Moda', '404', 'Centro', NULL, 'Florianópolis', 'SC'),
-(8, 'GreenGrow Gardens', '8901234567', 'contato@greengrowgardens.com', 'Jardins Sustentáveis', '89012-345', 'Estrada das Plantas', '505', 'Jardins', NULL, 'Salvador', 'BA'),
-(9, 'TechNova Industries','9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica', '90123-456', 'Boulevard da Tecnologia', '606', 'Distrito Tecnológico', NULL, 'Campinas', 'SP'),
-(10, 'Tranquil Retreats Ltd.', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos', '01234-567', 'Rua da Serenidade', '707', 'Centro', NULL, 'Fortaleza', 'CE');
+INSERT INTO fornecedor (nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF) VALUES
+('Tech Solutions Ltda.','1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções', '12345-678', 'Rua das Inovações', '123', 'Centro', NULL, 'São Paulo', 'SP'),
+('Eco Supply Co.', '2345678901', 'contato@ecosupply.com', 'Fornecimento Ecológico', '23456-789', 'Avenida Sustentável', '456', 'Jardim', NULL, 'Rio de Janeiro', 'RJ'),
+('ArtisanCraft Inc.', '3456789012', 'contato@artisancraft.com', 'Arte e Design', '34567-890', 'Praça dos Artesãos', '789', 'Vila', NULL, 'Belo Horizonte', 'MG'),
+('Gourmet Essentials', '4567890123', 'contato@gourmetessentials.com', 'Alimentos Gourmet', '45678-901', 'Travessa dos Sabores', '101', 'Centro', NULL, 'Curitiba', 'PR'),
+('BioTech Innovations', '5678901234', 'contato@biotechinnovations.com', 'Inovações Biomédicas', '56789-012', 'Alameda da Ciência', '202', 'Zona Industrial', NULL, 'Porto Alegre', 'RS'),
+('EduSmart Solutions', '6789012345', 'contato@edusmart.com', 'Soluções Educacionais', '67890-123', 'Avenida do Conhecimento', '303', 'Bairro Universitário', NULL, 'Brasília', 'DF'),
+('Fashion Trends Inc.', '7890123456', 'contato@fashiontrends.com', 'Tendências de Moda', '78901-234', 'Rua da Moda', '404', 'Centro', NULL, 'Florianópolis', 'SC'),
+('GreenGrow Gardens', '8901234567', 'contato@greengrowgardens.com', 'Jardins Sustentáveis', '89012-345', 'Estrada das Plantas', '505', 'Jardins', NULL, 'Salvador', 'BA'),
+('TechNova Industries','9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica', '90123-456', 'Boulevard da Tecnologia', '606', 'Distrito Tecnológico', NULL, 'Campinas', 'SP'),
+('Tranquil Retreats Ltd.', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos', '01234-567', 'Rua da Serenidade', '707', 'Centro', NULL, 'Fortaleza', 'CE');
 GO
 INSERT INTO insumo (codigo, nome, precoCompra,precoVenda, quantidade,unidade, fornecedor,dataCompra) VALUES
 (1, 'Solvente', 30.00,35.00, 500,'un', 1.5,'2024-05-05'),
@@ -209,17 +209,17 @@ INSERT INTO insumo (codigo, nome, precoCompra,precoVenda, quantidade,unidade, fo
 (9, 'Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
 (10, 'Tinta Metálica', 20.10,27.50, 20,'un', 6, '2024-07-10');
 GO
-INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataAquisicao) VALUES 
-(1, 'Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
-(2, 'Guilhotina', 'Guilhotina de corte automático', 'Guilhotinas S.A.', '2024-04-27'),
-(3, 'Encadernadora', 'Encadernadora para acabamento de livros', 'Encadernações Ltda.', '2024-04-27'),
-(4, 'Máquina de Corte e Vinco', 'Máquina para corte e vinco de papelão', 'Máquinas Inc.', '2024-04-27'),
-(5, 'Plotter de Impressão', 'Plotter para impressão de grandes formatos', 'Plotter Solutions', '2024-04-27'),
-(6, 'Dobradeira', 'Dobradeira de papel automática', 'Dobras & Cia.', '2024-04-27'),
-(7, 'Laminadora', 'Laminadora para aplicação de filmes plásticos', 'Laminadoras S.A.', '2024-04-27'),
-(8, 'Grampeadora Automática', 'Grampeadora automática para acabamento de revistas', 'Grampeadoras Ltda.', '2024-04-27'),
-(9, 'Sistema de Impressão Digital', 'Impressora digital de alta resolução', 'Digital Print', '2024-04-27'),
-(10, 'Fresadora CNC', 'Fresadora de controle numérico computadorizado para usinagem de peças', 'CNC Solutions', '2024-04-27');
+INSERT INTO equipamento (nome, descricao, fabricante, dataAquisicao) VALUES 
+('Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
+('Guilhotina', 'Guilhotina de corte automático', 'Guilhotinas S.A.', '2024-04-27'),
+('Encadernadora', 'Encadernadora para acabamento de livros', 'Encadernações Ltda.', '2024-04-27'),
+('Máquina de Corte e Vinco', 'Máquina para corte e vinco de papelão', 'Máquinas Inc.', '2024-04-27'),
+('Plotter de Impressão', 'Plotter para impressão de grandes formatos', 'Plotter Solutions', '2024-04-27'),
+('Dobradeira', 'Dobradeira de papel automática', 'Dobras & Cia.', '2024-04-27'),
+('Laminadora', 'Laminadora para aplicação de filmes plásticos', 'Laminadoras S.A.', '2024-04-27'),
+('Grampeadora Automática', 'Grampeadora automática para acabamento de revistas', 'Grampeadoras Ltda.', '2024-04-27'),
+('Sistema de Impressão Digital', 'Impressora digital de alta resolução', 'Digital Print', '2024-04-27'),
+('Fresadora CNC', 'Fresadora de controle numérico computadorizado para usinagem de peças', 'CNC Solutions', '2024-04-27');
 GO
 INSERT INTO produto (codigo, nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque) VALUES
 (1, 'Caneca Personalizada', 'Utensílio Doméstico', 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01'),
@@ -302,7 +302,7 @@ GO
 
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
-    @codigo INT,
+    @codigo INT NULL,
     @nome VARCHAR(50),
     @telefone CHAR(12),
     @email VARCHAR(100),
@@ -324,8 +324,8 @@ BEGIN
             RAISERROR('Código já existe. Não é possível inserir o fornecedor.', 16, 1)
             RETURN
         END
-        INSERT INTO fornecedor (codigo, nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF)
-        VALUES (@codigo, @nome, @telefone, @email, @empresa, @CEP, @logradouro, @numero, @bairro, @complemento, @cidade, @UF)
+        INSERT INTO fornecedor (nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF)
+        VALUES  (@nome, @telefone, @email, @empresa, @CEP, @logradouro, @numero, @bairro, @complemento, @cidade, @UF)
         SET @saida = 'Fornecedor inserido com sucesso'
     END
     ELSE IF (@acao = 'U')
@@ -362,7 +362,7 @@ GO
 
 CREATE PROCEDURE sp_iud_equipamento
     @acao CHAR(1),
-    @codigo INT,
+    @codigo INT NULL,
     @nome VARCHAR(50),
     @descricao VARCHAR(100),
     @fabricante VARCHAR(50),
@@ -378,8 +378,8 @@ BEGIN
             RETURN
         END
 
-        INSERT INTO equipamento (codigo, nome, descricao, fabricante, dataAquisicao)
-        VALUES (@codigo, @nome, @descricao, @fabricante, @dataAquisicao)
+        INSERT INTO equipamento (nome, descricao, fabricante, dataAquisicao)
+        VALUES (@nome, @descricao, @fabricante, @dataAquisicao)
         SET @saida = 'Equipamento inserido com sucesso'
     END
     ELSE IF (@acao = 'U')
@@ -1300,26 +1300,33 @@ BEGIN
     WHERE codigo IN (SELECT codigo FROM deleted);
 END
 GO
-CREATE TRIGGER t_cliente_pedido
+CREATE TRIGGER t_cliente_pedido_orcamento
 ON cliente
 INSTEAD OF DELETE
 AS
 BEGIN
-    -- Verificar se o cliente está sendo referenciado na tabela pedido
+    -- Verifica se há pedidos ou orçamentos associados ao cliente
     IF EXISTS (
-        SELECT 1 
+        SELECT 1
         FROM deleted d
         JOIN pedido p ON d.codigo = p.cliente
+        UNION
+        SELECT 1
+        FROM deleted d
+        JOIN orcamento o ON d.codigo = o.cliente
     )
     BEGIN
-        -- Retornar mensagem de erro se houver referência
-        RAISERROR ('Não é possível excluir o cliente porque ele está associado a um ou mais pedidos.', 16, 1);
-        RETURN;
-    END;
-    -- Se não houver referência, prosseguir com a exclusão
-    DELETE FROM cliente
-    WHERE codigo IN (SELECT codigo FROM deleted);
-END
+        -- Se houver associações, gera uma mensagem de erro
+        RAISERROR('Não é possível excluir o cliente porque ele está associado a um ou mais pedidos ou orçamentos.', 16, 1);
+        ROLLBACK TRANSACTION; -- Reverte a transação
+    END
+    ELSE
+    BEGIN
+        -- Caso não haja associações, realiza a exclusão normalmente
+        DELETE FROM cliente
+        WHERE codigo IN (SELECT codigo FROM deleted);
+    END
+END;
 GO
 CREATE TRIGGER t_despesa_pedido
 ON pedido
@@ -1346,6 +1353,31 @@ BEGIN
 	END
 END
 GO
+CREATE TRIGGER t_equipamento_manutencao
+ON equipamento
+INSTEAD OF DELETE
+AS
+BEGIN
+    -- Verifica se há manutenções associadas ao equipamento que está sendo excluído
+    IF EXISTS (
+        SELECT 1
+        FROM deleted d
+        JOIN manutencoesEquipamento m ON d.codigo = m.codigoEquipamento
+    )
+    BEGIN
+        -- Se houver associações, gera uma mensagem de erro e reverte a transação
+        RAISERROR('Não é possível excluir o equipamento porque ele está associado a uma ou mais manutenções.', 16, 1);
+        ROLLBACK TRANSACTION; -- Reverte a transação para garantir que a exclusão não ocorra
+    END
+    ELSE
+    BEGIN
+        -- Caso não haja associações, realiza a exclusão normalmente
+        DELETE FROM equipamento
+        WHERE codigo IN (SELECT codigo FROM deleted);
+    END
+END;
+GO
+
 CREATE VIEW vw_insumo AS
 SELECT 
     i.codigo,
@@ -1362,7 +1394,6 @@ FROM
 JOIN 
     fornecedor f ON i.fornecedor = f.codigo;
 GO
-
 CREATE VIEW vw_fornecedor AS
 SELECT
     codigo,
@@ -1380,7 +1411,16 @@ SELECT
 FROM
     fornecedor;
 GO
-
+CREATE VIEW vw_equipamento AS
+SELECT 
+    codigo,
+    nome,
+    descricao,
+    fabricante,
+    dataAquisicao
+FROM 
+    equipamento;
+GO
 CREATE VIEW vw_buscar_cliente AS
 SELECT 
     codigo,

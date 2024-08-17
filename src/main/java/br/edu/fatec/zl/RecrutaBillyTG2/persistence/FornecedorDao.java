@@ -110,9 +110,10 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 		c.close();
 		return saida;
 	}
-	
+
 	@Override
-	public List<Fornecedor> findFornecedoresByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+	public List<Fornecedor> findFornecedoresByOption(String opcao, String parametro)
+			throws SQLException, ClassNotFoundException {
 		List<Fornecedor> fornecedores = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
@@ -122,6 +123,44 @@ public class FornecedorDao implements ICrud<Fornecedor>, IFornecedorDao {
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, opcao);
 		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Fornecedor f = new Fornecedor();
+			f.setCodigo(rs.getInt("codigo"));
+			f.setNome(rs.getString("nome"));
+			f.setTelefone(rs.getString("telefone"));
+			f.setEmail(rs.getString("email"));
+			f.setEmpresa(rs.getString("empresa"));
+			f.setCEP(rs.getString("CEP"));
+			f.setLogradouro(rs.getString("logradouro"));
+			f.setNumero(rs.getString("numero"));
+			f.setBairro(rs.getString("bairro"));
+			f.setComplemento(rs.getString("complemento"));
+			f.setCidade(rs.getString("cidade"));
+			f.setUF(rs.getString("UF"));
+			fornecedores.add(f);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return fornecedores;
+	}
+
+	@Override
+	public List<Fornecedor> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Fornecedor> fornecedores = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM vw_fornecedor WHERE nome LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {

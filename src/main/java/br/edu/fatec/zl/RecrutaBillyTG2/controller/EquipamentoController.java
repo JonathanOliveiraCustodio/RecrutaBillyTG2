@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
@@ -26,7 +28,6 @@ public class EquipamentoController {
 	@Autowired
 	EquipamentoDao eDao;
 
-
 	@RequestMapping(name = "equipamento", value = "/equipamento", method = RequestMethod.GET)
 	public ModelAndView equipamentoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
 			HttpSession session) {
@@ -38,25 +39,24 @@ public class EquipamentoController {
 		String codigo = allRequestParam.get("codigo");
 
 		List<Equipamento> equipamentos = new ArrayList<>();
-		Equipamento e = null; 
-		//e = null;
+		Equipamento e = null;
+		// e = null;
 		try {
-			
 
 			if (cmd != null) {
-	            if (cmd.contains("alterar")) {
-	                // Inicializando e antes de utilizá-lo
-	                e = new Equipamento();
-	                e.setCodigo(Integer.parseInt(codigo));
-	                e = buscarEquipamento(e);
+				if (cmd.contains("alterar")) {
+					// Inicializando e antes de utilizá-lo
+					e = new Equipamento();
+					e.setCodigo(Integer.parseInt(codigo));
+					e = buscarEquipamento(e);
 
-	            } else if (cmd.contains("excluir")) {
-	                // Inicializando e antes de utilizá-lo
-	                e = new Equipamento();
-	                e.setCodigo(Integer.parseInt(codigo));
-	                saida = excluirEquipamento(e);
-	                e = null;  
-	            }
+				} else if (cmd.contains("excluir")) {
+					// Inicializando e antes de utilizá-lo
+					e = new Equipamento();
+					e.setCodigo(Integer.parseInt(codigo));
+					saida = excluirEquipamento(e);
+					e = null;
+				}
 				equipamentos = listarEquipamentos();
 			}
 
@@ -83,7 +83,7 @@ public class EquipamentoController {
 		String nome = allRequestParam.get("nome");
 		String descricao = allRequestParam.get("descricao");
 		String fabricante = allRequestParam.get("fabricante");
-		String dataAquisicao= allRequestParam.get("dataAquisicao");
+		String dataAquisicao = allRequestParam.get("dataAquisicao");
 
 		String saida = "";
 		String erro = "";
@@ -93,16 +93,21 @@ public class EquipamentoController {
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			e = null;
+
 		} else if (!cmd.contains("Listar")) {
-			e.setCodigo(Integer.parseInt(codigo));
+			e.setNome(nome);
 		}
-		try {
-			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-				e.setNome(nome);
-				e.setDescricao(descricao);
-				e.setFabricante(fabricante);
-				e.setDataAquisicao(Date.valueOf(dataAquisicao));
+		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+			if (codigo != null && !codigo.isEmpty()) {
+				e.setCodigo(Integer.parseInt(codigo));
 			}
+			e.setNome(nome);
+			e.setDescricao(descricao);
+			e.setFabricante(fabricante);
+			e.setDataAquisicao(Date.valueOf(dataAquisicao));
+		}
+
+		try {
 			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarEquipamento(e);
 				e = null;
@@ -112,25 +117,33 @@ public class EquipamentoController {
 				e = null;
 			}
 			if (cmd.contains("Buscar")) {
-				e = buscarEquipamento(e);
-				if (e == null) {
-					saida = "Nenhum Equipamento encontrado com o código " + codigo;
-				}
-			}
-			if (cmd.contains("Excluir")) {
-				// Buscar um Equipamento antes de Excluir para realizar a Validação
-				Equipamento equi = buscarEquipamento(e);
-				if (equi != null) {
-					saida = excluirEquipamento(e);
-					e = null; 
+				// Buscar equipamentos pelo nome
+				equipamentos = buscarEquipamentoNome(nome);
+				// Verificar o número de registros retornados
+				if (equipamentos.isEmpty()) {
+					// Caso não encontre nenhum Equipamento
+					saida = "Nenhum Equipamento encontrado com o Nome '" + nome + "'";
+				} else if (equipamentos.size() == 1) {
+					Equipamento equipamento = equipamentos.get(0);
+					saida = "Equipamento encontrado: " + equipamento.getNome();
+					e = buscarEquipamento(equipamento);
 				} else {
-					saida = "Nenhum Equipamento encontrado com o código " + codigo;
+					// Caso encontre mais de um Equipamento
+					saida = "Foram encontrados " + equipamentos.size() + " equipamentos com o Nome '" + nome + "'";
+
 				}
+			}			
+			if (cmd.contains("Excluir")) {
+				e = new Equipamento();
+				e.setCodigo(Integer.parseInt(codigo));
+				saida = excluirEquipamento(e);
+				e = null;
 			}
+					
 			if (cmd.contains("Listar")) {
 				equipamentos = listarEquipamentos();
 			}
-			
+
 			if (cmd.contains("Adicionar")) {
 				e = buscarEquipamento(e);
 				if (e == null) {
@@ -179,6 +192,12 @@ public class EquipamentoController {
 
 	private List<Equipamento> listarEquipamentos() throws SQLException, ClassNotFoundException {
 		List<Equipamento> equipamentos = eDao.findAll();
+		return equipamentos;
+	}
+
+	private List<Equipamento> buscarEquipamentoNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Equipamento> equipamentos = new ArrayList<>();
+		equipamentos = eDao.findByName(nome);
 		return equipamentos;
 	}
 

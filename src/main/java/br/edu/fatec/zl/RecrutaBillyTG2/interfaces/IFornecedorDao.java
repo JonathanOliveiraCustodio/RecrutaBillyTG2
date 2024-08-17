@@ -8,4 +8,5 @@ public interface IFornecedorDao {
 
 	public String sp_iud_fornecedor(String acao, Fornecedor f) throws SQLException, ClassNotFoundException;
 	public List<Fornecedor> findFornecedoresByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException;
+	public List<Fornecedor> findByName(String nome) throws SQLException, ClassNotFoundException;
 }

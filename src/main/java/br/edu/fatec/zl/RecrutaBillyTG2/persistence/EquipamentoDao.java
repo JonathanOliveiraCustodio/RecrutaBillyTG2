@@ -99,7 +99,6 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 		StringBuffer sql = new StringBuffer();
 
 		sql.append("SELECT * FROM fn_buscar_equipamento(?,?) ");
-
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, opcao);
 		ps.setString(2, parametro);
@@ -114,7 +113,34 @@ public class EquipamentoDao implements ICrud<Equipamento>, IEquipamentoDao {
 			e.setDataAquisicao(rs.getDate("dataAquisicao"));
 			equipamentos.add(e);		
 		}
+		rs.close();
+		ps.close();
+		con.close();
 
+		return equipamentos;
+	}
+
+	@Override
+	public List<Equipamento> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Equipamento> equipamentos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM vw_equipamento  WHERE nome LIKE ?");
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Equipamento e = new Equipamento();
+			e.setCodigo(rs.getInt("codigo"));
+			e.setNome(rs.getString("nome"));
+			e.setDescricao(rs.getString("descricao"));
+			e.setFabricante(rs.getString("fabricante"));
+			e.setDataAquisicao(rs.getDate("dataAquisicao"));
+			equipamentos.add(e);		
+		}
 		rs.close();
 		ps.close();
 		con.close();

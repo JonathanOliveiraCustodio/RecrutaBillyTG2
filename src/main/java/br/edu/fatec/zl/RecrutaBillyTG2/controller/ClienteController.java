@@ -109,11 +109,9 @@ public class ClienteController {
 		}
 
 		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-			
 			if (codigo != null && !codigo.isEmpty()) {
 				c.setCodigo(Integer.parseInt(codigo));
 			}
-			
 			c.setNome(nome);
 			c.setTelefone(telefone);
 			c.setEmail(email);

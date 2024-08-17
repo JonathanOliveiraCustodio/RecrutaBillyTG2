@@ -163,7 +163,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 		sql.append("SELECT * FROM cliente WHERE nome LIKE ?");
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
-		
+		// "%" Para fazer buscas aproximadas
 		ps.setString(1, "%" + nome + "%");
 		//ps.setString(1, nome);
 		ResultSet rs = ps.executeQuery();

@@ -6,15 +6,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
-<script
-	src="${pageContext.request.contextPath}/resources/js/equipamento.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <title>Equipamento</title>
-
 </head>
 <body>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/equipamento.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 	<div>
 		<jsp:include page="menu.jsp" />
 	</div>
@@ -27,62 +25,67 @@
 						onsubmit="return validarFormulario(event);">
 						<!-- Primeira Linha: Código, Nome, Fabricante -->
 						<div class="row g-3">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="codigo" class="form-label">Código:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="number" min="0" step="1" id="codigo" name="codigo"
+										class="form-control" placeholder="Código"
+										value='<c:out value="${equipamento.codigo }"></c:out>'
+										readonly> <label for="codigo">Código</label>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<input type="number" min="0" step="1" id="codigo" name="codigo"
-									class="form-control" placeholder="Código"
-									value='<c:out value="${equipamento.codigo}"></c:out>'>
+
+							<div class="col-md-3">
+								<div class="form-floating">
+									<input type="text" id="nome" name="nome" class="form-control"
+										placeholder="Nome" maxlength="100"
+										value='<c:out value="${equipamento.nome }"></c:out>'>
+									<label for="nome">Nome</label>
+								</div>
 							</div>
 							<div class="col-md-1">
-								<input type="submit" id="botaoBuscar" name="botao"
-									value="Buscar" class="btn btn-primary mb-3"
-									onclick="return validarBusca()">
+								<button type="submit" id="botao" name="botao" value="Buscar"
+									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()" style="height: 56px;">
+									<!-- Ícone SVG dentro do botão -->
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+								</button>
 							</div>
 
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="nome" class="form-label">Nome:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="nome" name="nome" class="form-control"
-									placeholder="Nome do Equipamento" maxlength="100"
-									value='<c:out value="${equipamento.nome}"></c:out>'>
-							</div>
-
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="fabricante" class="form-label">Fabricante:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="fabricante" name="fabricante"
-									class="form-control" placeholder="Fabricante" maxlength="100"
-									value='<c:out value="${equipamento.fabricante}"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="fabricante" name="fabricante"
+										class="form-control" placeholder="Fabricante" maxlength="50"
+										value='<c:out value="${equipamento.fabricante }"></c:out>'>
+									<label for="fabrincante">Fabricante</label>
+								</div>
 							</div>
 						</div>
 
 						<!-- Segunda Linha: Descrição -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="descricao" class="form-label">Descrição:</label>
-							</div>
-							<div class="col-md-11">
-								<textarea class="form-control" id="descricao" name="descricao"
-									placeholder="Descrição">${equipamento.descricao}</textarea>
+							<div class="col-md-12">
+								<div class="form-floating">
+									<textarea class="form-control" id="descricao" name="descricao"
+										placeholder="Descrição">${equipamento.descricao}</textarea>
+									<label for="descricao">Descrição</label>
+								</div>
 							</div>
 						</div>
-
 						<!-- Terceira Linha: Data de Manutenção -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="dataAquisicao" class="form-label">Aquisição:</label>
-							</div>
-							<div class="col-md-3">
-								<input type="date" id="dataAquisicao" name="dataAquisicao"
-									class="form-control"
-									value='<c:out value="${equipamento.dataAquisicao}"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="date" id="dataAquisicao" name="dataAquisicao"
+										class="form-control"
+										value='<c:out value="${equipamento.dataAquisicao}"></c:out>'>
+									<label for="dataAquisicao">Data de Aquisição</label>
+								</div>
 							</div>
 						</div>
-
 						<!-- Linha dos Botões -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
@@ -94,9 +97,11 @@
 									class="btn btn-warning">
 							</div>
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger">
+								<input type="button" id="botaoExcluir" name="botao"
+									value="Excluir" class="btn btn-danger"
+									onclick="return confirmarExclusao()">
 							</div>
+
 							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
@@ -147,28 +152,29 @@
 						<th>Data Aquisição</th>
 						<th>Manutenções</th>
 						<th>Excluir</th>
-
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
 					<c:forEach var="e" items="${equipamentos}">
 						<tr>
 							<td style="text-align: center;">
-								<button class="btn btn-outline-info" name="opcao" value="${e.codigo}"
-									onclick="editarEquipamento(this.value)"
+								<button class="btn btn-outline-dark" name="opcao"
+									value="${e.codigo}" onclick="editarEquipamento(this.value)"
 									${e.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-									  <path
-											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+										fill="currentColor" class="bi bi-pencil-square"
+										viewBox="0 0 16 16">
+						<path
+											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
 								</button>
 							</td>
 							<td><c:out value="${e.codigo}" /></td>
 							<td><c:out value="${e.nome}" /></td>
 							<td><c:out value="${e.descricao}" /></td>
 							<td><c:out value="${e.fabricante}" /></td>
-
 							<td><fmt:formatDate value="${e.dataAquisicao}"
 									pattern="dd/MM/yyyy" /></td>
 							<td>
@@ -176,20 +182,16 @@
 									onclick="window.location.href='manutencoesEquipamento?equipamento=${e.codigo}'"
 									class="btn btn-info">Adicionar</button>
 							</td>
-							
 							<td style="text-align: center;">
 								<button class="btn btn-danger"
 									onclick="excluirEquipamento('${e.codigo}')">Excluir</button>
 							</td>
-
-
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</c:if>
 	</div>
-
 	<div>
 		<jsp:include page="footer.jsp" />
 	</div>
