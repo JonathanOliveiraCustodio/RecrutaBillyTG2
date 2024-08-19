@@ -147,5 +147,41 @@ public class InsumoDao implements ICrud<Insumo>, IInsumoDao {
 		return insumos;
 	}
 
+	@Override
+	public List<Insumo> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Insumo> insumos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM vw_insumo WHERE nome LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Fornecedor f = new Fornecedor();
+			f.setCodigo(rs.getInt("codigoFornecedor"));
+			f.setNome(rs.getString("nomeFornecedor"));
+			Insumo i = new Insumo();
+			i.setCodigo(rs.getInt("codigo"));
+			i.setNome(rs.getString("nome"));
+			i.setPrecoCompra(rs.getFloat("precoCompra"));
+			i.setPrecoVenda(rs.getFloat("precoVenda"));
+			i.setQuantidade(rs.getFloat("quantidade"));
+			i.setUnidade(rs.getString("unidade"));
+			i.setFornecedor(f);
+			i.setDataCompra(rs.getDate("dataCompra"));
+			insumos.add(i);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return insumos;
+	}
+
 
 }

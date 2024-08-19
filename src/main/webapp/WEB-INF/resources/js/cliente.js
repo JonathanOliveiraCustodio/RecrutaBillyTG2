@@ -181,15 +181,19 @@ function validarFormulario(event) {
     } else if (botao === "Excluir") {
         var codigo = document.getElementById("codigo").value.trim();
         if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
-            alert("Por favor, preencha o campo de código.");
+            alert("Por favor, preencha o campo de código corretamente.");
             document.getElementById("codigo").focus(); // Coloca o foco no campo código
             event.preventDefault();
+            return false;
+        }
+        // Confirmar a exclusão
+        if (!confirm('Você realmente deseja excluir este registro? Esta ação não pode ser desfeita.')) {
+            event.preventDefault(); // Cancela o envio do formulário se o usuário cancelar a exclusão
             return false;
         }
     }
     return true;
 }
-
 
 function validarDataNascimento(dataNascimento) {
     var hoje = new Date();
@@ -211,8 +215,6 @@ function redirectToWhatsApp() {
 		alert("Número de telefone não encontrado.");
 	}
 }
-
-
 
 function ajustarMaxlength(tipo) {
 	var documento = document.getElementById("documento");

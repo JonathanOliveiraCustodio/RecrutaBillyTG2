@@ -239,7 +239,7 @@
 				<thead>
 					<tr>
 						<th class="titulo-tabela" colspan="8"
-							style="text-align: center; font-size: 23px;">Lista de
+							style="text-align: center; font-size: 35px;">Lista de
 							Clientes</th>
 					</tr>
 					<tr class="table-dark">

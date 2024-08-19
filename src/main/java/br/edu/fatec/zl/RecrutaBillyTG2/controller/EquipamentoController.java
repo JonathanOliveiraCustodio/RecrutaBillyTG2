@@ -97,6 +97,7 @@ public class EquipamentoController {
 		} else if (!cmd.contains("Listar")) {
 			e.setNome(nome);
 		}
+		try {
 		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 			if (codigo != null && !codigo.isEmpty()) {
 				e.setCodigo(Integer.parseInt(codigo));
@@ -107,7 +108,7 @@ public class EquipamentoController {
 			e.setDataAquisicao(Date.valueOf(dataAquisicao));
 		}
 
-		try {
+		
 			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarEquipamento(e);
 				e = null;

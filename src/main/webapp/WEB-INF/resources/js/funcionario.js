@@ -13,99 +13,126 @@ function excluirFuncionario(CPF) {
 }
 
 function validarBusca() {
-	var CPF = document.getElementById("CPF").value;
+	var CPF = document.getElementById("nome").value;
 	if (CPF.trim() === "") {
-		alert("Por favor, insira um CPF.");
+		alert("Por favor, insira um nome.");
 		return false;
 	}
 	return true;
+}
+
+// Funções auxiliares
+function validarCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+        soma += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    let resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(9))) return false;
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+        soma += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(10))) return false;
+
+    return true;
 }
 
 function validarSenhas() {
-	var senha = document.getElementById("senha").value;
-	var confirmarSenha = document.getElementById("confirmarSenha").value;
-	if (senha !== confirmarSenha) {
-		alert("As senhas não são iguais. Por favor, verifique.");
-		return false;
-	}
-	return true;
+    var senha = document.getElementById("senha").value;
+    var confirmarSenha = document.getElementById("confirmarSenha").value;
+    return senha === confirmarSenha;
 }
 
-function validarCPF(cpf) {
-	cpf = cpf.replace(/[^\d]+/g, '');
-	if (cpf == '')
-		return false;
-	if (cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111"
-		|| cpf == "22222222222" || cpf == "33333333333"
-		|| cpf == "44444444444" || cpf == "55555555555"
-		|| cpf == "66666666666" || cpf == "77777777777"
-		|| cpf == "88888888888" || cpf == "99999999999")
-		return false;
-	var add = 0;
-	for (var i = 0; i < 9; i++)
-		add += parseInt(cpf.charAt(i)) * (10 - i);
-	var rev = 11 - (add % 11);
-	if (rev == 10 || rev == 11)
-		rev = 0;
-	if (rev != parseInt(cpf.charAt(9)))
-		return false;
-	add = 0;
-	for (i = 0; i < 10; i++)
-		add += parseInt(cpf.charAt(i)) * (11 - i);
-	rev = 11 - (add % 11);
-	if (rev == 10 || rev == 11)
-		rev = 0;
-	if (rev != parseInt(cpf.charAt(10)))
-		return false;
-	return true;
-}
-
+// Função principal de validação do formulário
 function validarFormulario(event) {
-	var botao = event.submitter.value;
-	var CPF = document.getElementById("CPF").value.trim();
+    var botao = event.submitter.value;
+    var campos = [
+        { id: "CPF", nome: "CPF" },
+        { id: "nome", nome: "Nome" },
+        { id: "dataNascimento", nome: "Data Nascimento" },
+        { id: "email", nome: "E-mail" },
+        { id: "senha", nome: "Senha" },
+        { id: "cargo", nome: "Cargo" },
+        { id: "horario", nome: "Horário" },
+        { id: "nivelAcesso", nome: "Nível de Acesso" },
+        { id: "salario", nome: "Salário" },
+        { id: "dataAdmissao", nome: "Data Admissão" },
+        { id: "telefone", nome: "Telefone" }
+    ];
 
-	if (botao === "Cadastrar" || botao === "Alterar") {
-		var campos = [
-			"CPF", "nome", "dataNascimento", "email", "senha", "confirmarSenha",
-			"cargo", "horario", "nivelAcesso", "salario", "dataAdmissao",
-			"telefone"
-		];
+    if (botao === "Cadastrar" || botao === "Alterar") {
+        for (var i = 0; i < campos.length; i++) {
+            var campo = document.getElementById(campos[i].id);
+            if (campo && campo.value.trim() === "") {
+                alert("Por favor, preencha o campo " + campos[i].nome + ".");
+                campo.focus(); // Coloca o foco no campo vazio
+                event.preventDefault();
+                return false;
+            }
+        }
 
-		// Verificar se todos os campos obrigatórios estão preenchidos
-		for (var i = 0; i < campos.length; i++) {
-			var campo = document.getElementById(campos[i]).value.trim();
-			if (campo === "") {
-				alert("Por favor, preencha todos os campos.");
-				event.preventDefault();
-				return false;
-			}
-		}
+        // Verificar se o CPF é válido
+        var cpf = document.getElementById("CPF").value.trim(); // Corrigido para "CPF"
+        if (cpf && !validarCPF(cpf)) {
+            alert("CPF inválido.");
+            event.preventDefault();
+            return false;
+        }
 
-		// Verificar se o CPF é válido
-		if (!validarCPF(CPF)) {
-			alert("CPF inválido.");
-			event.preventDefault();
-			return false;
-		}
+        // Verificar se as senhas são válidas
+        if (!validarSenhas()) {
+            alert("As senhas não são iguais. Por favor, verifique.");
+            event.preventDefault();
+            return false;
+        }
+        
+         // Verificar se o horário é válido
+        var horario = document.getElementById("horario").value.trim();
+        if (horario && !validarHorario(horario)) {
+            alert("Horário inválido. Por favor, use o formato 'HH:mm às HH:mm'.");
+            event.preventDefault();
+            return false;
+        }
 
-		// Verificar se as senhas são válidas
-		if (!validarSenhas()) {
-			event.preventDefault();
-			return false;
-		}
-
-
-	} else if (botao === "Excluir") {
-		if (CPF === "" || isNaN(CPF) || parseInt(CPF) <= 0) {
-			alert("Por favor, preencha o campo de CPF.");
-			event.preventDefault();
-			return false;
-		}
-	}
-
-	// Se todos os campos estiverem preenchidos, permitir o envio do formulário
-	return true;
+    } else if (botao === "Excluir") {
+        var codigo = document.getElementById("CPF").value.trim(); // Corrigido para "CPF"
+        if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
+            alert("Por favor, preencha o campo de CPF corretamente.");
+            document.getElementById("CPF").focus(); // Coloca o foco no campo CPF
+            event.preventDefault();
+            return false;
+        }
+        // Confirmar a exclusão
+        if (!confirm('Você realmente deseja excluir este registro? Esta ação não pode ser desfeita.')) {
+            event.preventDefault(); // Cancela o envio do formulário se o usuário cancelar a exclusão
+            return false;
+        }
+    }
+    return true;
 }
+
+function redirectToWhatsApp() {
+	// Obtém o valor do campo de telefone
+	var phoneNumber = document.getElementById('telefone').value;
+
+	if (phoneNumber) {
+		// Construa a URL do WhatsApp
+		var url = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(phoneNumber);
+		window.open(url, "_blank");
+	} else {
+		alert("Número de telefone não encontrado.");
+	}
+}
+
 
 function validarHorario(horario) {
 	// Regex para validar o formato "HH:mm às HH:mm"

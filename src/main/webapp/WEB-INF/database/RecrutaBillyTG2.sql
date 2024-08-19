@@ -30,7 +30,7 @@ PRIMARY KEY (codigo)
 )
 GO
 CREATE TABLE insumo(
-codigo			INT	        	NOT NULL,
+codigo			INT	        	NOT NULL IDENTITY (1,1),
 nome			VARCHAR(100)    NOT NULL,
 precoCompra		DECIMAL(10,2)	NOT NULL,
 precoVenda     DECIMAL(10,2)	NOT NULL,
@@ -197,17 +197,17 @@ INSERT INTO fornecedor (nome, telefone, email, empresa, CEP, logradouro, numero,
 ('TechNova Industries','9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica', '90123-456', 'Boulevard da Tecnologia', '606', 'Distrito Tecnológico', NULL, 'Campinas', 'SP'),
 ('Tranquil Retreats Ltd.', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos', '01234-567', 'Rua da Serenidade', '707', 'Centro', NULL, 'Fortaleza', 'CE');
 GO
-INSERT INTO insumo (codigo, nome, precoCompra,precoVenda, quantidade,unidade, fornecedor,dataCompra) VALUES
-(1, 'Solvente', 30.00,35.00, 500,'un', 1.5,'2024-05-05'),
-(2, 'Verniz', 50.00,55.00, 100,'un', 2,'2024-04-07'),
-(3, 'Papel Offset', 15.00,20.00, 1000,'unidade', 3,'2024-11-10'),
-(4, 'Tinta Branca PU', 50.00,55.00, 50,'un', 4,'2024-02-01'),
-(5, 'Tinta Preta PU', 40.00,45.00, 300,'ml', 5,'2024-09-03'),
-(6, 'Molecula Verrmelha', 25.00,30.00, 400,'kg', 1,'2024-06-04'),
-(7, 'Molecula Cinza', 120.00,150.00, 5.5,'kg', 8,'2024-06-03'),
-(8, 'Filamento Azul', 42.50, 48.90,200,'kg', 7,'2023-12-12'),
-(9, 'Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
-(10, 'Tinta Metálica', 20.10,27.50, 20,'un', 6, '2024-07-10');
+INSERT INTO insumo (nome, precoCompra,precoVenda, quantidade,unidade, fornecedor,dataCompra) VALUES
+('Solvente', 30.00,35.00, 500,'unidade', 1.5,'2024-05-05'),
+('Verniz', 50.00,55.00, 100,'unidade', 2,'2024-04-07'),
+('Papel Offset', 15.00,20.00, 1000,'unidade', 3,'2024-11-10'),
+('Tinta Branca PU', 50.00,55.00, 50,'unidade', 4,'2024-02-01'),
+('Tinta Preta PU', 40.00,45.00, 300,'ml', 5,'2024-09-03'),
+('Molecula Verrmelha', 25.00,30.00, 400,'kg', 1,'2024-06-04'),
+('Molecula Cinza', 120.00,150.00, 5.5,'kg', 8,'2024-06-03'),
+('Filamento Azul', 42.50, 48.90,200,'kg', 7,'2023-12-12'),
+('Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
+('Tinta Metálica', 20.10,27.50, 20,'unidade', 6, '2024-07-10');
 GO
 INSERT INTO equipamento (nome, descricao, fabricante, dataAquisicao) VALUES 
 ('Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
@@ -419,7 +419,7 @@ END
 GO
 CREATE PROCEDURE sp_iud_insumo
     @acao CHAR(1),
-    @codigo INT,
+    @codigo INT NULL,
     @nome VARCHAR(100),
     @precoCompra DECIMAL(10,2),
 	@precoVenda DECIMAL(10,2),
@@ -437,8 +437,8 @@ BEGIN
             RAISERROR('Código já existe. Não é possível inserir o insumo.', 16, 1)
             RETURN
         END
-        INSERT INTO insumo (codigo, nome, precoCompra, precoVenda, quantidade, unidade, fornecedor,dataCompra)
-        VALUES (@codigo, @nome, @precoCompra,@precoVenda, @quantidade, @unidade, @fornecedor,GETDATE())
+        INSERT INTO insumo (nome, precoCompra, precoVenda, quantidade, unidade, fornecedor,dataCompra)
+        VALUES (@nome, @precoCompra,@precoVenda, @quantidade, @unidade, @fornecedor,GETDATE())
         SET @saida = 'Insumo inserido com sucesso'
     END
     ELSE IF (@acao = 'U')

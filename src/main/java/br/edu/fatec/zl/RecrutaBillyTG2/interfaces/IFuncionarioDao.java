@@ -8,5 +8,5 @@ public interface IFuncionarioDao {
 
 	public String sp_iud_funcionario (String acao, Funcionario f) throws SQLException, ClassNotFoundException;
 	public List<Funcionario> findFuncionariosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException;
-
+	public List<Funcionario> findByName(String nome) throws SQLException, ClassNotFoundException;
 }

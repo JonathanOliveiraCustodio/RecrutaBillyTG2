@@ -155,4 +155,44 @@ public class FuncionarioDao implements ICrud<Funcionario>, IFuncionarioDao {
 
 		return funcionarios;
 	}
+
+	@Override
+	public List<Funcionario> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM v_funcionario WHERE nome LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {	
+			Funcionario f = new Funcionario();
+			f.setCPF(rs.getString("CPF"));
+			f.setNome(rs.getString("nome"));
+			f.setNivelAcesso(rs.getString("nivelAcesso"));
+			f.setSenha(rs.getString("senha"));
+			f.setEmail(rs.getString("email"));
+			f.setDataNascimento(rs.getDate("dataNascimento"));
+			f.setTelefone(rs.getString("telefone"));
+			f.setCargo(rs.getString("cargo"));
+			f.setHorario(rs.getString("horario"));
+			f.setSalario(rs.getFloat("salario"));
+			f.setDataAdmissao(rs.getDate("dataAdmissao"));
+			f.setDataDesligamento(rs.getDate("dataDesligamento"));
+			f.setObservacao(rs.getString("observacao"));
+			funcionarios.add(f);
+		
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return funcionarios;
+	}
 }

@@ -18,7 +18,6 @@
 	<div>
 		<jsp:include page="menuLogin.jsp" />
 	</div>
-
 	<div class="container py-4">
 		<div
 			class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow center-form">
@@ -28,32 +27,41 @@
 				<div class="container">
 					<form action="<c:url value='/login' />" method="post"
 						class="row g-3 mt-3 justify-content-center">
-						<label for="email" class="form-label col-md-2">E-mail:</label>
-						<div class="col-md-4">
-							<input type="text" id="email" name="email" class="form-control"
-								placeholder="E-mail">
+						<!-- Primeira Linha: E-mail -->
+						<div class="row g-3 justify-content-center">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="email" name="email" class="form-control"
+										placeholder="E-mail"> <label for="email">E-mail</label>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-0"></div>
-						<label for="senha" class="form-label col-md-2">Senha:</label>
-						<div class="col-md-4">
-							<input type="password" id="senha" name="senha"
-								class="form-control" placeholder="Senha">
+						<!-- Segunda Linha: Senha -->
+						<div class="row g-3 mt-2 justify-content-center">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="password" id="senha" name="senha"
+										class="form-control" placeholder="Senha"> <label
+										for="senha">Senha</label>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-0"></div>
+						<!-- Terceira Linha: Botão Login -->
+						<div class="row g-3 mt-2 justify-content-center">
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Login"
+									class="btn btn-primary">
+							</div>
+						</div>
 
-						<div class="col-md-2 d-grid">
-							<input type="submit" id="botao" name="botao" value="Login"
-								class="btn btn-primary">
+						<!-- Quarta Linha: Esqueceu a Senha -->
+						<div class="row g-3 mt-2 justify-content-center">
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao"
+									value="Esqueceu a Senha?" class="btn btn-link">
+							</div>
 						</div>
-						<div class="col-md-0"></div>
-						<div class="col-md-0 d-grid">
-							<input type="submit" id="botao" name="botao" value="Esqueceu a Senha?"
-								class="btn btn-link">
-						</div>
-						
-						
 					</form>
-
 					<div>
 						<jsp:include page="footer.jsp" />
 					</div>

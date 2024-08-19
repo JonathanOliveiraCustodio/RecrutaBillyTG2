@@ -89,7 +89,6 @@ public class FornecedorController {
 		String cidade = allRequestParam.get("cidade");
 		String UF = allRequestParam.get("UF");
 		
-		
 		String saida = "";
 		String erro = "";
 

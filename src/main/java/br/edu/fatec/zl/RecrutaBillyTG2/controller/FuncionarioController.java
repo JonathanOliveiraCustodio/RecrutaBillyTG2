@@ -46,7 +46,7 @@ public class FuncionarioController {
 					// Inicializando e antes de utilizá-lo
 					f = new Funcionario();
 					f.setCPF(CPF);
-					f = buscarUsuario(f);
+					f = buscarFuncionario(f);
 
 				} else if (cmd.contains("excluir")) {
 					// Inicializando e antes de utilizá-lo
@@ -55,7 +55,7 @@ public class FuncionarioController {
 					saida = excluirFuncionario(f);
 					f = null;
 				}
-				funcionarios = listarUsuarios();
+				funcionarios = listarFuncionarios();
 			}
 
 		} catch (ClassNotFoundException | SQLException error) {
@@ -136,7 +136,7 @@ public class FuncionarioController {
 			}
 			if (cmd.contains("Excluir")) {
 				// Buscar um Usuario antes de Excluir para realizar a Validação
-				Funcionario func = buscarUsuario(f);
+				Funcionario func = buscarFuncionario(f);
 				if (func != null) {
 					saida = excluirFuncionario(f);
 					f = null;
@@ -145,13 +145,24 @@ public class FuncionarioController {
 				}
 			}
 			if (cmd.contains("Buscar")) {
-				f = buscarUsuario(f);
-				if (f == null) {
-					saida = "Nenhum Funcionário encontrado com o CPF " + CPF;
+				// Buscar clientes pelo nome
+				funcionarios = buscarFuncionarioNome(nome);
+				// Verificar o número de registros retornados
+				if (funcionarios.isEmpty()) {
+					// Caso não encontre nenhum cliente
+					saida = "Nenhum Funcionário encontrado com o Nome '" + nome + "'";
+				} else if (funcionarios.size() == 1) {
+					Funcionario funcionario = funcionarios.get(0);
+					saida = "Funcionário encontrado: " + funcionario.getNome();
+					f = buscarFuncionario(funcionario);
+				} else {
+					// Caso encontre mais de um Funcionário
+					saida = "Foram encontrados " + funcionarios.size() + " funcionários com o Nome '" + nome + "'";
+
 				}
 			}
 			if (cmd.contains("Listar")) {
-				funcionarios = listarUsuarios();
+				funcionarios = listarFuncionarios();
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
@@ -179,15 +190,21 @@ public class FuncionarioController {
 		return saida;
 	}
 
-	private Funcionario buscarUsuario(Funcionario u) throws ClassNotFoundException, SQLException {
+	private Funcionario buscarFuncionario(Funcionario u) throws ClassNotFoundException, SQLException {
 		u = fDao.findBy(u);
 		return u;
 
 	}
 
-	private List<Funcionario> listarUsuarios() throws ClassNotFoundException, SQLException {
+	private List<Funcionario> listarFuncionarios() throws ClassNotFoundException, SQLException {
 		List<Funcionario> usuarios = new ArrayList<>();
 		usuarios = fDao.findAll();
 		return usuarios;
+	}
+	
+	private List<Funcionario> buscarFuncionarioNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		funcionarios = fDao.findByName(nome);
+		return funcionarios;
 	}
 }

@@ -36,34 +36,34 @@ public class InsumoController {
 	@RequestMapping(name = "insumo", value = "/insumo", method = RequestMethod.GET)
 	public ModelAndView insumoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
 			HttpSession session) {
-		
+
 		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
 		String erro = "";
 		String saida = "";
 
 		List<Insumo> insumos = new ArrayList<>();
 		List<Fornecedor> fornecedores = new ArrayList<>();
-		Insumo i = null; 
+		Insumo i = null;
 		try {
 			String cmd = allRequestParam.get("cmd");
 			String codigo = allRequestParam.get("codigo");
 			fornecedores = listarFornecedores();
 
 			if (cmd != null) {
-	            if (cmd.contains("alterar")) {
-	                // Inicializando e antes de utilizá-lo
-	                i = new Insumo();
-	                i.setCodigo(Integer.parseInt(codigo));
-	                i = buscarInsumo(i);
+				if (cmd.contains("alterar")) {
+					// Inicializando e antes de utilizá-lo
+					i = new Insumo();
+					i.setCodigo(Integer.parseInt(codigo));
+					i = buscarInsumo(i);
 
-	            } else if (cmd.contains("excluir")) {
-	                // Inicializando e antes de utilizá-lo
-	                i = new Insumo();
-	                i.setCodigo(Integer.parseInt(codigo));
-	                i = buscarInsumo(i);
-	                saida = excluirInsumo(i);
-	                i = null;  
-	            }
+				} else if (cmd.contains("excluir")) {
+					// Inicializando e antes de utilizá-lo
+					i = new Insumo();
+					i.setCodigo(Integer.parseInt(codigo));
+					i = buscarInsumo(i);
+					saida = excluirInsumo(i);
+					i = null;
+				}
 				insumos = listarInsumos();
 				fornecedores = listarFornecedores();
 			}
@@ -100,6 +100,7 @@ public class InsumoController {
 		String saida = "";
 		String erro = "";
 		Insumo i = new Insumo();
+		Fornecedor f = new Fornecedor();
 
 		List<Insumo> insumos = new ArrayList<>();
 		List<Fornecedor> fornecedores = new ArrayList<>();
@@ -110,24 +111,28 @@ public class InsumoController {
 		} else
 
 		if (!cmd.contains("Listar")) {
-			i.setCodigo(Integer.parseInt(codigo));
+			i.setNome(nome);
 		}
 
 		try {
-
 			fornecedores = listarFornecedores();
 
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+
+				if (fornecedor != null && !fornecedor.isEmpty()) {
+					f.setCodigo(Integer.parseInt(fornecedor));
+					f = buscarFornecedor(f);
+					i.setFornecedor(f);
+				}
+				if (codigo != null && !codigo.isEmpty()) {
+					i.setCodigo(Integer.parseInt(codigo));
+				}
 				i.setNome(nome);
 				i.setPrecoCompra(Float.parseFloat(precoCompra));
 				i.setPrecoVenda(Float.parseFloat(precoVenda));
 				i.setQuantidade(Float.parseFloat(quantidade));
 				i.setUnidade(unidade);
 				i.setDataCompra(Date.valueOf(dataCompra));
-				Fornecedor f = new Fornecedor();
-				f.setCodigo(Integer.parseInt(fornecedor));
-				f = buscarFornecedor(f);
-				i.setFornecedor(f);
 
 			}
 			if (cmd.contains("Cadastrar")) {
@@ -139,19 +144,29 @@ public class InsumoController {
 				i = null;
 			}
 			if (cmd.contains("Excluir")) {
-				// Buscar um Insumo antes de Excluir para realizar a Validação
-				Insumo ins = buscarInsumo(i);
-				if (ins != null) {
-					saida = excluirInsumo(i);
-					i = null;
-				} else {
-					saida = "Nenhum Insumo encontrado com o código " + codigo;
-				}
+				i = new Insumo();
+				i.setCodigo(Integer.parseInt(codigo));
+				f.setCodigo(Integer.parseInt(fornecedor));
+				f = buscarFornecedor(f);
+				i.setFornecedor(f);
+				saida = excluirInsumo(i);
+				i = null;
 			}
 			if (cmd.contains("Buscar")) {
-				i = buscarInsumo(i);
-				if (i == null) {
-					saida = "Nenhum Insumo encontrado com o código " + codigo;
+				// Buscar equipamentos pelo nome
+				insumos = buscarInsumoNome(nome);
+				// Verificar o número de registros retornados
+				if (insumos.isEmpty()) {
+					// Caso não encontre nenhum Insumo
+					saida = "Nenhum Insumo encontrado com o Nome '" + nome + "'";
+				} else if (insumos.size() == 1) {
+					Insumo insumo = insumos.get(0);
+					saida = "Insumo encontrado: " + insumo.getNome();
+					i = buscarInsumo(insumo);
+				} else {
+					// Caso encontre mais de um Insumo
+					saida = "Foram encontrados " + insumos.size() + " insumos com o Nome '" + nome + "'";
+
 				}
 			}
 			if (cmd.contains("Listar")) {
@@ -211,6 +226,12 @@ public class InsumoController {
 	private List<Fornecedor> listarFornecedores() throws SQLException, ClassNotFoundException {
 		List<Fornecedor> fornecedores = fDao.findAll();
 		return fornecedores;
+	}
+
+	private List<Insumo> buscarInsumoNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Insumo> insumos = new ArrayList<>();
+		insumos = iDao.findByName(nome);
+		return insumos;
 	}
 
 }

@@ -97,9 +97,8 @@
 									class="btn btn-warning">
 							</div>
 							<div class="col-md-2 d-grid text-center">
-								<input type="button" id="botaoExcluir" name="botao"
-									value="Excluir" class="btn btn-danger"
-									onclick="return confirmarExclusao()">
+								<input type="submit" id="botao" name="botao" value="Excluir"
+									class="btn btn-danger" onclick="return confirmarExclusao()">
 							</div>
 
 							<div class="col-md-2 d-grid text-center"></div>
@@ -140,7 +139,7 @@
 				<thead>
 					<tr>
 						<th class="titulo-tabela" colspan="8"
-							style="text-align: center; font-size: 23px;">Lista de
+							style="text-align: center; font-size: 35px;">Lista de
 							Equipamentos</th>
 					</tr>
 					<tr class="table-dark">

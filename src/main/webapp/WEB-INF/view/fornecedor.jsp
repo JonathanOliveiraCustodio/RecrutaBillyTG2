@@ -98,15 +98,15 @@
 								<div class="form-floating">
 									<input type="text" id="logradouro" name="logradouro"
 										class="form-control" placeholder="Logradouro"
-										value='<c:out value="${fornecedor.logradouro}"></c:out>'readonly>
-									<label for="logradouro">Logradouro</label>
+										value='<c:out value="${fornecedor.logradouro}"></c:out>'
+										readonly> <label for="logradouro">Logradouro</label>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="bairro" name="bairro"
 										class="form-control" placeholder="Bairro"
-										value='<c:out value="${fornecedor.bairro}"></c:out>'readonly>
+										value='<c:out value="${fornecedor.bairro}"></c:out>' readonly>
 									<label for="bairro">Bairro</label>
 								</div>
 							</div>
@@ -114,7 +114,7 @@
 								<div class="form-floating">
 									<input type="text" id="cidade" name="cidade"
 										class="form-control" placeholder="Localidade"
-										value='<c:out value="${fornecedor.cidade}"></c:out>'readonly>
+										value='<c:out value="${fornecedor.cidade}"></c:out>' readonly>
 									<label for="cidade">Cidade</label>
 								</div>
 
@@ -127,8 +127,8 @@
 								<div class="form-floating">
 									<input type="text" id="UF" name="UF" class="form-control"
 										placeholder="UF"
-										value='<c:out value="${fornecedor.UF}"></c:out>'readonly> <label
-										for="UF">UF</label>
+										value='<c:out value="${fornecedor.UF}"></c:out>' readonly>
+									<label for="UF">UF</label>
 								</div>
 
 							</div>
