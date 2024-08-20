@@ -1,141 +1,140 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+<meta charset="UTF-8">
+<script
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/despesa.js"></script>
 <title>Despesas</title>
 </head>
 <body>
 	<div>
-    	<jsp:include page="menu.jsp" />
+		<jsp:include page="menu.jsp" />
 	</div>
 	<div class="container py-4">
 		<c:if test="${nivelAcesso == 'admin' }">
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
-					<h1 class="display-6 fw-bold">Gestão de Despesas</h1>
-					
-					<form action="despesas" method="post" class="row g-3 mt-3">
-					
-						<!-- Linha de visualização das métricas -->
-						<div class="row g-3 justify-content-center bg-body-secondary">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="entrada" class="form-label">R$ de Entrada:</label>
+					<h1 class="display-6 fw-bold">GestÃ£o de Despesas</h1>
+					<form action="despesas" method="post"
+						class="row g-3 mt-3 justify-content-center"
+						onsubmit="return validarFormulario(event);">
+						<!-- Linha de visualizaÃ§Ã£o das mÃ©tricas -->
+						<div
+							class="row g-2 justify-content-center align-items-center bg-body-secondary d-flex"
+							style="min-height: 120px;">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="entrada" name="entrada"
+										class="form-control" placeholder="R$ 0,00" value="${entrada}"
+										disabled> <label for="entrada">R$ de Entrada</label>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<input type="text" id="entrada" name="entrada" class="form-control" 
-								placeholder="R$ 0,00" value="${entrada }" disabled >
-							</div> 
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="gasto" class="form-label">R$ de Saída:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="gasto" name="gasto" class="form-control"
+										placeholder="R$ 0,00" value="${gasto}" disabled> <label
+										for="gasto">R$ de SaÃ­da</label>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<input type="text" id="gasto" name="gasto" class="form-control"]
-								 placeholder="R$ 0,00" value="${gasto }" disabled >
-							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="saldo" class="form-label">Saldo Geral:</label>
-							</div>
-							<div class="col-md-1">
-								<input type="text" id="saldo" name="saldo" class="form-control" 
-								placeholder="R$ 0,00" value="${saldo }" disabled >
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="saldo" name="saldo" class="form-control"
+										placeholder="R$ 0,00" value="${saldo}" disabled> <label
+										for="saldo">Saldo Geral</label>
+								</div>
 							</div>
 						</div>
-						
-						<!-- O resto para operação de CRUD -->
-						<div class="row g-4 mt-2">
-							<div>
-								<input type="hidden" min="0" step="1" id="codigo" name="codigo"
-									class="form-control" placeholder="Código"
-									value='<c:out value="${despesa.codigo}"></c:out>'>
+						<!-- O resto para operaÃ§Ã£o de CRUD -->
+						<!-- Primeira Linha: Nome, Data, Data Vencimento -->
+						<div class="row g-4 mt-2 justify-content-center">
+							<input type="hidden" min="0" step="1" id="codigo" name="codigo"
+								class="form-control" placeholder="CÃ³digo"
+								value='<c:out value="${despesa.codigo}"></c:out>'>
+
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="nome" name="nome" class="form-control"
+										placeholder="Nome"
+										value='<c:out value="${despesa.nome}"></c:out>'> <label
+										for="nome">Nome</label>
+								</div>
 							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="nome" class="form-label">Nome</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="date" id="data" name="data" class="form-control"
+										placeholder="Data"
+										value='<c:out value="${despesa.data}"></c:out>'> <label
+										for="data">Data</label>
+								</div>
 							</div>
-							<div class="col-md-3">
-								<input type="text" id="nome" name="nome" class="form-control" 
-								placeholder="Nome" value='<c:out value="${despesa.nome}"></c:out>'>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="date" id="dataVencimento" name="dataVencimento"
+										class="form-control" placeholder="Data de Vencimento"
+										value='<c:out value="${despesa.dataVencimento}"></c:out>'>
+									<label for="dataVencimento">Data de Vencimento</label>
+								</div>
 							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="data" class="form-label">Data</label>
-							</div>
-							<div class="col-md-3">
-								<input type="date" id="data" name="data" class="form-control" 
-								placeholder="Data" value='<c:out value="${despesa.data}"></c:out>'>
-							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="dataVencimento" class="form-label">Data de Vencimento</label>
-							</div>
-							<div class="col-md-3">
-								<input type="date" id="dataVencimento" name="dataVencimento" class="form-control"
-								placeholder="Data de Vencimento" value='<c:out value="${despesa.dataVencimento }"></c:out>'>
-							</div>
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="pagamento" class="form-label">Forma de Pagamento:</label>
-							</div>
-							<div class="col-md-3">
-								<select id="pagamento" name="pagamento" class="form-select">
-									<option value="">Escolha o tipo de pagamento</option>
-									<option value="PIX"
-										<c:if test="${despesa.pagamento eq 'PIX'}">selected</c:if>>PIX</option>
-									<option value="Boleto"
-										<c:if test="${despesa.pagamento eq 'Boleto'}">selected</c:if>>Boleto</option>
-								</select>
-							</div>
-							
+
 						</div>
-						
+						<!-- Segunda Linha:  -->
+						<div class="row g-3 mt-2 justify-content-center">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select id="tipo" name="tipo" class="form-select">
+										<option value="">Escolha o tipo de despesa</option>
+										<option value="Entrada"
+											<c:if test="${despesa.tipo eq 'Entrada'}">selected</c:if>>Entrada</option>
+										<option value="Saida"
+											<c:if test="${despesa.tipo eq 'Saida'}">selected</c:if>>Saida</option>
+									</select> <label for="tipo">Tipo</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="valor" name="valor" class="form-control"
+										placeholder="Valor"
+										value='<c:out value="${despesa.valor}"></c:out>'> <label
+										for="valor">Valor</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select id="estado" name="estado" class="form-select">
+										<option value="">Escolha um Estado para a Despesa</option>
+										<option value="Pendente"
+											<c:if test="${despesa.estado eq 'Pendente'}">selected</c:if>>Pendente</option>
+										<option value="Pago"
+											<c:if test="${despesa.estado eq 'Pago'}">selected</c:if>>Pago</option>
+									</select> <label for="estado">Estado</label>
+								</div>
+							</div>
+						</div>
+						<!-- Terceira Linha:  -->
 						<div class="row g-3 mt-2">
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="tipo" class="form-label">Tipo:</label>
-							</div>
-							<div class="col-md-3">
-								<select id="tipo" name="tipo" class="form-select">
-									<option value="">Escolha o tipo de despesa</option>
-									<option value="Entrada"
-										<c:if test="${despesa.tipo eq 'Entrada'}">selected</c:if>>Entrada</option>
-									<option value="Saida"
-										<c:if test="${despesa.tipo eq 'Saida'}">selected</c:if>>Saida</option>
-								</select>
-							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="valor" class="form-label">Valor</label>
-							</div>
-							<div class="col-md-3">
-								<input type="text" id="valor" name="valor" class="form-control" 
-								placeholder="Nome" value='<c:out value="${despesa.valor}"></c:out>'>
-							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="estado" class="form-label">Estado:</label>
-							</div>
-							<div class="col-md-3">
-								<select id="estado" name="estado" class="form-select">
-									<option value="">Escolha um Estado para a Despesa</option>
-									<option value="Pendente"
-										<c:if test="${despesa.estado eq 'Pendente'}">selected</c:if>>Pendente</option>
-									<option value="Pago"
-										<c:if test="${despesa.tipo eq 'Pago'}">selected</c:if>>Pago</option>
-								</select>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select id="pagamento" name="pagamento" class="form-select">
+										<option value="">Escolha o tipo de pagamento</option>
+										<option value="PIX"
+											<c:if test="${despesa.pagamento eq 'PIX'}">selected</c:if>>PIX</option>
+										<option value="Boleto"
+											<c:if test="${despesa.pagamento eq 'Boleto'}">selected</c:if>>Boleto</option>
+									</select> <label for="pagamento">Forma de Pagamento</label>
+								</div>
 							</div>
 						</div>
-					
-						
+
+						<!-- Linha dos BotÃµes -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success">
+									class="btn btn-success" style="height: 55.5px;">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
@@ -146,49 +145,60 @@
 									class="btn btn-danger">
 							</div>
 							<div class="col-md-2 d-grid text-center"></div>
-
+							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Limpar Campos"
-									class="btn btn-secondary">
+								<input type="submit" id="botao" name="botao"
+									value="Limpar Campos" class="btn btn-secondary">
 							</div>
 						</div>
-						
-						<!-- sessão de pesquisa previa, para completar a função primeiro -->
-						<div class="row g-3 mt-3 justify-items-center">
-							<div class="col-md-4 offset-sm-1 align-text-center">
-								<input type="text" id="pesquisa" name="pesquisa" class="form-control" 
-								placeholder="Pesquisar por...">
+						<div class="col-md-2 d-grid text-center"></div>
+						<!-- sessÃ£o de pesquisa previa, para completar a funÃ§Ã£o primeiro -->
+						<div
+							class="row g-2 justify-content-center align-items-center bg-body-secondary d-flex"
+							style="min-height: 120px;">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="pesquisa" name="pesquisa"
+										class="form-control" placeholder="Pesquisar Por"> <label
+										for="pesquisa">Pesquisar Por</label>
+								</div>
 							</div>
-							
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Pesquisar"
-									class="btn btn-info">
+
+							<div class="col-md-1">
+								<button type="submit" id="botao" name="botao" value="Pesquisar"
+									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()" style="height: 56px;">
+									<!-- Ãcone SVG dentro do botÃ£o -->
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+								</button>
 							</div>
-							
-							<div class="col-md-1 d-flex align-items-center">
-								<label for="filtro" class="form-label">Filtrar por:</label>
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select id="filtro" name="filtro" class="form-select">
+										<option value="0">Todos</option>
+										<option value="1">Janeiro</option>
+										<option value="2">Fevereiro</option>
+										<option value="3">MarÃ§o</option>
+										<option value="4">Abril</option>
+										<option value="5">Maio</option>
+										<option value="6">Junho</option>
+										<option value="7">Julho</option>
+										<option value="8">Agosto</option>
+										<option value="9">Setembro</option>
+										<option value="10">Outubro</option>
+										<option value="11">Novembro</option>
+										<option value="12">Dezembro</option>
+									</select> <label for="filtro">Filtrar por</label>
+								</div>
 							</div>
-							<div class="col-md-2 d-grid text-center">
-								<select id="filtro" name="filtro" class="form-select">
-									<option value="0">Todos</option>
-									<option value="1">Janeiro</option>
-									<option value="2">Fevereiro</option>
-									<option value="3">Março</option>
-									<option value="4">Abril</option>
-									<option value="5">Maio</option>
-									<option value="6">Junho</option>
-									<option value="7">Julho</option>
-									<option value="8">Agosto</option>
-									<option value="9">Setembro</option>
-									<option value="10">Outubro</option>
-									<option value="11">Novembro</option>
-									<option value="12">Dezembro</option>
-								</select>
-							</div>
-							
-							<div class="col-md-2 d-grid text-center">
+
+							<div class="col-md-3 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar Tudo"
-									class="btn btn-dark">
+									class="btn btn-dark" style="height: 56px;">
 							</div>
 						</div>
 					</form>
@@ -211,20 +221,20 @@
 			</h2>
 		</c:if>
 	</div>
-	<br />
-		<div class="container py-4 text-center d-flex justify-content-center"
+
+	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
 		<c:if test="${not empty despesas }">
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="8"
-							style="text-align: center; font-size: 23px;">Lista de
+						<th class="titulo-tabela" colspan="10"
+							style="text-align: center; font-size: 35px;">Lista de
 							Despesas</th>
 					</tr>
 					<tr class="table-dark">
 						<td></td>
-						<td>Código</td>
+						<td>CÃ³digo</td>
 						<td>Nome</td>
 						<td>Data Inicial</td>
 						<td>Data de Vencimento</td>
@@ -239,14 +249,17 @@
 					<c:forEach var="d" items="${despesas }">
 						<tr>
 							<td style="text-align: center;">
-								<button class="btn btn-info" name="opcao" value="${d.codigo}"
-									onclick="editarDespesa(this.value)"
+								<button class="btn btn-outline-dark" name="opcao"
+									value="${d.codigo}" onclick="editarDespesa(this.value)"
 									${d.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-									  <path
-											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+										fill="currentColor" class="bi bi-pencil-square"
+										viewBox="0 0 16 16">
+						<path
+											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
 								</button>
 							</td>
 							<td><c:out value="${d.codigo }" /></td>
