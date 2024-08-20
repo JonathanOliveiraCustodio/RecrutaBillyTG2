@@ -192,6 +192,44 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		c.close();
 		return saida;
 	}
+
+	@Override
+	public List<Pedido> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Pedido> pedidos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM v_pedidos WHERE nomePedido LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {		
+			Pedido p = new Pedido();
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			p.setCliente(cl);
+			
+			p.setDescricao(rs.getString("descricao"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			pedidos.add(p);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return pedidos;
+	}
 	
 	
 }

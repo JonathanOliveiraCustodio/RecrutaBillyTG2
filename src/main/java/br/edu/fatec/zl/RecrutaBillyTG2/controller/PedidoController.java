@@ -91,7 +91,7 @@ public class PedidoController {
 		String estado = allRequestParam.get("estado");
 		String descricao = allRequestParam.get("descricao");
 		String valorTotal = allRequestParam.get("valorTotal");
-		String tipoPagemento = allRequestParam.get("tipoPagemento");
+		String tipoPagamento = allRequestParam.get("tipoPagamento");
 		String observacao = allRequestParam.get("observacao");
 		String statusPagamento = allRequestParam.get("statusPagamento");
 		String dataPagamento = allRequestParam.get("dataPagamento");
@@ -109,7 +109,7 @@ public class PedidoController {
 
 		} else if (!cmd.contains("Listar")) {
 			if (codigo != null && !codigo.isEmpty()) {
-				p.setCodigo(Integer.parseInt(codigo));
+				p.setNome(nome);
 			}
 
 		}
@@ -126,7 +126,7 @@ public class PedidoController {
 				p.setCliente(c);
 				p.setValorTotal(Float.parseFloat(valorTotal));
 				p.setEstado(estado);
-				p.setTipoPagamento(tipoPagemento);
+				p.setTipoPagamento(tipoPagamento);
 				p.setObservacao(observacao);
 				p.setStatusPagamento(statusPagamento);
 
@@ -152,9 +152,20 @@ public class PedidoController {
 				p = null;
 			}
 			if (cmd.contains("Buscar")) {
-				p = buscarPedido(p);
-				if (p == null) {
-					saida = "Nenhum Pedido encontrado com o código " + codigo;
+				// Buscar clientes pelo nome
+				pedidos = buscarPedidoNome(nome);
+				// Verificar o número de registros retornados
+				if (pedidos.isEmpty()) {
+					// Caso não encontre nenhum cliente
+					saida = "Nenhum Pedido encontrado com o Nome '" + nome + "'";
+				} else if (pedidos.size() == 1) {
+					Pedido pedido = pedidos.get(0);
+					saida = "Pedido encontrado: " + pedido.getNome();
+					p = buscarPedido(pedido);
+				} else {
+					// Caso encontre mais de um pedido
+					saida = "Foram encontrados " + pedidos.size() + " pedidos com o Nome '" + nome + "'";
+
 				}
 			}
 			if (cmd.contains("Listar")) {
@@ -219,6 +230,11 @@ public class PedidoController {
 		List<Pedido> pedidos = new ArrayList<>();
 		pedidos = pDao.findAll();
 		return pedidos;
-
+	}
+	
+	private List<Pedido> buscarPedidoNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Pedido> pedidos = new ArrayList<>();
+		pedidos = pDao.findByName(nome);
+		return pedidos;
 	}
 }
