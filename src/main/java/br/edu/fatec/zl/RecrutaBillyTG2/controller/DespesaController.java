@@ -59,7 +59,7 @@ public class DespesaController {
 						d = null;
 					}
 				}
-				despesas = listarDespesas(Integer.parseInt(filtro));
+				despesas = listarDespesas(0);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
