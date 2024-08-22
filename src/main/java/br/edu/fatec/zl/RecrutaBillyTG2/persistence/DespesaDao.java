@@ -93,4 +93,10 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		c.close();
 		return despesas;
 	}
+
+	@Override
+	public List<Despesa> findByName(String nome) throws SQLException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

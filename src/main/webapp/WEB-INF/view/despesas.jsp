@@ -56,13 +56,25 @@
 								class="form-control" placeholder="Código"
 								value='<c:out value="${despesa.codigo}"></c:out>'>
 
-							<div class="col-md-4">
+							<div class="col-md-3">
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
 										placeholder="Nome"
 										value='<c:out value="${despesa.nome}"></c:out>'> <label
 										for="nome">Nome</label>
 								</div>
+							</div>
+														<div class="col-md-1">
+								<button type="submit" id="botao" name="botao" value="Pesquisar"
+									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()" style="height: 56px;">
+									<!-- Ícone SVG dentro do botão -->
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+								</button>
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -144,39 +156,10 @@
 								<input type="submit" id="botao" name="botao" value="Excluir"
 									class="btn btn-danger">
 							</div>
-							<div class="col-md-2 d-grid text-center"></div>
-							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao"
-									value="Limpar Campos" class="btn btn-secondary">
-							</div>
-						</div>
-						<div class="col-md-2 d-grid text-center"></div>
-						<!-- sessão de pesquisa previa, para completar a função primeiro -->
-						<div
-							class="row g-2 justify-content-center align-items-center bg-body-secondary d-flex"
-							style="min-height: 120px;">
-							<div class="col-md-4">
-								<div class="form-floating">
-									<input type="text" id="pesquisa" name="pesquisa"
-										class="form-control" placeholder="Pesquisar Por"> <label
-										for="pesquisa">Pesquisar Por</label>
-								</div>
-							</div>
-
-							<div class="col-md-1">
-								<button type="submit" id="botao" name="botao" value="Pesquisar"
-									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
-									onclick="return validarBusca()" style="height: 56px;">
-									<!-- Ícone SVG dentro do botão -->
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path
-											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
-								</button>
-							</div>
-							<div class="col-md-4">
+								<input type="submit" id="botao" name="botao" value="Listar" 
+									class="btn btn-secondary"></div>
+							<div class="col-md-2">
 								<div class="form-floating">
 									<select id="filtro" name="filtro" class="form-select">
 										<option value="0">Todos</option>
@@ -195,12 +178,14 @@
 									</select> <label for="filtro">Filtrar por</label>
 								</div>
 							</div>
-
-							<div class="col-md-3 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Listar Tudo"
-									class="btn btn-dark" style="height: 56px;">
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao"
+									value="Limpar Campos" class="btn btn-secondary">
 							</div>
 						</div>
+						<div class="col-md-2 d-grid text-center"></div>
+						
+						
 					</form>
 				</div>
 			</div>

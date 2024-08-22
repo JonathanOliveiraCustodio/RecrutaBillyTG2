@@ -59,6 +59,7 @@ public class DespesaController {
 						d = null;
 					}
 				}
+				despesas = listarDespesas(Integer.parseInt(filtro));
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
@@ -142,6 +143,7 @@ public class DespesaController {
 				d = null;
 			}
 			if (cmd.contains("Buscar")) {
+				
 				d = buscarDespesa(d);
 				if (d == null) {
 					erro = "Despesa não encontrada";
@@ -154,9 +156,15 @@ public class DespesaController {
 				}
 			}
 			if (cmd.contains("Pesquisar")) {
-				despesas = pesquisarDespesas(pesquisa, Integer.parseInt(filtro));
-				if (despesas.isEmpty()) {
-					saida = "Nenhuma entrada encontrada com o parâmetro \"" + pesquisa + "\"";
+				despesas = pesquisarDespesas(nome, 0);
+				if(despesas.size() == 1) {
+					Despesa aux = despesas.get(0);
+					saida = "Despesa encontrada: " + aux.getNome();
+					d = buscarDespesa(aux);
+				} else if (despesas.isEmpty()) {
+						saida = "Nenhuma entrada encontrada com o parâmetro \"" + nome + "\"";
+				} else {
+					saida = Integer.toString(despesas.size()) + " despesas encontradas com o nome \"" + nome + "\""; 
 				}
 			}
 		} catch (ClassNotFoundException | SQLException e) {
