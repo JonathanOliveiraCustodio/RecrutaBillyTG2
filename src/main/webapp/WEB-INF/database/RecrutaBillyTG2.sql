@@ -60,7 +60,7 @@ PRIMARY KEY (CPF)
 )
 GO
 CREATE TABLE produto(
-codigo		   INT	         	NOT NULL,
+codigo		   INT	         	NOT NULL IDENTITY (1,1),
 nome		   VARCHAR(50)      NOT NULL,
 categoria      VARCHAR(30)      NOT NULL,
 descricao      VARCHAR(100)     NOT NULL,
@@ -144,16 +144,32 @@ FOREIGN KEY (codigoEquipamento) REFERENCES equipamento (codigo),
 )
 GO
 CREATE TABLE orcamento (
-    codigo        INT             NOT NULL IDENTITY(1,1),
-    nome          VARCHAR(100)    NOT NULL,
-    descricao     VARCHAR(200)    NOT NULL,
-    cliente       INT             NOT NULL,
-    valorTotal    DECIMAL(10,2)   NULL,
-    status        VARCHAR(50)     NOT NULL,
-    observacao    VARCHAR(200)    NULL,
-    dataOrcamento DATE            NOT NULL,
-    PRIMARY KEY (codigo),
-    FOREIGN KEY (cliente) REFERENCES cliente (codigo)
+codigo					INT             NOT NULL IDENTITY(1,1),
+nome					VARCHAR(100)    NOT NULL,
+descricao				VARCHAR(200)    NOT NULL,
+cliente			        INT             NOT NULL,
+valorTotal				DECIMAL(10,2)   NULL,
+formaPagamento			VARCHAR(25)     NOT NULL,
+status					VARCHAR(50)     NOT NULL,
+observacao				VARCHAR(200)    NULL,
+dataOrcamento			DATE            NOT NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (cliente) REFERENCES cliente (codigo)
+)
+GO
+CREATE TABLE endereco(
+codigo              INT IDENTITY(1,1)   NOT NULL,
+CPF                 CHAR(11)		    NOT NULL,
+CEP				    CHAR(09)	        NOT NULL,
+logradouro          VARCHAR(150)	    NOT NULL, 
+bairro              VARCHAR(150)	    NOT NULL,
+localidade          VARCHAR(100)	    NOT NULL,
+UF                  CHAR(02)	        NOT NULL,
+complemento         VARCHAR(100)	    NULL,
+numero              VARCHAR (20)	    NOT NULL,
+tipoEndereco		VARCHAR(30)		    NOT NULL
+PRIMARY KEY (codigo,CPF)
+FOREIGN KEY (CPF) REFERENCES funcionario (CPF),
 )
 GO
 -- Insert Usuario de Teste
@@ -221,16 +237,16 @@ INSERT INTO equipamento (nome, descricao, fabricante, dataAquisicao) VALUES
 ('Sistema de Impressão Digital', 'Impressora digital de alta resolução', 'Digital Print', '2024-04-27'),
 ('Fresadora CNC', 'Fresadora de controle numérico computadorizado para usinagem de peças', 'CNC Solutions', '2024-04-27');
 GO
-INSERT INTO produto (codigo, nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque) VALUES
-(1, 'Caneca Personalizada', 'Utensílio Doméstico', 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01'),
-(2, 'Camiseta Personalizada', 'Vestuário', 'Camiseta de algodão com estampa personalizada.', 24.99,'Em Produção',10,'CX02'),
-(3, 'Calendário de Parede Personalizado', 'Papelaria', 'Calendário de parede personalizado com fotos.', 12.99,'Não Aplicável',100,'CX05'),
-(4, 'Caneta Personalizada', 'Papelaria', 'Caneta esferográfica com nome gravado.', 13.49,'Em Produção',100,'AR01'),
-(5, 'Mouse Pad Personalizado', 'Acessório de Computador', 'Mouse pad com imagem personalizada.', 58.99,'Não Aplicável',5,'CX10'),
-(7, 'Caderno Personalizado', 'Papelaria', 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03'),
-(8, 'Almofada Personalizada', 'Decoração', 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02'),
-(9, 'Chaveiro Personalizado', 'Acessório', 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01'),
-(10, 'Patach emborrados', 'Emborachados', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01');
+INSERT INTO produto (nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque) VALUES
+('Caneca Personalizada', 'Utensílio Doméstico', 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01'),
+('Camiseta Personalizada', 'Vestuário', 'Camiseta de algodão com estampa personalizada.', 24.99,'Em Produção',10,'CX02'),
+('Calendário de Parede Personalizado', 'Papelaria', 'Calendário de parede personalizado com fotos.', 12.99,'Não Aplicável',100,'CX05'),
+('Caneta Personalizada', 'Papelaria', 'Caneta esferográfica com nome gravado.', 13.49,'Em Produção',100,'AR01'),
+('Mouse Pad Personalizado', 'Acessório de Computador', 'Mouse pad com imagem personalizada.', 58.99,'Não Aplicável',5,'CX10'),
+('Caderno Personalizado', 'Papelaria', 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03'),
+('Almofada Personalizada', 'Decoração', 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02'),
+('Chaveiro Personalizado', 'Acessório', 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01'),
+('Patach emborrados', 'Emborachados', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01');
 GO
 INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
 VALUES
@@ -277,29 +293,32 @@ INSERT INTO manutencoesEquipamento (codigoEquipamento, dataManutencao, descricao
 (9, '2024-07-15', 'Inspeção de cabos e conexões'),
 (10, '2024-08-20', 'Reparo em componentes desgastados');
 GO
-INSERT INTO orcamento (nome, descricao, cliente, valorTotal, status, observacao, dataOrcamento) VALUES
-('Orçamento A', 'Descrição do orçamento A', 1, 1500.00, 'Orçamento', 'Observação A', '2024-08-01'),
-('Orçamento B', 'Descrição do orçamento B', 2, 2500.50, 'Orçamento', 'Observação B', '2024-08-02'),
-('Orçamento C', 'Descrição do orçamento C', 3, 3200.75, 'Orçamento', 'Observação C', '2024-08-03'),
-('Orçamento D', 'Descrição do orçamento D', 4, 450.30, 'Orçamento', 'Observação D', '2024-08-04'),
-('Orçamento E', 'Descrição do orçamento E', 5, 5700.80, 'Orçamento', 'Observação E', '2024-08-05'),
-('Orçamento F', 'Descrição do orçamento F', 6, 1200.40, 'Orçamento', 'Observação F', '2024-08-06'),
-('Orçamento G', 'Descrição do orçamento G', 7, 2300.90, 'Orçamento', 'Observação G', '2024-08-07'),
-('Orçamento H', 'Descrição do orçamento H', 8, 750.00, 'Orçamento', 'Observação H', '2024-08-08'),
-('Orçamento I', 'Descrição do orçamento I', 9, 1340.10, 'Orçamento', 'Observação I', '2024-08-09'),
-('Orçamento J', 'Descrição do orçamento J', 10, 250.20, 'Orçamento', 'Observação J', '2024-08-10'),
-('Orçamento K', 'Descrição do orçamento K', 11, 4900.30, 'Orçamento', 'Observação K', '2024-08-11'),
-('Orçamento L', 'Descrição do orçamento L', 12, 3100.00, 'Orçamento', 'Observação L', '2024-08-12'),
-('Orçamento M', 'Descrição do orçamento M', 13, 870.70,  'Orçamento', 'Observação M', '2024-08-13'),
-('Orçamento N', 'Descrição do orçamento N', 14, 670.80, 'Aprovado', 'Observação N', '2024-08-14'),
-('Orçamento O', 'Descrição do orçamento O', 15, 2950.20, 'Em aberto', 'Observação O', '2024-08-15'),
-('Orçamento P', 'Descrição do orçamento P', 16, 1450.60, 'Rejeitado', 'Observação P', '2024-08-16'),
-('Orçamento Q', 'Descrição do orçamento Q', 17, 2000.00, 'Em aberto', 'Observação Q', '2024-08-17'),
-('Orçamento R', 'Descrição do orçamento R', 18, 5000.50, 'Aprovado', 'Observação R', '2024-08-18'),
-('Orçamento S', 'Descrição do orçamento S', 19, 330.00, 'Em aberto', 'Observação S', '2024-08-19'),
-('Orçamento T', 'Descrição do orçamento T', 20, 7700.90, 'Rejeitado', 'Observação T', '2024-08-20')
+INSERT INTO orcamento (nome, descricao, cliente, valorTotal,formaPagamento, status, observacao, dataOrcamento) VALUES
+('Orçamento A', 'Descrição do orçamento A', 1, 1500.00, 'Mercado  Pago','Orçamento', 'Observação A', '2024-08-01'),
+('Orçamento B', 'Descrição do orçamento B', 2, 2500.50,'PIX', 'Orçamento', 'Observação B', '2024-08-02'),
+('Orçamento C', 'Descrição do orçamento C', 3, 3200.75,'Mercado  Pago', 'Orçamento', 'Observação C', '2024-08-03'),
+('Orçamento D', 'Descrição do orçamento D', 4, 450.30,'PIX', 'Orçamento', 'Observação D', '2024-08-04'),
+('Orçamento E', 'Descrição do orçamento E', 5, 5700.80,'Mercado  Pago', 'Orçamento', 'Observação E', '2024-08-05'),
+('Orçamento F', 'Descrição do orçamento F', 6, 1200.40,'PIX', 'Orçamento', 'Observação F', '2024-08-06'),
+('Orçamento G', 'Descrição do orçamento G', 7, 2300.90,'Mercado  Pago', 'Orçamento', 'Observação G', '2024-08-07'),
+('Orçamento H', 'Descrição do orçamento H', 8, 750.00,'PIX', 'Orçamento', 'Observação H', '2024-08-08'),
+('Orçamento I', 'Descrição do orçamento I', 9, 1340.10,'Boleto', 'Orçamento', 'Observação I', '2024-08-09'),
+('Orçamento J', 'Descrição do orçamento J', 10, 250.20,'PIX', 'Orçamento', 'Observação J', '2024-08-10'),
+('Orçamento K', 'Descrição do orçamento K', 11, 4900.30,'Boleto', 'Orçamento', 'Observação K', '2024-08-11'),
+('Orçamento L', 'Descrição do orçamento L', 12, 3100.00,'PIX', 'Orçamento', 'Observação L', '2024-08-12'),
+('Orçamento M', 'Descrição do orçamento M', 13, 870.70,'Boleto', 'Orçamento', 'Observação M', '2024-08-13'),
+('Orçamento N', 'Descrição do orçamento N', 14, 670.80,'PIX', 'Aprovado', 'Observação N', '2024-08-14'),
+('Orçamento O', 'Descrição do orçamento O', 15, 2950.20,'Boleto', 'Em aberto', 'Observação O', '2024-08-15'),
+('Orçamento P', 'Descrição do orçamento P', 16, 1450.60,'PIX', 'Rejeitado', 'Observação P', '2024-08-16'),
+('Orçamento Q', 'Descrição do orçamento Q', 17, 2000.00,'Boleto', 'Em aberto', 'Observação Q', '2024-08-17'),
+('Orçamento R', 'Descrição do orçamento R', 18, 5000.50,'PIX', 'Aprovado', 'Observação R', '2024-08-18'),
+('Orçamento S', 'Descrição do orçamento S', 19, 330.00,'Mercado  Pago', 'Em aberto', 'Observação S', '2024-08-19'),
+('Orçamento T', 'Descrição do orçamento T', 20, 7700.90,'PIX', 'Rejeitado', 'Observação T', '2024-08-20')
 GO
-
+INSERT INTO endereco (CPF, CEP, logradouro, bairro, localidade, UF, complemento, numero, tipoEndereco) VALUES 
+('25525320045','01001-000','Praça da Sé','Sé','São Paulo','SP','Centro','1','Residencial'),
+('76368440015','20040-003','Avenida Rio Branco','Centro','Rio de Janeiro','RJ','Edifício ABC','100','Comercial')
+GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
     @codigo INT NULL,
@@ -546,42 +565,71 @@ BEGIN
     END
 END
 GO
-
 CREATE PROCEDURE sp_iud_produto
-@acao CHAR(1),
-@codigo INT,
-@nome VARCHAR(50),
-@categoria VARCHAR(30),
-@descricao VARCHAR(100),
-@valorUnitario DECIMAL(10,2),
-@status			VARCHAR(20),
-@quantidade		INT, 
-@refEstoque     VARCHAR(50),
-@saida VARCHAR(100) OUTPUT
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @nome VARCHAR(50),
+    @categoria VARCHAR(30),
+    @descricao VARCHAR(100),
+    @valorUnitario DECIMAL(10,2),
+    @status VARCHAR(20),
+    @quantidade INT, 
+    @refEstoque VARCHAR(50),
+    @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
+    -- Verifica a ação a ser executada
     IF (@acao = 'I')
     BEGIN
-        INSERT INTO produto (codigo, nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque)
-        VALUES (@codigo, @nome, @categoria, @descricao, @valorUnitario,@status, @quantidade,@refEstoque)
-        SET @saida = 'Produto inserido com sucesso'
+        -- Verifica se o código já existe na tabela produto
+        IF EXISTS (SELECT 1 FROM produto WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código já existe. Não é possível inserir o produto.', 16, 1);
+            SET @saida = 'Código já existe. Não é possível inserir o produto.';
+            RETURN;
+        END
+        
+        -- Insere o novo produto
+        INSERT INTO produto (nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque)
+        VALUES (@nome, @categoria, @descricao, @valorUnitario, @status, @quantidade, @refEstoque);
+        SET @saida = 'Produto inserido com sucesso';
     END
     ELSE IF (@acao = 'U')
     BEGIN
+        -- Atualiza o produto existente
         UPDATE produto
-        SET nome = @nome, categoria = @categoria, descricao = @descricao, valorUnitario = @valorUnitario, status = @status, quantidade = @quantidade,refEstoque = @refEstoque
-        WHERE codigo = @codigo
-        SET @saida = 'Produto alterado com sucesso'
+        SET nome = @nome, categoria = @categoria, descricao = @descricao, valorUnitario = @valorUnitario, status = @status, quantidade = @quantidade, refEstoque = @refEstoque
+        WHERE codigo = @codigo;
+
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Produto não encontrado.', 16, 1);
+            SET @saida = 'Produto não encontrado.';
+            RETURN;
+        END
+
+        SET @saida = 'Produto alterado com sucesso';
     END
     ELSE IF (@acao = 'D')
     BEGIN
-        DELETE FROM produto WHERE codigo = @codigo
-        SET @saida = 'Produto excluído com sucesso'
+        -- Exclui o produto
+        DELETE FROM produto WHERE codigo = @codigo;
+
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Produto não encontrado.', 16, 1);
+            SET @saida = 'Produto não encontrado.';
+            RETURN;
+        END
+
+        SET @saida = 'Produto excluído com sucesso';
     END
     ELSE
     BEGIN
-        RAISERROR('Operação inválida', 16, 1)
-        RETURN
+        -- Ação inválida
+        RAISERROR('Operação inválida', 16, 1);
+        SET @saida = 'Operação inválida';
+        RETURN;
     END
 END
 GO
@@ -963,20 +1011,30 @@ CREATE PROCEDURE sp_iud_orcamento
     @descricao VARCHAR(200),
     @cliente INT,
     @valorTotal DECIMAL(10,2),
+	@formaPagamento VARCHAR(25),
+	@dataOrcamento DATE = NULL,
     @status VARCHAR(50),
     @observacao VARCHAR(200),
     @saida VARCHAR(200) OUTPUT
 AS
 BEGIN
-    IF (@acao = 'I') -- Inserir
+   IF (@acao = 'I') -- Inserir
+BEGIN
+    -- Verifica se o código do cliente já existe na tabela cliente
+    IF EXISTS (SELECT 1 FROM orcamento WHERE codigo = @codigo)
     BEGIN
-        INSERT INTO orcamento (nome, descricao, cliente, valorTotal, status, observacao, dataOrcamento)
-        VALUES (@nome, @descricao, @cliente, @valorTotal, 'Orçamento', @observacao, GETDATE())
-        
-        -- Retornar o valor do código gerado
-        SET @codigo = SCOPE_IDENTITY()
-        SET @saida = 'Orçamento inserido com sucesso. Código gerado: ' + CAST(@codigo AS VARCHAR(10))
-    END
+        -- Se o código existir, retorna um erro e sai da procedure
+        RAISERROR('Código de Orçamento já existe. Não é possível inserir o orçamento.', 16, 1)
+        RETURN
+    END   
+    -- Inserir o orçamento na tabela orcamento
+    INSERT INTO orcamento (nome, descricao, cliente, valorTotal, formaPagamento, status, observacao, dataOrcamento)
+    VALUES (@nome, @descricao, @cliente, @valorTotal, @formaPagamento, 'Orçamento', @observacao, GETDATE())
+    
+    -- Retornar o valor do código gerado
+    SET @codigo = SCOPE_IDENTITY()
+    SET @saida = 'Orçamento inserido com sucesso. Código gerado: ' + CAST(@codigo AS VARCHAR(10))
+END
     ELSE IF (@acao = 'U') -- Atualizar
     BEGIN
         UPDATE orcamento
@@ -984,6 +1042,8 @@ BEGIN
             descricao = @descricao,
             cliente = @cliente,
             valorTotal = @valorTotal,
+			formaPagamento = @formaPagamento,
+			dataOrcamento = @dataOrcamento,
             status = @status,
             observacao = @observacao
         WHERE codigo = @codigo
@@ -1017,19 +1077,93 @@ CREATE PROCEDURE sp_orcamento_pedido
     @saida VARCHAR(200) OUTPUT 
 AS
 BEGIN
+    -- Verifica se o orçamento já foi convertido em pedido
+    IF EXISTS (SELECT 1 FROM orcamento WHERE codigo = @codigo AND status = 'Pedido')
+    BEGIN
+        -- Se o status já for 'Pedido', retorna uma mensagem informando que já foi convertido
+        SET @saida = 'Este orçamento já foi convertido em pedido. Não é possível converter novamente.'
+        RETURN
+    END
+    
     -- Atualiza o status do orçamento para 'Pedido'
     UPDATE orcamento
     SET status = 'Pedido'
     WHERE codigo = @codigo;
+    
     -- Verifica se a atualização afetou alguma linha
     IF @@ROWCOUNT > 0
-        SET @saida = 'Status do orçamento alterado para "Pedido" com sucesso.'
+    BEGIN
+        -- Inserir o pedido na tabela pedido, excluindo a coluna de identidade 'codigo'
+        INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
+        SELECT nome, descricao, cliente, valorTotal, 'Recebido', GETDATE(), formaPagamento, observacao, 'Pendente', NULL
+        FROM orcamento
+        WHERE codigo = @codigo;
+        
+        SET @saida = 'Orçamento convertido em pedido com sucesso.';
+    END
     ELSE
-        SET @saida = 'Nenhum orçamento encontrado com o código especificado para atualizar.'
+    BEGIN
+        SET @saida = 'Nenhum orçamento encontrado com o código especificado para atualizar.';
+    END
 END
 GO
+CREATE PROCEDURE sp_iud_endereco
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @CPF CHAR(11),
+    @CEP CHAR(9),
+    @logradouro VARCHAR(150),
+    @bairro VARCHAR(150),
+    @localidade VARCHAR(100),
+    @UF CHAR(2),
+    @complemento VARCHAR(100) NULL,
+    @numero VARCHAR(20),
+    @tipoEndereco VARCHAR(30),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@acao = 'I')
+    BEGIN
+        IF EXISTS (SELECT 1 FROM endereco WHERE codigo = @codigo AND CPF = @CPF)
+        BEGIN
+            RAISERROR('Endereço já existe. Não é possível inserir.', 16, 1)
+            RETURN
+        END
+        INSERT INTO endereco (CPF, CEP, logradouro, bairro, localidade, UF, complemento, numero, tipoEndereco)
+        VALUES (@CPF, @CEP, @logradouro, @bairro, @localidade, @UF, @complemento, @numero, @tipoEndereco)
+        SET @saida = 'Endereço inserido com sucesso'
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM endereco WHERE codigo = @codigo AND CPF = @CPF)
+        BEGIN
+            RAISERROR('Endereço não existe. Não é possível atualizar.', 16, 1)
+            RETURN
+        END
 
+        UPDATE endereco
+        SET CEP = @CEP, logradouro = @logradouro, bairro = @bairro, localidade = @localidade, UF = @UF, complemento = @complemento, numero = @numero, tipoEndereco = @tipoEndereco
+        WHERE codigo = @codigo AND CPF = @CPF
+        SET @saida = 'Endereço alterado com sucesso'
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM endereco WHERE codigo = @codigo AND CPF = @CPF)
+        BEGIN
+            RAISERROR('Endereço não existe. Não é possível excluir.', 16, 1)
+            RETURN
+        END
 
+        DELETE FROM endereco WHERE codigo = @codigo AND CPF = @CPF
+        SET @saida = 'Endereço excluído com sucesso'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
+GO
 CREATE FUNCTION fn_insumo_funcionario()
 RETURNS TABLE
 AS
@@ -1055,14 +1189,6 @@ AS
 RETURN
 (
  SELECT codigo, nome, descricao, fabricante, dataAquisicao FROM equipamento
-);
-GO
-CREATE FUNCTION fn_produto()
-RETURNS TABLE
-AS
-RETURN
-(
- SELECT codigo, nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque FROM produto
 );
 GO
 CREATE FUNCTION fn_consultar_equipamento(@codigoEquipamento INT)
@@ -1129,7 +1255,6 @@ RETURN
     WHERE eq.codigo = @codigoEquipamento
 );
 GO
-
 CREATE VIEW v_pedidos
 AS
 SELECT 
@@ -1157,14 +1282,25 @@ c.telefone
 FROM pedido p, cliente c
 WHERE p.cliente = c.codigo
 GO
-
 CREATE VIEW v_pedido_produto
 AS
 SELECT pp.codigoPedido AS codigo_pedido, p.codigo AS codigo_produto, p.nome AS nome_produto, p.categoria AS categoria_produto, p.descricao AS descricao_produto, p.valorUnitario AS valor_unitario, pp.quantidade
 FROM produtosPedido pp, produto p
 WHERE p.codigo = pp.codigoProduto
 GO
-
+CREATE VIEW v_produto AS
+SELECT 
+    codigo, 
+    nome, 
+    categoria, 
+    descricao, 
+    valorUnitario, 
+    status, 
+    quantidade, 
+    refEstoque 
+FROM 
+    produto;
+GO
 CREATE VIEW v_funcionario AS
 SELECT 
     CPF,
@@ -1182,6 +1318,24 @@ SELECT
 	observacao
 FROM 
     funcionario;
+GO
+CREATE VIEW vw_endereco_funcionario AS
+SELECT 
+    e.codigo,
+    e.CPF,
+    f.nome AS nomeFuncionario,
+    e.CEP,
+    e.logradouro,
+    e.bairro,
+    e.localidade,
+    e.UF,
+    e.complemento,
+    e.numero,
+    e.tipoEndereco
+FROM 
+    endereco e
+JOIN 
+    funcionario f ON e.CPF = f.CPF;
 GO
 CREATE FUNCTION fn_listar_funcionario_cpf(@CPF CHAR(11))
 RETURNS TABLE
@@ -1450,6 +1604,7 @@ SELECT
     o.descricao,
     o.cliente,
     o.valorTotal,
+	o.formaPagamento,
     o.status,
     o.observacao,
     o.dataOrcamento,
@@ -2020,7 +2175,5 @@ BEGIN
     RETURN;
 END;
 GO
---SELECT * FROM vw_orcamento WHERE nome = 'Orçamento B'
--- Fim Funções para o Relatorio
---SELECT * FROM fn_buscar_fornecedor('Todos','')
+
 

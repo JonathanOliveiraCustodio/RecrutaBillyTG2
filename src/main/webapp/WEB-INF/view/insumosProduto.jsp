@@ -1,13 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/insumosProduto.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/insumosProduto.js"></script>
 <title>Gerenciar Insumos Produto</title>
 
 </head>
@@ -27,45 +29,47 @@
 					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<!-- Insumo -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="insumo" class="form-label">Insumo:</label> <select
-								class="form-select ms-2" id="insumo" name="insumo"
-								onchange="updateUnidade()">
-								<option value="0" data-unidade="">Escolha um Insumo</option>
-								<c:forEach var="i" items="${insumos}">
-									<c:if
-										test="${empty produtoInsumo or i.codigo ne produtoInsumo.insumo.codigo}">
-										<option value="${i.codigo}" data-unidade="${i.unidade}">
-											<c:out value="${i}" />
-										</option>
-									</c:if>
-									<c:if test="${i.codigo eq produtoInsumo.insumo.codigo}">
-										<option value="${i.codigo}" data-unidade="${i.unidade}"
-											selected="selected">
-											<c:out value="${i}" />
-										</option>
-									</c:if>
-								</c:forEach>
-							</select>
-						</div>
-
-						
-
-						<!-- Quantidade -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="quantidade" class="form-label">Quantidade:</label> <input
-								class="form-control ms-2" type="number" min="0" step="1"
-								id="quantidade" name="quantidade" placeholder="Quantidade"
-								value='<c:out value="${produtoInsumo.quantidade}"></c:out>'>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select class="form-select" id="insumo" name="insumo"
+									onchange="updateUnidade()">
+									<option value="0" data-unidade="">Escolha um Insumo</option>
+									<c:forEach var="i" items="${insumos}">
+										<c:if
+											test="${empty produtoInsumo or i.codigo ne produtoInsumo.insumo.codigo}">
+											<option value="${i.codigo}" data-unidade="${i.unidade}">
+												<c:out value="${i}" />
+											</option>
+										</c:if>
+										<c:if test="${i.codigo eq produtoInsumo.insumo.codigo}">
+											<option value="${i.codigo}" data-unidade="${i.unidade}"
+												selected="selected">
+												<c:out value="${i}" />
+											</option>
+										</c:if>
+									</c:forEach>
+								</select> <label for="insumo">Insumo</label>
+							</div>
 						</div>
 						
 						<!-- Unidade -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="unidade" class="form-label">Unidade:</label> <input
-								class="form-control ms-2" type="text" id="unidade"
-								name="unidade" placeholder="Unidade"
-								value='<c:out value="${produtoInsumo.insumo.unidade}"></c:out>'
-								readonly>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="unidade"
+									name="unidade" placeholder="Unidade"
+									value='<c:out value="${produtoInsumo.insumo.unidade}"></c:out>'
+									readonly> <label for="unidade">Unidade</label>
+							</div>
+						</div>
+
+						<!-- Quantidade -->
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="number" min="0" step="1"
+									id="quantidade" name="quantidade" placeholder="Quantidade"
+									value='<c:out value="${produtoInsumo.quantidade}"></c:out>'>
+								<label for="quantidade">Quantidade</label>
+							</div>
 						</div>
 					</div>
 
@@ -82,7 +86,6 @@
 						</div>
 					</div>
 				</form>
-
 			</div>
 		</div>
 

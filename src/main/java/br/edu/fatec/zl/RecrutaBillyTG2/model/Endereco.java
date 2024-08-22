@@ -1,7 +1,5 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.model;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +9,15 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orcamento {
+public class Endereco {
 	int codigo;
-	String nome;
-    String descricao;
-	float valorTotal;
-	String status;
-	String formaPagamento;
-	Date dataOrcamento;
-	String observacao;
-	Cliente cliente;
+	String CEP;
+	String logradouro;
+	String bairro;
+	String localidade;
+	String UF;
+	String complemento;
+	String numero;
+	String tipoEndereco;
+	Funcionario funcionario;
 }

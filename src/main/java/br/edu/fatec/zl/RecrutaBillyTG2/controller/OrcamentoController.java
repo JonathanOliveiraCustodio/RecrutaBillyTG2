@@ -1,5 +1,6 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +90,10 @@ public class OrcamentoController {
 		String status = allRequestParam.get("status");
 		String descricao = allRequestParam.get("descricao");
 		String valorTotal = allRequestParam.get("valorTotal");
+		String formaPagamento = allRequestParam.get("formaPagamento");
 		String observacao = allRequestParam.get("observacao");
-
+		String dataOrcamento = allRequestParam.get("dataOrcamento");
+		
 		// Parâmetros de saida
 		String saida = "";
 		String erro = "";
@@ -121,7 +124,20 @@ public class OrcamentoController {
 				o.setStatus(status);
 				o.setDescricao(descricao);
 				o.setObservacao(observacao);
+				
+				// Remover a máscara de moeda
+				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
 				o.setValorTotal(Float.parseFloat(valorTotal));
+				
+				o.setFormaPagamento(formaPagamento);
+				
+				// A Data do Pagamento pode ser vazia
+				if (dataOrcamento != null && !dataOrcamento.isEmpty()) {
+					o.setDataOrcamento(Date.valueOf(dataOrcamento));
+				} else {
+					o.setDataOrcamento(null);
+				}
+				
 			}
 
 			if (cmd.contains("Cadastrar")) {
@@ -137,13 +153,20 @@ public class OrcamentoController {
 				o = null;
 			}
 			if (cmd.contains("Buscar")) {
-				if (nome != null && !nome.isEmpty()) {
-					o = buscarOrcamentoNome(nome);
-					if (o == null) {
-						saida = "Nenhum Orçamento encontrado com o Nome " + nome;
-					}
+				// Buscar orçamentos pelo nome
+				orcamentos = buscarOrcamentoNome(nome);
+				// Verificar o número de registros retornados
+				if (orcamentos.isEmpty()) {
+					// Caso não encontre nenhum orçamento
+					saida = "Nenhum Orçamento encontrado com o Nome '" + nome + "'";
+				} else if (orcamentos.size() == 1) {
+					Orcamento orcamento = orcamentos.get(0);
+					saida = "Orçamento encontrado: " + orcamento.getNome();
+					o = buscarOrcamento(orcamento);
 				} else {
-					saida = "Nome não pode ser vazio para busca";
+					// Caso encontre mais de um orçamento
+					saida = "Foram encontrados " + orcamentos.size() + " pedidos com o Nome '" + nome + "'";
+
 				}
 			}
 
@@ -207,10 +230,10 @@ public class OrcamentoController {
 		return o;
 	}
 
-	private Orcamento buscarOrcamentoNome(String nome) throws ClassNotFoundException, SQLException {
-		Orcamento o = new Orcamento();
-		o.setNome(nome);
-		return oDao.findByName(o);
+	private List<Orcamento> buscarOrcamentoNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Orcamento> orcamentos = new ArrayList<>();
+		orcamentos = oDao.findByName(nome);
+		return orcamentos;
 	}
 
 	private List<Orcamento> listarOrcamentos() throws ClassNotFoundException, SQLException {

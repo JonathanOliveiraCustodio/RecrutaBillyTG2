@@ -73,7 +73,6 @@ public class InsumosProdutoController {
 		String produto = allRequestParam.get("produto");		
 		String insumo = allRequestParam.get("insumo");
 		String quantidade = allRequestParam.get("quantidade");
-		//String codigoProduto = allRequestParam.get("codigoProduto");
 
 		if (cmd != null && cmd.equals("Adicionar")) {
 

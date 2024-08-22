@@ -179,7 +179,8 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		return pedidos;
 	}
 
-	public String finalizar(Pedido p) throws SQLException, ClassNotFoundException {
+	@Override
+	public String sp_finalizar_pedido(Pedido p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
 		String sql = "CALL sp_finalizar_pedido(?,?,?)";
 		CallableStatement cs = c.prepareCall(sql);

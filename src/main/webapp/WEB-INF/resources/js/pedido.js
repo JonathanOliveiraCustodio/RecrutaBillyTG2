@@ -98,3 +98,32 @@ function updateEndereco() {
     document.getElementById("cidade").value = cidade;
     document.getElementById("estado").value = estado;
 }
+
+function formatarMoeda(campo) {
+    let valor = campo.value;
+
+    // Remove qualquer caractere que não seja número ou vírgula
+    valor = valor.replace(/[^\d]/g, '');
+
+    // Adiciona a vírgula para separar os centavos
+    valor = (valor / 100).toFixed(2) + '';
+    valor = valor.replace(".", ",");
+
+    // Adiciona o ponto para separar os milhares
+    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+    // Adiciona o símbolo de moeda
+    campo.value = 'R$ ' + valor;
+}
+
+function confirmarFinalizacao() {
+	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
+}
+
+// Formata o valor inicial ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    const campoValorTotal = document.getElementById('valorTotal');
+    if (campoValorTotal) {
+        formatarMoeda(campoValorTotal);
+    }
+});

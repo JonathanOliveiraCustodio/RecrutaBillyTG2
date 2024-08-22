@@ -1,13 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/produtosPedido.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/produtosPedido.js"></script>
 <title>Gerenciar Produtos Pedido</title>
 
 </head>
@@ -27,38 +29,41 @@
 					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<!-- Produto -->
-						<div class="col-md-6 d-flex align-items-center">
-							<label for="produto" class="form-label me-2">Produto:</label> <select
-								class="form-select flex-grow-1" id="produto" name="produto">
-								<option value="0">Escolha um Produto</option>
-								<c:forEach var="p" items="${produtos}">
-									<c:if
-										test="${empty pedidoProduto or p.codigo ne pedidoProduto.produto.codigo}">
-										<option value="${p.codigo}">
-											<c:out value="${p.nome}" />
-										</option>
-									</c:if>
-									<c:if test="${p.codigo eq pedidoProduto.produto.codigo}">
-										<option value="${p.codigo}" selected="selected">
-											<c:out value="${p.nome}" />
-										</option>
-									</c:if>
-								</c:forEach>
-							</select>
+						<div class="col-md-6">
+							<div class="form-floating">
+								<select class="form-select" id="produto" name="produto">
+									<option value="0">Escolha um Produto</option>
+									<c:forEach var="p" items="${produtos}">
+										<c:if
+											test="${empty pedidoProduto or p.codigo ne pedidoProduto.produto.codigo}">
+											<option value="${p.codigo}">
+												<c:out value="${p.nome}" />
+											</option>
+										</c:if>
+										<c:if test="${p.codigo eq pedidoProduto.produto.codigo}">
+											<option value="${p.codigo}" selected="selected">
+												<c:out value="${p.nome}" />
+											</option>
+										</c:if>
+									</c:forEach>
+								</select> <label for="produto">Produto</label>
+							</div>
 						</div>
 
 						<!-- Quantidade -->
-						<div class="col-md-6 d-flex align-items-center">
-							<label for="quantidade" class="form-label me-2">Quantidade:</label>
-							<input class="form-control flex-grow-1" type="number" min="1"
-								step="1" id="quantidade" name="quantidade"
-								placeholder="Quantidade"
-								value='<c:out value="${pedidoProduto.quantidade}"></c:out>'>
+						<div class="col-md-6">
+							<div class="form-floating">
+								<input class="form-control" type="number" min="1" step="1"
+									id="quantidade" name="quantidade" placeholder="Quantidade"
+									value='<c:out value="${pedidoProduto.quantidade}"></c:out>'>
+								<label for="quantidade">Quantidade</label>
+							</div>
 						</div>
 					</div>
+
 					<!-- Linha dos Botões -->
 					<div class="row g-3 mt-3">
-					<div class="col-md-4 d-grid text-center"></div>
+						<div class="col-md-4 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
 								class="btn btn-success">
@@ -95,7 +100,7 @@
 					<thead>
 						<tr>
 							<th class="titulo-tabela" colspan="6"
-								style="text-align: center; font-size: 23px;">Lista de
+								style="text-align: center; font-size: 35px;">Lista de
 								Produtos de um Pedido</th>
 						</tr>
 						<tr class="table-dark">

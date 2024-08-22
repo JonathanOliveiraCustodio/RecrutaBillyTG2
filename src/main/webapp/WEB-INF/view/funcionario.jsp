@@ -129,10 +129,10 @@
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="number" step="0.01" id="salario" name="salario"
+									<input type="text" id="salario" name="salario"
 										class="form-control" placeholder="Salário"
-										value='<c:out value="${funcionario.salario}"></c:out>'>
-									<label for="salario">Salário</label>
+										value='<c:out value="${funcionario.salario}"></c:out>'
+										oninput="formatarMoeda(this)"> <label for="salario">Salário</label>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -176,15 +176,14 @@
 									Contato WhatsApp
 								</button>
 							</div>
-							<!-- Botão Buscar -->
+							<!-- Botão Endereço -->
 							<div class="col-md-4 d-flex align-items-center">
-								<button type="submit" id="botao" name="botao" value="Buscar"
+								<button type="button" id="botaoEndereco"
 									class="btn btn-outline-secondary w-100 d-flex justify-content-center align-items-center"
-									style="height: 56px;">Endereço</button>
-
+									style="height: 56px;" onclick="validarERedirecionar()">
+									Endereço</button>
 							</div>
 						</div>
-
 						<!-- Sexta Linha: Observação -->
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-12">

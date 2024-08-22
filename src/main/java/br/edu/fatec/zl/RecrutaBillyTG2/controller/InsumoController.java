@@ -128,6 +128,11 @@ public class InsumoController {
 					i.setCodigo(Integer.parseInt(codigo));
 				}
 				i.setNome(nome);
+				
+				 // Remover a máscara de moeda
+				precoCompra = precoCompra.replace("R$", "").replace(".", "").replace(",", ".");
+				precoVenda = precoVenda.replace("R$", "").replace(".", "").replace(",", ".");
+				
 				i.setPrecoCompra(Float.parseFloat(precoCompra));
 				i.setPrecoVenda(Float.parseFloat(precoVenda));
 				i.setQuantidade(Float.parseFloat(quantidade));

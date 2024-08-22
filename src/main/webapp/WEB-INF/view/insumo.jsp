@@ -56,10 +56,11 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="precoCompra" name="precoCompra"
+									<input class="form-control moeda"  type="text" id="precoCompra" name="precoCompra"
 										class="form-control" placeholder="Preço de Custo"
-										value='<c:out value="${insumo.precoCompra}"></c:out>'>
-									<label for="precoCompra">Preço de Custo</label>
+										value='<c:out value="${insumo.precoCompra}"></c:out>'
+										oninput="formatarMoeda(this)"> <label
+										for="precoCompra">Preço de Custo</label>
 								</div>
 							</div>
 
@@ -69,10 +70,11 @@
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="precoVenda" name="precoVenda"
+									<input class="form-control moeda" type="text" id="precoVenda" name="precoVenda"
 										class="form-control" placeholder="Preço de Venda"
-										value='<c:out value="${insumo.precoVenda}"></c:out>'>
-									<label for="precoVenda">Preço de Venda</label>
+										value='<c:out value="${insumo.precoVenda}"></c:out>'
+										oninput="formatarMoeda(this)"> <label for="precoVenda">Preço
+										de Venda</label>
 								</div>
 							</div>
 							<div class="col-md-4">

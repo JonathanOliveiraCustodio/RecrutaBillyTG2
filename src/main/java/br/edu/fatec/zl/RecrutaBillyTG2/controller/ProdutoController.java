@@ -88,15 +88,22 @@ public class ProdutoController {
 			p = null;
 
 		} else if (!cmd.contains("Listar")) {
-			p.setCodigo(Integer.parseInt(codigo));
+			p.setNome(nome);
 		}
 		try {
 
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				if (codigo != null && !codigo.isEmpty()) {
+					p.setCodigo(Integer.parseInt(codigo));
+				}
 				p.setNome(nome);
 				p.setCategoria(categoria);
 				p.setDescricao(descricao);
-				p.setValorUnitario(Float.parseFloat(valorUnitario));
+				
+				 // Remover a máscara de moeda
+	            valorUnitario = valorUnitario.replace("R$", "").replace(".", "").replace(",", ".");
+	            p.setValorUnitario(Float.parseFloat(valorUnitario));
+				
 				p.setStatus(status);
 				p.setQuantidade(Integer.parseInt(quantidade));
 				p.setRefEstoque(refEstoque);
@@ -115,9 +122,20 @@ public class ProdutoController {
 				p = null;
 			}
 			if (cmd.contains("Buscar")) {
-				p = buscarProduto(p);
-				if (p == null) {
-					saida = "Nenhum Produto encontrado com o código " + codigo ;
+				// Buscar Produto pelo nome
+				produtos = buscarProdutoNome(nome);
+				// Verificar o número de registros retornados
+				if (produtos.isEmpty()) {
+					// Caso não encontre nenhum produto
+					saida = "Nenhum Produto encontrado com o Nome '" + nome + "'";
+				} else if (produtos.size() == 1) {
+					Produto produto = produtos.get(0);
+					saida = "Produto encontrado: " + produto.getNome();
+					p = buscarProduto(produto);
+				} else {
+					// Caso encontre mais de um pedido
+					saida = "Foram encontrados " + produtos.size() + " produtos com o Nome '" + nome + "'";
+
 				}
 			}
 			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
@@ -173,11 +191,16 @@ public class ProdutoController {
 	private Produto buscarProduto(Produto p) throws SQLException, ClassNotFoundException {
 		p = pDao.findBy(p);
 		return p;
-
 	}
 
 	private List<Produto> listarProdutos() throws SQLException, ClassNotFoundException {
 		List<Produto> produtos = pDao.findAll();
+		return produtos;
+	}
+	
+	private List<Produto> buscarProdutoNome(String nome) throws ClassNotFoundException, SQLException {
+		List<Produto> produtos = new ArrayList<>();
+		produtos = pDao.findByName(nome);
 		return produtos;
 	}
 

@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
-import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IPedidoProduto;
+import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IPedidoProdutoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.PedidoProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 
 @Repository
-public class PedidoProdutoDao implements IPedidoProduto{
+public class PedidoProdutoDao implements IPedidoProdutoDao{
 	private GenericDao gDao;
 	
 	public PedidoProdutoDao(GenericDao gDao) {

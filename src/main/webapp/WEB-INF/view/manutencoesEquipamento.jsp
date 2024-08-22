@@ -26,15 +26,17 @@
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
 					<input type="hidden" id="equipamento" name="equipamento"
 						value='<c:out value="${equipamento.codigo}"></c:out>'>
+
 					<!-- Linha do Formulário -->
 					<div class="row justify-content-center g-3">
 						<!-- Descrição -->
-						<div
-							class="col-md-6 d-flex justify-content-center align-items-center">
-							<label for="descricao" class="form-label me-2">Descrição:</label>
-							<input class="form-control" type="text" id="descricao"
-								name="descricao" placeholder="Descrição"
-								value='<c:out value="${manutencaoEquipamento.descricao}"></c:out>'>
+						<div class="col-md-6">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="descricao"
+									name="descricao" placeholder="Descrição"
+									value='<c:out value="${manutencaoEquipamento.descricao}"></c:out>'>
+								<label for="descricao">Descrição</label>
+							</div>
 						</div>
 					</div>
 
@@ -70,7 +72,7 @@
 					<thead>
 						<tr>
 							<th class="titulo-tabela" colspan="5"
-								style="text-align: center; font-size: 23px;">Lista de
+								style="text-align: center; font-size: 35px;">Lista de
 								Manutenções de um Equipamento</th>
 						</tr>
 						<tr class="table-dark">

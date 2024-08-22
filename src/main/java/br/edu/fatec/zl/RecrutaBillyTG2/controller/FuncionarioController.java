@@ -116,6 +116,10 @@ public class FuncionarioController {
 			f.setTelefone(telefone);
 			f.setCargo(cargo);
 			f.setHorario(horario);
+			
+			 // Remover a máscara de moeda
+			salario = salario.replace("R$", "").replace(".", "").replace(",", ".");
+			
 			f.setSalario(Float.parseFloat(salario));
 			f.setDataAdmissao(Date.valueOf(dataAdmissao));
 			if (dataDesligamento != null && !dataDesligamento.trim().isEmpty()) {
@@ -163,6 +167,17 @@ public class FuncionarioController {
 			}
 			if (cmd.contains("Listar")) {
 				funcionarios = listarFuncionarios();
+			}
+			
+			if (cmd.contains("Endereço")) {
+				f = buscarFuncionario(f);
+				if (f == null) {
+					saida = "Nenhum Funcionário encontrado com o CPF especificado.";
+					f = null;
+				} else {
+					model.addAttribute("funcionario", f);
+					return new ModelAndView("forward:/endereco", model);
+				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();

@@ -23,95 +23,132 @@
 				<h1 class="display-6 fw-bold">Manutenção de Orçamento</h1>
 				<form action="orcamento" method="post"
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
-
 					<!-- Primeira Linha: Código, Nome, Descrição -->
 					<div class="row g-3">
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="orcamento" class="form-label">Código:</label>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="number" min="0" step="1"
+									id="codigo" name="codigo" placeholder="Código"
+									value='<c:out value="${orcamento.codigo}"></c:out>' readonly>
+								<label for="codigo">Código</label>
+							</div>
 						</div>
 						<div class="col-md-3">
-							<input class="form-control" type="number" min="0" step="1"
-								id="codigo" name="codigo" placeholder="Código"
-								value='<c:out value="${orcamento.codigo}"></c:out>' readonly>
+							<div class="form-floating">
+								<input class="form-control" type="text" id="nome" name="nome"
+									placeholder="Nome do Orçamento"
+									value='<c:out value="${orcamento.nome}"></c:out>'> <label
+									for="nome">Nome</label>
+							</div>
 						</div>
-
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="nome" class="form-label">Nome:</label>
+						<div class="col-md-1">
+							<button type="submit" id="botao" name="botao" value="Buscar"
+								class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
+								onclick="return validarBusca()" style="height: 56px;">
+								<!-- Ícone SVG dentro do botão -->
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+									fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path
+										d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+							</button>
 						</div>
-						<div class="col-md-2">
-							<input class="form-control" type="text" id="nome" name="nome"
-								placeholder="Nome do Orçamento"
-								value='<c:out value="${orcamento.nome}"></c:out>'>
-						</div>
-						<div class="col-md-1 d-flex align-items-center">
-							<input type="submit" id="botaoBuscar" name="botao"
-								class="btn btn-primary" value="Buscar">
-							<!-- onclick="return validarBusca()"> -->
-						</div>
-
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="descricao" class="form-label">Descrição:</label>
-						</div>
-						<div class="col-md-3">
-							<input class="form-control" type="text" id="descricao"
-								name="descricao" placeholder="Descrição"
-								value='<c:out value="${orcamento.descricao}"></c:out>'>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="descricao"
+									name="descricao" placeholder="Descrição"
+									value='<c:out value="${orcamento.descricao}"></c:out>'>
+								<label for="descricao">Descrição</label>
+							</div>
 						</div>
 					</div>
 
 					<!-- Segunda Linha: Cliente, Estado -->
 					<div class="row g-3 mt-2">
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="codigoCliente" class="form-label">Cliente:</label>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select class="form-select" id="cliente" name="cliente"
+									onclick="mostrarValor(this.value)">
+									<option value="0">Escolha um Cliente</option>
+									<c:forEach var="c" items="${clientes}">
+										<c:if
+											test="${empty cliente or c.codigo ne orcamento.cliente.codigo}">
+											<option value="${c.codigo}">
+												<c:out value="${c.nome}" />
+											</option>
+										</c:if>
+										<c:if test="${c.codigo eq orcamento.cliente.codigo}">
+											<option value="${c.codigo}" selected>
+												<c:out value="${c.nome}" />
+											</option>
+										</c:if>
+									</c:forEach>
+								</select> <label for="cliente">Cliente</label>
+							</div>
 						</div>
-						<div class="col-md-3">
-							<select class="form-select" id="cliente" name="cliente"
-								onclick="mostrarValor(this.value)">
-								<option value="0">Escolha um Cliente</option>
-								<c:forEach var="c" items="${clientes}">
-									<c:if
-										test="${empty cliente or c.codigo ne orcamento.cliente.codigo}">
-										<option value="${c.codigo}">
-											<c:out value="${c.nome}" />
-										</option>
-									</c:if>
-									<c:if test="${c.codigo eq orcamento.cliente.codigo}">
-										<option value="${c.codigo}" selected>
-											<c:out value="${c.nome}" />
-										</option>
-									</c:if>
-								</c:forEach>
-							</select>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="status"
+									name="status" placeholder="Pedido"
+									value='<c:out value="${orcamento.status}"></c:out>' readonly>
+								<label for="status">Status</label>
+							</div>
 						</div>
-
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="status" class="form-label">Status:</label>
-						</div>
-						<div class="col-md-3">
-							<input class="form-control" type="text" id="status" name="status"
-								placeholder="Pedido"
-								value='<c:out value="${orcamento.status}"></c:out>' readonly>
-						</div>
-
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="valorTotal" class="form-label">Valor Total:</label>
-						</div>
-						<div class="col-md-3">
-							<input class="form-control" type="text" id="valorTotal"
-								name="valorTotal" placeholder="Valor Total"
-								value='<c:out value="${orcamento.valorTotal}"></c:out>'>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="valorTotal"
+									name="valorTotal" placeholder="Valor Total"
+									value='<c:out value="${orcamento.valorTotal}"></c:out>'
+									oninput="formatarMoeda(this)"> <label for="valorTotal">Valor
+									Total</label>
+							</div>
 						</div>
 					</div>
 
-					<!-- Terceira Linha: Observação -->
+					<!-- Terceira Linha: Tipo Pagamento, Observação -->
 					<div class="row g-3 mt-2">
-						<div class="col-md-1 d-flex align-items-center">
-							<label for="observacao" class="form-label">Observação:</label>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select class="form-select" id="formaPagamento"
+									name="formaPagamento">
+									<option value="">Escolha um Tipo Pagamento</option>
+									<option value="PIX"
+										<c:if test="${orcamento.formaPagamento eq 'PIX'}">selected</c:if>>PIX</option>
+									<option value="Boleto"
+										<c:if test="${orcamento.formaPagamento eq 'Boleto'}">selected</c:if>>Boleto</option>
+									<option value="Cartão de Crédito"
+										<c:if test="${orcamento.formaPagamento eq 'Cartão de Crédito'}">selected</c:if>>Cartão
+										de Crédito</option>
+									<option value="Mercado Pago"
+										<c:if test="${orcamento.formaPagamento eq 'Mercado Pago'}">selected</c:if>>Mercado
+										Pago</option>
+									<option value="Transferência Bancária"
+										<c:if test="${orcamento.formaPagamento eq 'Transferência Bancária'}">selected</c:if>>Transferência
+										Bancária</option>
+								</select> <label for="formaPagamento">Forma de Pagamento:</label>
+							</div>
 						</div>
-						<div class="col-md-11">
-							<textarea id="observacao" name="observacao" class="form-control"
-								placeholder="Observações" rows="3"><c:out
-									value="${orcamento.observacao}"></c:out></textarea>
+
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="date" id="dataOrcamento"
+									name="dataOrcamento" placeholder="Data Pedido"
+									value='<c:out value="${orcamento.dataOrcamento}"></c:out>'
+									readonly> <label for="dataOrcamento">Data
+									Pedido:</label>
+							</div>
+						</div>
+					</div>
+
+					<!-- Quarta Linha: Observação -->
+					<div class="row g-3 mt-2">
+						<div class="col-md-12">
+							<div class="form-floating">
+								<textarea id="observacao" name="observacao" class="form-control"
+									placeholder="Observações" rows="3"><c:out
+										value="${orcamento.observacao}"></c:out></textarea>
+								<label for="observacao">Observação</label>
+							</div>
 						</div>
 					</div>
 
@@ -127,7 +164,6 @@
 						</div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
-
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
 								class="btn btn-dark">
@@ -210,7 +246,8 @@
 								<td><c:out value="${o.status}" /></td>
 								<td>
 
-									<form action="orcamento" method="post">
+									<form action="orcamento" method="post"
+										onsubmit="return confirmarConversao()">
 										<input type="hidden" name="codigo" value="${o.codigo}">
 										<input type="hidden" name="cliente" value="${o.codigo}">
 										<input type="hidden" id="botao" name="botao"

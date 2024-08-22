@@ -16,7 +16,6 @@ import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.ManutencaoEquipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ManutencaoEquipamentoDao;
-import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class ManutencoesEquipamentoController {
@@ -28,20 +27,18 @@ public class ManutencoesEquipamentoController {
 	ManutencaoEquipamentoDao meDao;
 
 	@RequestMapping(name = "manutencoesEquipamento", value = "/manutencoesEquipamento", method = RequestMethod.GET)
-	public ModelAndView manutencoesEquipamentoGet(@RequestParam Map<String, String> allRequestParam,
-			HttpServletRequest request, ModelMap model) {
-	//	HttpSession session = request.getSession();
+	public ModelAndView manutencoesEquipamentoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
 		String erro = "";
 		String equipamento = allRequestParam.get("equipamento");
-			
+
 		Equipamento e = new Equipamento();
 		e.setCodigo(Integer.parseInt(equipamento));
 
 		List<ManutencaoEquipamento> equipamentoManutencoes = new ArrayList<>();
 
 		try {
-			
+
 			equipamentoManutencoes = listarManutencoes(Integer.parseInt(equipamento));
 
 		} catch (SQLException | ClassNotFoundException error) {
@@ -56,8 +53,7 @@ public class ManutencoesEquipamentoController {
 	}
 
 	@RequestMapping(name = "manutencoesEquipamento", value = "/manutencoesEquipamento", method = RequestMethod.POST)
-	public ModelAndView manutencoesEquipamentoPost(@RequestParam Map<String, String> allRequestParam,
-			HttpServletRequest request, ModelMap model) {
+	public ModelAndView manutencoesEquipamentoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
 		String cmd = allRequestParam.get("botao");
 		String codigoEquipamento = allRequestParam.get("equipamento");
@@ -65,12 +61,21 @@ public class ManutencoesEquipamentoController {
 		String descricaoManutencao = allRequestParam.get("descricao");
 
 		ManutencaoEquipamento me = new ManutencaoEquipamento();
+		Equipamento e = new Equipamento();
 		List<ManutencaoEquipamento> equipamentoManutencoes = new ArrayList<>();
 
+		if (cmd != null && cmd.equals("Adicionar")) {
+
+			return new ModelAndView("redirect:/manutencoesEquipamento?equipamento=" + codigoEquipamento, model);
+		}
 		String saida = "";
 		String erro = "";
 
 		try {
+
+			e.setCodigo(Integer.parseInt(codigoEquipamento));
+			e = buscarEquipamento(e);
+			me.setEquipamento(e);
 
 			if (cmd.contains("Cadastrar")) {
 				me.setCodigoEquipamento(Integer.parseInt(codigoEquipamento));
@@ -91,6 +96,7 @@ public class ManutencoesEquipamentoController {
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
 			model.addAttribute("manutencoesEquipamento", me);
+			model.addAttribute("equipamento", e);
 			model.addAttribute("equipamentoManutencoes", equipamentoManutencoes);
 
 		}
@@ -111,6 +117,10 @@ public class ManutencoesEquipamentoController {
 	private String excluirManutencao(ManutencaoEquipamento me) throws SQLException, ClassNotFoundException {
 		String saida = meDao.sp_manutencaoEquipamento("D", me);
 		return saida;
+	}
 
+	private Equipamento buscarEquipamento(Equipamento e) throws SQLException, ClassNotFoundException {
+		e = eDao.findBy(e);
+		return e;
 	}
 }

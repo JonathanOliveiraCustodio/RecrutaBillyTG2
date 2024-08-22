@@ -91,7 +91,7 @@ public class PedidoController {
 		String estado = allRequestParam.get("estado");
 		String descricao = allRequestParam.get("descricao");
 		String valorTotal = allRequestParam.get("valorTotal");
-		String tipoPagamento = allRequestParam.get("tipoPagamento");
+		String formaPagamento = allRequestParam.get("formaPagamento");
 		String observacao = allRequestParam.get("observacao");
 		String statusPagamento = allRequestParam.get("statusPagamento");
 		String dataPagamento = allRequestParam.get("dataPagamento");
@@ -124,9 +124,12 @@ public class PedidoController {
 				c.setCodigo(Integer.parseInt(cliente));
 				c = cDao.findBy(c);
 				p.setCliente(c);
+
+				// Remover a máscara de moeda
+				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
 				p.setValorTotal(Float.parseFloat(valorTotal));
 				p.setEstado(estado);
-				p.setTipoPagamento(tipoPagamento);
+				p.setTipoPagamento(formaPagamento);
 				p.setObservacao(observacao);
 				p.setStatusPagamento(statusPagamento);
 
@@ -172,6 +175,7 @@ public class PedidoController {
 				pedidos = listarPedidos();
 			}
 			if (cmd.contains("Finalizar Pedido")) {
+				p.setCodigo(Integer.parseInt(codigo));
 				c.setCodigo(Integer.parseInt(cliente));
 				c = cDao.findBy(c);
 				p.setCliente(c);
@@ -202,7 +206,7 @@ public class PedidoController {
 	}
 
 	private String finalizarPedido(Pedido p) throws ClassNotFoundException, SQLException {
-		String saida = pDao.finalizar(p);
+		String saida = pDao.sp_finalizar_pedido(p);
 		return saida;
 	}
 
@@ -231,7 +235,7 @@ public class PedidoController {
 		pedidos = pDao.findAll();
 		return pedidos;
 	}
-	
+
 	private List<Pedido> buscarPedidoNome(String nome) throws ClassNotFoundException, SQLException {
 		List<Pedido> pedidos = new ArrayList<>();
 		pedidos = pDao.findByName(nome);

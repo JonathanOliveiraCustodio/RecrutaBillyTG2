@@ -176,8 +176,6 @@
 							</div>
 						</div>
 					</form>
-
-
 				</div>
 			</div>
 		</c:if>

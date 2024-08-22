@@ -25,7 +25,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 	@Override
 	public String sp_iud_orcamento(String acao, Orcamento o) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "CALL sp_iud_orcamento(?,?,?,?,?,?,?,?,?)";
+		String sql = "CALL sp_iud_orcamento(?,?,?,?,?,?,?,?,?,?,?)";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, o.getCodigo());
@@ -33,11 +33,13 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 		cs.setString(4, o.getDescricao());
 		cs.setInt(5, o.getCliente().getCodigo());
 		cs.setFloat(6, o.getValorTotal());
-		cs.setString(7, o.getStatus());
-		cs.setString(8, o.getObservacao());
-		cs.registerOutParameter(9, Types.VARCHAR);
+		cs.setString(7, o.getFormaPagamento());
+		cs.setDate(8, o.getDataOrcamento());
+		cs.setString(9, o.getStatus());
+		cs.setString(10, o.getObservacao());
+		cs.registerOutParameter(11, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(9);
+		String saida = cs.getString(11);
 		cs.close();
 		c.close();
 		return saida;
@@ -59,6 +61,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			cl.setNome(rs.getString("nomeCliente"));
 			o.setCliente(cl);
 			o.setValorTotal(rs.getFloat("valorTotal"));
+			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setStatus(rs.getString("status"));
 			o.setObservacao(rs.getString("observacao"));
 			o.setDataOrcamento(rs.getDate("dataOrcamento"));
@@ -75,37 +78,6 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 
 	}
 
-	@Override
-	public Orcamento findByName(Orcamento o) throws SQLException, ClassNotFoundException {
-		Connection c = gDao.getConnection();
-		String sql = "SELECT * FROM vw_orcamento WHERE nome = ?";
-		PreparedStatement ps = c.prepareStatement(sql);
-		ps.setString(1, o.getNome());
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
-			o.setCodigo(rs.getInt("codigo"));
-			o.setNome(rs.getString("nome"));
-			o.setDescricao(rs.getString("descricao"));
-			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("codigoCliente"));
-			cl.setNome(rs.getString("nomeCliente"));
-			o.setCliente(cl);
-			o.setValorTotal(rs.getFloat("valorTotal"));
-			o.setStatus(rs.getString("status"));
-			o.setObservacao(rs.getString("observacao"));
-			o.setDataOrcamento(rs.getDate("dataOrcamento"));
-			rs.close();
-			ps.close();
-			c.close();
-			return o;
-		} else {
-			rs.close();
-			ps.close();
-			c.close();
-			return null;
-		}
-
-	}
 	@Override
 	public List<Orcamento> findAll() throws SQLException, ClassNotFoundException {
 		List<Orcamento> orcamentos = new ArrayList<>();
@@ -123,6 +95,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			cl.setNome(rs.getString("nomeCliente"));
 			o.setCliente(cl);
 			o.setValorTotal(rs.getFloat("valorTotal"));
+			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setStatus(rs.getString("status"));
 			o.setObservacao(rs.getString("observacao"));
 			o.setDataOrcamento(rs.getDate("dataOrcamento"));
@@ -141,7 +114,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
 
-		sql.append("SELECT * FROM fn_buscar_pedido(?,?)");
+		sql.append("SELECT * FROM fn_buscar_orcamento(?,?)");
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setString(1, opcao);
@@ -158,6 +131,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			cl.setNome(rs.getString("nomeCliente"));
 			o.setCliente(cl);
 
+			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setDescricao(rs.getString("descricao"));
 			o.setStatus(rs.getString("estado"));
 			o.setDataOrcamento(rs.getDate("dataPedido"));
@@ -186,4 +160,43 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 		return saida;
 	}
 
+	@Override
+	public List<Orcamento> findByName(String nome) throws SQLException, ClassNotFoundException {
+		List<Orcamento> orcamentos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM vw_orcamento WHERE nome LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + nome + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Orcamento o = new Orcamento();
+			o.setCodigo(rs.getInt("codigo"));
+			o.setNome(rs.getString("nome"));
+
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			o.setCliente(cl);
+
+			o.setFormaPagamento(rs.getString("formaPagamento"));
+			o.setDescricao(rs.getString("descricao"));
+			o.setStatus(rs.getString("status"));
+			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			o.setObservacao(rs.getString("observacao"));
+			o.setValorTotal(rs.getFloat("valorTotal"));
+			orcamentos.add(o);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return orcamentos;
+	}
 }
