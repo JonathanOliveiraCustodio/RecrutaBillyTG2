@@ -158,9 +158,9 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="telefone" name="telefone"
-										class="form-control" placeholder="Telefone"
-										value='<c:out value="${funcionario.telefone}"></c:out>'>
-									<label for="telefone">Telefone</label>
+										class="form-control" placeholder="Telefone" maxlength="11"
+										value='<c:out value="${funcionario.telefone }"></c:out>'
+										oninput="validarTelefone(this)"> <label for="telefone">Telefone</label>
 								</div>
 							</div>
 							<div class="col-md-4 d-flex align-items-center">

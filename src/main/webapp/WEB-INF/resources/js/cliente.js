@@ -235,11 +235,20 @@ function ajustarMaxlength(tipo) {
         if (valor.length > 11) {
             valor = valor.slice(0, 11);
         }
-
         // Atualiza o valor do input
         input.value = valor;
     }
+function validarTelefone(input) {
+    // Remove todos os caracteres que não são dígitos
+    let valor = input.value.replace(/\D/g, '');
 
+    // Limita o valor a 11 dígitos
+    if (valor.length > 11) {
+        valor = valor.slice(0, 11);
+    }
+    // Atualiza o valor do input
+    input.value = valor;
+}
 
 document.getElementById("tipo").addEventListener("change", function() {
 	ajustarMaxlength(this.value);

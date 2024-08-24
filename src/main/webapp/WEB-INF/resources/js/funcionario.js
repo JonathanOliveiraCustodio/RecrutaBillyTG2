@@ -141,6 +141,16 @@ function redirectToWhatsApp() {
 	}
 }
 
+function validarTelefone(input) {
+    // Remove todos os caracteres que não são dígitos
+    let valor = input.value.replace(/\D/g, '');
+    // Limita o valor a 11 dígitos
+    if (valor.length > 11) {
+        valor = valor.slice(0, 11);
+    }
+    // Atualiza o valor do input
+    input.value = valor;
+}
 
 function validarHorario(horario) {
 	// Regex para validar o formato "HH:mm às HH:mm"

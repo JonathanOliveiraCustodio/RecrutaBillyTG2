@@ -49,3 +49,28 @@ function validarFormulario(event) {
 	}
 	return true;
 }
+
+function formatarMoeda(campo) {
+    let valor = campo.value;
+
+    // Remove qualquer caractere que não seja número ou vírgula
+    valor = valor.replace(/[^\d]/g, '');
+
+    // Adiciona a vírgula para separar os centavos
+    valor = (valor / 100).toFixed(2) + '';
+    valor = valor.replace(".", ",");
+
+    // Adiciona o ponto para separar os milhares
+    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+
+    // Adiciona o símbolo de moeda
+    campo.value = 'R$ ' + valor;
+}
+
+// Formata o valor inicial ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    const campoSalario = document.getElementById('valor');
+    if (campoSalario) {
+        formatarMoeda(campoSalario);
+    }
+});

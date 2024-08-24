@@ -111,7 +111,8 @@
 								<div class="form-floating">
 									<input type="text" id="valor" name="valor" class="form-control"
 										placeholder="Valor"
-										value='<c:out value="${despesa.valor}"></c:out>'> <label
+										value='<c:out value="${despesa.valor}"></c:out>'
+										oninput="formatarMoeda(this)"> <label
 										for="valor">Valor</label>
 								</div>
 							</div>
@@ -249,9 +250,12 @@
 							</td>
 							<td><c:out value="${d.codigo }" /></td>
 							<td><c:out value="${d.nome }" /></td>
-							<td><c:out value="${d.data }" /></td>
-							<td><c:out value="${d.dataVencimento }" /></td>
-							<td><c:out value="${d.valor }" /></td>
+							<td><fmt:formatDate value="${d.data}"
+										pattern="dd/MM/yyyy" /></td>									
+										<td><fmt:formatDate value="${d.dataVencimento}"
+										pattern="dd/MM/yyyy" /></td>
+							<td><fmt:formatNumber value="${d.valor }"
+										type="currency" currencySymbol="R$" /></td>
 							<td><c:out value="${d.tipo }" /></td>
 							<td><c:out value="${d.estado }" /></td>
 							<td><c:out value="${d.pagamento }" /></td>

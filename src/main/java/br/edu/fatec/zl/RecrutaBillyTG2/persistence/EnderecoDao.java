@@ -26,7 +26,7 @@ public class EnderecoDao implements ICrud<Endereco>, IEnderecoDao {
 
 	@Override
 	public String sp_iud_endereco(String acao, Endereco e) throws SQLException, ClassNotFoundException {
-		String sql = "CALL sp_iud_endereco(?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "CALL sp_iud_endereco(?,?,?,?,?,?,?,?,?,?,?,?)";
 		Connection c = gDao.getConnection();
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
@@ -86,14 +86,25 @@ public class EnderecoDao implements ICrud<Endereco>, IEnderecoDao {
 	@Override
 	public Endereco findBy(Endereco e) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "SELECT * FROM fn_consultar_equipamento(?)";
+		String sql = "SELECT * FROM fn_consultar_endereco(?,?)";
 		PreparedStatement ps = c.prepareStatement(sql);
 		ps.setInt(1, e.getCodigo());
+		ps.setString(2, e.getFuncionario().getCPF());
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
 			e.setCodigo(rs.getInt("codigo"));
-			
-
+			Funcionario f = new Funcionario();
+			f.setCPF(rs.getString("CPF"));
+			f.setNome(rs.getString("nomeFuncionario"));
+			e.setFuncionario(f);
+			e.setCEP(rs.getString("CEP"));
+			e.setLogradouro(rs.getString("logradouro"));
+			e.setBairro(rs.getString("bairro"));
+			e.setLocalidade(rs.getString("localidade"));
+			e.setUF(rs.getString("UF"));
+			e.setComplemento(rs.getString("complemento"));
+			e.setNumero(rs.getString("numero"));
+			e.setTipoEndereco(rs.getString("tipoEndereco"));
 			rs.close();
 			ps.close();
 			c.close();

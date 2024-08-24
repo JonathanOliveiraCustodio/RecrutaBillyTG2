@@ -124,6 +124,8 @@ public class DespesaController {
 			if (dataVencimento != null && !dataVencimento.isEmpty()) {
 				d.setDataVencimento(Date.valueOf(dataVencimento));
 			}
+			 // Remover a máscara de moeda
+			valor = valor.replace("R$", "").replace(".", "").replace(",", ".");
 			d.setValor(Float.parseFloat(valor));
 			d.setTipo(tipo);
 			d.setPagamento(pagamento);

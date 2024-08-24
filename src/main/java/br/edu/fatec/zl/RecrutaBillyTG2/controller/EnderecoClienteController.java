@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Endereco;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Funcionario;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EnderecoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FuncionarioDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
-
 
 @Controller
 public class EnderecoClienteController {
@@ -27,35 +28,65 @@ public class EnderecoClienteController {
 	@Autowired
 	EnderecoDao eDao;
 
+	@Autowired
+	FuncionarioDao fDao;
+
 	@RequestMapping(name = "endereco", value = "/endereco", method = RequestMethod.GET)
 	public ModelAndView enderecoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
 		String erro = "";
+		String saida = "";
 		String funcionario = allRequestParam.get("funcionario");
+		String codigo = allRequestParam.get("codigo");
+		String cmd = allRequestParam.get("cmd");
 		List<Endereco> enderecos = new ArrayList<>();
 
 		Funcionario f = new Funcionario();
+		Endereco e = new Endereco();
 		f.setCPF(funcionario);
 		try {
+
+			if (cmd != null) {
+				e.setCodigo(Integer.parseInt(codigo));
+				f.setCPF(funcionario);
+				f = buscarFuncionario(f);
+				e.setFuncionario(f);
+				if (cmd.contains("alterar")) {
+					e = buscarEndereco(e);
+				} else {
+					if (cmd.contains("excluir")) {
+						e = buscarEndereco(e);
+						saida = excluirEndereco(e);
+						e = null;
+					} else {
+						if (cmd.contains("Listar")) {
+							// pedidos = listarPedidos();
+						}
+					}
+				}
+			}
+
 			enderecos = listarEnderecos(funcionario);
 
-		} catch (ClassNotFoundException | SQLException e) {
-			erro = e.getMessage();
+		} catch (ClassNotFoundException | SQLException error) {
+			erro = error.getMessage();
 
 		} finally {
 			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
 			model.addAttribute("funcionario", f);
+			model.addAttribute("endereco", e);
 			model.addAttribute("enderecos", enderecos);
 
 		}
 		return new ModelAndView("endereco");
 	}
 
-	@RequestMapping(name = "endereco", value = "/endereco", method = RequestMethod.POST)
+	@RequestMapping(value = "/endereco", method = RequestMethod.POST)
 	public ModelAndView enderecoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
 		String cmd = allRequestParam.get("botao");
-		String funcionario = allRequestParam.get("funcionario");
+		String CPF = allRequestParam.get("funcionario");
 		String codigo = allRequestParam.get("codigo");
 		String CEP = allRequestParam.get("CEP");
 		String logradouro = allRequestParam.get("logradouro");
@@ -66,110 +97,93 @@ public class EnderecoClienteController {
 		String numero = allRequestParam.get("numero");
 		String tipoEndereco = allRequestParam.get("tipoEndereco");
 
-
-		if (cmd != null && cmd.equals("Endereço")) {
-
-			return new ModelAndView("redirect:/endereco?funcionario=" + funcionario, model);
-		}
-
 		String saida = "";
 		String erro = "";
 
-//		InsumoProduto pi = new InsumoProduto();
-//		Produto p = new Produto();
-//		Insumo i = new Insumo();
-//		
-//		List<InsumoProduto> insumosProduto = new ArrayList<>();
-//		List<Insumo> insumos = new ArrayList<>();
-//
-//		try {
-//			
-//			insumos = listarInsumos();
-//			insumosProduto = listarProdutosInsumo(Integer.parseInt(produto));
-//			
-//			if (!cmd.contains("Listar")) {			
-//				p.setCodigo(Integer.parseInt(produto));
-//				p = buscarProduto(p);				
-//				pi.setProduto(p);
-//				
-//				i.setCodigo(Integer.parseInt(insumo));
-//				i = buscarInsumo(i);				
-//				pi.setInsumo(i);
-//				
-//			}
-//
-//			if (cmd.contains("Cadastrar") || cmd.contains("Excluir")) {
-//				pi.setCodigoProduto(Integer.parseInt(produto));
-//				System.out.println("Produto " + produto);
-//				System.out.println("Insumo " + insumo);
-//				pi.setCodigoInsumo(Integer.parseInt(insumo));
-//				pi.setQuantidade(Integer.parseInt(quantidade));
-//			}
-//
-//			if (cmd.contains("Cadastrar")) {
-//				saida = cadastrarProdutoInsumo(pi, i);
-//				i = null;		
-//			}
-//			if (cmd.contains("Excluir")) {
-//		
-//				saida = excluirProdutoInsumo(pi, i);
-//			}
-//			if (cmd.contains("Buscar")) {
-//				pi = buscarProdutoInsumo(pi);
-//				if (pi == null) {
-//					saida = "Nenhum conteudo encontrado com o código especificado.";
-//				}
-//			}
-//
-//			insumos = listarInsumos();
-//			insumosProduto = listarProdutosInsumo(Integer.parseInt(produto));
-//
-//		} catch (SQLException | ClassNotFoundException e) {
-//			erro = e.getMessage();
-//		} finally {
-//			model.addAttribute("saida", saida);
-//			model.addAttribute("erro", erro);
-//			model.addAttribute("insumoProduto", pi);
-//			model.addAttribute("insumosProduto", insumosProduto);
-//			model.addAttribute("produto", p);
-//			model.addAttribute("insumo", i);
-//			model.addAttribute("insumos", insumos);
-//		}
+		List<Endereco> enderecos = new ArrayList<>();
+
+		Funcionario f = new Funcionario();
+		Endereco e = new Endereco();
+
+		try {
+			enderecos = listarEnderecos(CPF);
+
+			if (!cmd.contains("Listar")) {
+				f.setCPF(CPF);
+				f = buscarFuncionario(f);
+				e.setFuncionario(f);
+			}
+
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				e.setCodigo(Integer.parseInt(codigo));
+				e.setFuncionario(f);
+				e.setCEP(CEP);
+				e.setLogradouro(logradouro);
+				e.setBairro(bairro);
+				e.setLocalidade(localidade);
+				e.setUF(UF);
+				e.setComplemento(complemento);
+				e.setNumero(numero);
+				e.setTipoEndereco(tipoEndereco);
+			}
+
+			if (cmd.contains("Cadastrar")) {
+				saida = cadastrarEndereco(e);
+				e = null;
+			}
+			if (cmd.contains("Excluir")) {
+				saida = excluirEndereco(e);
+			}
+			if (cmd.contains("Alterar")) {
+				saida = alterarEndereco(e);
+			}
+			if (cmd.contains("Buscar")) {
+				e = buscarEndereco(e);
+				if (e == null) {
+					saida = "Nenhum conteudo encontrado com o código especificado.";
+				}
+			}
+			enderecos = listarEnderecos(CPF);
+
+		} catch (SQLException | ClassNotFoundException error) {
+			erro = error.getMessage();
+		} finally {
+			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
+			model.addAttribute("funcionario", f);
+			model.addAttribute("endereco", e);
+			model.addAttribute("enderecos", enderecos);
+		}
 
 		return new ModelAndView("endereco");
+	}
+
+	private String cadastrarEndereco(Endereco e) throws SQLException, ClassNotFoundException {
+		String saida = eDao.sp_iud_endereco("I", e);
+		return saida;
 
 	}
 
-//	private String cadastrarProdutoInsumo(InsumoProduto pi, Insumo i) throws SQLException, ClassNotFoundException {
-//		String saida = piDao.iudProdutoInsumo("I", pi, i);
-//		return saida;
-//
-//	}
-//
-//
-//	private String excluirProdutoInsumo(InsumoProduto pi, Insumo i) throws SQLException, ClassNotFoundException {	
-//		String saida = piDao.iudProdutoInsumo("D", pi, i);
-//		System.out.println(pi.getProduto().getCodigo());
-//		System.out.println(i.getCodigo());
-//		return saida;
-//
-//	}
-//
-//	private InsumoProduto buscarProdutoInsumo(InsumoProduto pi) throws SQLException, ClassNotFoundException {
-//		pi = piDao.consultar(pi);
-//		return pi;
-//	}
+	private String excluirEndereco(Endereco e) throws SQLException, ClassNotFoundException {
+		String saida = eDao.sp_iud_endereco("D", e);
+		return saida;
+	}
+
+	private String alterarEndereco(Endereco e) throws SQLException, ClassNotFoundException {
+		String saida = eDao.sp_iud_endereco("U", e);
+		return saida;
+	}
 
 	private List<Endereco> listarEnderecos(String CPF) throws SQLException, ClassNotFoundException {
 		List<Endereco> enderecos = eDao.findAll(CPF);
 		return enderecos;
 	}
 
-//	private Insumo buscarInsumo(Insumo i) throws SQLException, ClassNotFoundException {
-//		i = iDao.findBy(i);
-//		return i;
-//	}
-//	
+	private Funcionario buscarFuncionario(Funcionario f) throws SQLException, ClassNotFoundException {
+		f = fDao.findBy(f);
+		return f;
+	}
+
 	private Endereco buscarEndereco(Endereco e) throws SQLException, ClassNotFoundException {
 		e = eDao.findBy(e);
 		return e;

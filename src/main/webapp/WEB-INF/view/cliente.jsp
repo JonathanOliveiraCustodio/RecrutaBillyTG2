@@ -29,12 +29,11 @@
 								<div class="form-floating">
 									<input type="number" min="0" step="1" id="codigo" name="codigo"
 										class="form-control" placeholder="Código"
-										value='<c:out value="${cliente.codigo }"></c:out>'readonly> 
-										<label
-										for="codigo">Código</label>
+										value='<c:out value="${cliente.codigo }"></c:out>' readonly>
+									<label for="codigo">Código</label>
 								</div>
 							</div>
-			
+
 							<div class="col-md-3">
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
@@ -43,7 +42,7 @@
 										for="nome">Nome</label>
 								</div>
 							</div>
-											<div class="col-md-1">
+							<div class="col-md-1">
 								<button type="submit" id="botao" name="botao" value="Buscar"
 									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
 									onclick="return validarBusca()" style="height: 56px;">
@@ -57,10 +56,10 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="number" id="telefone" name="telefone"
+									<input type="text" id="telefone" name="telefone"
 										class="form-control" placeholder="Telefone" maxlength="11"
-										value='<c:out value="${cliente.telefone }"></c:out>'>
-									<label for="telefone">Telefone</label>
+										value='<c:out value="${cliente.telefone }"></c:out>'
+										oninput="validarTelefone(this)"> <label for="telefone">Telefone</label>
 								</div>
 							</div>
 						</div>
@@ -114,15 +113,15 @@
 										readonly> <label for="logradouro">Logradouro</label>
 								</div>
 							</div>
-							
-									<div class="col-md-4">
+
+							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="bairro" name="bairro"
 										class="form-control" placeholder="Bairro" maxlength="100"
 										value='<c:out value="${cliente.bairro }"></c:out>' readonly>
 									<label for="bairro">Bairro</label>
 								</div>
-							</div>						
+							</div>
 						</div>
 						<!-- Quarta Linha: UF, Localidade, Numero -->
 						<div class="row g-3 mt-2">

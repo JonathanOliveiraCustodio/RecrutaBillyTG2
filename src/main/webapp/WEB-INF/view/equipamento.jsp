@@ -132,65 +132,61 @@
 		</c:if>
 	</div>
 
-	<div class="container py-4 text-center d-flex justify-content-center"
-		align="center">
-		<c:if test="${not empty equipamentos }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="8"
-							style="text-align: center; font-size: 35px;">Lista de
-							Equipamentos</th>
-					</tr>
-					<tr class="table-dark">
-						<th></th>
-						<th>Código</th>
-						<th>Nome</th>
-						<th>Descrição</th>
-						<th>Fabricante</th>
-						<th>Data Aquisição</th>
-						<th>Manutenções</th>
-						<th>Excluir</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="e" items="${equipamentos}">
-						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${e.codigo}" onclick="editarEquipamento(this.value)"
-									${e.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-						<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
-								</button>
-							</td>
-							<td><c:out value="${e.codigo}" /></td>
-							<td><c:out value="${e.nome}" /></td>
-							<td><c:out value="${e.descricao}" /></td>
-							<td><c:out value="${e.fabricante}" /></td>
-							<td><fmt:formatDate value="${e.dataAquisicao}"
-									pattern="dd/MM/yyyy" /></td>
-							<td>
-								<button
-									onclick="window.location.href='manutencoesEquipamento?equipamento=${e.codigo}'"
-									class="btn btn-info">Adicionar</button>
-							</td>
-							<td style="text-align: center;">
-								<button class="btn btn-danger"
-									onclick="excluirEquipamento('${e.codigo}')">Excluir</button>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</c:if>
-	</div>
+	<div class="container py-4 text-center d-flex justify-content-center" align="center">
+    <c:if test="${not empty equipamentos}">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="titulo-tabela" colspan="8" style="text-align: center; font-size: 35px;">
+                            Lista de Equipamentos
+                        </th>
+                    </tr>
+                    <tr class="table-dark">
+                        <th></th>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Fabricante</th>
+                        <th>Data Aquisição</th>
+                        <th>Manutenções</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <c:forEach var="e" items="${equipamentos}">
+                        <tr>
+                            <td style="text-align: center;">
+                                <button class="btn btn-outline-dark" name="opcao" value="${e.codigo}"
+                                    onclick="editarEquipamento(this.value)" ${e.codigo eq codigoEdicao ? 'checked' : ''}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </button>
+                            </td>
+                            <td><c:out value="${e.codigo}" /></td>
+                            <td><c:out value="${e.nome}" /></td>
+                            <td><c:out value="${e.descricao}" /></td>
+                            <td><c:out value="${e.fabricante}" /></td>
+                            <td><fmt:formatDate value="${e.dataAquisicao}" pattern="dd/MM/yyyy" /></td>
+                            <td>
+                                <button onclick="window.location.href='manutencoesEquipamento?equipamento=${e.codigo}'"
+                                    class="btn btn-info">Adicionar</button>
+                            </td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-danger" onclick="excluirEquipamento('${e.codigo}')">Excluir</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </c:if>
+</div>
 	<div>
 		<jsp:include page="footer.jsp" />
 	</div>

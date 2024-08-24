@@ -1,5 +1,15 @@
 // endereco.js
 
+function consultarEndereco(CPF) {
+	window.location.href = 'consulta?CPF=' + CPF;
+}
+
+function editarEndereco(codigo, CPF) {
+    // Corrige o nome do parâmetro para "funcionario"
+    window.location.href = 'endereco?cmd=alterar&codigo=' + codigo + '&funcionario=' + CPF;
+}
+
+
 function buscarEndereco() {
 	var cep = document.getElementById("CEP").value.replace(/\D/g, '');
 
