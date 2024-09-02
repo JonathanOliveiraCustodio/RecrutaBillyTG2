@@ -132,10 +132,10 @@
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input class="form-control" type="date" id="dataOrcamento"
-									name="dataOrcamento" placeholder="Data Pedido"
+									name="dataOrcamento" placeholder="Data Orçamento"
 									value='<c:out value="${orcamento.dataOrcamento}"></c:out>'
 									readonly> <label for="dataOrcamento">Data
-									Pedido:</label>
+									Orçamento:</label>
 							</div>
 						</div>
 					</div>

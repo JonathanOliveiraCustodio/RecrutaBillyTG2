@@ -11,9 +11,7 @@
 				}
 			}
 		} else if (botao === "Excluir") {
-			var produto = document.getElementById("descricao").value.trim();
-
-
+			var descricao = document.getElementById("descricao").value.trim();
 			if (descricao === "" || isNaN(descricao)) {
 				alert("Por favor, preencha o campo de descricao.");
 				event.preventDefault();

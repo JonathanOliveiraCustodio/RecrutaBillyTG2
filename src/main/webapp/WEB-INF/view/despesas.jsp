@@ -185,8 +185,7 @@
 							</div>
 						</div>
 						<div class="col-md-2 d-grid text-center"></div>
-						
-						
+							
 					</form>
 				</div>
 			</div>
@@ -268,6 +267,9 @@
 				</tbody>
 			</table>
 		</c:if>
+	</div>
+	<div>
+		<jsp:include page="footer.jsp" />
 	</div>
 </body>
 </html>

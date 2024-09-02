@@ -1,75 +1,29 @@
-function validarBusca() {
-	var nome = document.getElementById("nome").value.trim();
-	if (nome === "") {
-		alert("Por favor, insira um Nome.");
-		return false;
-	}
-	return true;
-}
-
-function editarEquipamento(codigo) {
-	window.location.href = 'equipamento?cmd=alterar&codigo=' + codigo;
-}
-
-function excluirEquipamento(codigo) {
-	if (confirm("Tem certeza que deseja excluir este insumo?")) {
-		window.location.href = 'equipamento?cmd=excluir&codigo=' + codigo;
-	}
-}
-
 function validarFormulario(event) {
     var botao = event.submitter.value;
-    var campos = [
-        { id: "nome", nome: "Nome" },
-        { id: "fabricante", nome: "Fabricante" },
-        { id: "descricao", nome: "Descrição" },
-        { id: "dataAquisicao", nome: "Data de Aquisição" }
-    ];
-
-    if (botao === "Cadastrar" || botao === "Alterar") {
+    
+    if (botao === "Cadastrar") {
+        var campos = ["descricao"];
         for (var i = 0; i < campos.length; i++) {
-            var campo = document.getElementById(campos[i].id);
-            if (campo && campo.value.trim() === "") {
-                alert("Por favor, preencha o campo " + campos[i].nome + ".");
-                campo.focus(); // Coloca o foco no campo vazio
+            var campo = document.getElementById(campos[i]).value.trim();
+            if (campo === "") {
+                alert("Por favor, preencha todos os campos.");
                 event.preventDefault();
                 return false;
             }
         }
-        var dataAquisicao = document.getElementById("dataAquisicao").value;
-
-        if (!validarDataAquisicao(dataAquisicao)) {
-            alert("Data de Aquisição inválida. Por favor, insira uma data anterior a Data de Hoje.");
-            document.getElementById("dataAquisicao").focus(); // Coloca o foco no campo dataAquisicao
-            event.preventDefault();
-            return false;
-        }
     } else if (botao === "Excluir") {
-        var codigo = document.getElementById("codigo").value.trim();
-        if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
-            alert("Por favor, preencha o campo de código corretamente.");
-            document.getElementById("codigo").focus(); // Coloca o foco no campo código
+        var descricao = document.getElementById("descricao").value.trim();
+        if (descricao === "" || isNaN(descricao)) {
+            alert("Por favor, preencha o campo de descricao com um número válido.");
             event.preventDefault();
             return false;
         }
+
         // Confirmar a exclusão
         if (!confirm('Você realmente deseja excluir este registro? Esta ação não pode ser desfeita.')) {
             event.preventDefault(); // Cancela o envio do formulário se o usuário cancelar a exclusão
             return false;
         }
     }
-
     return true;
-}
-
-
-function validarDataAquisicao(data) {
-    var hoje = new Date();
-    var dataAquisicao = new Date(data);
-
-    // Ajusta a hora para garantir que estamos comparando apenas datas
-    hoje.setHours(0, 0, 0, 0);
-    dataAquisicao.setHours(0, 0, 0, 0);
-
-    return dataAquisicao < hoje; // Data deve ser menor que a Data de Hoje
 }

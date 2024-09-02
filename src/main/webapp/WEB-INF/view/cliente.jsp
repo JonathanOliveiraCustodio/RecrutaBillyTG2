@@ -229,7 +229,6 @@
 			</h2>
 		</c:if>
 	</div>
-	<br />
 
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">

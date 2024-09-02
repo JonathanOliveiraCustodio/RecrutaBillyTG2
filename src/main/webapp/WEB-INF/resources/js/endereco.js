@@ -57,17 +57,14 @@ function limparCamposEndereco() {
 
 function validarFormulario(event) {
     var botao = event.submitter.value;
-    var campos = [
-        { id: "nome", nome: "Nome" },
-        { id: "telefone", nome: "Telefone" },
-        { id: "email", nome: "E-mail" },
-         { id: "numero", nome: "Número" },
-        { id: "tipo", nome: "Tipo de Documento" },
-        { id: "documento", nome: "Documento" },
-        { id: "dataNascimento", nome: "Data de Nascimento" }
-    ];
-
+    
     if (botao === "Cadastrar" || botao === "Alterar") {
+        var campos = [
+            { id: "CEP", nome: "CEP" },
+            { id: "numero", nome: "Número" }
+        ];
+
+        // Validação dos campos obrigatórios
         for (var i = 0; i < campos.length; i++) {
             var campo = document.getElementById(campos[i].id);
             if (campo.value.trim() === "") {
@@ -78,18 +75,25 @@ function validarFormulario(event) {
             }
         }
 
-        var tipo = document.getElementById("tipo").value;
-        var documento = document.getElementById("documento").value.trim();
-        var dataNascimento = document.getElementById("dataNascimento").value;
-
-        if (tipo === "CPF" && !validarCPF(documento)) {
-            alert("CPF inválido.");
-            document.getElementById("documento").focus(); // Coloca o foco no campo documento
+        // Validação do CEP
+        var cep = document.getElementById("CEP").value.replace(/\D/g, '');
+        var validacep = /^[0-9]{8}$/;
+        if (!validacep.test(cep)) {
+            alert("Formato de CEP inválido.");
+            document.getElementById("CEP").focus(); // Coloca o foco no campo CEP
             event.preventDefault();
             return false;
         }
-
-
+        
+        // Validação do número
+        var numero = document.getElementById("numero").value.trim();
+        if (isNaN(numero) || numero === "") {
+            alert("Por favor, preencha o campo Número com um valor numérico válido.");
+            document.getElementById("numero").focus(); // Coloca o foco no campo Número
+            event.preventDefault();
+            return false;
+        }
+        
     } else if (botao === "Excluir") {
         var codigo = document.getElementById("codigo").value.trim();
         if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
@@ -104,6 +108,7 @@ function validarFormulario(event) {
             return false;
         }
     }
+    
     return true;
 }
 

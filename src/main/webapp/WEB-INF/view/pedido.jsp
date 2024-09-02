@@ -203,6 +203,15 @@
 									readonly> <label for="bairro">Bairro:</label>
 							</div>
 						</div>
+						
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input type="text" id="UF" name="UF"
+									class="form-control" placeholder="UF" maxlength="2"
+									value='<c:out value="${pedido.cliente.UF}"></c:out>'
+									readonly> <label for="UF">UF:</label>
+							</div>
+						</div>
 					</div>
 
 					<!-- Sexta Linha: Observações -->

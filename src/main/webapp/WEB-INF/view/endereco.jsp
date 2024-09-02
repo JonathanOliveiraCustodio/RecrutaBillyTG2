@@ -210,7 +210,9 @@
 								<form action="endereco" method="post">
 									<input type="hidden" name="codigo" value="${e.codigo}" /> <input
 										type="hidden" name="funcionario" value="${e.funcionario.CPF}" />
-									<button class="btn btn-danger" type="submit">Excluir</button>
+									<input type="hidden"
+											name="botao" value="Excluir">
+										<button type="submit" class="btn btn-danger">Excluir</button>
 								</form>
 							</td>
 						</tr>

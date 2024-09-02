@@ -58,11 +58,8 @@ public class EnderecoClienteController {
 						e = buscarEndereco(e);
 						saida = excluirEndereco(e);
 						e = null;
-					} else {
-						if (cmd.contains("Listar")) {
-							// pedidos = listarPedidos();
-						}
-					}
+					} 
+					
 				}
 			}
 
@@ -108,13 +105,16 @@ public class EnderecoClienteController {
 		try {
 			enderecos = listarEnderecos(CPF);
 
-			if (!cmd.contains("Listar")) {
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+				e = null;
+
+			} else if (!cmd.contains("Listar")) {
 				f.setCPF(CPF);
 				f = buscarFuncionario(f);
 				e.setFuncionario(f);
 			}
-
-			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+			
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar") || cmd.contains("Excluir")) {
 				e.setCodigo(Integer.parseInt(codigo));
 				e.setFuncionario(f);
 				e.setCEP(CEP);

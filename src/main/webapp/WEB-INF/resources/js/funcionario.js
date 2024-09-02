@@ -196,6 +196,13 @@ function formatarMoeda(campo) {
         window.location.href = 'endereco?funcionario=' + encodeURIComponent(cpf);
     }
 
+function aplicarMascaraCPF() {
+    var cpfInput = document.getElementById('CPF');
+    Inputmask("999.999.999-99").mask(cpfInput);
+}
+
+
+
 
 
 // Formata o valor inicial ao carregar a página
@@ -204,5 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (campoSalario) {
         formatarMoeda(campoSalario);
     }
+    aplicarMascaraCPF();
 });
 

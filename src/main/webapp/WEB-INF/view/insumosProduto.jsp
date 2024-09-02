@@ -20,7 +20,7 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
-				<h1 class="display-6 fw-bold">Gerenciar Insumos</h1>
+				<h1 class="display-6 fw-bold">Gerenciar Insumos de um Produto</h1>
 				<form action="insumosProduto" method="post"
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
 					<input type="hidden" id="produto" name="produto"

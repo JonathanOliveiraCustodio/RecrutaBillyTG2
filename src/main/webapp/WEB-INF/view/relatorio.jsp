@@ -25,43 +25,47 @@
 					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<!-- Categoria -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="categoria" class="form-label">Categoria:</label> <select
-								class="form-select ms-2" id="categoria" name="categoria"
-								onchange="atualizarOpcoes()">
-								<option value="">Escolha uma Categoria</option>
-								<option value="cliente"
-									${categoria == 'cliente' ? 'selected' : ''}>Cliente</option>
-								<option value="equipamento"
-									${categoria == 'equipamento' ? 'selected' : ''}>Equipamento</option>
-								<option value="fornecedor"
-									${categoria == 'fornecedor' ? 'selected' : ''}>Fornecedor</option>
-								<option value="funcionario"
-									${categoria == 'funcionario' ? 'selected' : ''}>Funcionário</option>
-								<option value="insumo"
-									${categoria == 'insumo' ? 'selected' : ''}>Insumo</option>
-								<option value="pedido"
-									${categoria == 'pedido' ? 'selected' : ''}>Pedido</option>
-								<option value="produto"
-									${categoria == 'produto' ? 'selected' : ''}>Produto</option>
-							</select>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select class="form-select" id="categoria" name="categoria"
+									onchange="atualizarOpcoes()">
+									<option value="">Escolha uma Categoria</option>
+									<option value="cliente"
+										${categoria == 'cliente' ? 'selected' : ''}>Cliente</option>
+									<option value="equipamento"
+										${categoria == 'equipamento' ? 'selected' : ''}>Equipamento</option>
+									<option value="fornecedor"
+										${categoria == 'fornecedor' ? 'selected' : ''}>Fornecedor</option>
+									<option value="funcionario"
+										${categoria == 'funcionario' ? 'selected' : ''}>Funcionário</option>
+									<option value="insumo"
+										${categoria == 'insumo' ? 'selected' : ''}>Insumo</option>
+									<option value="pedido"
+										${categoria == 'pedido' ? 'selected' : ''}>Pedido</option>
+									<option value="produto"
+										${categoria == 'produto' ? 'selected' : ''}>Produto</option>
+								</select> <label for="categoria">Categoria:</label>
+							</div>
 						</div>
 
 						<!-- Opção -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="opcao" class="form-label">Opção:</label> <select
-								class="form-select ms-2" id="opcao" name="opcao">
-								<!-- As opções serão preenchidas dinamicamente com base na categoria selecionada -->
-								<option value="${opcao}" selected>${opcao}</option>
-							</select>
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select class="form-select" id="opcao" name="opcao">
+									<!-- As opções serão preenchidas dinamicamente com base na categoria selecionada -->
+									<option value="${opcao}" selected>${opcao}</option>
+								</select> <label for="opcao">Opção:</label>
+							</div>
 						</div>
 
 						<!-- Parâmetro de Pesquisa -->
-						<div class="col-md-4 d-flex align-items-center">
-							<label for="parametro" class="form-label">Filtro de
-								Pesquisa:</label> <input type="text" id="parametro" name="parametro"
-								class="form-control ms-2" placeholder="Digite o Filtro"
-								value="${parametro}">
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input type="text" id="parametro" name="parametro"
+									class="form-control" placeholder="Digite o Filtro"
+									value="${parametro}"> <label for="parametro">Filtro
+									de Pesquisa:</label>
+							</div>
 						</div>
 					</div>
 					<!-- Linha dos Botões -->
@@ -76,7 +80,6 @@
 								value="Visualizar Relatório" class="btn btn-warning"
 								onclick="resetarFormulario()">
 						</div>
-
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary" onclick="resetarFormulario()">
@@ -143,11 +146,12 @@
 			</c:when>
 			<c:when test="${categoria eq 'fornecedor'}">
 				<c:if test="${not empty fornecedores}">
+				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
 							<tr>
 								<th class="titulo-tabela" colspan="14"
-									style="text-align: center; font-size: 23px;">Lista de
+									style="text-align: center; font-size: 35px;">Lista de
 									Fornecedores</th>
 							</tr>
 							<tr class="table-dark">
@@ -184,6 +188,7 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					</div>
 				</c:if>
 			</c:when>
 			<c:when test="${categoria eq 'insumo'}">
