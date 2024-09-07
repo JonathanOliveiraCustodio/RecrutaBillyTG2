@@ -11,7 +11,6 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/manutencoesEquipamento.js"></script>
 <title>Gerenciar Insumos Produto</title>
-
 </head>
 <body>
 	<div>
@@ -92,14 +91,15 @@
 								<td><fmt:formatDate value="${em.dataManutencao}"
 										pattern="dd/MM/yyyy" /></td>
 								<td>
-									<form action="manutencoesEquipamento" method="post">
+									<form action="manutencoesEquipamento" method="post"
+										onsubmit="return validarFormulario(event);">
 										<input type="hidden" name="equipamento"
 											value="${em.codigoEquipamento}"> <input type="hidden"
 											name="equipamento" value="${em.equipamento.codigo}">
 										<input type="hidden" name="codigoManutencao"
 											value="${em.codigoManutencao}"> <input type="hidden"
 											name="botao" value="Excluir">
-										<button type="submit" class="btn btn-danger">Excluir</button>
+										<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
 									</form>
 								</td>
 							</tr>

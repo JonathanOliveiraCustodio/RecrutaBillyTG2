@@ -11,7 +11,6 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/produtosPedido.js"></script>
 <title>Gerenciar Produtos Pedido</title>
-
 </head>
 <body>
 	<div>
@@ -62,19 +61,13 @@
 					</div>
 
 					<!-- Linha dos Botões -->
-					<div class="row g-3 mt-3">
-						<div class="col-md-4 d-grid text-center"></div>
+					<div class="row justify-content-center g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
 								class="btn btn-success">
 						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Excluir"
-								class="btn btn-danger">
-						</div>
 					</div>
 				</form>
-
 			</div>
 		</div>
 
@@ -87,7 +80,7 @@
 		</div>
 
 		<div align="center">
-			<c:if test="${not empty saida }">
+			<c:if test="${not empty saida}">
 				<h2 style="color: #198754;">
 					<b><c:out value="${saida}" /></b>
 				</h2>
@@ -95,7 +88,7 @@
 		</div>
 
 		<div align="center" class="mt-4">
-			<c:if test="${not empty pedidoProdutos }">
+			<c:if test="${not empty pedidoProdutos}">
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -115,18 +108,19 @@
 					<tbody>
 						<c:forEach var="p" items="${pedidoProdutos}">
 							<tr>
-								<td><c:out value="${p.produto.nome }" /></td>
+								<td><c:out value="${p.produto.nome}" /></td>
 								<td><c:out value="${p.produto.categoria}" /></td>
 								<td><c:out value="${p.produto.descricao}" /></td>
 								<td><fmt:formatNumber value="${p.produto.valorUnitario}"
 										type="currency" currencySymbol="R$" /></td>
-								<td><c:out value="${p.quantidade }" /></td>
+								<td><c:out value="${p.quantidade}" /></td>
 								<td>
-									<form action="produtosPedido" method="post">
+									<form action="produtosPedido" method="post"
+										onsubmit="return validarFormulario(event);">
 										<input type="hidden" name="produto" value="${p.codigoProduto}">
 										<input type="hidden" name="pedido" value="${p.codigoPedido}">
 										<input type="hidden" name="botao" value="Excluir">
-										<button type="submit" class="btn btn-danger">Excluir</button>
+										<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
 									</form>
 								</td>
 							</tr>

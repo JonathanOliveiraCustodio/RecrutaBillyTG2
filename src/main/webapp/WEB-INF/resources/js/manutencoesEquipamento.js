@@ -1,7 +1,7 @@
-	function validarFormulario(event) {
+function validarFormulario(event) {
 		var botao = event.submitter.value;
 		if (botao === "Cadastrar") {
-			var campos = [ "descricao"];
+			var campos = [ "descricao" ];
 			for (var i = 0; i < campos.length; i++) {
 				var campo = document.getElementById(campos[i]).value.trim();
 				if (campo === "") {
@@ -11,14 +11,10 @@
 				}
 			}
 		} else if (botao === "Excluir") {
-			var descricao = document.getElementById("descricao").value.trim();
-			if (descricao === "" || isNaN(descricao)) {
-				alert("Por favor, preencha o campo de descricao.");
+			var confirmacao = confirm("Você realmente deseja excluir este registro?");
+			if (!confirmacao) {
 				event.preventDefault();
 				return false;
 			}
-
-			
 		}
-		return true;
 	}
