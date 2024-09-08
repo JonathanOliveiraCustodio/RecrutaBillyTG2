@@ -10,4 +10,5 @@ public interface IOrcamentoDao {
 	public String sp_iud_orcamento(String acao, Orcamento o) throws SQLException, ClassNotFoundException;
 	public List<Orcamento> findPedidosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException;
 	public List<Orcamento> findByName(String nome) throws SQLException, ClassNotFoundException;
+	public List<Orcamento> findByStatus(String status) throws SQLException, ClassNotFoundException;
 }

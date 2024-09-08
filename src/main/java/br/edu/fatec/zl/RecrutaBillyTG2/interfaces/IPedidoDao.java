@@ -10,4 +10,5 @@ public interface IPedidoDao {
 	public String sp_finalizar_pedido(Pedido p) throws SQLException, ClassNotFoundException;
 	public List<Pedido> findPedidosByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException;
 	public List<Pedido> findByName(String nome) throws SQLException, ClassNotFoundException;
+	public List<Pedido> findByEstado(String estado) throws SQLException, ClassNotFoundException;
 }

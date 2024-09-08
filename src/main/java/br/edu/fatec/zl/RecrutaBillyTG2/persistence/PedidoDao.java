@@ -230,7 +230,7 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		return pedidos;
 	}
 	
-	
+	@Override
 	public List<Pedido> findByEstado(String estado) throws SQLException, ClassNotFoundException {
 		List<Pedido> pedidos = new ArrayList<>();
 		Connection con = gDao.getConnection();

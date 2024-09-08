@@ -199,4 +199,42 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 
 		return orcamentos;
 	}
+
+	@Override
+	public List<Orcamento> findByStatus(String status) throws SQLException, ClassNotFoundException {
+		List<Orcamento> orcamentos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM vw_orcamento WHERE status LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+        ps.setString(1, status);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Orcamento o = new Orcamento();
+			o.setCodigo(rs.getInt("codigo"));
+			o.setNome(rs.getString("nome"));
+
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			o.setCliente(cl);
+
+			o.setFormaPagamento(rs.getString("formaPagamento"));
+			o.setDescricao(rs.getString("descricao"));
+			o.setStatus(rs.getString("status"));
+			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			o.setObservacao(rs.getString("observacao"));
+			o.setValorTotal(rs.getFloat("valorTotal"));
+			orcamentos.add(o);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return orcamentos;
+	}
 }

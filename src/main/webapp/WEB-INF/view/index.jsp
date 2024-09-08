@@ -28,15 +28,17 @@
 					<div class="container mt-5">
 						<h2 class="text-center mb-4">Dashboard de Operações</h2>
 						<div class="row g-4">
-							<!-- Quantos Orçamentos -->
 							<div class="col-md-4">
 								<div class="card text-center shadow-sm" style="cursor: pointer;"
 									onclick="setEscolha('orcamentos')">
 									<div class="card-body">
-										<h5 class="card-title">Orçamentos</h5>
+										<h5 class="card-title">Orçamentos em Aberto</h5>
 										<p class="card-text display-6">
 											<c:out value="${totalOrcamentos}" />
 										</p>
+										<c:if test="${totalOrcamentos > 15}">
+											<p class="text-danger">Entre em contato com os clientes!</p>
+										</c:if>
 									</div>
 								</div>
 							</div>
@@ -85,30 +87,68 @@
 										<table class="table table-striped">
 											<thead>
 												<tr>
-													<th class="titulo-tabela" colspan="5"
+													<th class="titulo-tabela" colspan="8"
 														style="text-align: center; font-size: 22px;"><c:out
 															value="${tituloTabela}" /></th>
 												</tr>
-												<tr class="table-dark">
-													<th>Código</th>
-													<th>Cliente</th>
-													<th>Data</th>
-													<th>Status</th>
-													<th>Valor</th>
-												</tr>
+												<c:choose>
+													<c:when test="${escolha == 'orcamentos'}">
+														<tr class="table-dark">
+															<th>Código</th>
+															<th>Nome</th>
+															<th>Descrição</th>
+															<th>Cliente</th>
+															<th>Valor Total</th>
+															<th>Forma de Pagamento</th>
+															<th>Status</th>
+															<th>Data do Orçamento</th>
+														</tr>
+													</c:when>
+													<c:otherwise>
+														<tr class="table-dark">
+															<th>Código</th>
+															<th>Cliente</th>
+															<th>Data</th>
+															<th>Status</th>
+															<th>Valor</th>
+														</tr>
+													</c:otherwise>
+												</c:choose>
 											</thead>
 											<tbody>
-												<c:forEach var="pedido" items="${pedidos}">
-													<tr>
-														<td><c:out value="${pedido.codigo}" /></td>
-														<td><c:out value="${pedido.cliente.nome}" /></td>
-														<td><fmt:formatDate value="${pedido.dataPedido}"
-																pattern="dd/MM/yyyy" /></td>
-														<td><c:out value="${pedido.estado}" /></td>
-														<td><fmt:formatNumber value="${pedido.valorTotal}"
-																type="currency" currencySymbol="R$" /></td>
-													</tr>
-												</c:forEach>
+												<c:choose>
+													<c:when test="${escolha == 'orcamentos'}">
+														<c:forEach var="orcamento" items="${orcamentos}">
+															<tr>
+																<td><c:out value="${orcamento.codigo}" /></td>
+																<td><c:out value="${orcamento.nome}" /></td>
+																<td><c:out value="${orcamento.descricao}" /></td>
+																<td><c:out value="${orcamento.cliente.nome}" /></td>
+																<td><fmt:formatNumber
+																		value="${orcamento.valorTotal}" type="currency"
+																		currencySymbol="R$" /></td>
+																<td><c:out value="${orcamento.formaPagamento}" /></td>
+																<td><c:out value="${orcamento.status}" /></td>
+																<td><fmt:formatDate
+																		value="${orcamento.dataOrcamento}"
+																		pattern="dd/MM/yyyy" /></td>
+															</tr>
+														</c:forEach>
+													</c:when>
+													<c:otherwise>
+														<c:forEach var="pedido" items="${pedidos}">
+															<tr>
+																<td><c:out value="${pedido.codigo}" /></td>
+																<td><c:out value="${pedido.cliente.nome}" /></td>
+																<td><fmt:formatDate value="${pedido.dataPedido}"
+																		pattern="dd/MM/yyyy" /></td>
+																<td><c:out value="${pedido.estado}" /></td>
+																<td><fmt:formatNumber value="${pedido.valorTotal}"
+																		type="currency" currencySymbol="R$" /></td>
+															</tr>
+														</c:forEach>
+													</c:otherwise>
+												</c:choose>
 											</tbody>
 										</table>
 									</div>
@@ -119,7 +159,6 @@
 					</div>
 					<!-- End of Dashboard Section -->
 				</form>
-
 			</div>
 		</div>
 

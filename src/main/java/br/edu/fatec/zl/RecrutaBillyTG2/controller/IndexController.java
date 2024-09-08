@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Orcamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.IndexDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.OrcamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -31,6 +33,9 @@ public class IndexController {
 
 	@Autowired
 	PedidoDao pDao;
+	
+	@Autowired
+	OrcamentoDao oDao;
 
 	@RequestMapping(name = "index", value = "/index", method = RequestMethod.GET)
 	public ModelAndView indexGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
@@ -40,6 +45,7 @@ public class IndexController {
 
 		String saida = "";
 		String erro = "";
+		String tituloTabela = "Pedidos Recentes";
 
 		int totalOrcamentos = 0;
 		int totalPedidoAndamento = 0;
@@ -62,6 +68,7 @@ public class IndexController {
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
 			model.addAttribute("pedidos", pedidos);
+			model.addAttribute("tituloTabela", tituloTabela);
 			model.addAttribute("totalOrcamentos", totalOrcamentos);
 			model.addAttribute("totalPedidoAndamento", totalPedidoAndamento);
 			model.addAttribute("totalPedidosRecebidos", totalPedidosRecebidos);
@@ -88,13 +95,14 @@ public class IndexController {
 	        String tituloTabela = "Pedidos Recentes";
 
 	        List<Pedido> pedidos = new ArrayList<>();
+	        List<Orcamento> orcamentos = new ArrayList<>();
 	        try {
 	            
 	            switch (escolha) {
 	                case "orcamentos":
 	                    //saida = "Você escolheu visualizar os orçamentos.";
-	                    pedidos = pDao.findAll(); 
-	                    tituloTabela = "Orçamentos";
+	                    orcamentos = oDao.findByStatus("Orçamento"); 
+	                    tituloTabela = "Lista de Orçamentos";
 	                    break;
 	                case "pedidosAndamento":
 	                 //   saida = "Você escolheu visualizar os pedidos em andamento.";
@@ -129,6 +137,7 @@ public class IndexController {
 	            model.addAttribute("erro", erro);
 	            model.addAttribute("escolha", escolha);
 	            model.addAttribute("pedidos", pedidos);
+	            model.addAttribute("orcamentos", orcamentos);
 	            model.addAttribute("totalOrcamentos", totalOrcamentos);
 	            model.addAttribute("totalPedidoAndamento", totalPedidoAndamento);
 	            model.addAttribute("totalPedidosRecebidos", totalPedidosRecebidos);
