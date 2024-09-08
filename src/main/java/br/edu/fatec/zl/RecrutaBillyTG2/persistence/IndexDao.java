@@ -7,14 +7,17 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IIndexDao;
+
 @Repository
-public class IndexDao {
+public class IndexDao implements IIndexDao {
 	private GenericDao gDao;
 
 	public IndexDao(GenericDao gDao) {
 		this.gDao = gDao;
 	}
 
+	@Override
 	public int countOrcamentos() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();
@@ -30,6 +33,7 @@ public class IndexDao {
 		return count;
 	}
 
+	@Override
 	public int countPedidosAndamento() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();
@@ -45,6 +49,7 @@ public class IndexDao {
 		return count;
 	}
 
+	@Override
 	public int countPedidosRecebidos() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();
@@ -60,6 +65,7 @@ public class IndexDao {
 		return count;
 	}
 	
+	@Override
 	public int countPedidosDespachados() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();

@@ -104,9 +104,7 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		PreparedStatement ps = c.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
-			Pedido p = new Pedido();
-			
-			
+			Pedido p = new Pedido();		
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nomePedido"));
 			p.setDescricao(rs.getString("descricao"));
@@ -206,6 +204,43 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		// "%" Para fazer buscas aproximadas
 		ps.setString(1, "%" + nome + "%");
 		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {		
+			Pedido p = new Pedido();
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			p.setCliente(cl);
+			
+			p.setDescricao(rs.getString("descricao"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			pedidos.add(p);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return pedidos;
+	}
+	
+	
+	public List<Pedido> findByEstado(String estado) throws SQLException, ClassNotFoundException {
+		List<Pedido> pedidos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM v_pedidos WHERE estado LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setString(1,estado);
+
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {		
