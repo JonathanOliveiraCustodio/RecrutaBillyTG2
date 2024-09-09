@@ -172,6 +172,15 @@ PRIMARY KEY (codigo,CPF)
 FOREIGN KEY (CPF) REFERENCES funcionario (CPF),
 )
 GO
+CREATE TABLE configuracoes(
+qtdMaximaOrcamento                INT		    NULL,
+qtdMinimaProdutoEstoque           INT		    NULL,
+qtdMediaPedidoAndamento           INT		    NULL,
+qtdMediaPedidosRecebidos          INT           NULL,
+qtdMediaPedidosDespachados        INT           NULL,
+qtdMediaProducaoProdutos          INT           NULL,
+)
+GO
 -- Insert Usuario de Teste
 INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao) VALUES
 ('25525320045', 'Administrador', 'admin', 'admin', 'admin', '2000-01-01', '12345678901', 'Gerente', '08:00 às 17:00', 5000.0, '2020-01-01', NULL, NULL),
@@ -318,6 +327,9 @@ GO
 INSERT INTO endereco (CPF, CEP, logradouro, bairro, localidade, UF, complemento, numero, tipoEndereco) VALUES 
 ('25525320045','01001-000','Praça da Sé','Sé','São Paulo','SP','Centro','1','Residencial'),
 ('76368440015','20040-003','Avenida Rio Branco','Centro','Rio de Janeiro','RJ','Edifício ABC','100','Comercial')
+GO
+INSERT INTO configuracoes(qtdMaximaOrcamento,qtdMinimaProdutoEstoque,qtdMediaPedidoAndamento,qtdMediaPedidosRecebidos,qtdMediaPedidosDespachados,qtdMediaProducaoProdutos) VALUES 
+(14,5,4,5,5,5)
 GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
@@ -1164,6 +1176,29 @@ BEGIN
     END
 END
 GO
+CREATE PROCEDURE sp_u_configuracoes
+    @qtdMaximaOrcamento INT,
+    @qtdMinimaProdutoEstoque INT,
+	@qtdMediaPedidoAndamento INT,
+	@qtdMediaPedidosRecebidos INT,
+	@qtdMediaPedidosDespachados INT,
+	@qtdMediaProducaoProdutos INT,
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM configuracoes)
+    BEGIN
+        RAISERROR('Configuração não existe. Não é possível atualizar.', 16, 1)
+        RETURN
+    END
+
+    UPDATE configuracoes
+    SET qtdMaximaOrcamento = @qtdMaximaOrcamento, qtdMinimaProdutoEstoque = @qtdMinimaProdutoEstoque,
+	qtdMediaPedidoAndamento = @qtdMediaPedidoAndamento, qtdMediaPedidosRecebidos = @qtdMediaPedidosRecebidos,
+	qtdMediaPedidosDespachados = @qtdMediaPedidosDespachados, qtdMediaProducaoProdutos = @qtdMediaProducaoProdutos
+    SET @saida = 'Configuração alterada com sucesso'
+END
+GO
 CREATE FUNCTION fn_insumo_funcionario()
 RETURNS TABLE
 AS
@@ -1206,6 +1241,21 @@ RETURN
         equipamento
     WHERE
         codigo = @codigoEquipamento
+);
+GO
+CREATE FUNCTION fn_consultar_endereco (
+    @codigo INT,
+    @CPF CHAR(11)
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT e.codigo, e.CPF, e.CEP, e.logradouro, e.bairro, e.localidade, e.UF, 
+           e.complemento, e.numero, e.tipoEndereco, f.nome AS nomeFuncionario
+    FROM endereco e
+    INNER JOIN funcionario f ON e.CPF = f.CPF
+    WHERE e.codigo = @codigo AND e.CPF = @CPF
 );
 GO
 CREATE FUNCTION fn_consultar_produto(@codigoProduto INT)
@@ -2175,5 +2225,4 @@ BEGIN
     RETURN;
 END;
 GO
-
 

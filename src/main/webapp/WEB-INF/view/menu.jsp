@@ -58,6 +58,11 @@
 
 							</ul></li>
 
+
+						<li class="nav-item"><a
+							class="nav-link px-3 link-body-emphasis"
+							href="${pageContext.request.contextPath}/configuracoes">Configurações</a></li>
+
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/despesas">Despesas</a></li>

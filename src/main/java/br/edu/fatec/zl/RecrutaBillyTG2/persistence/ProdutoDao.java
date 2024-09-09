@@ -156,14 +156,76 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			produtos.add(p);
-			
+			produtos.add(p);	
 		}
-
 		rs.close();
 		ps.close();
 		con.close();
 
 		return produtos;
 	}
+	
+	public List<Produto> findByStatus(String status) throws SQLException, ClassNotFoundException {
+		List<Produto> produtos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM v_produto WHERE status LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + status + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {	
+			Produto p = new Produto();
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nome"));
+			p.setCategoria(rs.getString("categoria"));
+			p.setDescricao(rs.getString("descricao"));
+			p.setValorUnitario(rs.getFloat("valorUnitario"));
+			p.setStatus(rs.getString("status"));
+			p.setQuantidade(rs.getInt("quantidade"));
+			p.setRefEstoque(rs.getString("refEstoque"));
+			produtos.add(p);			
+		}
+		rs.close();
+		ps.close();
+		con.close();
+		return produtos;
+	}
+	
+	public List<Produto> findByEstoqueBaixo(int qtd) throws SQLException, ClassNotFoundException {
+	    List<Produto> produtos = new ArrayList<>();
+	    Connection con = gDao.getConnection();
+	    
+	    // Usando StringBuilder em vez de StringBuffer por ser mais eficiente neste contexto
+	    StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT * FROM v_produto WHERE quantidade <= ?");  // Correção do operador e uso do parâmetro
+
+	    PreparedStatement ps = con.prepareStatement(sql.toString());
+	    ps.setInt(1, qtd);  // Define o valor do parâmetro
+
+	    ResultSet rs = ps.executeQuery();
+
+	    while (rs.next()) {	
+	        Produto p = new Produto();
+	        p.setCodigo(rs.getInt("codigo"));
+	        p.setNome(rs.getString("nome"));
+	        p.setCategoria(rs.getString("categoria"));
+	        p.setDescricao(rs.getString("descricao"));
+	        p.setValorUnitario(rs.getFloat("valorUnitario"));
+	        p.setStatus(rs.getString("status"));
+	        p.setQuantidade(rs.getInt("quantidade"));
+	        p.setRefEstoque(rs.getString("refEstoque"));
+	        produtos.add(p);			
+	    }
+
+	    rs.close();
+	    ps.close();
+	    con.close();
+
+	    return produtos;
+	}
+
 }

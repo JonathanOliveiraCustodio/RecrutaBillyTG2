@@ -21,7 +21,7 @@ public class IndexDao implements IIndexDao {
 	public int countOrcamentos() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();
-		String sql = "SELECT COUNT(*) AS total FROM vw_orcamento";
+		String sql = "SELECT COUNT(*) AS total FROM vw_orcamento WHERE status LIKE 'Orçamento'";
 		PreparedStatement ps = c.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
@@ -80,4 +80,38 @@ public class IndexDao implements IIndexDao {
 		c.close();
 		return count;
 	}
+	
+	public int countProdutosProducao() throws SQLException, ClassNotFoundException {
+		int count = 0;
+		Connection c = gDao.getConnection();
+		String sql = "SELECT COUNT(*) AS total FROM v_produto WHERE status = 'Em Produção'";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			count = rs.getInt("total");
+		}
+		rs.close();
+		ps.close();
+		c.close();
+		return count;
+	}
+	
+	public int countProdutosEstoqueBaixo(int minEstoque) throws SQLException, ClassNotFoundException {
+	    int count = 0;
+	    Connection c = gDao.getConnection();
+	    String sql = "SELECT COUNT(*) AS total FROM v_produto WHERE quantidade < ?";
+	    PreparedStatement ps = c.prepareStatement(sql);
+	    ps.setInt(1, minEstoque);
+	    ResultSet rs = ps.executeQuery();
+	    if (rs.next()) {
+	        count = rs.getInt("total");
+	    }
+	    rs.close();
+	    ps.close();
+	    c.close();
+	    return count;
+	}
+	
+	
+	
 }
