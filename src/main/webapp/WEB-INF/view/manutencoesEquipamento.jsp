@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script
@@ -43,7 +45,7 @@
 					<div class="row justify-content-center g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+								class="btn btn-success btn-align">
 						</div>
 					</div>
 				</form>
@@ -67,45 +69,48 @@
 
 		<div align="center" class="mt-4">
 			<c:if test="${not empty equipamentoManutencoes}">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="titulo-tabela" colspan="5"
-								style="text-align: center; font-size: 35px;">Lista de
-								Manutenções de um Equipamento</th>
-						</tr>
-						<tr class="table-dark">
-							<th>Nome Equipamento</th>
-							<th>Codigo Manutencao</th>
-							<th>Descrição</th>
-							<th>Data</th>
-							<th>Ação</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="em" items="${equipamentoManutencoes}">
+				<div class="table-responsive w-100">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td><c:out value="${em.equipamento.nome}" /></td>
-								<td><c:out value="${em.codigoManutencao}" /></td>
-								<td><c:out value="${em.descricao}" /></td>
-								<td><fmt:formatDate value="${em.dataManutencao}"
-										pattern="dd/MM/yyyy" /></td>
-								<td>
-									<form action="manutencoesEquipamento" method="post"
-										onsubmit="return validarFormulario(event);">
-										<input type="hidden" name="equipamento"
-											value="${em.codigoEquipamento}"> <input type="hidden"
-											name="equipamento" value="${em.equipamento.codigo}">
-										<input type="hidden" name="codigoManutencao"
-											value="${em.codigoManutencao}"> <input type="hidden"
-											name="botao" value="Excluir">
-										<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
-									</form>
-								</td>
+								<th class="titulo-tabela" colspan="5"
+									style="text-align: center; font-size: 35px;">Lista de
+									Manutenções de um Equipamento</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+							<tr class="table-dark">
+								<th>Nome Equipamento</th>
+								<th>Codigo Manutencao</th>
+								<th>Descrição</th>
+								<th>Data</th>
+								<th>Ação</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="em" items="${equipamentoManutencoes}">
+								<tr>
+									<td><c:out value="${em.equipamento.nome}" /></td>
+									<td><c:out value="${em.codigoManutencao}" /></td>
+									<td><c:out value="${em.descricao}" /></td>
+									<td><fmt:formatDate value="${em.dataManutencao}"
+											pattern="dd/MM/yyyy" /></td>
+									<td>
+										<form action="manutencoesEquipamento" method="post"
+											onsubmit="return validarFormulario(event);">
+											<input type="hidden" name="equipamento"
+												value="${em.codigoEquipamento}"> <input
+												type="hidden" name="equipamento"
+												value="${em.equipamento.codigo}"> <input
+												type="hidden" name="codigoManutencao"
+												value="${em.codigoManutencao}"> <input type="hidden"
+												name="botao" value="Excluir">
+											<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
+										</form>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 			</c:if>
 		</div>
 	</div>

@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Funcionário</title>
 </head>
 <body>
@@ -28,8 +30,8 @@
 						<div class="row g-3 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="number" min="1" step="1" id="CPF" name="CPF"
-										class="form-control" placeholder="CPF"
+									<input type="text" id="CPF" name="CPF" class="form-control"
+										placeholder="CPF"
 										value='<c:out value="${funcionario.CPF}"></c:out>'> <label
 										for="CPF">CPF</label>
 								</div>
@@ -45,8 +47,8 @@
 
 							<div class="col-md-1">
 								<button type="submit" id="botao" name="botao" value="Buscar"
-									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
-									onclick="return validarBusca()" style="height: 56px;">
+									class="btn btn-outline-primary btn-align w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()">
 									<!-- Ícone SVG dentro do botão -->
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -158,15 +160,15 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="telefone" name="telefone"
-										class="form-control" placeholder="Telefone" maxlength="11"
+										class="form-control" placeholder="Telefone" maxlength="15"
 										value='<c:out value="${funcionario.telefone }"></c:out>'
 										oninput="validarTelefone(this)"> <label for="telefone">Telefone</label>
 								</div>
 							</div>
 							<div class="col-md-4 d-flex align-items-center">
 								<button type="button"
-									class="btn btn-outline-success d-flex align-items-center w-100"
-									onclick="redirectToWhatsApp()" style="height: 56px;">
+									class="btn btn-outline-success btn-align d-flex align-items-center w-100"
+									onclick="redirectToWhatsApp()">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16"
 										style="margin-right: 5px;">
@@ -179,9 +181,8 @@
 							<!-- Botão Endereço -->
 							<div class="col-md-4 d-flex align-items-center">
 								<button type="button" id="botaoEndereco"
-									class="btn btn-outline-secondary w-100 d-flex justify-content-center align-items-center"
-									style="height: 56px;" onclick="validarERedirecionar()">
-									Endereço</button>
+									class="btn btn-outline-secondary btn-align w-100 d-flex justify-content-center align-items-center"
+									onclick="validarERedirecionar()">Endereço</button>
 							</div>
 						</div>
 						<!-- Sexta Linha: Observação -->
@@ -200,24 +201,24 @@
 						<div class="row g-3 mt-3 justify-content-center">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success">
+									class="btn btn-success btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning">
+									class="btn btn-warning btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger">
+									class="btn btn-danger btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-dark">
+									class="btn btn-dark btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Limpar"
-									class="btn btn-secondary">
+									class="btn btn-secondary btn-align">
 							</div>
 						</div>
 					</form>
@@ -242,52 +243,54 @@
 	</div>
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
-		<c:if test="${not empty funcionarios}">
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="6"
-							style="text-align: center; font-size: 35px;">Lista de
-							Funcionário</th>
-					</tr>
-					<tr class="table-dark">
-						<th></th>
-						<th>CPF</th>
-						<th>Nome</th>
-						<th>Nv. Acesso</th>
-						<th>E-mail</th>
-						<th>Excluir</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="f" items="${funcionarios}">
+		<c:if test="${nivelAcesso == 'admin' && not empty funcionarios}">
+			<div class="table-responsive w-100">
+				<table class="table table-striped table-hover">
+					<thead>
 						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${f.CPF}" onclick="editarFuncionario(this.value)"
-									${f.CPF eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-						<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
-								</button>
-							</td>
-							<td><c:out value="${f.CPF}" /></td>
-							<td><c:out value="${f.nome}" /></td>
-							<td><c:out value="${f.nivelAcesso}" /></td>
-							<td><c:out value="${f.email}" /></td>
-							<td style="text-align: center;">
-								<button class="btn btn-danger"
-									onclick="excluirFuncionario('${f.CPF}')">Excluir</button>
-							</td>
+							<th class="titulo-tabela" colspan="6"
+								style="text-align: center; font-size: 35px;">Lista de
+								Funcionário</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+						<tr class="table-dark">
+							<th></th>
+							<th>CPF</th>
+							<th>Nome</th>
+							<th>Nv. Acesso</th>
+							<th>E-mail</th>
+							<th>Excluir</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="f" items="${funcionarios}">
+							<tr>
+								<td style="text-align: center;">
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${f.CPF}" onclick="editarFuncionario(this.value)"
+										${f.CPF eq codigoEdicao ? 'checked' : ''}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+											fill="currentColor" class="bi bi-pencil-square"
+											viewBox="0 0 16 16">
+						<path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
+									</button>
+								</td>
+								<td><c:out value="${f.CPF}" /></td>
+								<td><c:out value="${f.nome}" /></td>
+								<td><c:out value="${f.nivelAcesso}" /></td>
+								<td><c:out value="${f.email}" /></td>
+								<td style="text-align: center;">
+									<button class="btn btn-danger"
+										onclick="excluirFuncionario('${f.CPF}')">Excluir</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</c:if>
 	</div>
 	<div>

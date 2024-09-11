@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Fornecedor</title>
 </head>
 <body>
@@ -57,7 +59,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="telefone" name="telefone"
-										class="form-control" placeholder="Telefone" maxlength="11"
+										class="form-control" placeholder="Telefone" maxlength="15"
 										value='<c:out value="${fornecedor.telefone }"></c:out>'
 										oninput="validarTelefone(this)"> <label for="telefone">Telefone</label>
 								</div>
@@ -155,24 +157,24 @@
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success">
+									class="btn btn-success btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning">
+									class="btn btn-warning btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger">
+									class="btn btn-danger btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-dark">
+									class="btn btn-dark btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Limpar"
-									class="btn btn-secondary">
+									class="btn btn-secondary btn-align">
 							</div>
 						</div>
 					</form>
@@ -180,8 +182,6 @@
 			</div>
 		</c:if>
 	</div>
-
-	<br />
 
 	<div align="center">
 		<c:if test="${not empty erro}">
@@ -201,66 +201,68 @@
 
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
-		<c:if test="${not empty fornecedores }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="14"
-							style="text-align: center; font-size: 35px;">Lista de
-							Fornecedores</th>
-					</tr>
-					<tr class="table-dark">
-						<th></th>
-						<th>Código</th>
-						<th>Nome</th>
-						<th>Telefone</th>
-						<th>E-mail</th>
-						<th>Empresa</th>
-						<th>CEP</th>
-						<th>Logradouro</th>
-						<th>Número</th>
-						<th>Empresa</th>
-						<th>Cidade</th>
-						<th>UF</th>
-						<th>Excluir</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="f" items="${fornecedores}">
+		<c:if test="${nivelAcesso == 'admin' && not empty fornecedores }">
+			<div class="table-responsive w-100">
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${f.codigo}" onclick="editarFornecedor(this.value)"
-									${f.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-						<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
-								</button>
-							</td>
-							<td><c:out value="${f.codigo}" /></td>
-							<td><c:out value="${f.nome}" /></td>
-							<td><c:out value="${f.telefone}" /></td>
-							<td><c:out value="${f.email}" /></td>
-							<td><c:out value="${f.empresa}" /></td>
-							<td><c:out value="${f.CEP}" /></td>
-							<td><c:out value="${f.logradouro}" /></td>
-							<td><c:out value="${f.numero}" /></td>
-							<td><c:out value="${f.bairro}" /></td>
-							<td><c:out value="${f.cidade}" /></td>
-							<td><c:out value="${f.UF}" /></td>
-							<td style="text-align: center;">
-								<button class="btn btn-danger"
-									onclick="excluirFornecedor('${f.codigo}')">Excluir</button>
-							</td>
+							<th class="titulo-tabela" colspan="14"
+								style="text-align: center; font-size: 35px;">Lista de
+								Fornecedores</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+						<tr class="table-dark">
+							<th></th>
+							<th>Código</th>
+							<th>Nome</th>
+							<th>Telefone</th>
+							<th>E-mail</th>
+							<th>Empresa</th>
+							<th>CEP</th>
+							<th>Logradouro</th>
+							<th>Número</th>
+							<th>Empresa</th>
+							<th>Cidade</th>
+							<th>UF</th>
+							<th>Excluir</th>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<c:forEach var="f" items="${fornecedores}">
+							<tr>
+								<td style="text-align: center;">
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${f.codigo}" onclick="editarFornecedor(this.value)"
+										${f.codigo eq codigoEdicao ? 'checked' : ''}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+											fill="currentColor" class="bi bi-pencil-square"
+											viewBox="0 0 16 16">
+						<path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
+									</button>
+								</td>
+								<td><c:out value="${f.codigo}" /></td>
+								<td><c:out value="${f.nome}" /></td>
+								<td><c:out value="${f.telefone}" /></td>
+								<td><c:out value="${f.email}" /></td>
+								<td><c:out value="${f.empresa}" /></td>
+								<td><c:out value="${f.CEP}" /></td>
+								<td><c:out value="${f.logradouro}" /></td>
+								<td><c:out value="${f.numero}" /></td>
+								<td><c:out value="${f.bairro}" /></td>
+								<td><c:out value="${f.cidade}" /></td>
+								<td><c:out value="${f.UF}" /></td>
+								<td style="text-align: center;">
+									<button class="btn btn-danger"
+										onclick="excluirFornecedor('${f.codigo}')">Excluir</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</c:if>
 	</div>
 

@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Cliente</title>
 </head>
 <body>
@@ -24,8 +26,8 @@
 				<form action="endereco" method="post" class="row g-3 mt-3"
 					onsubmit="return validarFormulario(event);">
 					<input type="hidden" id="funcionario" name="funcionario"
-						value='<c:out value="${funcionario.CPF}"></c:out>'>
-					<input type="hidden" id="codigo" name="codigo"
+						value='<c:out value="${funcionario.CPF}"></c:out>'> <input
+						type="hidden" id="codigo" name="codigo"
 						value='<c:out value="${endereco.codigo}"></c:out>'>
 
 					<!-- Primeira Linha: CEP, Logradouro, Bairro -->
@@ -112,24 +114,24 @@
 					<div class="row g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+								class="btn btn-success btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Alterar"
-								class="btn btn-warning">
+								class="btn btn-warning btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Excluir"
-								class="btn btn-danger">
+								class="btn btn-danger btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
-								class="btn btn-dark">
+								class="btn btn-dark btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"
-								class="btn btn-secondary">
+								class="btn btn-secondary btn-align">
 						</div>
 					</div>
 				</form>
@@ -152,74 +154,74 @@
 			</h2>
 		</c:if>
 	</div>
-	<br />
+	
 
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
 		<c:if test="${not empty enderecos }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="12"
-							style="text-align: center; font-size: 35px;">Lista de
-							Endereço</th>
-					</tr>
-					<tr class="table-dark">
-						<th></th>
-						<th>Código</th>
-						<th>CPF</th>
-						<th>CEP</th>
-						<th>Logradouro</th>
-						<th>Bairro</th>
-						<th>UF</th>
-						<th>Localidade</th>
-						<th>Número</th>
-						<th>Complemento</th>
-						<th>Tipo Endereco</th>
-						<th>Excluir</th>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="e" items="${enderecos }">
+			<div class="table-responsive w-100">
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${e.codigo}"
-									onclick="editarEndereco(${e.codigo}, '${e.funcionario.CPF}')">
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-							<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-							<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-						</svg>
-								</button>
-							</td>
-							<td><c:out value="${e.codigo }" /></td>
-							<td><c:out value="${e.funcionario.CPF }" /></td>
-							<td><c:out value="${e.CEP }" /></td>
-							<td><c:out value="${e.logradouro }" /></td>
-							<td><c:out value="${e.bairro }" /></td>
-							<td><c:out value="${e.UF }" /></td>
-							<td><c:out value="${e.localidade }" /></td>
-							<td><c:out value="${e.numero }" /></td>
-							<td><c:out value="${e.complemento }" /></td>
-							<td><c:out value="${e.tipoEndereco }" /></td>
-							<td style="text-align: center;">
-								<form action="endereco" method="post">
-									<input type="hidden" name="codigo" value="${e.codigo}" /> <input
-										type="hidden" name="funcionario" value="${e.funcionario.CPF}" />
-									<input type="hidden"
-											name="botao" value="Excluir">
-										<button type="submit" class="btn btn-danger">Excluir</button>
-								</form>
-							</td>
+							<th class="titulo-tabela" colspan="12"
+								style="text-align: center; font-size: 35px;">Lista de
+								Endereço</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-
+						<tr class="table-dark">
+							<th></th>
+							<th>Código</th>
+							<th>CPF</th>
+							<th>CEP</th>
+							<th>Logradouro</th>
+							<th>Bairro</th>
+							<th>UF</th>
+							<th>Localidade</th>
+							<th>Número</th>
+							<th>Complemento</th>
+							<th>Tipo Endereco</th>
+							<th>Excluir</th>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<c:forEach var="e" items="${enderecos }">
+							<tr>
+								<td style="text-align: center;">
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${e.codigo}"
+										onclick="editarEndereco(${e.codigo}, '${e.funcionario.CPF}')">
+										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+											fill="currentColor" class="bi bi-pencil-square"
+											viewBox="0 0 16 16">
+							<path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+							<path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+						</svg>
+									</button>
+								</td>
+								<td><c:out value="${e.codigo }" /></td>
+								<td><c:out value="${e.funcionario.CPF }" /></td>
+								<td><c:out value="${e.CEP }" /></td>
+								<td><c:out value="${e.logradouro }" /></td>
+								<td><c:out value="${e.bairro }" /></td>
+								<td><c:out value="${e.UF }" /></td>
+								<td><c:out value="${e.localidade }" /></td>
+								<td><c:out value="${e.numero }" /></td>
+								<td><c:out value="${e.complemento }" /></td>
+								<td><c:out value="${e.tipoEndereco }" /></td>
+								<td style="text-align: center;">
+									<form action="endereco" method="post">
+										<input type="hidden" name="codigo" value="${e.codigo}" /> <input
+											type="hidden" name="funcionario" value="${e.funcionario.CPF}" />
+										<input type="hidden" name="botao" value="Excluir">
+										<button type="submit" class="btn btn-danger">Excluir</button>
+									</form>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</c:if>
 	</div>
 	<div>

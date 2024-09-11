@@ -9,6 +9,8 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/despesa.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Despesas</title>
 </head>
 <body>
@@ -51,7 +53,7 @@
 						</div>
 						<!-- O resto para operação de CRUD -->
 						<!-- Primeira Linha: Nome, Data, Data Vencimento -->
-						<div class="row g-4 mt-2 justify-content-center">
+						<div class="row g-3">
 							<input type="hidden" min="0" step="1" id="codigo" name="codigo"
 								class="form-control" placeholder="Código"
 								value='<c:out value="${despesa.codigo}"></c:out>'>
@@ -64,7 +66,7 @@
 										for="nome">Nome</label>
 								</div>
 							</div>
-														<div class="col-md-1">
+							<div class="col-md-1">
 								<button type="submit" id="botao" name="botao" value="Pesquisar"
 									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
 									onclick="return validarBusca()" style="height: 56px;">
@@ -112,8 +114,7 @@
 									<input type="text" id="valor" name="valor" class="form-control"
 										placeholder="Valor"
 										value='<c:out value="${despesa.valor}"></c:out>'
-										oninput="formatarMoeda(this)"> <label
-										for="valor">Valor</label>
+										oninput="formatarMoeda(this)"> <label for="valor">Valor</label>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -147,19 +148,20 @@
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success" style="height: 55.5px;">
+									class="btn btn-success btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning">
+									class="btn btn-warning btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger">
+									class="btn btn-danger btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Listar" 
-									class="btn btn-secondary"></div>
+								<input type="submit" id="botao" name="botao" value="Listar"
+									class="btn btn-secondary btn-align">
+							</div>
 							<div class="col-md-2">
 								<div class="form-floating">
 									<select id="filtro" name="filtro" class="form-select">
@@ -185,7 +187,6 @@
 							</div>
 						</div>
 						<div class="col-md-2 d-grid text-center"></div>
-							
 					</form>
 				</div>
 			</div>
@@ -209,63 +210,64 @@
 
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
-		<c:if test="${not empty despesas }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="10"
-							style="text-align: center; font-size: 35px;">Lista de
-							Despesas</th>
-					</tr>
-					<tr class="table-dark">
-						<td></td>
-						<td>Código</td>
-						<td>Nome</td>
-						<td>Data Inicial</td>
-						<td>Data de Vencimento</td>
-						<td>Valor</td>
-						<td>Tipo</td>
-						<td>Forma de Pagamento</td>
-						<td>Estado</td>
-						<td>Excluir</td>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="d" items="${despesas }">
+		<c:if test="${nivelAcesso == 'admin' && not empty despesas }">
+			<div class="table-responsive w-100">
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${d.codigo}" onclick="editarDespesa(this.value)"
-									${d.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-						<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
-								</button>
-							</td>
-							<td><c:out value="${d.codigo }" /></td>
-							<td><c:out value="${d.nome }" /></td>
-							<td><fmt:formatDate value="${d.data}"
-										pattern="dd/MM/yyyy" /></td>									
-										<td><fmt:formatDate value="${d.dataVencimento}"
-										pattern="dd/MM/yyyy" /></td>
-							<td><fmt:formatNumber value="${d.valor }"
-										type="currency" currencySymbol="R$" /></td>
-							<td><c:out value="${d.tipo }" /></td>
-							<td><c:out value="${d.estado }" /></td>
-							<td><c:out value="${d.pagamento }" /></td>
-							<td style="text-align: center;">
-								<button class="btn btn-danger"
-									onclick="excluirDespesa('${d.codigo}')">Excluir</button>
-							</td>
+							<th class="titulo-tabela" colspan="10"
+								style="text-align: center; font-size: 35px;">Lista de
+								Despesas</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+						<tr class="table-dark">
+							<td></td>
+							<td>Código</td>
+							<td>Nome</td>
+							<td>Data Inicial</td>
+							<td>Data de Vencimento</td>
+							<td>Valor</td>
+							<td>Tipo</td>
+							<td>Forma de Pagamento</td>
+							<td>Estado</td>
+							<td>Excluir</td>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<c:forEach var="d" items="${despesas }">
+							<tr>
+								<td style="text-align: center;">
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${d.codigo}" onclick="editarDespesa(this.value)"
+										${d.codigo eq codigoEdicao ? 'checked' : ''}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+											fill="currentColor" class="bi bi-pencil-square"
+											viewBox="0 0 16 16">
+						<path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
+									</button>
+								</td>
+								<td><c:out value="${d.codigo }" /></td>
+								<td><c:out value="${d.nome }" /></td>
+								<td><fmt:formatDate value="${d.data}" pattern="dd/MM/yyyy" /></td>
+								<td><fmt:formatDate value="${d.dataVencimento}"
+										pattern="dd/MM/yyyy" /></td>
+								<td><fmt:formatNumber value="${d.valor }" type="currency"
+										currencySymbol="R$" /></td>
+								<td><c:out value="${d.tipo }" /></td>
+								<td><c:out value="${d.estado }" /></td>
+								<td><c:out value="${d.pagamento }" /></td>
+								<td style="text-align: center;">
+									<button class="btn btn-danger"
+										onclick="excluirDespesa('${d.codigo}')">Excluir</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</c:if>
 	</div>
 	<div>

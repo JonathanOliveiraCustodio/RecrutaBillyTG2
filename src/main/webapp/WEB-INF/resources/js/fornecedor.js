@@ -117,6 +117,37 @@ function validarTelefone(input) {
     input.value = valor;
 }
 
+function formatarTelefone(telefone) {
+    telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+    telefone = telefone.slice(0, 11); // Limita a 11 dígitos
+
+    if (telefone.length <= 2) {
+        return telefone;
+    } else if (telefone.length <= 6) {
+        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2);
+    } else if (telefone.length <= 10) {
+        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 6) + '-' + telefone.slice(6);
+    } else {
+        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 7) + '-' + telefone.slice(7);
+    }
+}
+
+function aplicarMascaraTelefone() {
+    var telefoneInput = document.getElementById('telefone');
+    telefoneInput.addEventListener('input', function () {
+        this.value = formatarTelefone(this.value);
+    });
+
+    // Formata o valor inicial se o campo já tiver um valor
+    if (telefoneInput.value) {
+        telefoneInput.value = formatarTelefone(telefoneInput.value);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+     aplicarMascaraTelefone();
+});
+
 
 
 

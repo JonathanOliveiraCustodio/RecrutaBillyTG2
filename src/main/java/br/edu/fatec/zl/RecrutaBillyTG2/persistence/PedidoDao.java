@@ -267,5 +267,48 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		return pedidos;
 	}
 	
+
+	public List<Pedido> findData() throws SQLException, ClassNotFoundException {
+		List<Pedido> pedidos = new ArrayList<>();
+		Connection c = gDao.getConnection();
+		String sql = "SELECT * FROM v_pedidos ORDER BY dataPedido DESC ";
+		PreparedStatement ps = c.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			Pedido p = new Pedido();		
+			p.setCodigo(rs.getInt("codigo"));
+			p.setNome(rs.getString("nomePedido"));
+			p.setDescricao(rs.getString("descricao"));
+			p.setEstado(rs.getString("estado"));
+			p.setDescricao(rs.getString("descricao"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			p.setEstado(rs.getString("estado"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setTipoPagamento(rs.getString("tipoPagamento"));
+			p.setObservacao(rs.getString("observacao"));
+			p.setStatusPagamento(rs.getString("statusPagamento"));
+			p.setDataPagamento(rs.getDate("dataPagamento"));
+			
+			Cliente cl = new Cliente();
+			
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("Telefone"));
+			
+			p.setCliente(cl);
+			pedidos.add(p);
+		}
+		rs.close();
+		ps.close();
+		c.close();
+		return pedidos;
+	}
 	
 }

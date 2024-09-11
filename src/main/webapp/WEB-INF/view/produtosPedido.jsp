@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script
@@ -64,7 +66,7 @@
 					<div class="row justify-content-center g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+								class="btn btn-success btn-align">
 						</div>
 					</div>
 				</form>
@@ -89,6 +91,7 @@
 
 		<div align="center" class="mt-4">
 			<c:if test="${not empty pedidoProdutos}">
+			<div class="table-responsive w-100">
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -127,6 +130,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				</div>
 			</c:if>
 		</div>
 	</div>

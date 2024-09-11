@@ -10,6 +10,9 @@
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/orcamento.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
+
 <title>Orçamento</title>
 
 </head>
@@ -156,23 +159,24 @@
 					<div class="row g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+								class="btn btn-success btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Alterar"
-								class="btn btn-warning">
+								class="btn btn-warning btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
-								class="btn btn-dark">
+								class="btn btn-dark btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"
-								class="btn btn-secondary">
+								class="btn btn-secondary btn-align">
 						</div>
 					</div>
+
 				</form>
 			</div>
 		</div>
@@ -195,71 +199,74 @@
 
 		<div class="container py-4 text-center d-flex justify-content-center">
 			<c:if test="${not empty orcamentos }">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="titulo-tabela" colspan="10"
-								style="text-align: center; font-size: 25px;">Lista de
-								Orçamentos</th>
-						</tr>
-						<tr class="table-dark">
-							<th></th>
-							<th>Código</th>
-							<th>Nome Orçamento</th>
-							<th>Código Cliente</th>
-							<th>Nome Cliente</th>
-							<th>Data Orçamento</th>
-							<th>Produtos</th>
-							<th>Valor Total</th>
-							<th>Status</th>
-							<th>Efetivar</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="o" items="${orcamentos }">
+				<div class="table-responsive w-100">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td style="text-align: center;">
-									<button class="btn btn-outline-dark" name="opcao"
-										value="${o.codigo}" onclick="editarOrcamento(this.value)"
-										${o.codigo eq codigoEdicao ? 'checked' : ''}>
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-											fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-										  <path
-												d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-										</svg>
-									</button>
-								</td>
-								<td><c:out value="${o.codigo}" /></td>
-								<td><c:out value="${o.nome}" /></td>
-								<td><c:out value="${o.cliente.codigo}" /></td>
-								<td><c:out value="${o.cliente.nome}" /></td>
-								<td><fmt:formatDate value="${o.dataOrcamento}"
-										pattern="dd/MM/yyyy" /></td>
-								<td>
-									<button
-										onclick="window.location.href='produtosPedido?pedido=${o.codigo}'"
-										class="btn btn-info">Adicionar</button>
-								</td>
-								<td><fmt:formatNumber value="${o.valorTotal}"
-										type="currency" currencySymbol="R$" /></td>
-
-								<td><c:out value="${o.status}" /></td>
-								<td>
-
-									<form action="orcamento" method="post"
-										onsubmit="return confirmarConversao()">
-										<input type="hidden" name="codigo" value="${o.codigo}">
-										<input type="hidden" name="cliente" value="${o.codigo}">
-										<input type="hidden" id="botao" name="botao"
-											value="Efetivar Pedido">
-										<button type="submit" class="btn btn-outline-dark">Efetivar
-											Pedido</button>
-									</form>
-								<td>
+								<th class="titulo-tabela" colspan="10"
+									style="text-align: center; font-size: 25px;">Lista de
+									Orçamentos</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+							<tr class="table-dark">
+								<th></th>
+								<th>Código</th>
+								<th>Nome Orçamento</th>
+								<th>Código Cliente</th>
+								<th>Nome Cliente</th>
+								<th>Data Orçamento</th>
+								<th>Produtos</th>
+								<th>Valor Total</th>
+								<th>Status</th>
+								<th>Efetivar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="o" items="${orcamentos }">
+								<tr>
+									<td style="text-align: center;">
+										<button class="btn btn-outline-dark" name="opcao"
+											value="${o.codigo}" onclick="editarOrcamento(this.value)"
+											${o.codigo eq codigoEdicao ? 'checked' : ''}>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16"
+												height="16" fill="currentColor" class="bi bi-search"
+												viewBox="0 0 16 16">
+										  <path
+													d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+										</svg>
+										</button>
+									</td>
+									<td><c:out value="${o.codigo}" /></td>
+									<td><c:out value="${o.nome}" /></td>
+									<td><c:out value="${o.cliente.codigo}" /></td>
+									<td><c:out value="${o.cliente.nome}" /></td>
+									<td><fmt:formatDate value="${o.dataOrcamento}"
+											pattern="dd/MM/yyyy" /></td>
+									<td>
+										<button
+											onclick="window.location.href='produtosPedido?pedido=${o.codigo}'"
+											class="btn btn-info">Adicionar</button>
+									</td>
+									<td><fmt:formatNumber value="${o.valorTotal}"
+											type="currency" currencySymbol="R$" /></td>
+
+									<td><c:out value="${o.status}" /></td>
+									<td>
+
+										<form action="orcamento" method="post"
+											onsubmit="return confirmarConversao()">
+											<input type="hidden" name="codigo" value="${o.codigo}">
+											<input type="hidden" name="cliente" value="${o.codigo}">
+											<input type="hidden" id="botao" name="botao"
+												value="Efetivar Pedido">
+											<button type="submit" class="btn btn-outline-dark">Efetivar
+												Pedido</button>
+										</form>
+									<td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 			</c:if>
 		</div>
 	</div>

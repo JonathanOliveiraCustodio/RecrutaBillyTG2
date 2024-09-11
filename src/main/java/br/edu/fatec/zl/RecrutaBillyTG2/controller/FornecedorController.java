@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FornecedorDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.util.Util;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -94,6 +95,8 @@ public class FornecedorController {
 
 		Fornecedor f = new Fornecedor();
 		List<Fornecedor> fornecedores = new ArrayList<>();
+		
+		telefone = Util.removerMascara(telefone);
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			f = null;

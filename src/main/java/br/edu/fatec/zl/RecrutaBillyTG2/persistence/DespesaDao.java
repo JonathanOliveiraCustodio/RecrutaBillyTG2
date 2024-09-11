@@ -43,7 +43,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		
 		cs.close();
 		c.close();
-		return saida;
+		return saida; 
 	}
 	
 	@Override

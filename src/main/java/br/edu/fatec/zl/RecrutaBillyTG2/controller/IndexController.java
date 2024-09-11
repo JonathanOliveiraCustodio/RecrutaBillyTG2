@@ -62,7 +62,7 @@ public class IndexController {
 
 		try {
 			configuracoes = cDao.findConfiguracoes();
-			pedidos = pDao.findAll();
+			pedidos = pDao.findData();
 			atualizarContadores(model, configuracoes);
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();

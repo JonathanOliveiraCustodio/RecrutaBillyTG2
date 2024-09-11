@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.util.Util;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -100,6 +101,10 @@ public class ClienteController {
 
 		Cliente c = new Cliente();
 		List<Cliente> clientes = new ArrayList<>();
+		
+		 // Remover a máscara do Documento
+		telefone = Util.removerMascara(telefone);
+		documento = Util.removerMascara(documento);
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			c = null;
@@ -115,6 +120,7 @@ public class ClienteController {
 			c.setNome(nome);
 			c.setTelefone(telefone);
 			c.setEmail(email);
+			
 			c.setDocumento(documento);
 			c.setTipo(tipo);
 			c.setCEP(CEP);

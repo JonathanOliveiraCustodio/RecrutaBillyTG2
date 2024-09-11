@@ -44,7 +44,7 @@ public class DespesaController {
 		try {
 			String cmd = allRequestParam.get("cmd");
 			String codigo = allRequestParam.get("codigo");
-			String filtro = allRequestParam.get("filtro");
+	       // String filtro = allRequestParam.get("filtro");
 
 			if (cmd != null) {
 				if (cmd.contains("alterar")) {
@@ -97,7 +97,7 @@ public class DespesaController {
 		String entrada = allRequestParam.get("entrada");
 		String gasto = allRequestParam.get("gasto");
 		String saldo = allRequestParam.get("entrada");
-		String pesquisa = allRequestParam.get("pesquisa");
+		//String pesquisa = allRequestParam.get("pesquisa");
 		String[] meses = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
 				"Outubro", "Novembro", "Dezembro" };
 
@@ -218,6 +218,7 @@ public class DespesaController {
 		return d;
 	}
 
+	@SuppressWarnings("deprecation")
 	private List<Despesa> listarDespesas(int filtro) throws ClassNotFoundException, SQLException {
 		List<Despesa> despesas = new ArrayList<>();
 		List<Despesa> auxDespesas = new ArrayList<>();

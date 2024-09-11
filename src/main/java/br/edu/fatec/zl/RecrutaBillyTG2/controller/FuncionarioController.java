@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Funcionario;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.util.Util;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FuncionarioDao;
 import jakarta.servlet.http.HttpSession;
 
@@ -97,6 +98,10 @@ public class FuncionarioController {
 
 		Funcionario f = new Funcionario();
 		List<Funcionario> funcionarios = new ArrayList<>();
+		
+		 // Remover a máscaras
+        CPF = Util.removerMascara(CPF);
+        telefone = Util.removerMascara(telefone);
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			f = null;
@@ -113,6 +118,7 @@ public class FuncionarioController {
 			f.setEmail(email);
 			f.setSenha(senha);
 			f.setDataNascimento(Date.valueOf(dataNascimento));
+			
 			f.setTelefone(telefone);
 			f.setCargo(cargo);
 			f.setHorario(horario);

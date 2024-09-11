@@ -6,6 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Cliente</title>
 </head>
 <body>
@@ -44,8 +48,8 @@
 							</div>
 							<div class="col-md-1">
 								<button type="submit" id="botao" name="botao" value="Buscar"
-									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
-									onclick="return validarBusca()" style="height: 56px;">
+									class="btn btn-outline-primary btn-align w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()">
 									<!-- Ícone SVG dentro do botão -->
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -57,9 +61,9 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="telefone" name="telefone"
-										class="form-control" placeholder="Telefone" maxlength="11"
-										value='<c:out value="${cliente.telefone }"></c:out>'
-										oninput="validarTelefone(this)"> <label for="telefone">Telefone</label>
+										class="form-control" placeholder="Telefone" maxlength="15"
+										value='<c:out value="${cliente.telefone }"></c:out>'>
+									<label for="telefone">Telefone</label>
 								</div>
 							</div>
 						</div>
@@ -76,7 +80,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="tipo" name="tipo" class="form-select"
-										onclick="ajustarMaxlength(this.value)">
+										onchange="aplicarMascara()">
 										<option value="">Escolha um Tipo de Documento</option>
 										<option value="CPF"
 											<c:if test="${cliente.tipo eq 'CPF'}">selected</c:if>>CPF</option>
@@ -88,8 +92,8 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="documento" name="documento"
-										class="form-control" placeholder="Documento" maxlength="14"
-										value='<c:out value="${cliente.documento }"></c:out>'>
+										class="form-control" placeholder="Documento" maxlength="18"
+										value='<c:out value="${cliente.documento}"></c:out>'>
 									<label for="documento">Documento</label>
 								</div>
 							</div>
@@ -188,24 +192,24 @@
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success">
+									class="btn btn-success btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning">
+									class="btn btn-warning btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger">
+									class="btn btn-danger btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-dark">
+									class="btn btn-dark btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Limpar"
-									class="btn btn-secondary">
+									class="btn btn-secondary btn-align">
 							</div>
 						</div>
 					</form>
@@ -232,56 +236,59 @@
 
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
-		<c:if test="${not empty clientes }">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class="titulo-tabela" colspan="8"
-							style="text-align: center; font-size: 35px;">Lista de
-							Clientes</th>
-					</tr>
-					<tr class="table-dark">
-						<td></td>
-						<td>Código</td>
-						<td>Nome</td>
-						<td>Telefone</td>
-						<td>Email</td>
-						<td>Tipo do Documento</td>
-						<td>Documento</td>
-						<td>Excluir</td>
-					</tr>
-				</thead>
-				<tbody class="table-group-divider">
-					<c:forEach var="c" items="${clientes }">
+		<c:if test="${nivelAcesso == 'admin' && not empty clientes}">
+			<div class="table-responsive w-100">
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<td style="text-align: center;">
-								<button class="btn btn-outline-dark" name="opcao"
-									value="${c.codigo}" onclick="editarCliente(this.value)"
-									${c.codigo eq codigoEdicao ? 'checked' : ''}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
-										fill="currentColor" class="bi bi-pencil-square"
-										viewBox="0 0 16 16">
-						<path
-											d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
-											d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
-								</button>
-							</td>
-							<td><c:out value="${c.codigo }" /></td>
-							<td><c:out value="${c.nome }" /></td>
-							<td><c:out value="${c.telefone }" /></td>
-							<td><c:out value="${c.email }" /></td>
-							<td><c:out value="${c.tipo }" /></td>
-							<td><c:out value="${c.documento }" /></td>
-							<td style="text-align: center;">
-								<button class="btn btn-danger"
-									onclick="excluirCliente('${c.codigo}')">Excluir</button>
-							</td>
+							<th class="titulo-tabela" colspan="8"
+								style="text-align: center; font-size: 35px;">Lista de
+								Clientes</th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+						<tr class="table-dark">
+							<td></td>
+							<td>Código</td>
+							<td>Nome</td>
+							<td>Telefone</td>
+							<td>Email</td>
+							<td>Tipo do Documento</td>
+							<td>Documento</td>
+							<td>Excluir</td>
+						</tr>
+					</thead>
+					<tbody class="table-group-divider">
+						<c:forEach var="c" items="${clientes }">
+							<tr>
+								<td style="text-align: center;">
+									<button class="btn btn-outline-dark" name="opcao"
+										value="${c.codigo}" onclick="editarCliente(this.value)"
+										${c.codigo eq codigoEdicao ? 'checked' : ''}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
+											fill="currentColor" class="bi bi-pencil-square"
+											viewBox="0 0 16 16">
+						<path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+					</svg>
+									</button>
+								</td>
+								<td><c:out value="${c.codigo }" /></td>
+								<td><c:out value="${c.nome }" /></td>
+								<td class="telefone"><c:out value="${c.telefone }" /></td>
+								<td><c:out value="${c.email }" /></td>
+								<td><c:out value="${c.tipo }" /></td>
+								<td class="documento" data-tipo="${c.tipo}"><c:out
+										value="${c.documento }" /></td>
+								<td style="text-align: center;">
+									<button class="btn btn-danger"
+										onclick="excluirCliente('${c.codigo}')">Excluir</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</c:if>
 	</div>
 	<div>

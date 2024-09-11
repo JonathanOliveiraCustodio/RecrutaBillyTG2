@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+	<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Pedido</title>
 </head>
 <body>
@@ -230,22 +232,22 @@
 					<div class="row g-3 mt-3">
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Cadastrar"
-								class="btn btn-success">
+								class="btn btn-success btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Alterar"
-								class="btn btn-warning">
+								class="btn btn-warning btn-align">
 						</div>
 
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
-								class="btn btn-dark">
+								class="btn btn-dark btn-align">
 						</div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Limpar"
-								class="btn btn-secondary">
+								class="btn btn-secondary btn-align">
 						</div>
 					</div>
 				</form>
@@ -272,6 +274,7 @@
 
 		<div class="container py-4 text-center d-flex justify-content-center">
 			<c:if test="${not empty pedidos }">
+			<div class="table-responsive w-100">
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -341,6 +344,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				</div>
 			</c:if>
 		</div>
 	</div>

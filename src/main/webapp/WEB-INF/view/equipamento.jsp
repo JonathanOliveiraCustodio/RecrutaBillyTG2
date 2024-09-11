@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Equipamento</title>
 </head>
 <body>
@@ -44,8 +46,8 @@
 							</div>
 							<div class="col-md-1">
 								<button type="submit" id="botao" name="botao" value="Buscar"
-									class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center"
-									onclick="return validarBusca()" style="height: 56px;">
+									class="btn btn-outline-primary btn-align w-100 d-flex justify-content-center align-items-center"
+									onclick="return validarBusca()">
 									<!-- Ícone SVG dentro do botão -->
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -90,25 +92,25 @@
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success">
+									class="btn btn-success btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning">
+									class="btn btn-warning btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger" onclick="return confirmarExclusao()">
+									class="btn btn-danger btn-align" onclick="return confirmarExclusao()">
 							</div>
 
 							<div class="col-md-2 d-grid text-center"></div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-dark">
+									class="btn btn-dark btn-align">
 							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Limpar"
-									class="btn btn-secondary">
+									class="btn btn-secondary btn-align">
 							</div>
 						</div>
 					</form>
@@ -133,7 +135,7 @@
 	</div>
 
 	<div class="container py-4 text-center d-flex justify-content-center" align="center">
-    <c:if test="${not empty equipamentos}">
+    <c:if test="${nivelAcesso == 'admin' && not empty equipamentos}">
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
