@@ -24,6 +24,12 @@
 				<h1 class="display-6 fw-bold">Gerar Relatório</h1>
 				<form action="relatorio" method="post" class="row g-3 mt-3"
 					id="form-relatorio">
+					<!-- Campos ocultos para armazenar a categoria e a opção selecionada -->
+					<input type="hidden" id="categoriaSelecionada"
+						name="categoriaSelecionada" value="${categoria}"> <input
+						type="hidden" id="opcaoSelecionada" name="opcaoSelecionada"
+						value="${opcao}">
+
 					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<!-- Categoria -->
@@ -34,6 +40,8 @@
 									<option value="">Escolha uma Categoria</option>
 									<option value="cliente"
 										${categoria == 'cliente' ? 'selected' : ''}>Cliente</option>
+									<option value="despesa"
+										${categoria == 'despesa' ? 'selected' : ''}>Despesas</option>
 									<option value="equipamento"
 										${categoria == 'equipamento' ? 'selected' : ''}>Equipamento</option>
 									<option value="fornecedor"
@@ -42,10 +50,13 @@
 										${categoria == 'funcionario' ? 'selected' : ''}>Funcionário</option>
 									<option value="insumo"
 										${categoria == 'insumo' ? 'selected' : ''}>Insumo</option>
+									<option value="orcamento"
+										${categoria == 'orcamento' ? 'selected' : ''}>Orçamento</option>
 									<option value="pedido"
 										${categoria == 'pedido' ? 'selected' : ''}>Pedido</option>
 									<option value="produto"
 										${categoria == 'produto' ? 'selected' : ''}>Produto</option>
+
 								</select> <label for="categoria">Categoria:</label>
 							</div>
 						</div>
@@ -83,7 +94,7 @@
 								onclick="resetarFormulario()">
 						</div>
 						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Limpar "
+							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary btn-align"
 								onclick="resetarFormulario()">
 						</div>
@@ -314,18 +325,16 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th class="titulo-tabela" colspan="8"
+									<th class="titulo-tabela" colspan="6"
 										style="text-align: center; font-size: 35px;">Lista de
 										Pedidos</th>
 								</tr>
 								<tr class="table-dark">
-
+									<th></th>
 									<th>Código</th>
 									<th>Nome Pedido</th>
-									<th>Código Cliente</th>
 									<th>Nome Cliente</th>
 									<th>Data Pedido</th>
-									<th>Produtos</th>
 									<th>Valor Total</th>
 									<th>Estado Atual</th>
 								</tr>
@@ -336,7 +345,6 @@
 										<td style="text-align: center;">
 										<td><c:out value="${p.codigo}" /></td>
 										<td><c:out value="${p.nome}" /></td>
-										<td><c:out value="${p.cliente.codigo}" /></td>
 										<td><c:out value="${p.cliente.nome}" /></td>
 										<td><fmt:formatDate value="${p.dataPedido}"
 												pattern="dd/MM/yyyy" /></td>
@@ -390,6 +398,98 @@
 					</div>
 				</c:if>
 			</c:when>
+
+			<c:when test="${categoria eq 'orcamento'}">
+				<c:if test="${not empty orcamentos }">
+					<div class="table-responsive w-100">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th class="titulo-tabela" colspan="9"
+										style="text-align: center; font-size: 35px;">Lista de
+										Orçamentos</th>
+								</tr>
+								<tr class="table-dark">
+									<th></th>
+									<th>Código</th>
+									<th>Nome Orçamento</th>
+									<th>Descrição</th>
+									<th>Nome Cliente</th>
+									<th>Data Orçamento</th>
+									<th>Forma Pagamento</th>
+									<th>Valor Total</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="o" items="${orcamentos }">
+									<tr>
+										<td style="text-align: center;"></td>
+										<td><c:out value="${o.codigo}" /></td>
+										<td><c:out value="${o.nome}" /></td>
+										<td><c:out value="${o.descricao}" /></td>
+										<td><c:out value="${o.cliente.nome}" /></td>
+										<td><fmt:formatDate value="${o.dataOrcamento}"
+												pattern="dd/MM/yyyy" /></td>
+										<td><c:out value="${o.formaPagamento}" /></td>
+										<td><fmt:formatNumber value="${o.valorTotal}"
+												type="currency" currencySymbol="R$" /></td>
+
+										<td><c:out value="${o.status}" /></td>
+										<td>
+										<td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</c:if>
+			</c:when>
+			<c:when test="${categoria eq 'despesa'}">
+				<c:if test="${not empty despesas }">
+					<div class="table-responsive w-100">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th class="titulo-tabela" colspan="8"
+										style="text-align: center; font-size: 35px;">Lista de
+										Despesas</th>
+								</tr>
+								<tr class="table-dark">
+									<td>Código</td>
+									<td>Nome</td>
+									<td>Data Inicial</td>
+									<td>Data de Vencimento</td>
+									<td>Valor</td>
+									<td>Tipo</td>
+									<td>Forma de Pagamento</td>
+									<td>Estado</td>
+								</tr>
+							</thead>
+							<tbody class="table-group-divider">
+								<c:forEach var="d" items="${despesas }">
+									<tr>
+										<td><c:out value="${d.codigo }" /></td>
+										<td><c:out value="${d.nome }" /></td>
+										<td><fmt:formatDate value="${d.data}"
+												pattern="dd/MM/yyyy" /></td>
+										<td><fmt:formatDate value="${d.dataVencimento}"
+												pattern="dd/MM/yyyy" /></td>
+										<td><fmt:formatNumber value="${d.valor }" type="currency"
+												currencySymbol="R$" /></td>
+										<td><c:out value="${d.tipo }" /></td>
+										<td><c:out value="${d.estado }" /></td>
+										<td><c:out value="${d.pagamento }" /></td>
+
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</c:if>
+			</c:when>
+
 		</c:choose>
 	</div>
 	<div>

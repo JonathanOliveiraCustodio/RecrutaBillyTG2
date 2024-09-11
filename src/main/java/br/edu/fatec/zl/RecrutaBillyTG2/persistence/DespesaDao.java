@@ -99,4 +99,33 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Despesa> findDespesasByOption(String opcao, String parametro) throws SQLException, ClassNotFoundException {
+		List<Despesa> despesas = new ArrayList<>();
+		Connection c = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_despesa(?,?) ");
+
+		PreparedStatement ps = c.prepareStatement(sql.toString());
+		ps.setString(1, opcao);
+		ps.setString(2, parametro);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			Despesa d = new Despesa();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			d.setData(rs.getDate("dataInicio"));
+			d.setDataVencimento(rs.getDate("dataVencimento"));
+			d.setValor(rs.getFloat("valor"));
+			d.setTipo(rs.getString("tipo"));
+			d.setPagamento(rs.getString("pagamento"));
+			d.setEstado(rs.getString("estado"));
+			despesas.add(d);
+		}
+		ps.close();
+		rs.close();
+		c.close();
+		return despesas;
+	}
 }

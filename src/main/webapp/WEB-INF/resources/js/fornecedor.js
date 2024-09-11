@@ -144,6 +144,19 @@ function aplicarMascaraTelefone() {
     }
 }
 
+function redirectToWhatsApp() {
+    // Obtém o valor do campo de telefone
+    var phoneNumber = document.getElementById('telefone').value;
+
+    if (phoneNumber) {
+        // Construa a URL do WhatsApp
+        var url = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(phoneNumber);
+        window.open(url, "_blank");
+    } else {
+        alert("Número de telefone não encontrado.");
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
      aplicarMascaraTelefone();
 });

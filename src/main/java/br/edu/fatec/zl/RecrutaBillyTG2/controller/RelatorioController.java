@@ -26,20 +26,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Despesa;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Fornecedor;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Funcionario;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Insumo;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Orcamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
-import br.edu.fatec.zl.RecrutaBillyTG2.model.Funcionario;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.DespesaDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EquipamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FornecedorDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FuncionarioDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.InsumoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.OrcamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoDao;
-import br.edu.fatec.zl.RecrutaBillyTG2.persistence.FuncionarioDao;
 import jakarta.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -73,6 +77,12 @@ public class RelatorioController {
 
 	@Autowired
 	FuncionarioDao uDao;
+	
+	@Autowired
+	OrcamentoDao oDao;
+	
+	@Autowired
+	DespesaDao dDao;
 
 	@RequestMapping(name = "relatorio", value = "/relatorio", method = RequestMethod.GET)
 	public ModelAndView relatorioGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
@@ -101,6 +111,8 @@ public class RelatorioController {
 		List<Insumo> insumos = new ArrayList<>();
 		List<Equipamento> equipamentos = new ArrayList<>();
 		List<Funcionario> funcionarios = new ArrayList<>();
+		List<Orcamento> orcamentos = new ArrayList<>();
+		List<Despesa> despesas = new ArrayList<>();
 
 		try {
 			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
@@ -131,7 +143,13 @@ public class RelatorioController {
 					break;
 				case "produto":
 					produtos = listarProdutos(opcao, parametro);
-					break;
+					break;		
+				case "orcamento":
+					orcamentos = listarOrcamentos(opcao, parametro);
+					break;	
+				case "despesa":
+					despesas = listarDespesas(opcao, parametro);
+					break;	
 
 				default:
 					erro = "Categoria desconhecida: " + categoria;
@@ -154,6 +172,8 @@ public class RelatorioController {
 			model.addAttribute("insumos", insumos);
 			model.addAttribute("equipamentos", equipamentos);
 			model.addAttribute("funcionarios", funcionarios);
+			model.addAttribute("orcamentos", orcamentos);
+			model.addAttribute("despesas", despesas);
 		}
 		return new ModelAndView("relatorio");
 	}
@@ -165,11 +185,8 @@ public class RelatorioController {
 		String erro = "";
 
 		String categoria = allRequestParam.get("categoria");
-		String opcao = allRequestParam.get("opcao");
-		String parametro = allRequestParam.get("parametro");
-		System.out.println(categoria);
-		System.out.println(opcao);
-		System.out.println(parametro);
+		//String opcao = allRequestParam.get("opcao");
+		//String parametro = allRequestParam.get("parametro");
 
 		Map<String, Object> paramRelatorio = new HashMap<String, Object>();
 		paramRelatorio.put("opcao", allRequestParam.get("opcao"));
@@ -205,6 +222,13 @@ public class RelatorioController {
 		case "funcionario":
 			reportPath = "classpath:reports/RelatorioFuncionario.jasper";
 			break;
+		case "orcamento":
+			reportPath = "classpath:reports/RelatorioOrcamento.jasper";
+			break;
+		case "despesa":
+			reportPath = "classpath:reports/RelatorioDespesa.jasper";
+			break;	
+			
 		default:
 			throw new IllegalArgumentException("Categoria desconhecida " + categoria);
 		}
@@ -274,6 +298,20 @@ public class RelatorioController {
 		List<Funcionario> funcionarios = new ArrayList<>();
 		funcionarios = uDao.findFuncionariosByOption(opcao, parametro);
 		return funcionarios;
+	}
+	
+	private List<Orcamento> listarOrcamentos(String opcao, String parametro)
+			throws ClassNotFoundException, SQLException {
+		List<Orcamento> orcamentos = new ArrayList<>();
+		orcamentos = oDao.findOrcamentosByOption(opcao, parametro);
+		return orcamentos;
+	}
+	
+	private List<Despesa> listarDespesas(String opcao, String parametro)
+			throws ClassNotFoundException, SQLException {
+		List<Despesa> despesas = new ArrayList<>();
+		despesas = dDao.findDespesasByOption(opcao, parametro);
+		return despesas;
 	}
 
 }

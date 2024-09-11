@@ -2127,7 +2127,6 @@ BEGIN
     RETURN;
 END;
 GO
-
 CREATE FUNCTION fn_buscar_funcionario (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
@@ -2225,4 +2224,169 @@ BEGIN
     RETURN;
 END;
 GO
+CREATE FUNCTION fn_buscar_orcamento (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS @resultado TABLE (
+    codigo INT,
+    nome VARCHAR(100),
+    descricao VARCHAR(200),
+    cliente INT,
+    nomeCliente VARCHAR(100),
+    valorTotal DECIMAL(10,2),
+    formaPagamento VARCHAR(25),
+    status VARCHAR(50),
+    observacao VARCHAR(200) NULL,
+    dataOrcamento DATE,
+    quantidadeRegistros INT
+)
+AS
+BEGIN
+    DECLARE @count INT;
+    DECLARE @orcamentos TABLE (
+        codigo INT,
+        nome VARCHAR(100),
+        descricao VARCHAR(200),
+        cliente INT,
+        nomeCliente VARCHAR(100), 
+        valorTotal DECIMAL(10,2),
+        formaPagamento VARCHAR(25),
+        status VARCHAR(50),
+        observacao VARCHAR(200) NULL,
+        dataOrcamento DATE
+    );
 
+    INSERT INTO @orcamentos
+    SELECT 
+        o.codigo,
+        o.nome,
+        o.descricao,
+        o.cliente,
+        c.nome AS nomeCliente, -- Nome do cliente adicionado
+        o.valorTotal,
+        o.formaPagamento,
+        o.status,
+        o.observacao,
+        o.dataOrcamento
+    FROM 
+        orcamento o
+    JOIN
+        cliente c ON o.cliente = c.codigo
+    WHERE 
+        (@tipoPesquisa = 'nome' AND o.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'descricao' AND o.descricao LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'cliente' AND o.cliente = TRY_CAST(@valorPesquisa AS INT)) OR
+        (@tipoPesquisa = 'valorTotal igual' AND o.valorTotal = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'valorTotal maior que' AND o.valorTotal > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'valorTotal menor que' AND o.valorTotal < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'formaPagamento' AND o.formaPagamento LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'status' AND o.status LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'dataOrcamento' AND o.dataOrcamento = TRY_CAST(@valorPesquisa AS DATE)) OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @orcamentos);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nome, descricao, cliente, nomeCliente, valorTotal, formaPagamento, status, observacao, dataOrcamento, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', '', 0, '', 0.0, '', '', NULL, NULL, 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT 
+            codigo,
+            nome,
+            descricao,
+            cliente,
+            nomeCliente,
+            valorTotal,
+            formaPagamento,
+            status,
+            observacao,
+            dataOrcamento,
+            @count AS quantidadeRegistros
+        FROM @orcamentos;
+    END
+    RETURN;
+END;
+GO
+CREATE FUNCTION fn_buscar_despesa (
+    @tipoPesquisa VARCHAR(50),
+    @valorPesquisa VARCHAR(150)
+)
+RETURNS @resultado TABLE (
+    codigo INT,
+    nome VARCHAR(200),
+    tipo VARCHAR(50),
+    pagamento VARCHAR(50),
+    dataInicio DATE,
+    dataVencimento DATE NULL,
+    valor DECIMAL(12,2),
+    estado VARCHAR(50),
+    quantidadeRegistros INT
+)
+AS
+BEGIN
+    DECLARE @count INT;
+    DECLARE @despesas TABLE (
+        codigo INT,
+        nome VARCHAR(200),
+        tipo VARCHAR(50),
+        pagamento VARCHAR(50),
+        dataInicio DATE,
+        dataVencimento DATE NULL,
+        valor DECIMAL(12,2),
+        estado VARCHAR(50)
+    );
+
+    INSERT INTO @despesas
+    SELECT 
+        d.codigo,
+        d.nome,
+        d.tipo,
+        d.pagamento,
+        d.dataInicio,
+        d.dataVencimento,
+        d.valor,
+        d.estado
+    FROM 
+        despesa d
+    WHERE 
+        (@tipoPesquisa = 'tipo' AND d.tipo LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'pagamento' AND d.pagamento LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'dataInicio' AND d.dataInicio = TRY_CAST(@valorPesquisa AS DATE)) OR
+        (@tipoPesquisa = 'dataVencimento' AND d.dataVencimento = TRY_CAST(@valorPesquisa AS DATE)) OR
+        (@tipoPesquisa = 'valor igual' AND d.valor = TRY_CAST(@valorPesquisa AS DECIMAL(12,2))) OR
+        (@tipoPesquisa = 'valor maior que' AND d.valor > TRY_CAST(@valorPesquisa AS DECIMAL(12,2))) OR
+        (@tipoPesquisa = 'valor menor que' AND d.valor < TRY_CAST(@valorPesquisa AS DECIMAL(12,2))) OR
+        (@tipoPesquisa = 'estado' AND d.estado LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'nome' AND d.nome LIKE '%' + @valorPesquisa + '%') OR
+        (@tipoPesquisa = 'Todos');
+
+    SET @count = (SELECT COUNT(*) FROM @despesas);
+
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigo, nome, tipo, pagamento, dataInicio, dataVencimento, valor, estado, quantidadeRegistros)
+        VALUES (0, 'Nenhum registro encontrado', '', '', NULL, NULL, 0.0, '', 0);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO @resultado
+        SELECT 
+            codigo,
+            nome,
+            tipo,
+            pagamento,
+            dataInicio,
+            dataVencimento,
+            valor,
+            estado,
+            @count AS quantidadeRegistros
+        FROM @despesas;
+    END
+    RETURN;
+END;
+GO
