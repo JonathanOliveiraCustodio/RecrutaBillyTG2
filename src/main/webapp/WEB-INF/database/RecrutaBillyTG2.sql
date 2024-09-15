@@ -2390,3 +2390,78 @@ BEGIN
     RETURN;
 END;
 GO
+CREATE FUNCTION fn_buscar_etiqueta (
+    @codigoCliente INT,
+    @codigoPedido INT
+)
+RETURNS @resultado TABLE (
+    codigoPedido INT,
+    nomePedido VARCHAR(100),
+    descricaoPedido VARCHAR(255),
+    valorTotal DECIMAL(10,2),
+    estadoPedido VARCHAR(50),
+    dataPedido DATE,
+    codigoCliente INT,
+    nomeCliente VARCHAR(100),
+    telefoneCliente CHAR(11),
+    emailCliente VARCHAR(100),
+    statusPagamento VARCHAR(30),
+    CEP CHAR(9),
+    logradouro VARCHAR(150),
+    bairro VARCHAR(150),
+    localidade VARCHAR(100),
+    UF CHAR(2),
+    complemento VARCHAR(100),
+    numero VARCHAR(20),
+    codigoProduto INT,
+    nomeProduto VARCHAR(50),
+    categoriaProduto VARCHAR(30),
+    descricaoProduto VARCHAR(100),
+    valorUnitarioProduto DECIMAL(10,2),
+	referenciaEstoque VARCHAR(50), 
+	observacao VARCHAR(200),
+    quantidadeProduto INT
+)
+AS
+BEGIN
+    -- Insere os dados do pedido, cliente, endereço e produtos correspondentes
+    INSERT INTO @resultado
+    SELECT 
+        p.codigo AS codigoPedido,
+        p.nome AS nomePedido,
+        p.descricao AS descricaoPedido,
+        p.valorTotal,
+        p.estado AS estadoPedido,
+        p.dataPedido,
+        c.codigo AS codigoCliente,
+        c.nome AS nomeCliente,
+        c.telefone AS telefoneCliente,
+        c.email AS emailCliente,
+        p.statusPagamento,
+        c.CEP,
+        c.logradouro,
+        c.bairro,
+        c.localidade,
+        c.UF,
+        c.complemento,
+        c.numero,
+        prod.codigo AS codigoProduto,
+        prod.nome AS nomeProduto,
+        prod.categoria AS categoriaProduto,
+        prod.descricao AS descricaoProduto,
+        prod.valorUnitario AS valorUnitarioProduto,
+		prod.refEstoque,
+		p.observacao,
+        pp.quantidade AS quantidadeProduto
+    FROM 
+        pedido p
+        JOIN cliente c ON p.cliente = c.codigo
+        JOIN produtosPedido pp ON p.codigo = pp.codigoPedido
+        JOIN produto prod ON pp.codigoProduto = prod.codigo
+    WHERE 
+        p.codigo = @codigoPedido AND c.codigo = @codigoCliente;
+
+    RETURN;
+END;
+GO
+

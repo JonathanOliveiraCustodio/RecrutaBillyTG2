@@ -1,14 +1,26 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +32,11 @@ import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 @Controller
 public class PedidoController {
@@ -91,7 +108,7 @@ public class PedidoController {
 		String estado = allRequestParam.get("estado");
 		String descricao = allRequestParam.get("descricao");
 		String valorTotal = allRequestParam.get("valorTotal");
-		String formaPagamento = allRequestParam.get("formaPagamento");
+		String formaPagamento = allRequestParam.get("tipoPagamento");
 		String observacao = allRequestParam.get("observacao");
 		String statusPagamento = allRequestParam.get("statusPagamento");
 		String dataPagamento = allRequestParam.get("dataPagamento");
@@ -174,7 +191,7 @@ public class PedidoController {
 			if (cmd.contains("Listar")) {
 				pedidos = listarPedidos();
 			}
-			if (cmd.contains("Finalizar Pedido")) {
+			if (cmd.contains("Finalizar")) {
 				p.setCodigo(Integer.parseInt(codigo));
 				c.setCodigo(Integer.parseInt(cliente));
 				c = cDao.findBy(c);
@@ -203,6 +220,49 @@ public class PedidoController {
 			model.addAttribute("clientes", clientes);
 		}
 		return new ModelAndView("pedido");
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	@RequestMapping(name = "etiqueta", value = "/etiqueta", method = RequestMethod.POST)
+	public ResponseEntity EtiquetaPost(@RequestParam Map<String, String> allRequestParam) {
+
+		String erro = "";
+
+		Map<String, Object> paramRelatorio = new HashMap<String, Object>();
+		paramRelatorio.put("cliente", allRequestParam.get("cliente"));
+		paramRelatorio.put("pedido", allRequestParam.get("pedido"));
+		paramRelatorio.put(JRParameter.REPORT_CLASS_LOADER, this.getClass().getClassLoader());
+
+		byte[] bytes = null;
+
+		InputStreamResource resource = null;
+		HttpStatus status = null;
+		HttpHeaders header = new HttpHeaders();
+
+		String reportPath = "";
+
+		reportPath = "classpath:reports/Etiqueta.jasper";
+
+		try {
+
+			Connection c = gDao.getConnection();
+			File arquivo = ResourceUtils.getFile(reportPath);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(arquivo.getAbsolutePath());
+			bytes = JasperRunManager.runReportToPdf(report, paramRelatorio, c);
+		} catch (ClassNotFoundException | SQLException | FileNotFoundException | JRException e) {
+			e.printStackTrace();
+			erro = e.getMessage();
+			status = HttpStatus.BAD_REQUEST;
+		} finally {
+			if (erro.equals("")) {
+				InputStream inputStream = new ByteArrayInputStream(bytes);
+				resource = new InputStreamResource(inputStream);
+				header.setContentLength(bytes.length);
+				header.setContentType(MediaType.APPLICATION_PDF);
+				status = HttpStatus.OK;
+			}
+		}
+		return new ResponseEntity<>(resource, header, status);
 	}
 
 	private String finalizarPedido(Pedido p) throws ClassNotFoundException, SQLException {
@@ -241,4 +301,11 @@ public class PedidoController {
 		pedidos = pDao.findByName(nome);
 		return pedidos;
 	}
+
+//	private List<Pedido> buscarEtiqueta(int cliente, int pedido) throws ClassNotFoundException, SQLException {
+//		List<Pedido> pedidos = new ArrayList<>();
+//		pedidos = pDao.findEtiqueta(cliente, pedido);
+//		return pedidos;
+//	}
+
 }

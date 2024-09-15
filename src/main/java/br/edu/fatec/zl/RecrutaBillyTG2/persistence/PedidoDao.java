@@ -311,4 +311,46 @@ public class PedidoDao implements ICrud<Pedido>, IPedidoDao {
 		return pedidos;
 	}
 	
+	public List<Pedido> findEtiqueta(int cliente, int pedido) throws SQLException, ClassNotFoundException {
+		List<Pedido> pedidos = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("SELECT * FROM fn_buscar_etiqueta(?,?)");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ps.setInt(1, cliente);
+		ps.setInt(2, pedido);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {		
+			Pedido p = new Pedido();
+			p.setCodigo(rs.getInt("codigoPedido"));
+			p.setNome(rs.getString("nomePedido"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+	        cl.setLogradouro(rs.getString("logradouro"));
+	        cl.setBairro(rs.getString("bairro"));
+	        cl.setLocalidade(rs.getString("localidade"));
+	        cl.setUF(rs.getString("UF"));
+	        cl.setComplemento(rs.getString("complemento"));
+	        cl.setNumero(rs.getString("numero"));
+			p.setDescricao(rs.getString("descricaoPedido"));
+			p.setEstado(rs.getString("estadoPedido"));
+			p.setDataPedido(rs.getDate("dataPedido"));
+			p.setValorTotal(rs.getFloat("valorTotal"));
+			pedidos.add(p);
+		}
+
+		rs.close();
+		ps.close();
+		con.close();
+
+		return pedidos;
+	}
+
+	
 }
