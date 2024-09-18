@@ -221,12 +221,13 @@
 						<div class="col-md-12">
 							<div class="form-floating">
 								<textarea id="observacao" name="observacao" class="form-control"
-									placeholder="Observações" rows="3"><c:out
+									placeholder="Observações" rows="3" maxlength="800"><c:out
 										value="${pedido.observacao}"></c:out></textarea>
 								<label for="observacoes">Observações:</label>
 							</div>
 						</div>
 					</div>
+
 
 					<!-- Linha dos Botões -->
 					<div class="row g-3 mt-3">
@@ -338,7 +339,7 @@
 									<td><c:out value="${p.estado}" /></td>
 									<td>
 										<form action="pedido" method="post"
-											onsubmit="return confirmarFinalizacao()">
+											onsubmit="return confirmarFinalizacao('${p.estado}')">
 											<input type="hidden" name="codigo" value="${p.codigo}">
 											<input type="hidden" name="cliente"
 												value="${p.cliente.codigo}"> <input type="hidden"

@@ -55,7 +55,7 @@ horario             VARCHAR(30)     NOT NULL,
 salario				DECIMAL (10,1)  NOT NULL,
 dataAdmissao        DATE			NOT NULL,
 dataDesligamento    DATE            NULL,
-observacao          VARCHAR(200)    NULL,
+observacao          VARCHAR(800)    NULL,
 PRIMARY KEY (CPF)
 )
 GO
@@ -107,7 +107,7 @@ valorTotal		  DECIMAL(10,2)		    NULL,
 estado			  VARCHAR(100)		    NOT NULL,
 dataPedido		  DATE					NULL,
 tipoPagamento     VARCHAR(30)		    NOT NULL,
-observacao        VARCHAR(200)		    NULL,
+observacao        VARCHAR(800)		    NULL,
 statusPagamento   VARCHAR(30)		    NOT NULL, 
 dataPagamento     DATE					NULL
 PRIMARY KEY (codigo)
@@ -151,7 +151,7 @@ cliente			        INT             NOT NULL,
 valorTotal				DECIMAL(10,2)   NULL,
 formaPagamento			VARCHAR(25)     NOT NULL,
 status					VARCHAR(50)     NOT NULL,
-observacao				VARCHAR(200)    NULL,
+observacao				VARCHAR(800)    NULL,
 dataOrcamento			DATE            NOT NULL,
 PRIMARY KEY (codigo),
 FOREIGN KEY (cliente) REFERENCES cliente (codigo)
@@ -179,6 +179,12 @@ qtdMediaPedidoAndamento           INT		    NULL,
 qtdMediaPedidosRecebidos          INT           NULL,
 qtdMediaPedidosDespachados        INT           NULL,
 qtdMediaProducaoProdutos          INT           NULL,
+)
+GO
+CREATE TABLE categoriaProduto(
+codigo              INT IDENTITY(1,1)   NOT NULL,
+nome                VARCHAR(150)	    NOT NULL, 
+PRIMARY KEY (codigo)
 )
 GO
 -- Insert Usuario de Teste
@@ -255,7 +261,18 @@ INSERT INTO produto (nome, categoria, descricao, valorUnitario,status, quantidad
 ('Caderno Personalizado', 'Papelaria', 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03'),
 ('Almofada Personalizada', 'Decoração', 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02'),
 ('Chaveiro Personalizado', 'Acessório', 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01'),
-('Patach emborrados', 'Emborachados', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01');
+('Patach emborrados', 'Emborachados', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01'),
+('Maria O-', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 7, 'AR02'),
+('Carlos A+', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.50, 'Em Produção', 3, 'AR03'),
+('Ana AB+', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.00, 'Pendente', 10, 'AR04'),
+('Pedro B-', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.50, 'Em Produção', 6, 'AR05'),
+('João A-', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.00, 'Em Produção', 4, 'AR06'),
+('Lucas O+', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 8, 'AR07'),
+('Fernanda AB-', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.00, 'Pendente', 9, 'AR08'),
+('Clara B+', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.50, 'Em Produção', 5, 'AR09'),
+('Roberto O-', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.50, 'Finalizado', 6, 'AR10'),
+('Bruno A+', 'Patch Emborrachado', 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.00, 'Pendente', 7, 'AR11'),
+('Alex B+', 'Patch Emborrachado', 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Em Produção',5,'AR01');
 GO
 INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
 VALUES
@@ -331,6 +348,23 @@ GO
 INSERT INTO configuracoes(qtdMaximaOrcamento,qtdMinimaProdutoEstoque,qtdMediaPedidoAndamento,qtdMediaPedidosRecebidos,qtdMediaPedidosDespachados,qtdMediaProducaoProdutos) VALUES 
 (14,5,4,5,5,5)
 GO
+INSERT INTO produtosPedido (codigoPedido, codigoProduto, quantidade)
+VALUES 
+(1, 1, 2),
+(1, 2, 1),  
+(1, 3, 5),
+(2, 1, 2),
+(2, 2, 1),  
+(2, 3, 5); 
+GO
+INSERT INTO categoriaProduto(nome)
+VALUES 
+('Utensílio Doméstico'),
+('Patch Emborrachado'),
+('Decoração'),
+('Papelaria'),
+('Facas');
+GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
     @codigo INT NULL,
@@ -390,7 +424,6 @@ BEGIN
     END
 END
 GO
-
 CREATE PROCEDURE sp_iud_equipamento
     @acao CHAR(1),
     @codigo INT NULL,
@@ -516,7 +549,7 @@ CREATE PROCEDURE sp_iud_funcionario
     @salario DECIMAL(10,1),
     @dataAdmissao DATE,
     @dataDesligamento DATE NULL,
-    @observacao VARCHAR(200) NULL,
+    @observacao VARCHAR(800) NULL,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -780,7 +813,7 @@ CREATE PROCEDURE sp_iud_pedido
     @valorTotal DECIMAL(10,2) = NULL,
     @estado VARCHAR(100),
     @tipoPagamento VARCHAR(30),
-    @observacao VARCHAR(200) = NULL,
+    @observacao VARCHAR(800) = NULL,
     @statusPagamento VARCHAR(30),
     @dataPagamento DATE = NULL,
     @saida VARCHAR(200) OUTPUT
@@ -915,9 +948,9 @@ CREATE PROCEDURE sp_alterar_senha
     @Resultado NVARCHAR(100) OUTPUT
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM usuario WHERE email = @Email AND cpf = @CPF)
+    IF EXISTS (SELECT 1 FROM funcionario WHERE email = @Email AND cpf = @CPF)
     BEGIN
-        UPDATE usuario
+        UPDATE funcionario
         SET senha = @NovaSenha
         WHERE email = @Email AND cpf = @CPF    
         SET @Resultado = 'Senha alterada com sucesso'
@@ -1026,7 +1059,7 @@ CREATE PROCEDURE sp_iud_orcamento
 	@formaPagamento VARCHAR(25),
 	@dataOrcamento DATE = NULL,
     @status VARCHAR(50),
-    @observacao VARCHAR(200),
+    @observacao VARCHAR(800),
     @saida VARCHAR(200) OUTPUT
 AS
 BEGIN
@@ -1169,6 +1202,65 @@ BEGIN
         DELETE FROM endereco WHERE codigo = @codigo AND CPF = @CPF
         SET @saida = 'Endereço excluído com sucesso'
     END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
+GO
+CREATE PROCEDURE sp_iud_categoriaProduto
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @nome VARCHAR(150),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    -- Inserir nova categoria
+    IF (@acao = 'I')
+    BEGIN
+        -- Verificar se o código já existe
+        IF EXISTS (SELECT 1 FROM categoriaProduto WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código já existe. Não é possível inserir a categoria.', 16, 1)
+            RETURN
+        END     
+        -- Inserir nova categoria
+        INSERT INTO categoriaProduto (nome)
+        VALUES (@nome)
+        SET @saida = 'Categoria inserida com sucesso'
+    END
+
+    -- Atualizar categoria existente
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Verificar se o código existe
+        IF NOT EXISTS (SELECT 1 FROM categoriaProduto WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código não existe. Não é possível atualizar a categoria.', 16, 1)
+            RETURN
+        END
+        -- Atualizar categoria
+        UPDATE categoriaProduto
+        SET nome = @nome
+        WHERE codigo = @codigo
+        SET @saida = 'Categoria alterada com sucesso'
+    END
+    -- Excluir categoria
+    ELSE IF (@acao = 'D')
+    BEGIN
+        -- Verificar se o código existe
+        IF NOT EXISTS (SELECT 1 FROM categoriaProduto WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código não existe. Não é possível excluir a categoria.', 16, 1)
+            RETURN
+        END
+
+        -- Excluir categoria
+        DELETE FROM categoriaProduto WHERE codigo = @codigo
+        SET @saida = 'Categoria excluída com sucesso'
+    END
+    -- Caso a ação seja inválida
     ELSE
     BEGIN
         RAISERROR('Operação inválida', 16, 1)
@@ -2144,7 +2236,7 @@ RETURNS @resultado TABLE (
     salario DECIMAL(10,1),
     dataAdmissao DATE,
     dataDesligamento DATE NULL,
-    observacao VARCHAR(200) NULL,
+    observacao VARCHAR(800) NULL,
     quantidadeRegistros INT
 )
 AS
@@ -2163,7 +2255,7 @@ BEGIN
         salario DECIMAL(10,1),
         dataAdmissao DATE,
         dataDesligamento DATE NULL,
-        observacao VARCHAR(200) NULL
+        observacao VARCHAR(800) NULL
     );
 
     INSERT INTO @funcionarios
@@ -2237,7 +2329,7 @@ RETURNS @resultado TABLE (
     valorTotal DECIMAL(10,2),
     formaPagamento VARCHAR(25),
     status VARCHAR(50),
-    observacao VARCHAR(200) NULL,
+    observacao VARCHAR(800) NULL,
     dataOrcamento DATE,
     quantidadeRegistros INT
 )
@@ -2253,7 +2345,7 @@ BEGIN
         valorTotal DECIMAL(10,2),
         formaPagamento VARCHAR(25),
         status VARCHAR(50),
-        observacao VARCHAR(200) NULL,
+        observacao VARCHAR(800) NULL,
         dataOrcamento DATE
     );
 
@@ -2418,14 +2510,46 @@ RETURNS @resultado TABLE (
     categoriaProduto VARCHAR(30),
     descricaoProduto VARCHAR(100),
     valorUnitarioProduto DECIMAL(10,2),
-	referenciaEstoque VARCHAR(50), 
-	observacao VARCHAR(200),
+    referenciaEstoque VARCHAR(50), 
+    observacao VARCHAR(800),
+    quantidade INT,
     quantidadeProduto INT
 )
 AS
 BEGIN
-    -- Insere os dados do pedido, cliente, endereço e produtos correspondentes
-    INSERT INTO @resultado
+    DECLARE @count INT;
+    DECLARE @etiquetas TABLE (
+        codigoPedido INT,
+        nomePedido VARCHAR(100),
+        descricaoPedido VARCHAR(255),
+        valorTotal DECIMAL(10,2),
+        estadoPedido VARCHAR(50),
+        dataPedido DATE,
+        codigoCliente INT,
+        nomeCliente VARCHAR(100),
+        telefoneCliente CHAR(11),
+        emailCliente VARCHAR(100),
+        statusPagamento VARCHAR(30),
+        CEP CHAR(9),
+        logradouro VARCHAR(150),
+        bairro VARCHAR(150),
+        localidade VARCHAR(100),
+        UF CHAR(2),
+        complemento VARCHAR(100),
+        numero VARCHAR(20),
+        codigoProduto INT,
+        nomeProduto VARCHAR(50),
+        categoriaProduto VARCHAR(30),
+        descricaoProduto VARCHAR(100),
+        valorUnitarioProduto DECIMAL(10,2),
+        referenciaEstoque VARCHAR(50), 
+        observacao VARCHAR(800),
+        quantidade INT,
+        quantidadeProduto INT
+    );
+
+    -- Inserir os dados do pedido, cliente, endereço e produtos correspondentes na tabela temporária
+    INSERT INTO @etiquetas
     SELECT 
         p.codigo AS codigoPedido,
         p.nome AS nomePedido,
@@ -2450,8 +2574,9 @@ BEGIN
         prod.categoria AS categoriaProduto,
         prod.descricao AS descricaoProduto,
         prod.valorUnitario AS valorUnitarioProduto,
-		prod.refEstoque,
-		p.observacao,
+        prod.refEstoque AS referenciaEstoque,
+        p.observacao,
+        pp.quantidade,
         pp.quantidade AS quantidadeProduto
     FROM 
         pedido p
@@ -2460,6 +2585,26 @@ BEGIN
         JOIN produto prod ON pp.codigoProduto = prod.codigo
     WHERE 
         p.codigo = @codigoPedido AND c.codigo = @codigoCliente;
+
+    -- Contar os registros encontrados
+    SET @count = (SELECT COUNT(*) FROM @etiquetas);
+
+    -- Se não houver registros, inserir mensagem de "Nenhum registro encontrado"
+    IF @count = 0
+    BEGIN
+        INSERT INTO @resultado (codigoPedido, nomePedido, descricaoPedido, valorTotal, estadoPedido, dataPedido, 
+                                codigoCliente, nomeCliente, telefoneCliente, emailCliente, statusPagamento, CEP, 
+                                logradouro, bairro, localidade, UF, complemento, numero, codigoProduto, nomeProduto, 
+                                categoriaProduto, descricaoProduto, valorUnitarioProduto, referenciaEstoque, observacao, 
+                                quantidade, quantidadeProduto)
+        VALUES (0, 'Nenhum registro encontrado', '', 0.0, '', NULL, 0, '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', 0.0, '', '', 0, 0);
+    END
+    ELSE
+    BEGIN
+        -- Inserir os registros encontrados no resultado final
+        INSERT INTO @resultado
+        SELECT * FROM @etiquetas;
+    END
 
     RETURN;
 END;

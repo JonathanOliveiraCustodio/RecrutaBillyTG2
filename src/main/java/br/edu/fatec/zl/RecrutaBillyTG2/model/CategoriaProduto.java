@@ -9,23 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Fornecedor {
+public class CategoriaProduto {
 	int codigo;
 	String nome;
-	String telefone;
-	String email;
-	String empresa;
-	String CEP;
-	String logradouro;
-	String numero;
-	String bairro;
-	String complemento;
-	String cidade;
-	String UF;
 	
 	@Override
 	public String toString() {
 		return nome;
 	}
-	
 }

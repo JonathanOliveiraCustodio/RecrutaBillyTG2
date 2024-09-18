@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
@@ -65,6 +66,7 @@ public class PedidoController {
 		Cliente c = new Cliente();
 		List<Cliente> clientes = new ArrayList<>();
 		List<Pedido> pedidos = new ArrayList<>();
+
 		try {
 			// p = null;
 			clientes = cDao.findAll();
@@ -241,7 +243,7 @@ public class PedidoController {
 
 		String reportPath = "";
 
-		reportPath = "classpath:reports/Etiqueta.jasper";
+		reportPath = "classpath:reports/Etiqueta1.jasper";
 
 		try {
 

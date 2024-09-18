@@ -37,7 +37,6 @@
 									<label for="codigo">Código</label>
 								</div>
 							</div>
-
 							<div class="col-md-3">
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
@@ -186,7 +185,7 @@
 									Contato WhatsApp
 								</button>
 							</div>
-
+						</div>
 						<!-- Linha dos Botões -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">

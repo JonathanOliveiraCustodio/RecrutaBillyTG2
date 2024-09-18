@@ -18,4 +18,5 @@ public class Produto {
 	String status;
 	int quantidade;
 	String refEstoque;
+	CategoriaProduto categoriaProduto;
 }

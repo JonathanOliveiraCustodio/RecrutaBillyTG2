@@ -1,26 +1,26 @@
 // pedido.js
 
 function validarBusca() {
-		var codigo = document.getElementById("codigo").value;
-		if (codigo.trim() === "") {
-			alert("Por favor, insira um Código.");
-			return false;
-		}
-		return true;
+	var codigo = document.getElementById("codigo").value;
+	if (codigo.trim() === "") {
+		alert("Por favor, insira um Código.");
+		return false;
 	}
+	return true;
+}
 
-	function editarPedido(codigo) {
-		window.location.href = 'pedido?cmd=alterar&codigo=' + codigo;
-	}
+function editarPedido(codigo) {
+	window.location.href = 'pedido?cmd=alterar&codigo=' + codigo;
+}
 
-	function excluirPedido(codigo) {
-		if (confirm("Tem certeza que deseja excluir este Pedido?")) {
-			window.location.href = 'pedido?cmd=Excluir&codigo=' + codigo;
-		}
+function excluirPedido(codigo) {
+	if (confirm("Tem certeza que deseja excluir este Pedido?")) {
+		window.location.href = 'pedido?cmd=Excluir&codigo=' + codigo;
 	}
-	function mostrarValor(codigo) {
-		console.log(codigo);
-	}
+}
+function mostrarValor(codigo) {
+	console.log(codigo);
+}
 
 function validarFormulario(event) {
 	var botao = event.submitter.value;
@@ -62,68 +62,73 @@ function validarFormulario(event) {
 	}
 	return true;
 }
-	
-	function redirectToWhatsApp() {
-	    // Obtém o valor do campo de telefone
-	    var phoneNumber = document.getElementById('telefone').value;
 
-	    if (phoneNumber) {
-	        // Construa a URL do WhatsApp
-	        var url = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(phoneNumber);
-	        window.open(url, "_blank");
-	    } else {
-	        alert("Número de telefone não encontrado.");
-	    }
+function redirectToWhatsApp() {
+	// Obtém o valor do campo de telefone
+	var phoneNumber = document.getElementById('telefone').value;
+
+	if (phoneNumber) {
+		// Construa a URL do WhatsApp
+		var url = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(phoneNumber);
+		window.open(url, "_blank");
+	} else {
+		alert("Número de telefone não encontrado.");
 	}
-	
+}
+
 function updateEndereco() {
-    const clienteSelect = document.getElementById("cliente");
-    const selectedOption = clienteSelect.options[clienteSelect.selectedIndex];
-    
-    // Dados do cliente selecionado (exemplo: armazenados como atributos data-*)
-    const cep = selectedOption.getAttribute("data-cep");
-    const logradouro = selectedOption.getAttribute("data-logradouro");
-    const numero = selectedOption.getAttribute("data-numero");
-    const complemento = selectedOption.getAttribute("data-complemento");
-    const bairro = selectedOption.getAttribute("data-bairro");
-    const cidade = selectedOption.getAttribute("data-cidade");
-    const estado = selectedOption.getAttribute("data-estado");
-    
-    // Preenchendo os campos com os dados do cliente
-    document.getElementById("CEP").value = cep;
-    document.getElementById("logradouro").value = logradouro;
-    document.getElementById("numero").value = numero;
-    document.getElementById("complemento").value = complemento;
-    document.getElementById("bairro").value = bairro;
-    document.getElementById("cidade").value = cidade;
-    document.getElementById("estado").value = estado;
+	const clienteSelect = document.getElementById("cliente");
+	const selectedOption = clienteSelect.options[clienteSelect.selectedIndex];
+
+	// Dados do cliente selecionado (exemplo: armazenados como atributos data-*)
+	const cep = selectedOption.getAttribute("data-cep");
+	const logradouro = selectedOption.getAttribute("data-logradouro");
+	const numero = selectedOption.getAttribute("data-numero");
+	const complemento = selectedOption.getAttribute("data-complemento");
+	const bairro = selectedOption.getAttribute("data-bairro");
+	const cidade = selectedOption.getAttribute("data-cidade");
+	const estado = selectedOption.getAttribute("data-estado");
+
+	// Preenchendo os campos com os dados do cliente
+	document.getElementById("CEP").value = cep;
+	document.getElementById("logradouro").value = logradouro;
+	document.getElementById("numero").value = numero;
+	document.getElementById("complemento").value = complemento;
+	document.getElementById("bairro").value = bairro;
+	document.getElementById("cidade").value = cidade;
+	document.getElementById("estado").value = estado;
 }
 
 function formatarMoeda(campo) {
-    let valor = campo.value;
+	let valor = campo.value;
 
-    // Remove qualquer caractere que não seja número ou vírgula
-    valor = valor.replace(/[^\d]/g, '');
+	// Remove qualquer caractere que não seja número ou vírgula
+	valor = valor.replace(/[^\d]/g, '');
 
-    // Adiciona a vírgula para separar os centavos
-    valor = (valor / 100).toFixed(2) + '';
-    valor = valor.replace(".", ",");
+	// Adiciona a vírgula para separar os centavos
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
 
-    // Adiciona o ponto para separar os milhares
-    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+	// Adiciona o ponto para separar os milhares
+	valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 
-    // Adiciona o símbolo de moeda
-    campo.value = 'R$ ' + valor;
+	// Adiciona o símbolo de moeda
+	campo.value = 'R$ ' + valor;
 }
 
-function confirmarFinalizacao() {
+function confirmarFinalizacao(estado) {
+	if (estado === "Pedido Finalizado") {
+		alert("Este pedido já está finalizado e não pode ser alterado.");
+		return false; // Não submete o formulário
+	}
 	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
 }
 
+
 // Formata o valor inicial ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
-    const campoValorTotal = document.getElementById('valorTotal');
-    if (campoValorTotal) {
-        formatarMoeda(campoValorTotal);
-    }
+	const campoValorTotal = document.getElementById('valorTotal');
+	if (campoValorTotal) {
+		formatarMoeda(campoValorTotal);
+	}
 });

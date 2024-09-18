@@ -2,7 +2,6 @@ package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
 import java.sql.SQLException;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Configuracoes;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ConfiguracoesDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
@@ -30,7 +28,7 @@ public class ConfiguracoesController {
 			HttpSession session) {
 		String erro = "";
 		String saida = "";
-
+		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
 		Configuracoes configuracoes = null;
 
 		try {
@@ -38,6 +36,9 @@ public class ConfiguracoesController {
 		} catch (ClassNotFoundException | SQLException error) {
 			erro = error.getMessage();
 		} finally {
+			if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
+				saida = "Você não possui acesso para visualizar esta página.";
+			}
 			model.addAttribute("erro", erro);
 			model.addAttribute("saida", saida);
 			model.addAttribute("configuracoes", configuracoes);

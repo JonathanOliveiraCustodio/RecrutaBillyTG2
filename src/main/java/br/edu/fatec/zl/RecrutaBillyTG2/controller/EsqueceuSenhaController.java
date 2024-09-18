@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.EsqueceuSenhaDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.util.Util;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -27,11 +28,13 @@ public class EsqueceuSenhaController {
     @RequestMapping(name = "esqueceuSenha", value = "/esqueceuSenha", method = RequestMethod.POST)
     public ModelAndView esqueceuSenhaPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
         String email = allRequestParam.get("email");
-        String cpf = allRequestParam.get("cpf");
+        String CPF = allRequestParam.get("CPF");
         String novaSenha = allRequestParam.get("novaSenha");
         String confirmarSenha = allRequestParam.get("confirmarSenha");
         String mensagem = "";
 
+        CPF = Util.removerMascara(CPF);
+        
         if (!novaSenha.equals(confirmarSenha)) {
             mensagem = "A nova senha e a confirmação de senha não coincidem.";
             model.addAttribute("erro", mensagem);
@@ -39,7 +42,7 @@ public class EsqueceuSenhaController {
         }
 
         try {
-            Map<String, String> resultado = esqueceuSenhaDao.alterarSenha(email, cpf, novaSenha);
+            Map<String, String> resultado = esqueceuSenhaDao.alterarSenha(email, CPF, novaSenha);
             mensagem = resultado.get("mensagem");
         } catch (Exception e) {
             mensagem = "Erro ao alterar a senha: " + e.getMessage();

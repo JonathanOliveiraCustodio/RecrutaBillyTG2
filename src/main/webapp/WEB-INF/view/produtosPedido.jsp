@@ -13,6 +13,11 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/produtosPedido.js"></script>
 <title>Gerenciar Produtos Pedido</title>
+<script>
+	function buscarProduto() {
+		document.forms[0].submit(); // Submete o primeiro formulário da página
+	}
+</script>
 </head>
 <body>
 	<div>
@@ -26,11 +31,24 @@
 					onsubmit="return validarFormulario(event);" class="container mt-3">
 					<input type="hidden" id="pedido" name="pedido"
 						value='<c:out value="${pedido}"></c:out>'>
-
-					<!-- Linha do Formulário -->
+						<!-- Linha do Formulário -->
 					<div class="row g-3">
+						<div class="col-md-4">
+							<div class="form-floating">
+								<select id="categoria" name="categoria" class="form-select"
+									onchange="buscarProduto()">
+									<option value="0">Escolha uma Categoria</option>
+									<c:forEach var="c" items="${categorias}">
+										<option value="${c.nome}"
+											${c.nome eq categoriaProduto.nome ? 'selected' : ''}>
+											<c:out value="${c.nome}" />
+										</option>
+									</c:forEach>
+								</select> <label for="categoria">Categoria</label>
+							</div>
+						</div>
 						<!-- Produto -->
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<div class="form-floating">
 								<select class="form-select" id="produto" name="produto">
 									<option value="0">Escolha um Produto</option>
@@ -52,7 +70,7 @@
 						</div>
 
 						<!-- Quantidade -->
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<div class="form-floating">
 								<input class="form-control" type="number" min="1" step="1"
 									id="quantidade" name="quantidade" placeholder="Quantidade"
@@ -91,45 +109,46 @@
 
 		<div align="center" class="mt-4">
 			<c:if test="${not empty pedidoProdutos}">
-			<div class="table-responsive w-100">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th class="titulo-tabela" colspan="6"
-								style="text-align: center; font-size: 35px;">Lista de
-								Produtos de um Pedido</th>
-						</tr>
-						<tr class="table-dark">
-							<th>Nome</th>
-							<th>Categoria</th>
-							<th>Descrição</th>
-							<th>Valor</th>
-							<th>Quantidade</th>
-							<th>Ação</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="p" items="${pedidoProdutos}">
+				<div class="table-responsive w-100">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td><c:out value="${p.produto.nome}" /></td>
-								<td><c:out value="${p.produto.categoria}" /></td>
-								<td><c:out value="${p.produto.descricao}" /></td>
-								<td><fmt:formatNumber value="${p.produto.valorUnitario}"
-										type="currency" currencySymbol="R$" /></td>
-								<td><c:out value="${p.quantidade}" /></td>
-								<td>
-									<form action="produtosPedido" method="post"
-										onsubmit="return validarFormulario(event);">
-										<input type="hidden" name="produto" value="${p.codigoProduto}">
-										<input type="hidden" name="pedido" value="${p.codigoPedido}">
-										<input type="hidden" name="botao" value="Excluir">
-										<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
-									</form>
-								</td>
+								<th class="titulo-tabela" colspan="6"
+									style="text-align: center; font-size: 35px;">Lista de
+									Produtos de um Pedido</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
+							<tr class="table-dark">
+								<th>Nome</th>
+								<th>Categoria</th>
+								<th>Descrição</th>
+								<th>Valor</th>
+								<th>Quantidade</th>
+								<th>Ação</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="p" items="${pedidoProdutos}">
+								<tr>
+									<td><c:out value="${p.produto.nome}" /></td>
+									<td><c:out value="${p.produto.categoria}" /></td>
+									<td><c:out value="${p.produto.descricao}" /></td>
+									<td><fmt:formatNumber value="${p.produto.valorUnitario}"
+											type="currency" currencySymbol="R$" /></td>
+									<td><c:out value="${p.quantidade}" /></td>
+									<td>
+										<form action="produtosPedido" method="post"
+											onsubmit="return validarFormulario(event);">
+											<input type="hidden" name="produto"
+												value="${p.codigoProduto}"> <input type="hidden"
+												name="pedido" value="${p.codigoPedido}"> <input
+												type="hidden" name="botao" value="Excluir">
+											<button type="submit" class="btn btn-danger" value="Excluir">Excluir</button>
+										</form>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
 				</div>
 			</c:if>
 		</div>

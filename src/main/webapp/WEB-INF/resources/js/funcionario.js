@@ -153,9 +153,9 @@ function validarTelefone(input) {
 }
 
 function validarHorario(horario) {
-    // Regex para validar o formato "HH:mm às HH:mm" ou "HH:mm as HH:mm"
-    var regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9] (às|as) ([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    return regex.test(horario);
+	// Regex para validar o formato "HH:mm às HH:mm" ou "HH:mm as HH:mm"
+	var regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9] (às|as) ([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+	return regex.test(horario);
 }
 
 
@@ -198,66 +198,72 @@ function validarERedirecionar() {
 }
 
 function formatarCPF(cpf) {
-    cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
-    cpf = cpf.slice(0, 11); // Limita a 11 dígitos
+	cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+	cpf = cpf.slice(0, 11); // Limita a 11 dígitos
 
-    if (cpf.length <= 3) {
-        return cpf;
-    } else if (cpf.length <= 6) {
-        return cpf.slice(0, 3) + '.' + cpf.slice(3);
-    } else if (cpf.length <= 9) {
-        return cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6);
-    } else {
-        return cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9);
-    }
+	if (cpf.length <= 3) {
+		return cpf;
+	} else if (cpf.length <= 6) {
+		return cpf.slice(0, 3) + '.' + cpf.slice(3);
+	} else if (cpf.length <= 9) {
+		return cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6);
+	} else {
+		return cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9);
+	}
 }
 
 function formatarTelefone(telefone) {
-    telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
-    telefone = telefone.slice(0, 11); // Limita a 11 dígitos
+	telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+	telefone = telefone.slice(0, 11); // Limita a 11 dígitos
 
-    if (telefone.length <= 2) {
-        return telefone;
-    } else if (telefone.length <= 6) {
-        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2);
-    } else if (telefone.length <= 10) {
-        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 6) + '-' + telefone.slice(6);
-    } else {
-        return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 7) + '-' + telefone.slice(7);
-    }
+	if (telefone.length <= 2) {
+		return telefone;
+	} else if (telefone.length <= 6) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2);
+	} else if (telefone.length <= 10) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 6) + '-' + telefone.slice(6);
+	} else {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 7) + '-' + telefone.slice(7);
+	}
 }
 
 function aplicarMascaraTelefone() {
-    var telefoneInput = document.getElementById('telefone');
-    telefoneInput.addEventListener('input', function () {
-        this.value = formatarTelefone(this.value);
-    });
+	var telefoneInput = document.getElementById('telefone');
+	telefoneInput.addEventListener('input', function() {
+		this.value = formatarTelefone(this.value);
+	});
 
-    // Formata o valor inicial se o campo já tiver um valor
-    if (telefoneInput.value) {
-        telefoneInput.value = formatarTelefone(telefoneInput.value);
-    }
+	// Formata o valor inicial se o campo já tiver um valor
+	if (telefoneInput.value) {
+		telefoneInput.value = formatarTelefone(telefoneInput.value);
+	}
 }
 
 
 function aplicarMascaraCPF() {
-    var cpfInput = document.getElementById('CPF');
-    cpfInput.addEventListener('input', function () {
-        this.value = formatarCPF(this.value);
-    });
+	var cpfInput = document.getElementById('CPF');
+	cpfInput.addEventListener('input', function() {
+		this.value = formatarCPF(this.value);
+	});
 
-    // Formata o valor inicial se o campo já tiver um valor
-    if (cpfInput.value) {
-        cpfInput.value = formatarCPF(cpfInput.value);
-    }
+	// Formata o valor inicial se o campo já tiver um valor
+	if (cpfInput.value) {
+		cpfInput.value = formatarCPF(cpfInput.value);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const campoSalario = document.getElementById('salario');
-    if (campoSalario) {
-        formatarMoeda(campoSalario);
-    }
-     aplicarMascaraTelefone();
-    aplicarMascaraCPF(); // Adicione esta linha
+	const campoSalario = document.getElementById('salario');
+	if (campoSalario) {
+		formatarMoeda(campoSalario);
+	}
+	aplicarMascaraTelefone();
+	aplicarMascaraCPF();
+
+	// Aplicar a máscara de CPF em todas as células da tabela que contêm CPF
+	var cpfsNaTabela = document.querySelectorAll('.CPF-campo');
+	cpfsNaTabela.forEach(function(campo) {
+		campo.textContent = formatarCPF(campo.textContent); // Aplica a máscara de CPF
+	});
 });
 

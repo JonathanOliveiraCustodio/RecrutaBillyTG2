@@ -6,9 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<link rel="stylesheet"
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Produto</title>
+
 </head>
 <body>
 	<script
@@ -59,10 +60,15 @@
 						</div>
 						<div class="col-md-4">
 							<div class="form-floating">
-								<input class="form-control" type="text" id="categoria"
-									name="categoria" placeholder="Categoria"
-									value='<c:out value="${produto.categoria}"></c:out>'> <label
-									for="categoria">Categoria</label>
+								<select id="categoria" name="categoria" class="form-select">
+									<option value="0">Escolha uma Categoria</option>
+									<c:forEach var="c" items="${categorias }">
+										<option value="${c.nome}"
+											${c.nome eq produto.categoria ? 'selected' : ''}>
+											<c:out value="${c.nome}" />
+										</option>
+									</c:forEach>
+								</select> <label for="categoria">Categoria</label>
 							</div>
 						</div>
 					</div>

@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import br.edu.fatec.zl.RecrutaBillyTG2.model.CategoriaProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.CategoriaProdutoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoDao;
 
@@ -23,47 +26,53 @@ public class ProdutoController {
 
 	@Autowired
 	ProdutoDao pDao;
+	
+	@Autowired
+	CategoriaProdutoDao cpDao;
 
 	@RequestMapping(name = "produto", value = "/produto", method = RequestMethod.GET)
 	public ModelAndView produtoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 
-		String cmd = allRequestParam.get("cmd");
-		String codigo = allRequestParam.get("codigo");
+	    String cmd = allRequestParam.get("cmd");
+	    String codigo = allRequestParam.get("codigo");
+	    String saida = "";
+	    String erro = "";
 
-		if (cmd != null) {
-			Produto p = new Produto();
-			p.setCodigo(Integer.parseInt(codigo));
+	    List<Produto> produtos = new ArrayList<>();
+	    List<CategoriaProduto> categorias = new ArrayList<>();
+	    Produto p = null; // Inicialize a variável fora do if
 
-			String saida = "";
-			String erro = "";
-			List<Produto> produtos = new ArrayList<>();
+	    try {
+	        produtos = listarProdutos();
+	        categorias = listarCategoriaProdutos();
 
-			try {
-				if (cmd.contains("alterar")) {
-					p = buscarProduto(p);
-				} else if (cmd.contains("excluir")) {
-					p = buscarProduto(p);
-					saida = excluirProduto(p);
-					p = null;
-				}
+	        // Se o cmd estiver presente, execute as ações correspondentes
+	        if (cmd != null && codigo != null && !codigo.isEmpty()) {
+	            p = new Produto();
+	            p.setCodigo(Integer.parseInt(codigo));
 
-				produtos = listarProdutos();
+	            if (cmd.contains("alterar")) {
+	                p = buscarProduto(p);
+	            } else if (cmd.contains("excluir")) {
+	                p = buscarProduto(p);
+	                saida = excluirProduto(p);
+	                p = null;
+	            }
+	        }
 
-			} catch (SQLException | ClassNotFoundException error) {
-				erro = error.getMessage();
-			} finally {
+	    } catch (SQLException | ClassNotFoundException | NumberFormatException error) {
+	        erro = error.getMessage();
+	    } finally {
+	        model.addAttribute("saida", saida);
+	        model.addAttribute("erro", erro);
+	        model.addAttribute("produto", p);
+	        model.addAttribute("produtos", produtos);
+	        model.addAttribute("categorias", categorias);
+	    }
 
-				model.addAttribute("saida", saida);
-				model.addAttribute("erro", erro);
-				model.addAttribute("produto", p);
-				model.addAttribute("produtos", produtos);
-
-			}
-
-		}
-
-		return new ModelAndView("produto");
+	    return new ModelAndView("produto");
 	}
+
 
 	@RequestMapping(name = "produto", value = "/produto", method = RequestMethod.POST)
 	public ModelAndView produtoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -83,6 +92,7 @@ public class ProdutoController {
 		Produto p = new Produto();
 
 		List<Produto> produtos = new ArrayList<>();
+		List<CategoriaProduto> categorias = new ArrayList<>();
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			p = null;
@@ -91,7 +101,8 @@ public class ProdutoController {
 			p.setNome(nome);
 		}
 		try {
-
+			
+			categorias  = cpDao.findAll();
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 				if (codigo != null && !codigo.isEmpty()) {
 					p.setCodigo(Integer.parseInt(codigo));
@@ -165,6 +176,7 @@ public class ProdutoController {
 			model.addAttribute("erro", erro);
 			model.addAttribute("produto", p);
 			model.addAttribute("produtos", produtos);
+			model.addAttribute("categorias", categorias);
 
 		}
 
@@ -196,6 +208,11 @@ public class ProdutoController {
 	private List<Produto> listarProdutos() throws SQLException, ClassNotFoundException {
 		List<Produto> produtos = pDao.findAll();
 		return produtos;
+	}
+	
+	private List<CategoriaProduto> listarCategoriaProdutos() throws SQLException, ClassNotFoundException {
+		List<CategoriaProduto> categorias = cpDao.findAll();
+		return categorias;
 	}
 	
 	private List<Produto> buscarProdutoNome(String nome) throws ClassNotFoundException, SQLException {

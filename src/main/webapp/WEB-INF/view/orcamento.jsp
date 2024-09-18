@@ -148,7 +148,7 @@
 						<div class="col-md-12">
 							<div class="form-floating">
 								<textarea id="observacao" name="observacao" class="form-control"
-									placeholder="Observações" rows="3"><c:out
+									placeholder="Observações" rows="3" maxlength="800"><c:out
 										value="${orcamento.observacao}"></c:out></textarea>
 								<label for="observacao">Observação</label>
 							</div>

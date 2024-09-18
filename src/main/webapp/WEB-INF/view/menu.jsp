@@ -39,11 +39,10 @@
 					</a>
 
 					<ul class="nav nav-pills">
-
 						<li class="nav-item dropdown"><a
 							class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
 							id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-							aria-expanded="false"> Controle de Cadastros </a>
+							aria-expanded="false"> Gestão de Cadastros </a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<li><a class="dropdown-item"
 									href="${pageContext.request.contextPath}/cliente">Cliente</a></li>
@@ -55,38 +54,42 @@
 									href="${pageContext.request.contextPath}/funcionario">Funcionário</a></li>
 								<li><a class="dropdown-item"
 									href="${pageContext.request.contextPath}/insumo">Insumo</a></li>
-
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/categoriaProduto">Categoria
+										de Produto</a></li>
 							</ul></li>
-
-
-						<li class="nav-item"><a
-							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/configuracoes">Configurações</a></li>
-
-						<li class="nav-item"><a
-							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/despesas">Despesas</a></li>
-
-						<li class="nav-item"><a
-							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/orcamento">Orçamento</a></li>
-
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
+							id="financeDropdown" role="button" data-bs-toggle="dropdown"
+							aria-expanded="false"> Gestão Financeira </a>
+							<ul class="dropdown-menu" aria-labelledby="financeDropdown">
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/despesas">Despesas</a></li>
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/orcamento">Orçamento</a></li>
+							</ul></li>
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/pedido">Pedido</a></li>
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/produto">Produto</a></li>
-
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/relatorio">Relatório</a></li>
+
+						<li class="nav-item"><a
+							class="nav-link px-3 link-body-emphasis"
+							href="${pageContext.request.contextPath}/configuracoes">Configurações</a></li>
+
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis" href="#"
 							onclick="logout()">Logout</a></li>
 					</ul>
+
 				</div>
 			</div>
+		</div>
 	</nav>
 	<script>
 		function logout() {

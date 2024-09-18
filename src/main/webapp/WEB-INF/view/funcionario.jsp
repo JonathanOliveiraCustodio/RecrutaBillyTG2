@@ -278,7 +278,7 @@
 					</svg>
 									</button>
 								</td>
-								<td><c:out value="${f.CPF}" /></td>
+								<td class="CPF-campo"><c:out value="${f.CPF}" /></td>
 								<td><c:out value="${f.nome}" /></td>
 								<td><c:out value="${f.nivelAcesso}" /></td>
 								<td><c:out value="${f.email}" /></td>

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Despesa;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Equipamento;
@@ -44,12 +42,12 @@ import br.edu.fatec.zl.RecrutaBillyTG2.persistence.InsumoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.OrcamentoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoDao;
-import jakarta.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.util.JRLoader;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RelatorioController {
@@ -77,16 +75,29 @@ public class RelatorioController {
 
 	@Autowired
 	FuncionarioDao uDao;
-	
+
 	@Autowired
 	OrcamentoDao oDao;
-	
+
 	@Autowired
 	DespesaDao dDao;
 
 	@RequestMapping(name = "relatorio", value = "/relatorio", method = RequestMethod.GET)
 	public ModelAndView relatorioGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
 			HttpSession session) {
+
+		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
+		String saida = "";
+
+		try {
+
+		} finally {
+			if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
+				saida = "Você não possui acesso para visualizar esta página.";
+			}
+
+			model.addAttribute("saida", saida);
+		}
 
 		return new ModelAndView("relatorio");
 	}
@@ -120,8 +131,8 @@ public class RelatorioController {
 				opcao = "";
 				parametro = "";
 			} else
-				
-				if (cmd.contains("Visualizar Relatório")) {
+
+			if (cmd.contains("Visualizar Relatório")) {
 				switch (categoria) {
 				case "cliente":
 					clientes = listarClientes(opcao, parametro);
@@ -143,13 +154,13 @@ public class RelatorioController {
 					break;
 				case "produto":
 					produtos = listarProdutos(opcao, parametro);
-					break;		
+					break;
 				case "orcamento":
 					orcamentos = listarOrcamentos(opcao, parametro);
-					break;	
+					break;
 				case "despesa":
 					despesas = listarDespesas(opcao, parametro);
-					break;	
+					break;
 
 				default:
 					erro = "Categoria desconhecida: " + categoria;
@@ -185,8 +196,8 @@ public class RelatorioController {
 		String erro = "";
 
 		String categoria = allRequestParam.get("categoria");
-		//String opcao = allRequestParam.get("opcao");
-		//String parametro = allRequestParam.get("parametro");
+		// String opcao = allRequestParam.get("opcao");
+		// String parametro = allRequestParam.get("parametro");
 
 		Map<String, Object> paramRelatorio = new HashMap<String, Object>();
 		paramRelatorio.put("opcao", allRequestParam.get("opcao"));
@@ -227,8 +238,8 @@ public class RelatorioController {
 			break;
 		case "despesa":
 			reportPath = "classpath:reports/RelatorioDespesa.jasper";
-			break;	
-			
+			break;
+
 		default:
 			throw new IllegalArgumentException("Categoria desconhecida " + categoria);
 		}
@@ -299,16 +310,15 @@ public class RelatorioController {
 		funcionarios = uDao.findFuncionariosByOption(opcao, parametro);
 		return funcionarios;
 	}
-	
+
 	private List<Orcamento> listarOrcamentos(String opcao, String parametro)
 			throws ClassNotFoundException, SQLException {
 		List<Orcamento> orcamentos = new ArrayList<>();
 		orcamentos = oDao.findOrcamentosByOption(opcao, parametro);
 		return orcamentos;
 	}
-	
-	private List<Despesa> listarDespesas(String opcao, String parametro)
-			throws ClassNotFoundException, SQLException {
+
+	private List<Despesa> listarDespesas(String opcao, String parametro) throws ClassNotFoundException, SQLException {
 		List<Despesa> despesas = new ArrayList<>();
 		despesas = dDao.findDespesasByOption(opcao, parametro);
 		return despesas;

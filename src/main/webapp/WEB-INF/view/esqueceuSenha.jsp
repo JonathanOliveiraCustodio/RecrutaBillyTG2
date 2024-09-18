@@ -7,7 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <script
-	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
+	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js">
+	
+</script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/esqueceuSenha.js"></script>
 <title>Recuperação de Senha</title>
 </head>
 <body>
@@ -25,14 +29,14 @@
 					<div class="row g-3 justify-content-center">
 						<div class="col-md-4">
 							<div class="form-floating">
-								<input type="email" class="form-control" id="email" name="email"
-									placeholder="E-mail" required> <label for="email">E-mail</label>
+								<input type="text" class="form-control" id="email" name="email"
+									placeholder="E-mail"> <label for="email">E-mail</label>
 							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="form-floating">
-								<input type="text" class="form-control" id="cpf" name="cpf"
-									placeholder="CPF" required> <label for="cpf">CPF</label>
+								<input type="text" class="form-control" id="CPF" name="CPF"
+									placeholder="CPF"> <label for="cpf">CPF</label>
 							</div>
 						</div>
 					</div>
@@ -42,16 +46,15 @@
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input type="password" class="form-control" id="novaSenha"
-									name="novaSenha" placeholder="Nova Senha" required> <label
+									name="novaSenha" placeholder="Nova Senha"> <label
 									for="novaSenha">Nova Senha</label>
 							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input type="password" class="form-control" id="confirmarSenha"
-									name="confirmarSenha" placeholder="Confirmar Nova Senha"
-									required> <label for="confirmarSenha">Confirmar
-									Nova Senha</label>
+									name="confirmarSenha" placeholder="Confirmar Nova Senha">
+								<label for="confirmarSenha">Confirmar Nova Senha</label>
 							</div>
 						</div>
 					</div>
@@ -59,8 +62,9 @@
 					<!-- Terceira Linha: Botão Alterar Senha -->
 					<div class="row g-3 mt-2 justify-content-center">
 						<div class="col-md-2 d-grid text-center">
-							<button type="submit" class="btn btn-primary">Alterar
-								Senha</button>
+							<button type="submit" class="btn btn-primary"
+								value="Alterar Senha">Alterar Senha</button>
+
 						</div>
 					</div>
 				</form>

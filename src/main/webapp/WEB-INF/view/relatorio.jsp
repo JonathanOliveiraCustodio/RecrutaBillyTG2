@@ -19,89 +19,91 @@
 		<jsp:include page="menu.jsp" />
 	</div>
 	<div class="container py-4">
-		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
-			<div class="container-fluid py-1">
-				<h1 class="display-6 fw-bold">Gerar Relatório</h1>
-				<form action="relatorio" method="post" class="row g-3 mt-3"
-					id="form-relatorio">
-					<!-- Campos ocultos para armazenar a categoria e a opção selecionada -->
-					<input type="hidden" id="categoriaSelecionada"
-						name="categoriaSelecionada" value="${categoria}"> <input
-						type="hidden" id="opcaoSelecionada" name="opcaoSelecionada"
-						value="${opcao}">
+		<c:if test="${nivelAcesso == 'admin' }">
+			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
+				<div class="container-fluid py-1">
+					<h1 class="display-6 fw-bold">Gerar Relatório</h1>
+					<form action="relatorio" method="post" class="row g-3 mt-3"
+						id="form-relatorio">
+						<!-- Campos ocultos para armazenar a categoria e a opção selecionada -->
+						<input type="hidden" id="categoriaSelecionada"
+							name="categoriaSelecionada" value="${categoria}"> <input
+							type="hidden" id="opcaoSelecionada" name="opcaoSelecionada"
+							value="${opcao}">
 
-					<!-- Linha do Formulário -->
-					<div class="row g-3">
-						<!-- Categoria -->
-						<div class="col-md-4">
-							<div class="form-floating">
-								<select class="form-select" id="categoria" name="categoria"
-									onchange="atualizarOpcoes()">
-									<option value="">Escolha uma Categoria</option>
-									<option value="cliente"
-										${categoria == 'cliente' ? 'selected' : ''}>Cliente</option>
-									<option value="despesa"
-										${categoria == 'despesa' ? 'selected' : ''}>Despesas</option>
-									<option value="equipamento"
-										${categoria == 'equipamento' ? 'selected' : ''}>Equipamento</option>
-									<option value="fornecedor"
-										${categoria == 'fornecedor' ? 'selected' : ''}>Fornecedor</option>
-									<option value="funcionario"
-										${categoria == 'funcionario' ? 'selected' : ''}>Funcionário</option>
-									<option value="insumo"
-										${categoria == 'insumo' ? 'selected' : ''}>Insumo</option>
-									<option value="orcamento"
-										${categoria == 'orcamento' ? 'selected' : ''}>Orçamento</option>
-									<option value="pedido"
-										${categoria == 'pedido' ? 'selected' : ''}>Pedido</option>
-									<option value="produto"
-										${categoria == 'produto' ? 'selected' : ''}>Produto</option>
+						<!-- Linha do Formulário -->
+						<div class="row g-3">
+							<!-- Categoria -->
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select class="form-select" id="categoria" name="categoria"
+										onchange="atualizarOpcoes()">
+										<option value="">Escolha uma Categoria</option>
+										<option value="cliente"
+											${categoria == 'cliente' ? 'selected' : ''}>Cliente</option>
+										<option value="despesa"
+											${categoria == 'despesa' ? 'selected' : ''}>Despesas</option>
+										<option value="equipamento"
+											${categoria == 'equipamento' ? 'selected' : ''}>Equipamento</option>
+										<option value="fornecedor"
+											${categoria == 'fornecedor' ? 'selected' : ''}>Fornecedor</option>
+										<option value="funcionario"
+											${categoria == 'funcionario' ? 'selected' : ''}>Funcionário</option>
+										<option value="insumo"
+											${categoria == 'insumo' ? 'selected' : ''}>Insumo</option>
+										<option value="orcamento"
+											${categoria == 'orcamento' ? 'selected' : ''}>Orçamento</option>
+										<option value="pedido"
+											${categoria == 'pedido' ? 'selected' : ''}>Pedido</option>
+										<option value="produto"
+											${categoria == 'produto' ? 'selected' : ''}>Produto</option>
 
-								</select> <label for="categoria">Categoria:</label>
+									</select> <label for="categoria">Categoria:</label>
+								</div>
+							</div>
+
+							<!-- Opção -->
+							<div class="col-md-4">
+								<div class="form-floating">
+									<select class="form-select" id="opcao" name="opcao">
+										<!-- As opções serão preenchidas dinamicamente com base na categoria selecionada -->
+										<option value="${opcao}" selected>${opcao}</option>
+									</select> <label for="opcao">Opção:</label>
+								</div>
+							</div>
+
+							<!-- Parâmetro de Pesquisa -->
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="text" id="parametro" name="parametro"
+										class="form-control" placeholder="Digite o Filtro"
+										value="${parametro}"> <label for="parametro">Filtro
+										de Pesquisa:</label>
+								</div>
 							</div>
 						</div>
-
-						<!-- Opção -->
-						<div class="col-md-4">
-							<div class="form-floating">
-								<select class="form-select" id="opcao" name="opcao">
-									<!-- As opções serão preenchidas dinamicamente com base na categoria selecionada -->
-									<option value="${opcao}" selected>${opcao}</option>
-								</select> <label for="opcao">Opção:</label>
+						<!-- Linha dos Botões -->
+						<div class="row g-3 mt-3 justify-content-center">
+							<div class="col-md-2 d-grid text-center">
+								<input type="button" id="botaoPdf" name="botaoPdf"
+									value="Gerar Relatório" class="btn btn-success btn-align"
+									onclick="gerarRelatorioPDF()">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao"
+									value="Visualizar Relatório" class="btn btn-warning btn-align"
+									onclick="resetarFormulario()">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Limpar"
+									class="btn btn-secondary btn-align"
+									onclick="resetarFormulario()">
 							</div>
 						</div>
-
-						<!-- Parâmetro de Pesquisa -->
-						<div class="col-md-4">
-							<div class="form-floating">
-								<input type="text" id="parametro" name="parametro"
-									class="form-control" placeholder="Digite o Filtro"
-									value="${parametro}"> <label for="parametro">Filtro
-									de Pesquisa:</label>
-							</div>
-						</div>
-					</div>
-					<!-- Linha dos Botões -->
-					<div class="row g-3 mt-3 justify-content-center">
-						<div class="col-md-2 d-grid text-center">
-							<input type="button" id="botaoPdf" name="botaoPdf"
-								value="Gerar Relatório" class="btn btn-success btn-align"
-								onclick="gerarRelatorioPDF()">
-						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao"
-								value="Visualizar Relatório" class="btn btn-warning btn-align"
-								onclick="resetarFormulario()">
-						</div>
-						<div class="col-md-2 d-grid text-center">
-							<input type="submit" id="botao" name="botao" value="Limpar"
-								class="btn btn-secondary btn-align"
-								onclick="resetarFormulario()">
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
-		</div>
+		</c:if>
 	</div>
 
 	<div align="center">
