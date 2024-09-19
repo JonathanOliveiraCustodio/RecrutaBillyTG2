@@ -33,52 +33,51 @@ public class OrcamentoController {
 	ClienteDao cDao;
 
 	@RequestMapping(name = "orcamento", value = "/orcamento", method = RequestMethod.GET)
-	public ModelAndView orcamentoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
-			ModelMap model) {
-		HttpSession session = request.getSession();
-		session.removeAttribute("orcamento");
-		String cmd = allRequestParam.get("cmd");
+    public ModelAndView orcamentoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
+            ModelMap model) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("orcamento");
+        String cmd = allRequestParam.get("cmd");
 
-		String codigo = allRequestParam.get("codigo");
+        String codigo = allRequestParam.get("codigo");
 
-		String saida = "";
-		String erro = "";
-		Orcamento o = new Orcamento();
-		Cliente c = new Cliente();
-		List<Cliente> clientes = new ArrayList<>();
-		List<Orcamento> orcamentos = new ArrayList<>();
-		try {
-			// p = null;
-			clientes = cDao.findAll();
+        String saida = "";
+        String erro = "";
+        Orcamento o = new Orcamento();
+        Cliente c = new Cliente();
+        List<Cliente> clientes = new ArrayList<>();
+        List<Orcamento> orcamentos = new ArrayList<>();
+        try {
+            clientes = cDao.findAll();
 
-			if (cmd != null) {
-				o.setCodigo(Integer.parseInt(codigo));
-				if (cmd.contains("alterar")) {
-					o = buscarOrcamento(o);
-				} else {
-					if (cmd.contains("excluir")) {
-						o = buscarOrcamento(o);
-						saida = excluirOrcamento(o);
-						o = null;
-					} else {
-						if (cmd.contains("Listar")) {
-							orcamentos = listarOrcamentos();
-						}
-					}
-				}
-			}
-		} catch (SQLException | ClassNotFoundException e) {
-			erro = e.getMessage();
-		} finally {
-			model.addAttribute("saida", saida);
-			model.addAttribute("erro", erro);
-			model.addAttribute("orcamento", o);
-			model.addAttribute("orcamentos", orcamentos);
-			model.addAttribute("clientes", clientes);
-			model.addAttribute("cliente", c);
-		}
-		return new ModelAndView("orcamento");
-	}
+            if (codigo != null) {
+                o.setCodigo(Integer.parseInt(codigo));
+                o = buscarOrcamento(o);
+            }
+
+            if (cmd != null) {
+                if (cmd.contains("alterar")) {
+                    o = buscarOrcamento(o);
+                } else if (cmd.contains("excluir")) {
+                    o = buscarOrcamento(o);
+                    saida = excluirOrcamento(o);
+                    o = null;
+                } else if (cmd.contains("Listar")) {
+                    orcamentos = listarOrcamentos();
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            erro = e.getMessage();
+        } finally {
+            model.addAttribute("saida", saida);
+            model.addAttribute("erro", erro);
+            model.addAttribute("orcamento", o);
+            model.addAttribute("orcamentos", orcamentos);
+            model.addAttribute("clientes", clientes);
+            model.addAttribute("cliente", c);
+        }
+        return new ModelAndView("orcamento");
+    }
 
 	@RequestMapping(name = "orcamento", value = "/orcamento", method = RequestMethod.POST)
 	public ModelAndView orcamentoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {

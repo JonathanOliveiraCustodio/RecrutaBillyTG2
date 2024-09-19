@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IPedidoProdutoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.CategoriaProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.PedidoProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
@@ -57,9 +58,9 @@ public class PedidoProdutoDao implements IPedidoProdutoDao{
 	@Override
 	public List<PedidoProduto> findAll(Pedido p) throws SQLException, ClassNotFoundException {
 		List<PedidoProduto> pedidoProdutos = new ArrayList<>();
-		Connection c = gDao.getConnection();
+		Connection con = gDao.getConnection();
 		String sql = "SELECT * FROM v_pedido_produto WHERE codigo_pedido = ?";
-		PreparedStatement ps = c.prepareStatement(sql);
+		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, p.getCodigo());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
@@ -67,7 +68,12 @@ public class PedidoProdutoDao implements IPedidoProdutoDao{
 			PedidoProduto pp = new PedidoProduto();
 			pr.setCodigo(rs.getInt("codigo_produto"));
 			pr.setNome(rs.getString("nome_produto"));
-			pr.setCategoria(rs.getString("categoria_produto"));
+			
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigo_categoria"));
+			c.setNome(rs.getString("nome_categoria"));
+			
+			pr.setCategoria(c);
 			pr.setDescricao(rs.getString("descricao_produto"));
 			pr.setValorUnitario(rs.getInt("valor_unitario"));
 			pp.setProduto(pr);
@@ -78,7 +84,7 @@ public class PedidoProdutoDao implements IPedidoProdutoDao{
 		}
 		rs.close();
 		ps.close();
-		c.close();
+		con.close();
 		return pedidoProdutos;
 	}
 

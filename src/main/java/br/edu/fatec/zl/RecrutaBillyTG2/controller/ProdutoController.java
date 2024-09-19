@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import br.edu.fatec.zl.RecrutaBillyTG2.model.CategoriaProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.CategoriaProdutoDao;
@@ -90,6 +89,7 @@ public class ProdutoController {
 		String saida = "";
 		String erro = "";
 		Produto p = new Produto();
+		CategoriaProduto cp = new CategoriaProduto();
 
 		List<Produto> produtos = new ArrayList<>();
 		List<CategoriaProduto> categorias = new ArrayList<>();
@@ -104,11 +104,16 @@ public class ProdutoController {
 			
 			categorias  = cpDao.findAll();
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				if (categoria != null && !categoria.isEmpty()) {
+					cp.setCodigo(Integer.parseInt(categoria));
+					cp = buscarCategoria(cp);
+					p.setCategoria(cp);
+				}
+				
 				if (codigo != null && !codigo.isEmpty()) {
 					p.setCodigo(Integer.parseInt(codigo));
 				}
 				p.setNome(nome);
-				p.setCategoria(categoria);
 				p.setDescricao(descricao);
 				
 				 // Remover a máscara de moeda
@@ -203,6 +208,11 @@ public class ProdutoController {
 	private Produto buscarProduto(Produto p) throws SQLException, ClassNotFoundException {
 		p = pDao.findBy(p);
 		return p;
+	}
+	
+	private CategoriaProduto buscarCategoria(CategoriaProduto cp) throws SQLException, ClassNotFoundException {
+		cp = cpDao.findBy(cp);
+		return cp;
 	}
 
 	private List<Produto> listarProdutos() throws SQLException, ClassNotFoundException {

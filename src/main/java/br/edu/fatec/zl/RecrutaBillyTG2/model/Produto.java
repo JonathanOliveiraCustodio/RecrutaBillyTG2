@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Produto {
 	int codigo;
 	String nome;
-	String categoria;
+	CategoriaProduto categoria;
 	String descricao;
 	float valorUnitario;
 	String status;
