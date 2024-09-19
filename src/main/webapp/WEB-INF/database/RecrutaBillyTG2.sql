@@ -157,6 +157,15 @@ PRIMARY KEY (codigo),
 FOREIGN KEY (cliente) REFERENCES cliente (codigo)
 )
 GO
+CREATE TABLE produtoOrcamento(
+	codigoOrcamento	INT	NOT NULL,
+	codigoProduto INT NOT NULL,
+	quantidade INT NOT NULL
+	PRIMARY KEY(codigoOrcamento, codigoProduto)
+	FOREIGN KEY(codigoOrcamento) REFERENCES orcamento(codigo),
+	FOREIGN KEY(codigoProduto) REFERENCES produto(codigo)
+)
+GO
 CREATE TABLE endereco(
 codigo              INT IDENTITY(1,1)   NOT NULL,
 CPF                 CHAR(11)		    NOT NULL,
@@ -1049,6 +1058,48 @@ BEGIN
 END
 -- Fim da procedure
 GO
+
+-- Início de procedure IUD Produto Orçamento
+CREATE PROCEDURE sp_iud_produto_orcamento(
+	@acao CHAR(1),
+	@codigoorcamento INT,
+	@codigoproduto INT,
+	@quantidade INT,
+	@saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(@acao = 'I')
+	BEGIN
+		INSERT INTO produtoOrcamento(codigoOrcamento, codigoProduto, quantidade) VALUES
+		(@codigoorcamento, @codigoproduto, @quantidade)
+		SET @saida = 'Produto adicionado ao Orçamento.'
+	END
+	ELSE
+	IF(@acao = 'U')
+	BEGIN
+		UPDATE produtoOrcamento
+		SET codigoProduto = @codigoproduto,
+			quantidade = @quantidade
+		WHERE codigoOrcamento = @codigoorcamento
+		SET @saida = 'Produto alterado com sucesso.'
+	END
+	ELSE
+	IF(@acao = 'D')
+	BEGIN
+		DELETE produtoOrcamento
+		WHERE codigoOrcamento = @codigoorcamento
+			AND codigoProduto = @codigoproduto
+		SET @saida = 'Produto removido do Orçamento'
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+	END
+END
+-- Fim da procedure
+GO
+
+
 CREATE PROCEDURE sp_iud_orcamento
     @acao CHAR(1),
     @codigo INT = NULL, -- O parâmetro pode ser NULL se não for usado
@@ -1443,6 +1494,13 @@ SELECT
 FROM 
     produto;
 GO
+CREATE VIEW v_produto_orcamento AS
+SELECT o.codigo AS codigo_orcamento, p.codigo AS codigo_produto, p.nome, p.categoria, p.descricao, p.valorUnitario AS valor_unitario, po.quantidade
+FROM orcamento o, produto p, produtoOrcamento po
+WHERE o.codigo = po.codigoOrcamento
+	AND p.codigo = po.codigoProduto
+GO
+
 CREATE VIEW v_funcionario AS
 SELECT 
     CPF,
