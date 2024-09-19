@@ -23,7 +23,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 
 	@Override
 	public Cliente findBy(Cliente cl) throws SQLException, ClassNotFoundException {
-		String sql = "SELECT * FROM cliente WHERE codigo = ?";
+		String sql = "SELECT * FROM v_cliente WHERE codigo = ?";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
 		ps.setInt(1, cl.getCodigo());
@@ -59,7 +59,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 	@Override
 	public List<Cliente> findAll() throws SQLException, ClassNotFoundException {
 		List<Cliente> clientes = new ArrayList<>();
-		String sql = "SELECT * FROM cliente";
+		String sql = "SELECT * FROM v_cliente";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
@@ -160,7 +160,7 @@ public class ClienteDao implements ICrud<Cliente>, IClienteDao {
 		List<Cliente> clientes = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT * FROM cliente WHERE nome LIKE ?");
+		sql.append("SELECT * FROM v_cliente WHERE nome LIKE ?");
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		// "%" Para fazer buscas aproximadas

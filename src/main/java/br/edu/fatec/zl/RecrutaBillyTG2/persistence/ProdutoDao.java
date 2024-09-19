@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.ICrud;
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IProdutoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.CategoriaProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 
 @Repository
@@ -32,7 +33,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		cs.setString(1, acao);
 		cs.setInt(2, p.getCodigo());
 		cs.setString(3, p.getNome());
-		cs.setString(4, p.getCategoria());
+		cs.setInt(4, p.getCategoria().getCodigo());
 		cs.setString(5, p.getDescricao());
 		cs.setFloat(6, p.getValorUnitario());
 		cs.setString(7, p.getStatus());
@@ -49,16 +50,22 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 
 	@Override
 	public Produto findBy(Produto p) throws SQLException, ClassNotFoundException {
-		Connection c = gDao.getConnection();
-		String sql = "SELECT * FROM fn_consultar_produto(?)";
-		PreparedStatement ps = c.prepareStatement(sql.toString());
+		Connection con = gDao.getConnection();
+		String sql = "SELECT * FROM v_produto WHERE codigo = ?";
+		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ps.setInt(1, p.getCodigo());
 		ResultSet rs = ps.executeQuery();
 		if (rs.next()) {
+			
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
+			
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
 			p.setDescricao(rs.getString("descricao"));
-			p.setCategoria(rs.getString("categoria"));
+			
+			p.setCategoria(c);
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
@@ -67,7 +74,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		} else {
 			rs.close();
 			ps.close();
-			c.close();
+			con.close();
 			return null;
 		}
 	}
@@ -76,16 +83,19 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	public List<Produto> findAll() throws SQLException, ClassNotFoundException {
 
 		List<Produto> produtos = new ArrayList<>();
-		Connection c = gDao.getConnection();
+		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT * FROM v_produto ");
-		PreparedStatement ps = c.prepareStatement(sql.toString());
+		PreparedStatement ps = con.prepareStatement(sql.toString());
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 			Produto p = new Produto();
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));
@@ -95,7 +105,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		}
 		rs.close();
 		ps.close();
-		c.close();
+		con.close();
 		return produtos;
 	}
 	
@@ -113,10 +123,13 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {	
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 			Produto p = new Produto();
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));
@@ -147,10 +160,13 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {	
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 			Produto p = new Produto();
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));
@@ -178,10 +194,13 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {	
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 			Produto p = new Produto();
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));
@@ -209,10 +228,13 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	    ResultSet rs = ps.executeQuery();
 
 	    while (rs.next()) {	
+	    	CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 	        Produto p = new Produto();
 	        p.setCodigo(rs.getInt("codigo"));
 	        p.setNome(rs.getString("nome"));
-	        p.setCategoria(rs.getString("categoria"));
+	        p.setCategoria(c);
 	        p.setDescricao(rs.getString("descricao"));
 	        p.setValorUnitario(rs.getFloat("valorUnitario"));
 	        p.setStatus(rs.getString("status"));
@@ -232,7 +254,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		List<Produto> produtos = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT * FROM v_produto WHERE categoria LIKE ?");
+		sql.append("SELECT * FROM v_produto WHERE nomeCategoria LIKE ?");
 
 		PreparedStatement ps = con.prepareStatement(sql.toString());
 		// "%" Para fazer buscas aproximadas
@@ -241,10 +263,13 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		ResultSet rs = ps.executeQuery();
 
 		while (rs.next()) {	
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigoCategoria"));
+			c.setNome(rs.getString("nomeCategoria"));
 			Produto p = new Produto();
 			p.setCodigo(rs.getInt("codigo"));
 			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valorUnitario"));
 			p.setStatus(rs.getString("status"));

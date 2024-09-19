@@ -59,18 +59,18 @@
 							</button>
 						</div>
 						<div class="col-md-4">
-							<div class="form-floating">
-								<select id="categoria" name="categoria" class="form-select">
-									<option value="0">Escolha uma Categoria</option>
-									<c:forEach var="c" items="${categorias }">
-										<option value="${c.nome}"
-											${c.nome eq produto.categoria ? 'selected' : ''}>
-											<c:out value="${c.nome}" />
-										</option>
-									</c:forEach>
-								</select> <label for="categoria">Categoria</label>
+								<div class="form-floating">
+									<select id="categoria" name="categoria" class="form-select">
+										<option value="0">Escolha uma Categoria</option>
+										<c:forEach var="c" items="${categorias }">
+											<option value="${c.codigo}"
+												<c:if test="${c.codigo eq produto.categoria.codigo}">selected</c:if>>
+												<c:out value="${c}" />
+											</option>
+										</c:forEach>
+									</select> <label for="categoria">Categoria</label>
+								</div>
 							</div>
-						</div>
 					</div>
 
 					<!-- Segunda Linha: Descrição, Valor, Status -->
