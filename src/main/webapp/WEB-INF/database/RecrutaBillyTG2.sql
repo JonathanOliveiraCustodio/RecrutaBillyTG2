@@ -165,12 +165,12 @@ FOREIGN KEY (cliente) REFERENCES cliente (codigo)
 )
 GO
 CREATE TABLE produtoOrcamento(
-	codigoOrcamento	INT	NOT NULL,
-	codigoProduto INT NOT NULL,
-	quantidade INT NOT NULL
-	PRIMARY KEY(codigoOrcamento, codigoProduto)
-	FOREIGN KEY(codigoOrcamento) REFERENCES orcamento(codigo),
-	FOREIGN KEY(codigoProduto) REFERENCES produto(codigo)
+codigoOrcamento	INT	NOT NULL,
+codigoProduto INT NOT NULL,
+quantidade INT NOT NULL
+PRIMARY KEY(codigoOrcamento, codigoProduto)
+FOREIGN KEY(codigoOrcamento) REFERENCES orcamento(codigo),
+FOREIGN KEY(codigoProduto) REFERENCES produto(codigo)
 )
 GO
 CREATE TABLE endereco(
@@ -1058,48 +1058,6 @@ BEGIN
 END
 -- Fim da procedure
 GO
-
--- Início de procedure IUD Produto Orçamento
-CREATE PROCEDURE sp_iud_produto_orcamento(
-	@acao CHAR(1),
-	@codigoorcamento INT,
-	@codigoproduto INT,
-	@quantidade INT,
-	@saida VARCHAR(200) OUTPUT)
-AS
-BEGIN
-	IF(@acao = 'I')
-	BEGIN
-		INSERT INTO produtoOrcamento(codigoOrcamento, codigoProduto, quantidade) VALUES
-		(@codigoorcamento, @codigoproduto, @quantidade)
-		SET @saida = 'Produto adicionado ao Orçamento.'
-	END
-	ELSE
-	IF(@acao = 'U')
-	BEGIN
-		UPDATE produtoOrcamento
-		SET codigoProduto = @codigoproduto,
-			quantidade = @quantidade
-		WHERE codigoOrcamento = @codigoorcamento
-		SET @saida = 'Produto alterado com sucesso.'
-	END
-	ELSE
-	IF(@acao = 'D')
-	BEGIN
-		DELETE produtoOrcamento
-		WHERE codigoOrcamento = @codigoorcamento
-			AND codigoProduto = @codigoproduto
-		SET @saida = 'Produto removido do Orçamento'
-	END
-	ELSE
-	BEGIN
-		RAISERROR('Operação inválida', 16, 1)
-	END
-END
--- Fim da procedure
-GO
-
-
 CREATE PROCEDURE sp_iud_orcamento
     @acao CHAR(1),
     @codigo INT = NULL, -- O parâmetro pode ser NULL se não for usado
@@ -1176,25 +1134,35 @@ BEGIN
     -- Verifica se o orçamento já foi convertido em pedido
     IF EXISTS (SELECT 1 FROM orcamento WHERE codigo = @codigo AND status = 'Pedido')
     BEGIN
-        -- Se o status já for 'Pedido', retorna uma mensagem informando que já foi convertido
         SET @saida = 'Este orçamento já foi convertido em pedido. Não é possível converter novamente.'
         RETURN
     END
-    
+
     -- Atualiza o status do orçamento para 'Pedido'
     UPDATE orcamento
     SET status = 'Pedido'
     WHERE codigo = @codigo;
-    
+
     -- Verifica se a atualização afetou alguma linha
     IF @@ROWCOUNT > 0
     BEGIN
-        -- Inserir o pedido na tabela pedido, excluindo a coluna de identidade 'codigo'
+        DECLARE @novoCodigoPedido INT;
+
+        -- Inserir o pedido na tabela pedido
         INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
         SELECT nome, descricao, cliente, valorTotal, 'Recebido', GETDATE(), formaPagamento, observacao, 'Pendente', NULL
         FROM orcamento
         WHERE codigo = @codigo;
-        
+
+        -- Capturar o valor da coluna de identidade gerada (codigo do pedido)
+        SET @novoCodigoPedido = SCOPE_IDENTITY();
+
+        -- Inserir os produtos relacionados do orçamento na tabela produtosPedido
+        INSERT INTO produtosPedido (codigoPedido, codigoProduto, quantidade)
+        SELECT @novoCodigoPedido, po.codigoProduto, po.quantidade
+        FROM produtoOrcamento po
+        WHERE po.codigoOrcamento = @codigo;
+
         SET @saida = 'Orçamento convertido em pedido com sucesso.';
     END
     ELSE
@@ -1203,6 +1171,8 @@ BEGIN
     END
 END
 GO
+
+
 CREATE PROCEDURE sp_iud_endereco
     @acao CHAR(1),
     @codigo INT NULL,
@@ -1342,6 +1312,44 @@ BEGIN
     SET @saida = 'Configuração alterada com sucesso'
 END
 GO
+CREATE PROCEDURE sp_iud_produto_orcamento(
+	@acao CHAR(1),
+	@codigoorcamento INT,
+	@codigoproduto INT,
+	@quantidade INT,
+	@saida VARCHAR(200) OUTPUT)
+AS
+BEGIN
+	IF(@acao = 'I')
+	BEGIN
+		INSERT INTO produtoOrcamento(codigoOrcamento, codigoProduto, quantidade) VALUES
+		(@codigoorcamento, @codigoproduto, @quantidade)
+		SET @saida = 'Produto adicionado ao Orçamento.'
+	END
+	ELSE
+	IF(@acao = 'U')
+	BEGIN
+		UPDATE produtoOrcamento
+		SET codigoProduto = @codigoproduto,
+			quantidade = @quantidade
+		WHERE codigoOrcamento = @codigoorcamento
+		SET @saida = 'Produto alterado com sucesso.'
+	END
+	ELSE
+	IF(@acao = 'D')
+	BEGIN
+		DELETE produtoOrcamento
+		WHERE codigoOrcamento = @codigoorcamento
+			AND codigoProduto = @codigoproduto
+		SET @saida = 'Produto removido do Orçamento'
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Operação inválida', 16, 1)
+	END
+END
+-- Fim da procedure
+GO
 CREATE FUNCTION fn_insumo_funcionario()
 RETURNS TABLE
 AS
@@ -1444,7 +1452,6 @@ p.tipoPagamento,
 p.observacao,
 p.statusPagamento,
 p.dataPagamento,
-
 c.nome AS nomeCliente, 
 c.CEP,
 c.logradouro,
@@ -1458,24 +1465,21 @@ FROM pedido p, cliente c
 WHERE p.cliente = c.codigo
 GO
 -- Criação da view v_pedido_produto ajustada
-
-CREATE VIEW v_pedido_produto
-AS
+CREATE VIEW v_produto_orcamento AS
 SELECT 
-    pp.codigoPedido AS codigo_pedido,
-    p.codigo AS codigo_produto,
-    p.nome AS nome_produto,
-    cp.codigo AS codigo_categoria, 
+    o.codigo AS codigo_orcamento, 
+    p.codigo AS codigo_produto, 
+    p.nome AS nome_produto, 
     cp.nome AS nome_categoria, 
-    p.descricao AS descricao_produto,
-    p.valorUnitario AS valor_unitario,
-    pp.quantidade
+	cp.codigo AS codigo_categoria,
+    p.descricao, 
+    p.valorUnitario AS valor_unitario, 
+    po.quantidade
 FROM 
-    produtosPedido pp
-INNER JOIN 
-    produto p ON p.codigo = pp.codigoProduto
-INNER JOIN 
-    categoriaProduto cp ON p.categoria = cp.codigo; -- Junção com a tabela categoriaProduto
+    orcamento o
+    INNER JOIN produtoOrcamento po ON o.codigo = po.codigoOrcamento
+    INNER JOIN produto p ON p.codigo = po.codigoProduto
+    INNER JOIN categoriaProduto cp ON p.categoria = cp.codigo
 GO
 -- Criação da view v_produto ajustada
 CREATE VIEW v_produto AS
@@ -1494,13 +1498,6 @@ FROM
 INNER JOIN 
     categoriaProduto cp ON p.categoria = cp.codigo; -- Junção com a tabela categoriaProduto
 GO
-CREATE VIEW v_produto_orcamento AS
-SELECT o.codigo AS codigo_orcamento, p.codigo AS codigo_produto, p.nome, p.categoria, p.descricao, p.valorUnitario AS valor_unitario, po.quantidade
-FROM orcamento o, produto p, produtoOrcamento po
-WHERE o.codigo = po.codigoOrcamento
-	AND p.codigo = po.codigoProduto
-GO
-
 CREATE VIEW v_funcionario AS
 SELECT 
     CPF,
@@ -1749,7 +1746,6 @@ BEGIN
     END
 END;
 GO
-
 CREATE VIEW vw_insumo AS
 SELECT 
     i.codigo,
@@ -1832,6 +1828,23 @@ FROM
     orcamento o
 JOIN 
     cliente e ON o.cliente = e.codigo;
+GO
+CREATE VIEW v_pedido_produto AS
+SELECT 
+    pp.codigoPedido AS codigo_pedido,
+    p.codigo AS codigo_produto,
+    p.nome AS nome_produto,
+    cp.codigo AS codigo_categoria, 
+    cp.nome AS nome_categoria, 
+    p.descricao AS descricao_produto,
+    p.valorUnitario AS valor_unitario,
+    pp.quantidade
+FROM 
+    produtosPedido pp
+INNER JOIN 
+    produto p ON p.codigo = pp.codigoProduto
+INNER JOIN 
+    categoriaProduto cp ON p.categoria = cp.codigo; -- Junção com a tabela categoriaProduto
 GO
 -- Inicio Funções para o Relatorio
 CREATE FUNCTION fn_buscar_cliente (
@@ -2689,4 +2702,3 @@ BEGIN
     RETURN;
 END;
 GO
-

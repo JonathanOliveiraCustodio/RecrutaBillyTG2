@@ -243,7 +243,7 @@
 											pattern="dd/MM/yyyy" /></td>
 									<td>
 										<button
-											onclick="window.location.href='produtosPedido?pedido=${o.codigo}'"
+											onclick="window.location.href='produtosOrcamento?orcamento=${o.codigo}'"
 											class="btn btn-info">Adicionar</button>
 									</td>
 									<td><fmt:formatNumber value="${o.valorTotal}"

@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.interfaces.IProdutoOrcamentoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.CategoriaProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Orcamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.ProdutoOrcamento;
@@ -42,29 +43,34 @@ public class ProdutoOrcamentoDao implements IProdutoOrcamentoDao{
 	@Override
 	public List<ProdutoOrcamento> findAll(Orcamento o) throws SQLException, ClassNotFoundException {
 		List<ProdutoOrcamento> produtosOrcamento = new ArrayList<>();
-		Connection c = gDao.getConnection();
+		Connection con = gDao.getConnection();
 		String sql = "SELECT * FROM v_produto_orcamento WHERE codigo_orcamento = ?";
-		PreparedStatement ps = c.prepareStatement(sql);
+		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, o.getCodigo());
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			Produto p = new Produto();
 			ProdutoOrcamento po = new ProdutoOrcamento();
+			
+			CategoriaProduto c = new CategoriaProduto();
+			c.setCodigo(rs.getInt("codigo_categoria"));
+			c.setNome(rs.getString("nome_categoria"));
+			
 			p.setCodigo(rs.getInt("codigo_produto"));
-			p.setNome(rs.getString("nome"));
-			p.setCategoria(rs.getString("categoria"));
+			p.setNome(rs.getString("nome_produto"));
+			p.setCategoria(c);
 			p.setDescricao(rs.getString("descricao"));
 			p.setValorUnitario(rs.getFloat("valor_unitario"));
 			
 			po.setProduto(p);
 			po.setCodigoProduto(p.getCodigo());
-			po.setCodigoOrcamento(o.getCodigo());
+			po.setCodigoOrcamento(rs.getInt("codigo_orcamento"));
 			po.setQuantidade(rs.getInt("quantidade"));
 			produtosOrcamento.add(po);
 		}
 		rs.close();
 		ps.close();
-		c.close();
+		con.close();
 		return produtosOrcamento;
 	}
 	

@@ -99,6 +99,14 @@ function updateEndereco() {
 	document.getElementById("estado").value = estado;
 }
 
+function confirmarFinalizacao(estado) {
+	if (estado === "Pedido Finalizado") {
+		alert("Este pedido já está finalizado e não pode ser alterado.");
+		return false; // Não submete o formulário
+	}
+	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
+}
+
 function formatarMoeda(campo) {
 	let valor = campo.value;
 
@@ -115,16 +123,6 @@ function formatarMoeda(campo) {
 	// Adiciona o símbolo de moeda
 	campo.value = 'R$ ' + valor;
 }
-
-function confirmarFinalizacao(estado) {
-	if (estado === "Pedido Finalizado") {
-		alert("Este pedido já está finalizado e não pode ser alterado.");
-		return false; // Não submete o formulário
-	}
-	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
-}
-
-
 // Formata o valor inicial ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
 	const campoValorTotal = document.getElementById('valorTotal');

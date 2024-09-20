@@ -57,7 +57,6 @@ public class PedidoController {
 		HttpSession session = request.getSession();
 		session.removeAttribute("pedido");
 		String cmd = allRequestParam.get("cmd");
-
 		String codigo = allRequestParam.get("codigo");
 
 		String saida = "";
@@ -146,6 +145,7 @@ public class PedidoController {
 
 				// Remover a máscara de moeda
 				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
+				System.out.println("valor:" + valorTotal);
 				p.setValorTotal(Float.parseFloat(valorTotal));
 				p.setEstado(estado);
 				p.setTipoPagamento(formaPagamento);

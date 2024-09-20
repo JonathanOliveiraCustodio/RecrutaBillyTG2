@@ -188,7 +188,7 @@ public class OrcamentoController {
 					o = null;
 				} else {
 					model.addAttribute("orcamento", o);
-					return new ModelAndView("forward:/produtosPedido", model);
+					return new ModelAndView("forward:/produtosOrcamento", model);
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
