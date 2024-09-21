@@ -875,38 +875,87 @@ BEGIN
     END
 END
 GO
-
-CREATE PROCEDURE sp_iud_produtos_pedido(
-@acao CHAR(1), 
-@codigopedido INT, 
-@codigoproduto INT, 
-@quantidade INT, 
-@saida VARCHAR(200) OUTPUT)
+CREATE PROCEDURE sp_iud_produtos_pedido( 
+    @acao CHAR(1), 
+    @codigopedido INT, 
+    @codigoproduto INT, 
+    @quantidade INT, 
+    @saida VARCHAR(200) OUTPUT
+)
 AS
 BEGIN
-	IF(@acao = 'I')
-	BEGIN
-		INSERT INTO produtosPedido(codigoPedido, codigoProduto, quantidade) VALUES
-		(@codigopedido, @codigoproduto, @quantidade)
-		SET @saida = 'Produto adicionado ao Pedido'
-	END
-	ELSE
-	IF(@acao = 'U')
-	BEGIN
-		UPDATE produtosPedido
-		SET codigoProduto = @codigoproduto,
-			quantidade = @quantidade
-		WHERE codigoPedido = @codigopedido
-		SET @saida = 'Produto alterado com sucesso'
-	END
-	ELSE
-	IF(@acao = 'D')
-	BEGIN
-		DELETE produtosPedido
-		WHERE codigoPedido = @codigopedido
-		AND codigoProduto = @codigoproduto
-		SET @saida = 'Produto removido do pedido'
-	END
+    DECLARE @estoqueAtual INT;
+    DECLARE @quantidadeAtualPedido INT; -- Declarar apenas uma vez
+
+    -- Verifica a quantidade em estoque
+    SELECT @estoqueAtual = quantidade 
+    FROM produto 
+    WHERE codigo = @codigoproduto;
+
+    IF (@acao = 'I')
+    BEGIN
+        -- Verifica se há estoque suficiente
+        IF @quantidade > @estoqueAtual
+        BEGIN
+            SET @saida = 'Quantidade solicitada excede o estoque disponível.';
+            RETURN;
+        END
+        
+        INSERT INTO produtosPedido(codigoPedido, codigoProduto, quantidade) 
+        VALUES (@codigopedido, @codigoproduto, @quantidade);
+        
+        -- Atualiza a quantidade no estoque
+        UPDATE produto
+        SET quantidade = quantidade - @quantidade
+        WHERE codigo = @codigoproduto;
+        
+        SET @saida = 'Produto adicionado ao Pedido';
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Verifica a quantidade atual no pedido
+        SELECT @quantidadeAtualPedido = quantidade
+        FROM produtosPedido
+        WHERE codigoPedido = @codigopedido AND codigoProduto = @codigoproduto;
+
+        -- Verifica se a atualização resulta em excesso de estoque
+        IF (@quantidade - @quantidadeAtualPedido > @estoqueAtual)
+        BEGIN
+            SET @saida = 'Quantidade solicitada excede o estoque disponível.';
+            RETURN;
+        END
+        
+        -- Atualiza a quantidade no pedido
+        UPDATE produtosPedido
+        SET codigoProduto = @codigoproduto,
+            quantidade = @quantidade
+        WHERE codigoPedido = @codigopedido;
+
+        -- Atualiza a quantidade no estoque
+        UPDATE produto
+        SET quantidade = quantidade - (@quantidade - @quantidadeAtualPedido)
+        WHERE codigo = @codigoproduto;
+
+        SET @saida = 'Produto alterado com sucesso';
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        -- Recupera a quantidade que será removida
+        SELECT @quantidadeAtualPedido = quantidade
+        FROM produtosPedido
+        WHERE codigoPedido = @codigopedido AND codigoProduto = @codigoproduto;
+
+        DELETE FROM produtosPedido
+        WHERE codigoPedido = @codigopedido
+        AND codigoProduto = @codigoproduto;
+
+        -- Restaura a quantidade no estoque
+        UPDATE produto
+        SET quantidade = quantidade + @quantidadeAtualPedido
+        WHERE codigo = @codigoproduto;
+
+        SET @saida = 'Produto removido do pedido e adicionado de volta ao estoque';
+    END
 END
 GO
 -- Inicio Procedure de Login 
