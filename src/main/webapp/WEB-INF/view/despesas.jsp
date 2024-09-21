@@ -110,13 +110,13 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<div class="form-floating">
-									<input type="text" id="valor" name="valor" class="form-control"
-										placeholder="Valor"
-										value='<c:out value="${despesa.valor}"></c:out>'
-										oninput="formatarMoeda(this)"> <label for="valor">Valor</label>
-								</div>
+							<div class="form-floating">
+								<input class="form-control" type="text" id="valor"
+									name="valor" placeholder="Valor"
+									value='<fmt:formatNumber value="${despesa.valor}" type="currency" currencySymbol="R$" />'>
+								<label for="valor">Valor Total:</label>
 							</div>
+						</div>
 							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="estado" name="estado" class="form-select">

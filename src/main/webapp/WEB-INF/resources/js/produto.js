@@ -65,25 +65,24 @@ function validarFormulario(event) {
 function formatarMoeda(campo) {
     let valor = campo.value;
 
-    // Remove qualquer caractere que não seja número ou vírgula
     valor = valor.replace(/[^\d]/g, '');
-
-    // Adiciona a vírgula para separar os centavos
     valor = (valor / 100).toFixed(2) + '';
     valor = valor.replace(".", ",");
-
-    // Adiciona o ponto para separar os milhares
-    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-
-    // Adiciona o símbolo de moeda
+ 
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     campo.value = 'R$ ' + valor;
+    if (campo.value.endsWith(',0')) {
+        campo.value = campo.value.slice(0, -1) + '00';
+    }
 }
 
-// Formata o valor inicial ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
-    const campoValorUnitario = document.getElementById('valorUnitario');
-    if (campoValorUnitario) {
-        formatarMoeda(campoValorUnitario);
+    const campovalorUnitario = document.getElementById('valorUnitario');
+    if (campovalorUnitario) {
+        formatarMoeda(campovalorUnitario);
+        campovalorUnitario.addEventListener('input', function() {
+            formatarMoeda(this);
+        });
     }
 });
 

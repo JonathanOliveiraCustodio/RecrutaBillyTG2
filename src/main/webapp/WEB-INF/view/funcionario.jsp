@@ -131,10 +131,10 @@
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="salario" name="salario"
-										class="form-control" placeholder="Salário"
-										value='<c:out value="${funcionario.salario}"></c:out>'
-										oninput="formatarMoeda(this)"> <label for="salario">Salário</label>
+									<input class="form-control" type="text" id="salario"
+										name="salario" placeholder="Salário"
+										value='<fmt:formatNumber value="${funcionario.salario}" type="currency" currencySymbol="R$" />'>
+									<label for="salario">Salário:</label>
 								</div>
 							</div>
 							<div class="col-md-4">

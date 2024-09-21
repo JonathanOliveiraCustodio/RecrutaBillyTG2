@@ -158,24 +158,6 @@ function validarHorario(horario) {
 	return regex.test(horario);
 }
 
-
-function formatarMoeda(campo) {
-	let valor = campo.value;
-
-	// Remove qualquer caractere que não seja número ou vírgula
-	valor = valor.replace(/[^\d]/g, '');
-
-	// Adiciona a vírgula para separar os centavos
-	valor = (valor / 100).toFixed(2) + '';
-	valor = valor.replace(".", ",");
-
-	// Adiciona o ponto para separar os milhares
-	valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-
-	// Adiciona o símbolo de moeda
-	campo.value = 'R$ ' + valor;
-}
-
 function validarERedirecionar() {
 	// Obtenha o CPF do campo
 	var cpf = document.getElementById("CPF").value.trim();
@@ -186,13 +168,11 @@ function validarERedirecionar() {
 		document.getElementById("CPF").focus(); // Coloca o foco no campo CPF
 		return;
 	}
-
 	// Verifique a validade do CPF se necessário
 	if (!validarCPF(cpf)) {
 		alert("CPF inválido.");
 		return;
 	}
-
 	// Se o CPF estiver correto, redirecione para a URL desejada
 	window.location.href = 'endereco?funcionario=' + encodeURIComponent(cpf);
 }
@@ -227,12 +207,25 @@ function formatarTelefone(telefone) {
 	}
 }
 
+function formatarMoeda(campo) {
+    let valor = campo.value;
+
+    valor = valor.replace(/[^\d]/g, '');
+    valor = (valor / 100).toFixed(2) + '';
+    valor = valor.replace(".", ",");
+ 
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    campo.value = 'R$ ' + valor;
+    if (campo.value.endsWith(',0')) {
+        campo.value = campo.value.slice(0, -1) + '00';
+    }
+}
+
 function aplicarMascaraTelefone() {
 	var telefoneInput = document.getElementById('telefone');
 	telefoneInput.addEventListener('input', function() {
 		this.value = formatarTelefone(this.value);
 	});
-
 	// Formata o valor inicial se o campo já tiver um valor
 	if (telefoneInput.value) {
 		telefoneInput.value = formatarTelefone(telefoneInput.value);
@@ -253,17 +246,27 @@ function aplicarMascaraCPF() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	const campoSalario = document.getElementById('salario');
-	if (campoSalario) {
-		formatarMoeda(campoSalario);
-	}
-	aplicarMascaraTelefone();
-	aplicarMascaraCPF();
+    const campoSalario = document.getElementById('salario');
+    if (campoSalario) {
+        formatarMoeda(campoSalario);
+    }
 
-	// Aplicar a máscara de CPF em todas as células da tabela que contêm CPF
-	var cpfsNaTabela = document.querySelectorAll('.CPF-campo');
-	cpfsNaTabela.forEach(function(campo) {
-		campo.textContent = formatarCPF(campo.textContent); // Aplica a máscara de CPF
-	});
+    aplicarMascaraTelefone();
+    aplicarMascaraCPF();
+
+    // Aplicar a máscara de CPF em todas as células da tabela que contêm CPF
+    var cpfsNaTabela = document.querySelectorAll('.CPF-campo');
+    cpfsNaTabela.forEach(function(campo) {
+        campo.textContent = formatarCPF(campo.textContent); // Aplica a máscara de CPF
+    });
+
+    // Formatação do campo valorTotal
+    const campoValorTotal = document.getElementById('salario');
+    if (campoValorTotal) {
+        formatarMoeda(campoValorTotal);
+        campoValorTotal.addEventListener('input', function() {
+            formatarMoeda(this);
+        });
+    }
 });
 

@@ -87,9 +87,8 @@
 							<div class="form-floating">
 								<input class="form-control" type="text" id="valorUnitario"
 									name="valorUnitario" placeholder="Valor Unitário"
-									value='<c:out value="${produto.valorUnitario}"></c:out>'
-									oninput="formatarMoeda(this)"> <label
-									for="valorUnitario">Valor Unitário</label>
+									value='<fmt:formatNumber value="${produto.valorUnitario}" type="currency" currencySymbol="R$" />'>
+								<label for="valorUnitario">Valor Unitário:</label>
 							</div>
 						</div>
 						<div class="col-md-4">

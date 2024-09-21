@@ -65,36 +65,34 @@ function validarFormulario(event) {
 }
 
 function formatarMoeda(campo) {
-    let valor = campo.value;
+	let valor = campo.value;
 
-    // Remove qualquer caractere que não seja número ou vírgula
-    valor = valor.replace(/[^\d]/g, '');
+	valor = valor.replace(/[^\d]/g, '');
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
 
-    // Adiciona a vírgula para separar os centavos
-    valor = (valor / 100).toFixed(2) + '';
-    valor = valor.replace(".", ",");
-
-    // Adiciona o ponto para separar os milhares
-    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-
-    // Adiciona o símbolo de moeda
-    campo.value = 'R$ ' + valor;
+	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	campo.value = 'R$ ' + valor;
+	
+	if (campo.value.endsWith(',0')) {
+		campo.value = campo.value.slice(0, -1) + '00';
+	}
 }
 
-// Função para formatar todos os campos quando o valor muda
-function aplicarFormatacao() {
-    const campos = document.querySelectorAll('.moeda');
-    campos.forEach(campo => formatarMoeda(campo));
-}
-
-// Formata os valores dos campos ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
-    aplicarFormatacao();
-});
+	const campoPrecoCompra = document.getElementById('precoCompra');
+	if (campoPrecoCompra) {
+		formatarMoeda(campoPrecoCompra);
+		campoPrecoCompra.addEventListener('input', function() {
+			formatarMoeda(this);
+		});
+	}
 
-// Adiciona um listener de eventos de entrada para formatar os campos enquanto o usuário digita
-document.addEventListener('input', function(event) {
-    if (event.target.classList.contains('moeda')) {
-        formatarMoeda(event.target);
-    }
+	const campoPrecoVenda = document.getElementById('precoVenda'); // Substitua pelo ID do segundo campo
+	if (campoPrecoVenda) {
+		formatarMoeda(campoPrecoVenda);
+		campoPrecoVenda.addEventListener('input', function() {
+			formatarMoeda(this);
+		});
+	}
 });

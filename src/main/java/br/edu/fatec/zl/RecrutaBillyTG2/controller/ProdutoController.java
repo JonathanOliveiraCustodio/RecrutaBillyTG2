@@ -39,19 +39,24 @@ public class ProdutoController {
 
 	    List<Produto> produtos = new ArrayList<>();
 	    List<CategoriaProduto> categorias = new ArrayList<>();
-	    Produto p = null; // Inicialize a variável fora do if
+	    Produto p = null;
 
 	    try {
-	        produtos = listarProdutos();
+	        // Carrega as listas de produtos e categorias
+	        //produtos = listarProdutos();
 	        categorias = listarCategoriaProdutos();
 
-	        // Se o cmd estiver presente, execute as ações correspondentes
-	        if (cmd != null && codigo != null && !codigo.isEmpty()) {
+	        // Verifica se o código foi fornecido e busca o produto correspondente
+	        if (codigo != null && !codigo.isEmpty()) {
 	            p = new Produto();
 	            p.setCodigo(Integer.parseInt(codigo));
+	            p = buscarProduto(p);
+	        }
 
+	        // Comando para alterar ou excluir o produto
+	        if (cmd != null) {
 	            if (cmd.contains("alterar")) {
-	                p = buscarProduto(p);
+	                p = buscarProduto(p); // Busca novamente para assegurar que está atualizado
 	            } else if (cmd.contains("excluir")) {
 	                p = buscarProduto(p);
 	                saida = excluirProduto(p);
@@ -62,6 +67,7 @@ public class ProdutoController {
 	    } catch (SQLException | ClassNotFoundException | NumberFormatException error) {
 	        erro = error.getMessage();
 	    } finally {
+	        // Adiciona os atributos ao model para serem acessados na view
 	        model.addAttribute("saida", saida);
 	        model.addAttribute("erro", erro);
 	        model.addAttribute("produto", p);
@@ -71,6 +77,7 @@ public class ProdutoController {
 
 	    return new ModelAndView("produto");
 	}
+
 
 
 	@RequestMapping(name = "produto", value = "/produto", method = RequestMethod.POST)

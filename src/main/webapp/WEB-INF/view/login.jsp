@@ -62,17 +62,18 @@
 							</div>
 						</div>
 					</form>
+					<c:if test="${not empty errorMessage}">
+						<div class="error-message">
+							<h2 class="text-danger">
+								<b><c:out value="${errorMessage}" /></b>
+							</h2>
+						</div>
+					</c:if>
 					<div>
 						<jsp:include page="footer.jsp" />
 					</div>
 				</div>
-				<c:if test="${not empty errorMessage}">
-					<div class="error-message">
-						<h2 class="text-danger">
-							<b><c:out value="${errorMessage}" /></b>
-						</h2>
-					</div>
-				</c:if>
+
 			</div>
 		</div>
 	</div>

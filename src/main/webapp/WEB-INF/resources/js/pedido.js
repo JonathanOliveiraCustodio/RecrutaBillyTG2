@@ -102,31 +102,31 @@ function updateEndereco() {
 function confirmarFinalizacao(estado) {
 	if (estado === "Pedido Finalizado") {
 		alert("Este pedido já está finalizado e não pode ser alterado.");
-		return false; // Não submete o formulário
+		return false; 
 	}
 	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
 }
 
 function formatarMoeda(campo) {
-	let valor = campo.value;
+    let valor = campo.value;
 
-	// Remove qualquer caractere que não seja número ou vírgula
-	valor = valor.replace(/[^\d]/g, '');
-
-	// Adiciona a vírgula para separar os centavos
-	valor = (valor / 100).toFixed(2) + '';
-	valor = valor.replace(".", ",");
-
-	// Adiciona o ponto para separar os milhares
-	valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-
-	// Adiciona o símbolo de moeda
-	campo.value = 'R$ ' + valor;
+    valor = valor.replace(/[^\d]/g, '');
+    valor = (valor / 100).toFixed(2) + '';
+    valor = valor.replace(".", ",");
+ 
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    campo.value = 'R$ ' + valor;
+    if (campo.value.endsWith(',0')) {
+        campo.value = campo.value.slice(0, -1) + '00';
+    }
 }
-// Formata o valor inicial ao carregar a página
+
 document.addEventListener('DOMContentLoaded', function() {
-	const campoValorTotal = document.getElementById('valorTotal');
-	if (campoValorTotal) {
-		formatarMoeda(campoValorTotal);
-	}
+    const campoValorTotal = document.getElementById('valorTotal');
+    if (campoValorTotal) {
+        formatarMoeda(campoValorTotal);
+        campoValorTotal.addEventListener('input', function() {
+            formatarMoeda(this);
+        });
+    }
 });

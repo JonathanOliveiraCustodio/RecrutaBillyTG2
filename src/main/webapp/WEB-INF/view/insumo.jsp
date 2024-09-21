@@ -56,29 +56,26 @@
         </svg>
 								</button>
 							</div>
+
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input class="form-control moeda" type="text" id="precoCompra"
-										name="precoCompra" class="form-control"
-										placeholder="Preço de Custo"
-										value='<c:out value="${insumo.precoCompra}"></c:out>'
-										oninput="formatarMoeda(this)"> <label
-										for="precoCompra">Preço de Custo</label>
+									<input class="form-control" type="text" id="precoCompra"
+										name="precoCompra" placeholder="Preço de Custo"
+										value='<fmt:formatNumber value="${insumo.precoCompra}" type="currency" currencySymbol="R$" />'>
+									<label for="valorTotal">Preço de Custo:</label>
 								</div>
 							</div>
-
 						</div>
 
 						<!-- Segunda Linha: Preço de Venda, Quantidade, Unidade -->
 						<div class="row g-3 mt-2">
+
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input class="form-control moeda" type="text" id="precoVenda"
-										name="precoVenda" class="form-control"
-										placeholder="Preço de Venda"
-										value='<c:out value="${insumo.precoVenda}"></c:out>'
-										oninput="formatarMoeda(this)"> <label for="precoVenda">Preço
-										de Venda</label>
+									<input class="form-control" type="text" id="precoVenda"
+										name="precoVenda" placeholder="Preço de Venda"
+										value='<fmt:formatNumber value="${insumo.precoVenda}" type="currency" currencySymbol="R$" />'>
+									<label for="precoVenda">Preço de Venda:</label>
 								</div>
 							</div>
 							<div class="col-md-4">

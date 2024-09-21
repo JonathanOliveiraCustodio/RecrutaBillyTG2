@@ -53,50 +53,53 @@ public class PedidoController {
 
 	@RequestMapping(name = "pedido", value = "/pedido", method = RequestMethod.GET)
 	public ModelAndView pedidoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
-			ModelMap model) {
-		HttpSession session = request.getSession();
-		session.removeAttribute("pedido");
-		String cmd = allRequestParam.get("cmd");
-		String codigo = allRequestParam.get("codigo");
+	        ModelMap model) {
+	    HttpSession session = request.getSession();
+	    session.removeAttribute("pedido");
+	    
+	    String cmd = allRequestParam.get("cmd");
+	    String codigo = allRequestParam.get("codigo");
 
-		String saida = "";
-		String erro = "";
-		Pedido p = new Pedido();
-		Cliente c = new Cliente();
-		List<Cliente> clientes = new ArrayList<>();
-		List<Pedido> pedidos = new ArrayList<>();
+	    String saida = "";
+	    String erro = "";
+	    Pedido p = new Pedido();
+	    Cliente c = new Cliente();
+	    List<Cliente> clientes = new ArrayList<>();
+	    List<Pedido> pedidos = new ArrayList<>();
 
-		try {
-			// p = null;
-			clientes = cDao.findAll();
+	    try {
+	        clientes = cDao.findAll();
+	        
+	        // Verifica se um código foi fornecido e busca o pedido correspondente
+	        if (codigo != null) {
+	            p.setCodigo(Integer.parseInt(codigo));
+	            p = buscarPedido(p);
+	        }
 
-			if (cmd != null) {
-				p.setCodigo(Integer.parseInt(codigo));
-				if (cmd.contains("alterar")) {
-					p = buscarPedido(p);
-				} else {
-					if (cmd.contains("excluir")) {
-						p = buscarPedido(p);
-						saida = excluirPedido(p);
-						p = null;
-					} else {
-						if (cmd.contains("Listar")) {
-							pedidos = listarPedidos();
-						}
-					}
-				}
-			}
-		} catch (SQLException | ClassNotFoundException e) {
-			erro = e.getMessage();
-		} finally {
-			model.addAttribute("saida", saida);
-			model.addAttribute("erro", erro);
-			model.addAttribute("pedido", p);
-			model.addAttribute("pedidos", pedidos);
-			model.addAttribute("clientes", clientes);
-			model.addAttribute("cliente", c);
-		}
-		return new ModelAndView("pedido");
+	        // Comando para alterar, excluir ou listar pedidos
+	        if (cmd != null) {
+	            if (cmd.contains("alterar")) {
+	                p = buscarPedido(p);
+	            } else if (cmd.contains("excluir")) {
+	                p = buscarPedido(p);
+	                saida = excluirPedido(p);
+	                p = null;
+	            } else if (cmd.contains("Listar")) {
+	                pedidos = listarPedidos();
+	            }
+	        }
+	    } catch (SQLException | ClassNotFoundException e) {
+	        erro = e.getMessage();
+	    } finally {
+	        model.addAttribute("saida", saida);
+	        model.addAttribute("erro", erro);
+	        model.addAttribute("pedido", p);
+	        model.addAttribute("pedidos", pedidos);
+	        model.addAttribute("clientes", clientes);
+	        model.addAttribute("cliente", c);
+	    }
+
+	    return new ModelAndView("pedido");
 	}
 
 	@RequestMapping(name = "pedido", value = "/pedido", method = RequestMethod.POST)
@@ -129,7 +132,6 @@ public class PedidoController {
 			if (codigo != null && !codigo.isEmpty()) {
 				p.setNome(nome);
 			}
-
 		}
 		try {
 			clientes = cDao.findAll();
@@ -145,7 +147,7 @@ public class PedidoController {
 
 				// Remover a máscara de moeda
 				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
-				System.out.println("valor:" + valorTotal);
+
 				p.setValorTotal(Float.parseFloat(valorTotal));
 				p.setEstado(estado);
 				p.setTipoPagamento(formaPagamento);
@@ -158,9 +160,7 @@ public class PedidoController {
 				} else {
 					p.setDataPagamento(null);
 				}
-
 			}
-
 			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarPedido(p);
 				p = null;
@@ -187,7 +187,6 @@ public class PedidoController {
 				} else {
 					// Caso encontre mais de um pedido
 					saida = "Foram encontrados " + pedidos.size() + " pedidos com o Nome '" + nome + "'";
-
 				}
 			}
 			if (cmd.contains("Listar")) {

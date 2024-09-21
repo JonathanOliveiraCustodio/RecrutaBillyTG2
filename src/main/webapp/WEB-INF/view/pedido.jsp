@@ -106,9 +106,8 @@
 							<div class="form-floating">
 								<input class="form-control" type="text" id="valorTotal"
 									name="valorTotal" placeholder="Valor Total"
-									value='<c:out value="${pedido.valorTotal}"></c:out>'
-									oninput="formatarMoeda(this)"><label for="valorTotal">Valor
-									Total:</label>
+									value='<fmt:formatNumber value="${pedido.valorTotal}" type="currency" currencySymbol="R$" />'>
+								<label for="valorTotal">Valor Total:</label>
 							</div>
 						</div>
 					</div>

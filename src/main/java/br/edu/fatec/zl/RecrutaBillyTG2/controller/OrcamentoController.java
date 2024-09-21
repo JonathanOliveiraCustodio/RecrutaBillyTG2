@@ -38,7 +38,6 @@ public class OrcamentoController {
         HttpSession session = request.getSession();
         session.removeAttribute("orcamento");
         String cmd = allRequestParam.get("cmd");
-
         String codigo = allRequestParam.get("codigo");
 
         String saida = "";
@@ -49,7 +48,6 @@ public class OrcamentoController {
         List<Orcamento> orcamentos = new ArrayList<>();
         try {
             clientes = cDao.findAll();
-
             if (codigo != null) {
                 o.setCodigo(Integer.parseInt(codigo));
                 o = buscarOrcamento(o);
