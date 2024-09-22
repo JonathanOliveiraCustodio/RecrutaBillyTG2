@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Configuracoes;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.Despesa;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Orcamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Produto;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ConfiguracoesDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.DespesaDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.IndexDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.OrcamentoDao;
@@ -44,6 +48,9 @@ public class IndexController {
 
 	@Autowired
 	ConfiguracoesDao cDao;
+	
+	@Autowired
+	DespesaDao dDao;
 
 	@RequestMapping(name = "index", value = "/index", method = RequestMethod.GET)
 	public ModelAndView indexGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
@@ -84,10 +91,13 @@ public class IndexController {
 		String saida = "";
 		String erro = "";
 		String tituloTabela = "Pedidos Recentes";
-
+		@SuppressWarnings("unused")
+		float valorTotalDespesasMes = 0;
+		
 		List<Pedido> pedidos = new ArrayList<>();
 		List<Produto> produtos = new ArrayList<>();
 		List<Orcamento> orcamentos = new ArrayList<>();
+		List<Despesa> despesas = new ArrayList<>();
 		Configuracoes configuracoes = null;
 
 		try {
@@ -119,6 +129,19 @@ public class IndexController {
 				produtos = prDao.findByEstoqueBaixo(qtdMinimaEstoque);
 				tituloTabela = "Produtos com Estoque Baixo";
 				break;
+				
+			 case "despesasPendentes":
+		            despesas = dDao.findByEstado("Pendente");
+		            tituloTabela = "Despesas Pendentes";
+		            break;
+		        case "despesasVencidas":
+		            despesas = dDao.findByVencidas();
+		            tituloTabela = "Despesas Vencidas";
+		            break;
+		        case "valorTotalDespesasMes":
+		        	valorTotalDespesasMes = dDao.findValorTotalByMes();
+		            tituloTabela = "Valor Total de Despesas no Mês";
+		            break;	
 			default:
 				saida = "Escolha inválida.";
 				break;
@@ -135,6 +158,7 @@ public class IndexController {
 			model.addAttribute("pedidos", pedidos);
 			model.addAttribute("orcamentos", orcamentos);
 			model.addAttribute("produtos", produtos);
+			model.addAttribute("despesas", despesas);
 			model.addAttribute("tituloTabela", tituloTabela);
 			model.addAttribute("configuracoes", configuracoes);
 		}
@@ -150,6 +174,9 @@ public class IndexController {
 		model.addAttribute("totalPedidosDespachados", iDao.countPedidosDespachados());
 		model.addAttribute("totalProdutosProducao", iDao.countProdutosProducao());
 		model.addAttribute("totalProdutoEstoqueBaixo", iDao.countProdutosEstoqueBaixo(qtdMinimaEstoque));
+		model.addAttribute("totalDespesasPendentes", iDao.countDespesasPendentes());
+	    model.addAttribute("totalDespesasVencidas", iDao.countDespesasVencidas());
+	    model.addAttribute("valorTotalDespesasMes", iDao.countValorTotalDespesasMes());
 	}
 
 }

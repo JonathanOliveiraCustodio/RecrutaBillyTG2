@@ -104,8 +104,8 @@
 										<option value="">Escolha o tipo de despesa</option>
 										<option value="Entrada"
 											<c:if test="${despesa.tipo eq 'Entrada'}">selected</c:if>>Entrada</option>
-										<option value="Saida"
-											<c:if test="${despesa.tipo eq 'Saida'}">selected</c:if>>Saida</option>
+										<option value="Saída"
+											<c:if test="${despesa.tipo eq 'Saída'}">selected</c:if>>Saída</option>
 									</select> <label for="tipo">Tipo</label>
 								</div>
 							</div>

@@ -195,6 +195,9 @@ qtdMediaPedidoAndamento           INT		    NULL,
 qtdMediaPedidosRecebidos          INT           NULL,
 qtdMediaPedidosDespachados        INT           NULL,
 qtdMediaProducaoProdutos          INT           NULL,
+qtdDespesasPendentes			  INT           NULL,
+qtdDespesasVencidas				  INT           NULL,
+valorTotalDespesasMes             DECIMAL(10,2) NULL
 )
 GO
 -- Insert Usuario de Teste
@@ -363,8 +366,9 @@ INSERT INTO endereco (CPF, CEP, logradouro, bairro, localidade, UF, complemento,
 ('25525320045','01001-000','Praça da Sé','Sé','São Paulo','SP','Centro','1','Residencial'),
 ('76368440015','20040-003','Avenida Rio Branco','Centro','Rio de Janeiro','RJ','Edifício ABC','100','Comercial')
 GO
-INSERT INTO configuracoes(qtdMaximaOrcamento,qtdMinimaProdutoEstoque,qtdMediaPedidoAndamento,qtdMediaPedidosRecebidos,qtdMediaPedidosDespachados,qtdMediaProducaoProdutos) VALUES 
-(14,5,4,5,5,5)
+INSERT INTO configuracoes(qtdMaximaOrcamento,qtdMinimaProdutoEstoque,qtdMediaPedidoAndamento,
+qtdMediaPedidosRecebidos,qtdMediaPedidosDespachados,qtdMediaProducaoProdutos,qtdDespesasPendentes,qtdDespesasVencidas,valorTotalDespesasMes) VALUES 
+(14,5,4,5,5,5,7,6,4000.0)
 GO
 INSERT INTO produtosPedido (codigoPedido, codigoProduto, quantidade)
 VALUES 
@@ -374,6 +378,25 @@ VALUES
 (2, 1, 2),
 (2, 2, 1),  
 (2, 3, 5); 
+GO
+INSERT INTO despesa (nome, tipo, pagamento, dataInicio, dataVencimento, valor, estado)
+VALUES 
+-- Setembro
+('Compra de Material', 'Saída', 'Boleto', '2024-09-01', '2024-09-15', 250.00, 'Pendente'),
+('Recebimento de Serviço', 'Entrada', 'PIX', '2024-09-05', NULL, 500.00, 'Pago'),
+('Aluguel', 'Saída', 'Boleto', '2024-09-01', '2024-09-30', 1200.00, 'Pendente'),
+('Venda de Produto A', 'Entrada', 'PIX', '2024-09-02', NULL, 300.00, 'Pago'),
+('Despesas com Funcionários', 'Saída', 'PIX', '2024-09-08', NULL, 2000.00, 'Pago'),
+('Compra de Material de Escritório', 'Saída', 'Boleto', '2024-10-01', '2024-10-10', 150.00, 'Pendente'),
+('Venda de Produto F', 'Entrada', 'PIX', '2024-10-02', NULL, 400.00, 'Pago'),
+('Manutenção de Equipamento', 'Saída', 'Boleto', '2024-10-05', '2024-10-15', 600.00, 'Pendente'),
+('Serviço de Internet', 'Saída', 'Boleto', '2024-10-10', '2024-10-20', 200.00, 'Pendente'),
+('Recebimento de Serviços de Marketing', 'Entrada', 'PIX', '2024-10-12', NULL, 800.00, 'Pago'),
+('Compra de Software', 'Saída', 'Boleto', '2024-11-01', NULL, 1200.00, 'Pendente'),
+('Venda de Produto G', 'Entrada', 'PIX', '2024-11-02', NULL, 900.00, 'Pago'),
+('Pagamento de Impostos', 'Saída', 'Boleto', '2024-11-05', '2024-11-15', 1500.00, 'Pendente'),
+('Serviço de Consultoria', 'Saída', 'Boleto', '2024-11-10', NULL, 1300.00, 'Pendente'),
+('Serviços de Limpeza', 'Saída', 'Boleto', '2024-11-15', '2024-11-25', 250.00, 'Pendente');
 GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
@@ -1186,7 +1209,6 @@ BEGIN
         SET @saida = 'Este orçamento já foi convertido em pedido. Não é possível converter novamente.'
         RETURN
     END
-
     -- Atualiza o status do orçamento para 'Pedido'
     UPDATE orcamento
     SET status = 'Pedido'
@@ -1196,7 +1218,6 @@ BEGIN
     IF @@ROWCOUNT > 0
     BEGIN
         DECLARE @novoCodigoPedido INT;
-
         -- Inserir o pedido na tabela pedido
         INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
         SELECT nome, descricao, cliente, valorTotal, 'Recebido', GETDATE(), formaPagamento, observacao, 'Pendente', NULL
@@ -1345,6 +1366,9 @@ CREATE PROCEDURE sp_u_configuracoes
 	@qtdMediaPedidosRecebidos INT,
 	@qtdMediaPedidosDespachados INT,
 	@qtdMediaProducaoProdutos INT,
+	@qtdDespesasPendentes INT,
+	@qtdDespesasVencidas INT,
+	@valorTotalDespesasMes DECIMAL(10,2),
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -1357,7 +1381,8 @@ BEGIN
     UPDATE configuracoes
     SET qtdMaximaOrcamento = @qtdMaximaOrcamento, qtdMinimaProdutoEstoque = @qtdMinimaProdutoEstoque,
 	qtdMediaPedidoAndamento = @qtdMediaPedidoAndamento, qtdMediaPedidosRecebidos = @qtdMediaPedidosRecebidos,
-	qtdMediaPedidosDespachados = @qtdMediaPedidosDespachados, qtdMediaProducaoProdutos = @qtdMediaProducaoProdutos
+	qtdMediaPedidosDespachados = @qtdMediaPedidosDespachados, qtdMediaProducaoProdutos = @qtdMediaProducaoProdutos,
+	qtdDespesasPendentes = @qtdDespesasPendentes,  qtdDespesasVencidas = @qtdDespesasVencidas, valorTotalDespesasMes = @valorTotalDespesasMes  
     SET @saida = 'Configuração alterada com sucesso'
 END
 GO
@@ -1626,7 +1651,18 @@ RETURN
         CPF = @CPF
 );
 GO
-
+CREATE VIEW v_despesa AS
+SELECT 
+    codigo,
+    nome,
+    tipo,
+    pagamento,
+    dataInicio,
+    dataVencimento,
+    valor,
+    estado
+FROM despesa;
+GO
 CREATE TRIGGER t_valortotal ON produtosPedido
 AFTER INSERT, UPDATE, DELETE
 AS

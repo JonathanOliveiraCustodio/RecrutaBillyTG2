@@ -16,5 +16,8 @@ public class Configuracoes {
 	int qtdMediaPedidosRecebidos;
 	int qtdMediaPedidosDespachados;
 	int qtdMediaProducaoProdutos;
+	int qtdDespesasPendentes; 
+	int qtdDespesasVencidas;  
+	float valorTotalDespesasMes;
 	
 }

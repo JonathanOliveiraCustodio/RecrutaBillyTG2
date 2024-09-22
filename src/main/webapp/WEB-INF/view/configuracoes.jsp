@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Configurações</title>
+<title>Parâmetros de Operação</title>
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -26,7 +26,7 @@
 		<c:if test="${nivelAcesso == 'admin' }">
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
-					<h1 class="display-6 fw-bold">Configurações</h1>
+					<h1 class="display-6 fw-bold">Parâmetros de Operação</h1>
 					<form id="configuracoes" action="configuracoes" method="post"
 						class="row g-3 mt-3">
 						<!-- Campo para definir a quantidade máxima de orçamentos em aberto -->
@@ -81,10 +81,38 @@
 							<label for="medProducaoProdutos">Quantidade Média de
 								Produção de Produtos</label>
 						</div>
+
+						<div class="col-md-6 form-floating">
+							<input type="number" class="form-control"
+								id="medDespesasPendentes" name="medDespesasPendentes"
+								value="${configuracoes.qtdDespesasPendentes}"
+								placeholder="Quantidade Média de Despesas Pendentes"> <label
+								for="medDespesasPendentes">Quantidade Média de Despesas
+								Pendentes</label>
+						</div>
+
+						<div class="col-md-6 form-floating">
+							<input type="number" class="form-control"
+								id="medDespesasVencidas" name="medDespesasVencidas"
+								value="${configuracoes.qtdDespesasVencidas}"
+								placeholder="Quantidade Média de Despesas Vencidas"> <label
+								for="medDespesasVencidas">Quantidade Média de Despesas
+								Vencidas</label>
+						</div>			
+						
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input class="form-control" type="text" id="valorTotalDespesasMes"
+									name="valorTotalDespesasMes" placeholder="Meta de Despesas do Mês"
+									value='<fmt:formatNumber value="${configuracoes.valorTotalDespesasMes}" type="currency" currencySymbol="R$" />'>
+								<label for="valorTotalDespesasMes">Meta de Despesas do Mês</label>
+							</div>
+						</div>
+						
 						<!-- Botão para submeter o formulário -->
 						<div class="row g-3 mt-3 justify-content-center">
 							<div class="col-md-2 d-grid text-center">
-								<button type="submit" class="btn btn-success btn-align">Cadastrar</button>
+								<button type="submit" class="btn btn-success btn-align">Alterar</button>
 							</div>
 						</div>
 					</form>

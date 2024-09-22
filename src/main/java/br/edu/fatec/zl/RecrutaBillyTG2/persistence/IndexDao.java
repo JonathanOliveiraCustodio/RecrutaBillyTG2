@@ -81,6 +81,7 @@ public class IndexDao implements IIndexDao {
 		return count;
 	}
 	
+	@Override
 	public int countProdutosProducao() throws SQLException, ClassNotFoundException {
 		int count = 0;
 		Connection c = gDao.getConnection();
@@ -96,6 +97,7 @@ public class IndexDao implements IIndexDao {
 		return count;
 	}
 	
+	@Override
 	public int countProdutosEstoqueBaixo(int minEstoque) throws SQLException, ClassNotFoundException {
 	    int count = 0;
 	    Connection c = gDao.getConnection();
@@ -111,6 +113,54 @@ public class IndexDao implements IIndexDao {
 	    c.close();
 	    return count;
 	}
+	
+	@Override
+    public int countDespesasPendentes() throws SQLException, ClassNotFoundException {
+        int count = 0;
+        Connection c = gDao.getConnection();
+        String sql = "SELECT COUNT(*) AS total FROM v_despesa WHERE estado = 'Pendente'";
+        PreparedStatement ps = c.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt("total");
+        }
+        rs.close();
+        ps.close();
+        c.close();
+        return count;
+    }
+
+    @Override
+    public int countDespesasVencidas() throws SQLException, ClassNotFoundException {
+        int count = 0;
+        Connection c = gDao.getConnection();
+        String sql = "SELECT COUNT(*) AS total FROM v_despesa WHERE dataVencimento < GETDATE() AND estado != 'Pago'";
+        PreparedStatement ps = c.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt("total");
+        }
+        rs.close();
+        ps.close();
+        c.close();
+        return count;
+    }
+
+    @Override
+    public float countValorTotalDespesasMes() throws SQLException, ClassNotFoundException {
+        float total = 0;
+        Connection c = gDao.getConnection();
+        String sql = "SELECT SUM(valor) AS total FROM v_despesa WHERE MONTH(dataInicio) = MONTH(GETDATE()) AND YEAR(dataInicio) = YEAR(GETDATE())";
+        PreparedStatement ps = c.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            total = rs.getFloat("total");
+        }
+        rs.close();
+        ps.close();
+        c.close();
+        return total;
+    }
 	
 	
 	

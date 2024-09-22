@@ -30,55 +30,57 @@ public class DespesaController {
 
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.GET)
 	public ModelAndView despesasGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
-			HttpSession session) {
-		String nivelAcesso = (String) session.getAttribute("nivelAcesso");
-		String entrada = allRequestParam.get("entrada");
-		String gasto = allRequestParam.get("gasto");
-		String saldo = allRequestParam.get("entrada");
-		String erro = "";
-		String saida = "";
+	        HttpSession session) {
+	    String nivelAcesso = (String) session.getAttribute("nivelAcesso");
+	    String entrada = allRequestParam.get("entrada");
+	    String gasto = allRequestParam.get("gasto");
+	    String saldo = allRequestParam.get("entrada");
+	    String erro = "";
+	    String saida = "";
 
-		List<Despesa> despesas = new ArrayList<>();
-		Despesa d = null;
+	    List<Despesa> despesas = new ArrayList<>();
+	    Despesa d = new Despesa();
 
-		try {
-			String cmd = allRequestParam.get("cmd");
-			String codigo = allRequestParam.get("codigo");
-	       // String filtro = allRequestParam.get("filtro");
+	    try {
+	        String cmd = allRequestParam.get("cmd");
+	        String codigo = allRequestParam.get("codigo");
 
-			if (cmd != null) {
-				if (cmd.contains("alterar")) {
-					d = new Despesa();
-					d.setCodigo(Integer.parseInt(codigo));
-					d = buscarDespesa(d);
-				} else {
-					if (cmd.contains("excluir")) {
-						d = new Despesa();
-						d.setCodigo(Integer.parseInt(codigo));
-						saida = excluirDespesa(d);
-						d = null;
-					}
-				}
-				despesas = listarDespesas(0);
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			erro = e.getMessage();
-		} finally {
-			if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
-				saida = "Você não possui acesso para visualizar esta página.";
-			}
-			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
-			gasto = "R$ " + Float.toString(calcularSaida(despesas));
-			saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
-			model.addAttribute("erro", erro);
-			model.addAttribute("saida", saida);
-			model.addAttribute("entrada", entrada);
-			model.addAttribute("gasto", gasto);
-			model.addAttribute("saldo", saldo);
-			model.addAttribute("despesa", d);
-			model.addAttribute("despesas", despesas);
-		}
-		return new ModelAndView("despesas");
+	        // Verifica se um código foi fornecido e busca a despesa correspondente
+	        if (codigo != null) {
+	            d.setCodigo(Integer.parseInt(codigo));
+	            d = buscarDespesa(d);
+	        }
+
+	        // Comando para alterar, excluir ou listar despesas
+	        if (cmd != null) {
+	            if (cmd.contains("alterar")) {
+	                d = buscarDespesa(d);
+	            } else if (cmd.contains("excluir")) {
+	                d = buscarDespesa(d);
+	                saida = excluirDespesa(d);
+	                d = null;
+	            } else if (cmd.contains("Listar")) {
+	                despesas = listarDespesas(0);
+	            }
+	        }
+	    } catch (ClassNotFoundException | SQLException e) {
+	        erro = e.getMessage();
+	    } finally {
+	        if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
+	            saida = "Você não possui acesso para visualizar esta página.";
+	        }
+	        entrada = "R$ " + Float.toString(calcularEntrada(despesas));
+	        gasto = "R$ " + Float.toString(calcularSaida(despesas));
+	        saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
+	        model.addAttribute("erro", erro);
+	        model.addAttribute("saida", saida);
+	        model.addAttribute("entrada", entrada);
+	        model.addAttribute("gasto", gasto);
+	        model.addAttribute("saldo", saldo);
+	        model.addAttribute("despesa", d);
+	        model.addAttribute("despesas", despesas);
+	    }
+	    return new ModelAndView("despesas");
 	}
 
 	@RequestMapping(name = "despesas", value = "/despesas", method = RequestMethod.POST)
@@ -249,7 +251,7 @@ public class DespesaController {
 	private float calcularSaida(List<Despesa> despesas) {
 		float saida = 0;
 		for (Despesa d : despesas) {
-			if (d.getTipo().equals("Saida")) {
+			if (d.getTipo().equals("Saída")) {
 				saida += d.getValor();
 			}
 		}

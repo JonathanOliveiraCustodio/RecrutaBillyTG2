@@ -49,38 +49,45 @@ public class ConfiguracoesController {
 
 	@RequestMapping(name = "configuracoes", value = "/configuracoes", method = RequestMethod.POST)
 	public ModelAndView configuracoesPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-		String maxOrcamentos = allRequestParam.get("maxOrcamentos");
-		String minEstoque = allRequestParam.get("minEstoque");
-		String medPedidosAndamento = allRequestParam.get("medPedidosAndamento");
-		String medPedidosRecebidos = allRequestParam.get("medPedidosRecebidos");
-		String medPedidosDespachados = allRequestParam.get("medPedidosDespachados");
-		String medProducaoProdutos = allRequestParam.get("medProducaoProdutos");
-		
-		String erro = "";
-		String saida = "";
+	    String maxOrcamentos = allRequestParam.get("maxOrcamentos");
+	    String minEstoque = allRequestParam.get("minEstoque");
+	    String medPedidosAndamento = allRequestParam.get("medPedidosAndamento");
+	    String medPedidosRecebidos = allRequestParam.get("medPedidosRecebidos");
+	    String medPedidosDespachados = allRequestParam.get("medPedidosDespachados");
+	    String medProducaoProdutos = allRequestParam.get("medProducaoProdutos");
+	    String medDespesasPendentes = allRequestParam.get("medDespesasPendentes");
+	    String medDespesasVencidas = allRequestParam.get("medDespesasVencidas");
+	    String valorTotalDespesasMes = allRequestParam.get("valorTotalDespesasMes");
 
-		Configuracoes configuracoes = new Configuracoes();
+	
+	    valorTotalDespesasMes = valorTotalDespesasMes.replace("R$", "").replace(".", "").replace(",", ".");
+	    String erro = "";
+	    String saida = "";
 
-		try {
-			
-			configuracoes.setQtdMaximaOrcamento(Integer.parseInt(maxOrcamentos));
-			configuracoes.setQtdMinimaProdutoEstoque(Integer.parseInt(minEstoque));
-			configuracoes.setQtdMediaPedidoAndamento(Integer.parseInt(medPedidosAndamento));
-			configuracoes.setQtdMediaPedidosRecebidos(Integer.parseInt(medPedidosRecebidos));
-			configuracoes.setQtdMediaPedidosDespachados(Integer.parseInt(medPedidosDespachados));
-			configuracoes.setQtdMediaProducaoProdutos(Integer.parseInt(medProducaoProdutos));
+	    Configuracoes configuracoes = new Configuracoes();
 
-			saida = cDao.sp_u_configuracoes(configuracoes);
-		} catch (NumberFormatException e) {
-			erro = "Valores inválidos. Por favor, insira números válidos.";
-		} catch (SQLException | ClassNotFoundException e) {
-			erro = e.getMessage();
-		} finally {
-			model.addAttribute("erro", erro);
-			model.addAttribute("saida", saida);
-			model.addAttribute("configuracoes", configuracoes);
-		}
+	    try {
+	        configuracoes.setQtdMaximaOrcamento(Integer.parseInt(maxOrcamentos));
+	        configuracoes.setQtdMinimaProdutoEstoque(Integer.parseInt(minEstoque));
+	        configuracoes.setQtdMediaPedidoAndamento(Integer.parseInt(medPedidosAndamento));
+	        configuracoes.setQtdMediaPedidosRecebidos(Integer.parseInt(medPedidosRecebidos));
+	        configuracoes.setQtdMediaPedidosDespachados(Integer.parseInt(medPedidosDespachados));
+	        configuracoes.setQtdMediaProducaoProdutos(Integer.parseInt(medProducaoProdutos));
+	        configuracoes.setQtdDespesasPendentes(Integer.parseInt(medDespesasPendentes));
+	        configuracoes.setQtdDespesasVencidas(Integer.parseInt(medDespesasVencidas));
+	        configuracoes.setValorTotalDespesasMes(Float.parseFloat(valorTotalDespesasMes));
 
-		return new ModelAndView("configuracoes");
+	        saida = cDao.sp_u_configuracoes(configuracoes);
+	    } catch (NumberFormatException e) {
+	        erro = "Valores inválidos. Por favor, insira números válidos.";
+	    } catch (SQLException | ClassNotFoundException e) {
+	        erro = e.getMessage();
+	    } finally {
+	        model.addAttribute("erro", erro);
+	        model.addAttribute("saida", saida);
+	        model.addAttribute("configuracoes", configuracoes);
+	    }
+
+	    return new ModelAndView("configuracoes");
 	}
 }

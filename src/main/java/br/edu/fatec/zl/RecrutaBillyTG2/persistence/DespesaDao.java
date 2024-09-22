@@ -48,7 +48,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 	
 	@Override
 	public Despesa findBy(Despesa d) throws SQLException, ClassNotFoundException {
-		String sql = "SELECT * FROM despesa WHERE codigo = ?";
+		String sql = "SELECT * FROM v_despesa WHERE codigo = ?";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
 		ps.setInt(1, d.getCodigo());
@@ -72,7 +72,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 	@Override
 	public List<Despesa> findAll() throws SQLException, ClassNotFoundException {
 		List<Despesa> despesas = new ArrayList<>();
-		String sql = "SELECT * FROM despesa";
+		String sql = "SELECT * FROM v_despesa";
 		Connection c = gDao.getConnection();
 		PreparedStatement ps = c.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
@@ -106,7 +106,7 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		StringBuffer sql = new StringBuffer();
 
 		sql.append("SELECT * FROM fn_buscar_despesa(?,?) ");
-
+		
 		PreparedStatement ps = c.prepareStatement(sql.toString());
 		ps.setString(1, opcao);
 		ps.setString(2, parametro);
@@ -128,4 +128,85 @@ public class DespesaDao implements ICrud<Despesa>, IDespesaDao{
 		c.close();
 		return despesas;
 	}
+	
+	public List<Despesa> findByEstado(String estado) throws SQLException, ClassNotFoundException {
+		List<Despesa> despesas = new ArrayList<>();
+		
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM v_despesa WHERE estado LIKE ?");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		// "%" Para fazer buscas aproximadas
+		ps.setString(1, "%" + estado + "%");
+		//ps.setString(1, nome);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			Despesa d = new Despesa();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			d.setData(rs.getDate("dataInicio"));
+			d.setDataVencimento(rs.getDate("dataVencimento"));
+			d.setValor(rs.getFloat("valor"));
+			d.setTipo(rs.getString("tipo"));
+			d.setPagamento(rs.getString("pagamento"));
+			d.setEstado(rs.getString("estado"));
+			despesas.add(d);
+		}
+		ps.close();
+		rs.close();
+		con.close();
+		return despesas;
+	}
+	
+	public List<Despesa> findByVencidas() throws SQLException, ClassNotFoundException {
+		List<Despesa> despesas = new ArrayList<>();
+		
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM despesa WHERE dataVencimento < GETDATE() AND estado != 'Pago'");
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			Despesa d = new Despesa();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nome"));
+			d.setData(rs.getDate("dataInicio"));
+			d.setDataVencimento(rs.getDate("dataVencimento"));
+			d.setValor(rs.getFloat("valor"));
+			d.setTipo(rs.getString("tipo"));
+			d.setPagamento(rs.getString("pagamento"));
+			d.setEstado(rs.getString("estado"));
+			despesas.add(d);
+		}
+		ps.close();
+		rs.close();
+		con.close();
+		return despesas;
+	}
+	
+	public float findValorTotalByMes() throws SQLException, ClassNotFoundException {
+	    float totalDespesasMes = 0.0f;
+	    
+	    Connection con = gDao.getConnection();
+	    StringBuffer sql = new StringBuffer();
+	    sql.append("SELECT SUM(valor) AS totalDespesas FROM despesa ");
+	    sql.append("WHERE MONTH(dataVencimento) = MONTH(GETDATE()) ");
+	    sql.append("AND YEAR(dataVencimento) = YEAR(GETDATE())");
+
+	    PreparedStatement ps = con.prepareStatement(sql.toString());
+	    ResultSet rs = ps.executeQuery();
+	    
+	    if (rs.next()) {
+	        totalDespesasMes = rs.getFloat("totalDespesas");
+	    }
+	    
+	    ps.close();
+	    rs.close();
+	    con.close();
+	    return totalDespesasMes;
+	}
+
+	
+	
 }

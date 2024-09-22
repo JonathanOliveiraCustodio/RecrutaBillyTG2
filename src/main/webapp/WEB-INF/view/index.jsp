@@ -197,6 +197,84 @@
 										</div>
 									</div>
 								</div>
+
+								<div class="col-md-4">
+									<div class="card text-center shadow-sm"
+										style="cursor: pointer;"
+										onclick="setEscolha('despesasPendentes')">
+										<div class="card-body">
+											<h5 class="card-title">Despesas Pendentes</h5>
+											<p class="card-text display-6">
+												<c:out value="${totalDespesasPendentes}" />
+											</p>
+											<c:choose>
+												<c:when
+													test="${totalDespesasPendentes > configuracoes.qtdDespesasPendentes}">
+													<p class="text-danger">Alto número de despesas
+														pendentes, priorize pagamentos!</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-success">Despesas pendentes dentro do
+														limite esperado.</p>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="card text-center shadow-sm"
+										style="cursor: pointer;"
+										onclick="setEscolha('despesasVencidas')">
+										<div class="card-body">
+											<h5 class="card-title">Despesas Vencidas</h5>
+											<p class="card-text display-6">
+												<c:out value="${totalDespesasVencidas}" />
+											</p>
+											<c:choose>
+												<c:when test="${totalDespesasVencidas > 0}">
+													<p class="text-danger">Existem despesas vencidas,
+														verifique e regularize!</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-success">Nenhuma despesa vencida no
+														momento.</p>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="card text-center shadow-sm"
+										style="cursor: pointer;"
+										onclick="setEscolha('valorTotalDespesasMes')">
+										<div class="card-body">
+											<h5 class="card-title">Análise de Despesas do Mês</h5>
+											<p>
+												Valor Total de Despesas:
+												<fmt:formatNumber value="${valorTotalDespesasMes}"
+													type="currency" currencySymbol="R$" />
+											</p>
+											<c:choose>
+												<c:when
+													test="${valorTotalDespesasMes > configuracoes.valorTotalDespesasMes}">
+													<p class="text-warning">Despesas elevadas! Revise seu
+														planejamento financeiro.</p>
+												</c:when>
+												<c:when
+													test="${valorTotalDespesasMes < configuracoes.valorTotalDespesasMes * 0.8}">
+													<p class="text-info">Despesas estão abaixo do esperado!
+														Ótima gestão.</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-success">Despesas estão dentro do
+														planejado. Continue assim!</p>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</div>
+								</div>
 							</div>
 							<!-- Lista de Pedidos Recentes -->
 							<div class="row mt-5">
@@ -239,6 +317,22 @@
 																	<th>Ref. Estoque</th>
 																</tr>
 															</c:when>
+
+															<c:when
+																test="${escolha == 'despesasVencidas' || escolha == 'despesasPendentes'}">
+																<tr class="table-dark">
+																	<th></th>
+																	<td>Código</td>
+																	<td>Nome</td>
+																	<td>Data Inicial</td>
+																	<td>Data de Vencimento</td>
+																	<td>Valor</td>
+																	<td>Tipo</td>
+																	<td>Forma de Pagamento</td>
+																	<td>Estado</td>
+																</tr>
+															</c:when>
+
 															<c:otherwise>
 																<tr class="table-dark">
 																	<th></th>
@@ -312,6 +406,42 @@
 																	</tr>
 																</c:forEach>
 															</c:when>
+
+															<c:when
+																test="${escolha == 'despesasVencidas' || escolha == 'despesasPendentes'}">
+																<c:forEach var="despesa" items="${despesas}">
+																	<tr>
+																		<td style="text-align: center;"><a
+																			href="${pageContext.request.contextPath}/despesas?codigo=${despesa.codigo}"
+																			class="btn btn-outline-dark"> <svg
+																					xmlns="http://www.w3.org/2000/svg" width="26"
+																					height="26" fill="currentColor"
+																					class="bi bi-pencil-square" viewBox="0 0 16 16">
+            <path
+																						d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+            <path fill-rule="evenodd"
+																						d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+        </svg>
+																		</a></td>
+																		<td><c:out value="${despesa.codigo }" /></td>
+																		<td><c:out value="${despesa.nome }" /></td>
+																		<td><fmt:formatDate value="${despesa.data}"
+																				pattern="dd/MM/yyyy" /></td>
+																		<td><fmt:formatDate
+																				value="${despesa.dataVencimento}"
+																				pattern="dd/MM/yyyy" /></td>
+																		<td><fmt:formatNumber value="${despesa.valor }"
+																				type="currency" currencySymbol="R$" /></td>
+																		<td><c:out value="${despesa.tipo }" /></td>
+																		<td><c:out value="${despesa.estado }" /></td>
+																		<td><c:out value="${despesa.pagamento }" /></td>
+																	</tr>
+																</c:forEach>
+															</c:when>
+
+
+
+
 															<c:otherwise>
 																<c:forEach var="pedido" items="${pedidos}">
 																	<tr>

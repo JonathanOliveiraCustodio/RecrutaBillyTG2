@@ -31,7 +31,10 @@ public class ConfiguracoesDao {
             c.setQtdMediaPedidoAndamento(rs.getInt("qtdMediaPedidoAndamento"));
             c.setQtdMediaPedidosRecebidos(rs.getInt("qtdMediaPedidosRecebidos"));
             c.setQtdMediaPedidosDespachados(rs.getInt("qtdMediaPedidosDespachados"));
-            c.setQtdMediaProducaoProdutos(rs.getInt("qtdMediaProducaoProdutos"));
+            c.setQtdMediaProducaoProdutos(rs.getInt("qtdMediaProducaoProdutos"));      	
+            c.setQtdDespesasPendentes(rs.getInt("qtdDespesasPendentes")); 
+            c.setQtdDespesasVencidas(rs.getInt("qtdDespesasVencidas")); 
+        	c.setValorTotalDespesasMes(rs.getFloat("valorTotalDespesasMes")); 
         }
         rs.close();
         ps.close();
@@ -40,7 +43,7 @@ public class ConfiguracoesDao {
     }
 
     public String sp_u_configuracoes(Configuracoes c) throws SQLException, ClassNotFoundException {
-        String sql = "CALL sp_u_configuracoes(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "CALL sp_u_configuracoes(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection con = gDao.getConnection();
         CallableStatement cs = con.prepareCall(sql);
         cs.setInt(1, c.getQtdMaximaOrcamento());
@@ -49,9 +52,13 @@ public class ConfiguracoesDao {
         cs.setInt(4, c.getQtdMediaPedidosRecebidos());
         cs.setInt(5, c.getQtdMediaPedidosDespachados());
         cs.setInt(6, c.getQtdMediaProducaoProdutos());
-        cs.registerOutParameter(7, Types.VARCHAR);
+        cs.setInt(7, c.getQtdDespesasPendentes()); 
+        cs.setInt(8, c.getQtdDespesasVencidas()); 
+        cs.setFloat(9, c.getValorTotalDespesasMes()); 
+        
+        cs.registerOutParameter(10, Types.VARCHAR);
         cs.execute();
-        String saida = cs.getString(7);
+        String saida = cs.getString(10);
         cs.close();
         con.close();
         return saida;
