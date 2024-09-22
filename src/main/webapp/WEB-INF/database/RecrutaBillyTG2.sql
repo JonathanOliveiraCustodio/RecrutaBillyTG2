@@ -1831,6 +1831,56 @@ BEGIN
     END
 END;
 GO
+CREATE TRIGGER t_orcamento_verificar_estoque ON orcamento
+AFTER UPDATE
+AS
+BEGIN
+	DECLARE @codigo INT,
+			@codigoproduto INT,
+			@nomeproduto VARCHAR(50),
+			@quantidade INT,
+			@quantidadePo INT,
+			@erro VARCHAR(999)
+	SELECT @codigo = codigo FROM INSERTED
+
+	DECLARE @tabela TABLE(
+	codigoProduto INT,
+	nomeProduto VARCHAR(50),
+	quantidade INT
+	)
+
+	DECLARE cur CURSOR FOR
+		SELECT p.codigo, p.nome, p.quantidade, po.quantidade AS quantidadePo
+		FROM orcamento o, produtoOrcamento po, produto p
+		WHERE o.codigo = @codigo
+			AND po.codigoOrcamento = o.codigo
+			AND p.codigo = po.codigoProduto
+	OPEN cur
+	FETCH NEXT FROM cur INTO @codigoproduto, @nomeproduto, @quantidade, @quantidadePo
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF(@quantidade <= 0 OR @quantidadePo > @quantidade)
+		BEGIN
+			INSERT INTO @tabela VALUES
+			(@codigoproduto, @nomeproduto, @quantidade)
+		END
+	FETCH NEXT FROM cur INTO @codigoproduto, @nomeproduto, @quantidade, @quantidadePo
+	END
+	CLOSE cur
+	DEALLOCATE cur
+
+	IF EXISTS(SELECT * FROM @tabela)
+	BEGIN
+		-- Concatena tudo que entrou na tabela ali em cima
+		SELECT @erro = STRING_AGG(CONVERT(NVARCHAR(MAX), nomeProduto) + '(' + (CONVERT(NVARCHAR(MAX), quantidade)  + ')'), ', ')
+		FROM @tabela
+		SET @erro = 'Erro na conversão: Os seguintes produtos estão esgotados ou acima do estoque: ' + @erro
+		
+		RAISERROR(@erro, 16, 1)
+		ROLLBACK TRANSACTION
+	END
+END
+GO
 CREATE VIEW vw_insumo AS
 SELECT 
     i.codigo,
