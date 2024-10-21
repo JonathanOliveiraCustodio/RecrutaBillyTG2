@@ -6,10 +6,10 @@ USE RecrutaBillyTG2
 GO
 CREATE TABLE fornecedor(
 codigo			INT				NOT NULL IDENTITY(1,1),
-nome			VARCHAR(70)		NOT NULL,
+nome			VARCHAR(100)	NOT NULL,
 telefone		CHAR(12)		NOT NULL,
 email			VARCHAR(100)	NOT NULL, 
-empresa			VARCHAR(50)		NOT NULL,
+empresa			VARCHAR(100)    NOT NULL,
 CEP		        CHAR(09)	    NOT NULL,
 logradouro      VARCHAR(150)	NOT NULL, 
 numero          VARCHAR (20)	NOT NULL,
@@ -52,7 +52,7 @@ dataNascimento      DATE			NOT NULL,
 telefone		    CHAR(12)		NOT NULL,
 cargo               VARCHAR(30)     NOT NULL,
 horario             VARCHAR(30)     NOT NULL,
-salario				DECIMAL (10,1)  NOT NULL,
+salario				DECIMAL (10,2)  NOT NULL,
 dataAdmissao        DATE			NOT NULL,
 dataDesligamento    DATE            NULL,
 observacao          VARCHAR(800)    NULL,
@@ -67,9 +67,9 @@ PRIMARY KEY (codigo)
 GO
 CREATE TABLE produto(
 codigo		   INT	         	NOT NULL IDENTITY (1,1),
-nome		   VARCHAR(50)      NOT NULL,
+nome		   VARCHAR(100)      NOT NULL,
 categoria      INT              NOT NULL,
-descricao      VARCHAR(100)     NOT NULL,
+descricao      VARCHAR(200)     NOT NULL,
 valorUnitario  DECIMAL (10,2)   NOT NULL,
 status		   VARCHAR(30)		NOT NULL,
 quantidade	   INT				NOT NULL,
@@ -131,7 +131,7 @@ FOREIGN KEY (codigoProduto) REFERENCES produto (codigo)
 GO
 CREATE TABLE despesa(
 codigo			INT				NOT NULL		IDENTITY,
-nome			VARCHAR(200)	NOT NULL,
+nome			VARCHAR(100)	NOT NULL,
 tipo			VARCHAR(50)		NOT NULL,
 pagamento		VARCHAR(50)		NOT NULL,
 dataInicio		DATE			NOT NULL,
@@ -401,7 +401,7 @@ GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
     @codigo INT NULL,
-    @nome VARCHAR(50),
+    @nome VARCHAR(100),
     @telefone CHAR(12),
     @email VARCHAR(100),
     @empresa VARCHAR(50),
@@ -579,7 +579,7 @@ CREATE PROCEDURE sp_iud_funcionario
     @telefone CHAR(12),
     @cargo VARCHAR(30),
     @horario VARCHAR(30),
-    @salario DECIMAL(10,1),
+    @salario DECIMAL(10,2),
     @dataAdmissao DATE,
     @dataDesligamento DATE NULL,
     @observacao VARCHAR(800) NULL,
@@ -646,9 +646,9 @@ GO
 CREATE PROCEDURE sp_iud_produto
     @acao CHAR(1),
     @codigo INT NULL,
-    @nome VARCHAR(50),
+    @nome VARCHAR(100),
     @categoria INT,
-    @descricao VARCHAR(100),
+    @descricao VARCHAR(200),
     @valorUnitario DECIMAL(10,2),
     @status VARCHAR(20),
     @quantidade INT, 
@@ -1881,6 +1881,31 @@ BEGIN
 	END
 END
 GO
+CREATE TRIGGER t_categoriaProduto_manutencao
+ON categoriaProduto
+INSTEAD OF DELETE
+AS
+BEGIN
+    -- Verifica se há produtos associados à categoria que está sendo excluída
+    IF EXISTS (
+        SELECT 1
+        FROM deleted d
+        JOIN produto p ON d.codigo = p.categoria
+    )
+    BEGIN
+        -- Se houver associações, gera uma mensagem de erro e reverte a transação
+        RAISERROR('Não é possível excluir a categoria porque ela está associada a um ou mais produtos.', 16, 1);
+        ROLLBACK TRANSACTION; -- Reverte a transação para garantir que a exclusão não ocorra
+    END
+    ELSE
+    BEGIN
+        -- Caso não haja associações, realiza a exclusão normalmente
+        DELETE FROM categoriaProduto
+        WHERE codigo IN (SELECT codigo FROM deleted);
+    END
+END;
+GO
+
 CREATE VIEW vw_insumo AS
 SELECT 
     i.codigo,
@@ -1988,7 +2013,7 @@ CREATE FUNCTION fn_buscar_cliente (
 )
 RETURNS @resultado TABLE (
     codigo INT,
-    nome VARCHAR(50),
+    nome VARCHAR(100),
     telefone VARCHAR(20),
     email VARCHAR(100),
     tipo VARCHAR(20),
@@ -2008,7 +2033,7 @@ BEGIN
     DECLARE @count INT;
     DECLARE @clientes TABLE (
         codigo INT,
-        nome VARCHAR(50),
+        nome VARCHAR(100),
         telefone VARCHAR(20),
         email VARCHAR(100),
         tipo VARCHAR(20),
@@ -2074,7 +2099,7 @@ CREATE FUNCTION fn_buscar_fornecedor (
 )
 RETURNS @resultado TABLE (
     codigo INT,
-    nome VARCHAR(50),
+    nome VARCHAR(100),
     telefone VARCHAR(20),
     email VARCHAR(100),
     empresa VARCHAR(100),
@@ -2145,8 +2170,6 @@ BEGIN
     RETURN;
 END;
 GO
-
-
 CREATE FUNCTION fn_buscar_insumo (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
@@ -2231,8 +2254,6 @@ BEGIN
     RETURN;
 END;
 GO
-
-
 CREATE FUNCTION fn_buscar_pedido (
     @tipoPesquisa VARCHAR(50),
     @valorPesquisa VARCHAR(150)
@@ -2240,7 +2261,7 @@ CREATE FUNCTION fn_buscar_pedido (
 RETURNS @resultado TABLE (
     codigo INT,
     nomePedido VARCHAR(100),
-    descricao VARCHAR(255),
+    descricao VARCHAR(200),
     cliente INT,
     valorTotal DECIMAL(10,2),
     estado VARCHAR(50),
@@ -2320,9 +2341,9 @@ CREATE FUNCTION fn_buscar_produto (
 )
 RETURNS @resultado TABLE (
     codigo INT,
-    nome VARCHAR(50),
-    codigoCategoria INT, -- Inclui o código da categoria
-    nomeCategoria VARCHAR(150), -- Inclui o nome da categoria
+    nome VARCHAR(100),
+    codigoCategoria INT, 
+    nomeCategoria VARCHAR(150), 
     descricao VARCHAR(100),
     valorUnitario DECIMAL(10,2),
     status VARCHAR(30),
@@ -2335,9 +2356,9 @@ BEGIN
     DECLARE @count INT;
     DECLARE @produtos TABLE (
         codigo INT,
-        nome VARCHAR(50),
-        codigoCategoria INT, -- Inclui o código da categoria
-        nomeCategoria VARCHAR(150), -- Inclui o nome da categoria
+        nome VARCHAR(100),
+        codigoCategoria INT,
+        nomeCategoria VARCHAR(150), 
         descricao VARCHAR(100),
         valorUnitario DECIMAL(10,2),
         status VARCHAR(30),
@@ -2399,7 +2420,7 @@ CREATE FUNCTION fn_buscar_equipamento (
 )
 RETURNS @resultado TABLE (
     codigo INT,
-    nome VARCHAR(50),
+    nome VARCHAR(100),
     descricao VARCHAR(100),
     fabricante VARCHAR(50),
     dataAquisicao DATE,
@@ -2463,7 +2484,7 @@ RETURNS @resultado TABLE (
     telefone CHAR(12),
     cargo VARCHAR(30),
     horario VARCHAR(30),
-    salario DECIMAL(10,1),
+    salario DECIMAL(10,2),
     dataAdmissao DATE,
     dataDesligamento DATE NULL,
     observacao VARCHAR(800) NULL,
@@ -2482,7 +2503,7 @@ BEGIN
         telefone CHAR(12),
         cargo VARCHAR(30),
         horario VARCHAR(30),
-        salario DECIMAL(10,1),
+        salario DECIMAL(10,2),
         dataAdmissao DATE,
         dataDesligamento DATE NULL,
         observacao VARCHAR(800) NULL
@@ -2509,9 +2530,9 @@ BEGIN
         (@tipoPesquisa = 'nivelAcesso' AND f.nivelAcesso LIKE '%' + @valorPesquisa + '%') OR
         (@tipoPesquisa = 'cargo' AND f.cargo LIKE '%' + @valorPesquisa + '%') OR
         (@tipoPesquisa = 'horario' AND f.horario LIKE '%' + @valorPesquisa + '%') OR
-        (@tipoPesquisa = 'salario igual' AND f.salario = TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
-        (@tipoPesquisa = 'salario maior que' AND f.salario > TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
-        (@tipoPesquisa = 'salario menor que' AND f.salario < TRY_CAST(@valorPesquisa AS DECIMAL(10,1))) OR
+        (@tipoPesquisa = 'salario igual' AND f.salario = TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'salario maior que' AND f.salario > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'salario menor que' AND f.salario < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
         (@tipoPesquisa = 'dataAdmissao' AND f.dataAdmissao = TRY_CAST(@valorPesquisa AS DATE)) OR
         (@tipoPesquisa = 'nome' AND f.nome LIKE '%' + @valorPesquisa + '%') OR
         (@tipoPesquisa = 'Todos');
@@ -2585,7 +2606,7 @@ BEGIN
         o.nome,
         o.descricao,
         o.cliente,
-        c.nome AS nomeCliente, -- Nome do cliente adicionado
+        c.nome AS nomeCliente,
         o.valorTotal,
         o.formaPagamento,
         o.status,
@@ -2640,7 +2661,7 @@ CREATE FUNCTION fn_buscar_despesa (
 )
 RETURNS @resultado TABLE (
     codigo INT,
-    nome VARCHAR(200),
+    nome VARCHAR(100),
     tipo VARCHAR(50),
     pagamento VARCHAR(50),
     dataInicio DATE,
@@ -2654,7 +2675,7 @@ BEGIN
     DECLARE @count INT;
     DECLARE @despesas TABLE (
         codigo INT,
-        nome VARCHAR(200),
+        nome VARCHAR(100),
         tipo VARCHAR(50),
         pagamento VARCHAR(50),
         dataInicio DATE,
@@ -2719,7 +2740,7 @@ CREATE FUNCTION fn_buscar_etiqueta (
 RETURNS @resultado TABLE (
     codigoPedido INT,
     nomePedido VARCHAR(100),
-    descricaoPedido VARCHAR(255),
+    descricaoPedido VARCHAR(200),
     valorTotal DECIMAL(10,2),
     estadoPedido VARCHAR(50),
     dataPedido DATE,
@@ -2837,3 +2858,4 @@ BEGIN
     RETURN;
 END;
 GO
+

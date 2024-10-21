@@ -163,7 +163,7 @@
 	</div>
 	<div align="center">
 		<c:if test="${not empty saida}">
-			<h2 style="color: #198754;">
+			<h2 style="color: black;">
 				<b><c:out value="${saida}" /></b>
 			</h2>
 		</c:if>

@@ -80,7 +80,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="password" id="senha" name="senha"
-										class="form-control" placeholder="Senha"
+										class="form-control" placeholder="Senha" maxlength="30"
 										value='<c:out value="${funcionario.senha}"></c:out>'>
 									<label for="senha">Senha</label>
 								</div>
@@ -89,7 +89,7 @@
 								<div class="form-floating">
 									<input type="password" id="confirmarSenha"
 										name="confirmarSenha" class="form-control"
-										placeholder="Confirmar Senha"> <label
+										placeholder="Confirmar Senha" maxlength="30"> <label
 										for="confirmarSenha">Confirmar Senha</label>
 								</div>
 							</div>
@@ -100,7 +100,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="cargo" name="cargo" class="form-control"
-										placeholder="Cargo" maxlength="50"
+										placeholder="Cargo" maxlength="30"
 										value='<c:out value="${funcionario.cargo}"></c:out>'>
 									<label for="cargo">Cargo</label>
 								</div>
@@ -109,7 +109,7 @@
 								<div class="form-floating">
 									<input type="text" id="horario" name="horario"
 										class="form-control" placeholder="Ex: 12:40 às 16:40"
-										maxlength="50"
+										maxlength="15"
 										value='<c:out value="${funcionario.horario}"></c:out>'>
 									<label for="horario">Horário</label>
 								</div>

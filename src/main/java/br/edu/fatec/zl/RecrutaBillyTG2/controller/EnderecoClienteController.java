@@ -58,8 +58,7 @@ public class EnderecoClienteController {
 						e = buscarEndereco(e);
 						saida = excluirEndereco(e);
 						e = null;
-					} 
-					
+					}
 				}
 			}
 
@@ -81,85 +80,87 @@ public class EnderecoClienteController {
 
 	@RequestMapping(value = "/endereco", method = RequestMethod.POST)
 	public ModelAndView enderecoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
-	    String cmd = allRequestParam.get("botao");
-	    String CPF = allRequestParam.get("funcionario");
-	    String codigo = allRequestParam.get("codigo");
-	    String CEP = allRequestParam.get("CEP");
-	    String logradouro = allRequestParam.get("logradouro");
-	    String bairro = allRequestParam.get("bairro");
-	    String localidade = allRequestParam.get("localidade");
-	    String UF = allRequestParam.get("UF");
-	    String complemento = allRequestParam.get("complemento");
-	    String numero = allRequestParam.get("numero");
-	    String tipoEndereco = allRequestParam.get("tipoEndereco");
+		String cmd = allRequestParam.get("botao");
+		String CPF = allRequestParam.get("funcionario");
+		String codigo = allRequestParam.get("codigo");
+		String CEP = allRequestParam.get("CEP");
+		String logradouro = allRequestParam.get("logradouro");
+		String bairro = allRequestParam.get("bairro");
+		String localidade = allRequestParam.get("localidade");
+		String UF = allRequestParam.get("UF");
+		String complemento = allRequestParam.get("complemento");
+		String numero = allRequestParam.get("numero");
+		String tipoEndereco = allRequestParam.get("tipoEndereco");
 
-	    String saida = "";
-	    String erro = "";
+		String saida = "";
+		String erro = "";
 
-	    List<Endereco> enderecos = new ArrayList<>();
+		List<Endereco> enderecos = new ArrayList<>();
 
-	    Funcionario f = new Funcionario();
-	    Endereco e = new Endereco();
+		Funcionario f = new Funcionario();
+		Endereco e = new Endereco();
 
-	    try {
-	        enderecos = listarEnderecos(CPF);
+		try {
+			enderecos = listarEnderecos(CPF);
 
-	        if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
-	            e = null;
-	        } else if (!cmd.contains("Listar")) {
-	            f.setCPF(CPF);
-	            f = buscarFuncionario(f);
-	            e.setFuncionario(f);
-	        }
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+				e = null;
+			} else if (!cmd.contains("Listar")) {
+				f.setCPF(CPF);
+				f = buscarFuncionario(f);
+				e.setFuncionario(f);
+			}
 
-	        if (cmd.contains("Cadastrar") || cmd.contains("Alterar") || cmd.contains("Excluir")) {
-	            if (codigo != null && !codigo.isEmpty()) {
-	                e.setCodigo(Integer.parseInt(codigo));
-	            } else {
-	                e.setCodigo(0); // Pode ajustar aqui dependendo da lógica desejada para códigos vazios
-	            }
-	            e.setFuncionario(f);
-	            e.setCEP(CEP);
-	            e.setLogradouro(logradouro);
-	            e.setBairro(bairro);
-	            e.setLocalidade(localidade);
-	            e.setUF(UF);
-	            e.setComplemento(complemento);
-	            e.setNumero(numero);
-	            e.setTipoEndereco(tipoEndereco);
-	        }
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar") || cmd.contains("Excluir")) {
+				if (codigo != null && !codigo.isEmpty()) {
+					e.setCodigo(Integer.parseInt(codigo));
+				} else {
+					e.setCodigo(0);
+				}
+				e.setFuncionario(f);
+				e.setCEP(CEP);
+				e.setLogradouro(logradouro);
+				e.setBairro(bairro);
+				e.setLocalidade(localidade);
+				e.setUF(UF);
+				e.setComplemento(complemento);
+				e.setNumero(numero);
+				e.setTipoEndereco(tipoEndereco);
+			}
 
-	        if (cmd.contains("Cadastrar")) {
-	            saida = cadastrarEndereco(e);
-	            e = null;
-	        }
-	        if (cmd.contains("Excluir")) {
-	            saida = excluirEndereco(e);
-	        }
-	        if (cmd.contains("Alterar")) {
-	            saida = alterarEndereco(e);
-	        }
-	        if (cmd.contains("Buscar")) {
-	            e = buscarEndereco(e);
-	            if (e == null) {
-	                saida = "Nenhum conteúdo encontrado com o código especificado.";
-	            }
-	        }
-	        enderecos = listarEnderecos(CPF);
+			if (cmd.contains("Cadastrar")) {
+				saida = cadastrarEndereco(e);
+				e = null;
+			}
+			if (cmd.contains("Excluir")) {
+				saida = excluirEndereco(e);
+			}
+			if (cmd.contains("Alterar")) {
+				saida = alterarEndereco(e);
+			}
+			if (cmd.contains("Buscar")) {
+				e = buscarEndereco(e);
+				if (e == null) {
+					saida = "Nenhum conteúdo encontrado com o código especificado.";
+				}
+			}
+			if (cmd.contains("Listar")) {
+				enderecos = listarEnderecos(CPF);
+			}
+			enderecos = listarEnderecos(CPF);
 
-	    } catch (SQLException | ClassNotFoundException error) {
-	        erro = error.getMessage();
-	    } finally {
-	        model.addAttribute("erro", erro);
-	        model.addAttribute("saida", saida);
-	        model.addAttribute("funcionario", f);
-	        model.addAttribute("endereco", e);
-	        model.addAttribute("enderecos", enderecos);
-	    }
+		} catch (SQLException | ClassNotFoundException error) {
+			erro = error.getMessage();
+		} finally {
+			model.addAttribute("erro", erro);
+			model.addAttribute("saida", saida);
+			model.addAttribute("funcionario", f);
+			model.addAttribute("endereco", e);
+			model.addAttribute("enderecos", enderecos);
+		}
 
-	    return new ModelAndView("endereco");
+		return new ModelAndView("endereco");
 	}
-
 
 	private String cadastrarEndereco(Endereco e) throws SQLException, ClassNotFoundException {
 		String saida = eDao.sp_iud_endereco("I", e);

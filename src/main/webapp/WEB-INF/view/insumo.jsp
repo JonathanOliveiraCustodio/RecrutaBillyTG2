@@ -38,7 +38,7 @@
 							<div class="col-md-3">
 								<div class="form-floating">
 									<input class="form-control" type="text" id="nome" name="nome"
-										placeholder="Nome"
+										placeholder="Nome" maxlength="100"
 										value='<c:out value="${insumo.nome}"></c:out>'> <label
 										for="nome">Nome</label>
 								</div>
@@ -82,8 +82,9 @@
 								<div class="form-floating">
 									<input type="text" id="quantidade" name="quantidade"
 										class="form-control" placeholder="Quantidade"
-										value='<c:out value="${insumo.quantidade}"></c:out>'>
-									<label for="quantidade">Quantidade</label>
+										value='<c:out value="${insumo.quantidade}"></c:out>'
+										oninput="formatarQuantidade(this)"> <label
+										for="quantidade">Quantidade</label>
 								</div>
 							</div>
 							<div class="col-md-4">

@@ -1,16 +1,16 @@
-// pedido.js
 
 function validarFormulario(event) {
 	var botao = event.submitter.value;
 	var campos = [
-		{ id: "nome", nome: "Nome" },
-		{ id: "descricao", nome: "Descrição" },
-		{ id: "cliente", nome: "Cliente" },
-		{ id: "estado", nome: "Estado" },
-		{ id: "valorTotal", nome: "Valor Total" },
-		{ id: "tipoPagamento", nome: "Tipo Pagamento" },
-		{ id: "statusPagamento", nome: "Status Pagamento" },
-		{ id: "dataPagamento", nome: "Data Pagamento" }
+		{ id: "maxOrcamentos", nome: "Quantidade Máxima de Orçamentos em Aberto" },
+		{ id: "minEstoque", nome: "Quantidade Mínima para o Estoque" },
+		{ id: "medPedidosAndamento", nome: "Quantidade Média de Pedidos em Andamento" },
+		{ id: "medPedidosRecebidos", nome: "Quantidade Média de Pedidos Recebidos" },
+		{ id: "medPedidosDespachados", nome: "Quantidade Média de Pedidos Despachados" },
+		{ id: "medProducaoProdutos", nome: "Quantidade Média de Produção de Produtos" },
+		{ id: "medDespesasPendentes", nome: "Quantidade Média de Despesas Pendentes" },
+		{ id: "medDespesasVencidas", nome: "Quantidade Média de Despesas Vencidas" },
+		{ id: "valorTotalDespesasMes", nome: "Meta de Despesas do Mês" }
 	];
 
 	if (botao === "Alterar") {

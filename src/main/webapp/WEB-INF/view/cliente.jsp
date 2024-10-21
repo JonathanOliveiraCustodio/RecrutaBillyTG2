@@ -70,7 +70,7 @@
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="email" name="email" class="form-control"
+									<input type="email" id="email" name="email" class="form-control"
 										placeholder="Email" maxlength="100"
 										value='<c:out value="${cliente.email }"></c:out>'> <label
 										for="email">Email</label>
@@ -147,7 +147,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="numero" name="numero"
-										class="form-control" placeholder="Número" maxlength="10"
+										class="form-control" placeholder="Número" maxlength="20"
 										value='<c:out value="${cliente.numero }"></c:out>'> <label
 										for="numero">Número</label>
 								</div>
@@ -159,7 +159,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="complemento" name="complemento"
-										class="form-control" placeholder="Complemento"
+										class="form-control" placeholder="Complemento" maxlength="100"
 										value='<c:out value="${cliente.complemento }"></c:out>'>
 									<label for="complemento">Complemento</label>
 								</div>

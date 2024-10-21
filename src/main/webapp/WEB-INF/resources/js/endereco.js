@@ -61,7 +61,8 @@ function validarFormulario(event) {
     if (botao === "Cadastrar" || botao === "Alterar") {
         var campos = [
             { id: "CEP", nome: "CEP" },
-            { id: "numero", nome: "Número" }
+            { id: "numero", nome: "Número" },
+            { id: "tipoEndereco", nome: "Tipo de Endereço" }
         ];
 
         // Validação dos campos obrigatórios

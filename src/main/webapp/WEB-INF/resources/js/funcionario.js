@@ -21,10 +21,34 @@ function validarBusca() {
 	return true;
 }
 
-// Funções auxiliares
+function validarSenhas() {
+	var senha = document.getElementById("senha").value;
+	var confirmarSenha = document.getElementById("confirmarSenha").value;
+
+	// Expressão para verificar se a senha tem ao menos:
+	// - uma letra maiúscula
+	// - um caractere especial
+	// - mínimo de 8 caracteres
+	var regexSenha = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+
+	if (senha !== confirmarSenha) {
+		alert("As senhas não são iguais. Por favor, verifique.");
+		return false;
+	}
+
+	if (!regexSenha.test(senha)) {
+		alert("A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um caractere especial (!@#$%^&*).");
+		return false;
+	}
+
+	return true;
+}
+
+// Função para validar CPF
 function validarCPF(cpf) {
-	cpf = cpf.replace(/[^\d]+/g, '');
-	if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+	cpf = cpf.replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
+	if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) { // Verifica se tem 11 dígitos e se não é uma sequência repetida
+		alert("CPF inválido. Por favor, verifique o número digitado.");
 		return false;
 	}
 	let soma = 0;
@@ -33,7 +57,10 @@ function validarCPF(cpf) {
 	}
 	let resto = (soma * 10) % 11;
 	if (resto === 10 || resto === 11) resto = 0;
-	if (resto !== parseInt(cpf.charAt(9))) return false;
+	if (resto !== parseInt(cpf.charAt(9))) {
+		alert("CPF inválido. Verifique o dígito verificador.");
+		return false;
+	}
 
 	soma = 0;
 	for (let i = 0; i < 10; i++) {
@@ -41,17 +68,15 @@ function validarCPF(cpf) {
 	}
 	resto = (soma * 10) % 11;
 	if (resto === 10 || resto === 11) resto = 0;
-	if (resto !== parseInt(cpf.charAt(10))) return false;
+	if (resto !== parseInt(cpf.charAt(10))) {
+		alert("CPF inválido. Verifique o dígito verificador.");
+		return false;
+	}
 
 	return true;
 }
 
-function validarSenhas() {
-	var senha = document.getElementById("senha").value;
-	var confirmarSenha = document.getElementById("confirmarSenha").value;
-	return senha === confirmarSenha;
-}
-
+// Função para validar o formulário
 function validarFormulario(event) {
 	var botao = event.submitter.value;
 	var campos = [
@@ -68,6 +93,9 @@ function validarFormulario(event) {
 		{ id: "telefone", nome: "Telefone" }
 	];
 
+	var dataAdmissao = document.getElementById("dataAdmissao").value;
+
+	// Validações para botões Cadastrar e Alterar
 	if (botao === "Cadastrar" || botao === "Alterar") {
 		for (var i = 0; i < campos.length; i++) {
 			var campo = document.getElementById(campos[i].id);
@@ -82,19 +110,17 @@ function validarFormulario(event) {
 		// Verificar se o CPF é válido
 		var cpf = document.getElementById("CPF").value.trim();
 		if (cpf && !validarCPF(cpf)) {
-			alert("CPF inválido.");
 			event.preventDefault();
 			return false;
 		}
 
-		// Verificar se as senhas são válidas
+		// Verificar se as senhas são válidas (implementação necessária)
 		if (!validarSenhas()) {
-			alert("As senhas não são iguais. Por favor, verifique.");
 			event.preventDefault();
 			return false;
 		}
 
-		// Verificar se o horário é válido
+		// Verificar se o horário é válido (implementação necessária)
 		var horario = document.getElementById("horario").value.trim();
 		if (horario && !validarHorario(horario)) {
 			alert("Horário inválido. Por favor, use o formato 'HH:mm às HH:mm'.");
@@ -102,6 +128,25 @@ function validarFormulario(event) {
 			return false;
 		}
 
+		// Validação para o Salário
+		var salarioCampo = document.getElementById("salario");
+		var salario = parseFloat(salarioCampo.value.replace(/[^\d,]/g, '').replace(",", "."));
+		if (salario <= 0) {
+			alert("O campo Salário deve ser maior que R$ 0,00.");
+			salarioCampo.focus();
+			event.preventDefault();
+			return false;
+		}
+
+		// Validação da data de aquisição
+		if (!validarDataAdmissao(dataAdmissao)) {
+			alert("Data de Adimissão é inválida. Por favor, insira uma data no passado.");
+			document.getElementById("dataAdmissao").focus(); // Coloca o foco no campo dataAdmissao
+			event.preventDefault();
+			return false;
+		}
+		
+		// Validações para o botão Excluir
 	} else if (botao === "Excluir") {
 		var codigo = document.getElementById("CPF").value.trim();
 		if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
@@ -115,6 +160,8 @@ function validarFormulario(event) {
 			event.preventDefault();
 			return false;
 		}
+
+		// Validação para o botão Endereço
 	} else if (botao === "Endereço") {
 		var cpf = document.getElementById("CPF").value.trim();
 		if (cpf === "") {
@@ -124,8 +171,19 @@ function validarFormulario(event) {
 			return false;
 		}
 	}
-
 	return true;
+}
+
+function validarDataAdmissao(dataAdmissao) {
+	var hoje = new Date();
+	var aquisicao = new Date(dataAdmissao);
+
+	// Zera as horas, minutos e segundos de ambas as datas para comparar apenas as datas
+	hoje.setHours(0, 0, 0, 0);
+	aquisicao.setHours(0, 0, 0, 0);
+
+	// A data de aquisição deve ser anterior ao dia de hoje
+	return aquisicao < hoje;
 }
 
 function redirectToWhatsApp() {
@@ -162,6 +220,7 @@ function validarERedirecionar() {
 	// Obtenha o CPF do campo
 	var cpf = document.getElementById("CPF").value.trim();
 
+	cpf = cpf.replace(/[^\d]+/g, '');
 	// Verifique se o CPF está vazio
 	if (cpf === "") {
 		alert("O CPF não pode estar vazio.");
@@ -208,17 +267,17 @@ function formatarTelefone(telefone) {
 }
 
 function formatarMoeda(campo) {
-    let valor = campo.value;
+	let valor = campo.value;
 
-    valor = valor.replace(/[^\d]/g, '');
-    valor = (valor / 100).toFixed(2) + '';
-    valor = valor.replace(".", ",");
- 
-    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    campo.value = 'R$ ' + valor;
-    if (campo.value.endsWith(',0')) {
-        campo.value = campo.value.slice(0, -1) + '00';
-    }
+	valor = valor.replace(/[^\d]/g, '');
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
+
+	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	campo.value = 'R$ ' + valor;
+	if (campo.value.endsWith(',0')) {
+		campo.value = campo.value.slice(0, -1) + '00';
+	}
 }
 
 function aplicarMascaraTelefone() {
@@ -246,27 +305,23 @@ function aplicarMascaraCPF() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const campoSalario = document.getElementById('salario');
-    if (campoSalario) {
-        formatarMoeda(campoSalario);
-    }
+	aplicarMascaraTelefone();
+	aplicarMascaraCPF();
 
-    aplicarMascaraTelefone();
-    aplicarMascaraCPF();
+	const campovalorUnitario = document.getElementById('salario');
+	if (campovalorUnitario) {
+		formatarMoeda(campovalorUnitario);
+		campovalorUnitario.addEventListener('input', function() {
+			formatarMoeda(this);
+		});
+	}
 
-    // Aplicar a máscara de CPF em todas as células da tabela que contêm CPF
-    var cpfsNaTabela = document.querySelectorAll('.CPF-campo');
-    cpfsNaTabela.forEach(function(campo) {
-        campo.textContent = formatarCPF(campo.textContent); // Aplica a máscara de CPF
-    });
+	// Aplicar a máscara de CPF em todas as células da tabela que contêm CPF
+	var cpfsNaTabela = document.querySelectorAll('.CPF-campo');
+	cpfsNaTabela.forEach(function(campo) {
+		campo.textContent = formatarCPF(campo.textContent); // Aplica a máscara de CPF
+	});
 
-    // Formatação do campo valorTotal
-    const campoValorTotal = document.getElementById('salario');
-    if (campoValorTotal) {
-        formatarMoeda(campoValorTotal);
-        campoValorTotal.addEventListener('input', function() {
-            formatarMoeda(this);
-        });
-    }
+
 });
 

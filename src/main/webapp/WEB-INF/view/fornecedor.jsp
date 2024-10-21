@@ -39,7 +39,7 @@
 							<div class="col-md-3">
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
-										placeholder="Nome"
+										placeholder="Nome" maxlength="100"
 										value='<c:out value="${fornecedor.nome}"></c:out>'> <label
 										for="nome">Nome</label>
 								</div>
@@ -70,8 +70,8 @@
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="text" id="email" name="email" class="form-control"
-										placeholder="E-mail"
+									<input type="email" id="email" name="email" class="form-control"
+										placeholder="E-mail" maxlength="100"
 										value='<c:out value="${fornecedor.email}"></c:out>'> <label
 										for="email">Email</label>
 								</div>
@@ -79,7 +79,7 @@
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="text" id="empresa" name="empresa"
-										class="form-control" placeholder="Empresa"
+										class="form-control" placeholder="Empresa" maxlength="100"
 										value='<c:out value="${fornecedor.empresa}"></c:out>'>
 									<label for="empresa">Empresa</label>
 								</div>

@@ -78,9 +78,15 @@
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/relatorio">Relatório</a></li>
 
-						<li class="nav-item"><a
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
+							id="financeDropdown" role="button" data-bs-toggle="dropdown"
+							aria-expanded="false"> Configurações </a>
+							<ul class="dropdown-menu" aria-labelledby="financeDropdown">
+								<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/configuracoes">Configurações</a></li>
+							href="${pageContext.request.contextPath}/configuracoes">Configurações Operacionais</a></li>
+							</ul></li>
 
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis" href="#"

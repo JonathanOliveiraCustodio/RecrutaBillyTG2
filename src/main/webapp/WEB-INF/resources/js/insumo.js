@@ -22,6 +22,19 @@ function validarBusca() {
 	}
 	return true;
 }
+
+function validarDataCompra(dataCompra) {
+	var hoje = new Date();
+	var compra = new Date(dataCompra);
+
+	// Zera as horas, minutos e segundos de ambas as datas para comparar apenas as datas
+	hoje.setHours(0, 0, 0, 0);
+	compra.setHours(0, 0, 0, 0);
+
+	// A data de aquisição deve ser anterior ao dia de hoje
+	return compra < hoje;
+}
+
 function validarFormulario(event) {
 	var botao = event.submitter ? event.submitter.value : null;
 	var campos = [
@@ -34,6 +47,8 @@ function validarFormulario(event) {
 		{ id: "dataCompra", nome: "Data de Compra" }
 	];
 
+	var dataCompra = document.getElementById("dataCompra").value;
+	
 	if (botao === "Cadastrar" || botao === "Alterar") {
 		for (var i = 0; i < campos.length; i++) {
 			var campo = document.getElementById(campos[i].id);
@@ -44,7 +59,21 @@ function validarFormulario(event) {
 					event.preventDefault();
 					return false;
 				}
+				// Validação para preço de compra e preço de venda
+				if ((campo.id === "precoCompra" || campo.id === "precoVenda") && parseFloat(campo.value.replace(/[^\d,]/g, '').replace(",", ".")) <= 0) {
+					alert("O campo " + campos[i].nome + " deve ser maior que R$ 0,00.");
+					campo.focus();
+					event.preventDefault();
+					return false;
+				}
 			}
+		}
+		// Validação da data de aquisição
+		if (!validarDataCompra(dataCompra)) {
+			alert("Data de Compra é inválida. Por favor, insira uma data no passado.");
+			document.getElementById("dataCompra").focus(); // Coloca o foco no campo dataAdmissao
+			event.preventDefault();
+			return false;
 		}
 
 	} else if (botao === "Excluir") {
@@ -73,9 +102,26 @@ function formatarMoeda(campo) {
 
 	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 	campo.value = 'R$ ' + valor;
-	
+
 	if (campo.value.endsWith(',0')) {
 		campo.value = campo.value.slice(0, -1) + '00';
+	}
+}
+
+function formatarQuantidade(input) {
+	// Remove qualquer caractere que não seja número ou ponto
+	input.value = input.value.replace(/[^0-9.]/g, '');
+
+	// Garante que só exista um ponto decimal
+	if ((input.value.match(/\./g) || []).length > 1) {
+		input.value = input.value.replace(/\.+$/, ''); // Remove o último ponto se houver mais de um
+	}
+
+	// Limita a dois números após o ponto decimal
+	const partes = input.value.split('.');
+	if (partes[1] && partes[1].length > 2) {
+		partes[1] = partes[1].slice(0, 2);
+		input.value = partes.join('.');
 	}
 }
 
@@ -88,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	}
 
-	const campoPrecoVenda = document.getElementById('precoVenda'); // Substitua pelo ID do segundo campo
+	const campoPrecoVenda = document.getElementById('precoVenda');
 	if (campoPrecoVenda) {
 		formatarMoeda(campoPrecoVenda);
 		campoPrecoVenda.addEventListener('input', function() {

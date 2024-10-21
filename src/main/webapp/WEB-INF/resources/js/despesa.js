@@ -31,6 +31,16 @@ function validarFormulario(event) {
 				event.preventDefault();
 				return false;
 			}
+			// Validação para o Valor
+			if (campos[i].id === "valor") {
+				var valor = parseFloat(campo.value.replace(/[^\d,]/g, '').replace(",", "."));
+				if (valor <= 0 || isNaN(valor)) {
+					alert("O campo " + campos[i].nome + " deve ser maior que R$ 0,00.");
+					campo.focus();
+					event.preventDefault();
+					return false;
+				}
+			}
 		}
 
 	} else if (botao === "Excluir") {
@@ -51,25 +61,25 @@ function validarFormulario(event) {
 }
 
 function formatarMoeda(campo) {
-    let valor = campo.value;
+	let valor = campo.value;
 
-    valor = valor.replace(/[^\d]/g, '');
-    valor = (valor / 100).toFixed(2) + '';
-    valor = valor.replace(".", ",");
- 
-    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    campo.value = 'R$ ' + valor;
-    if (campo.value.endsWith(',0')) {
-        campo.value = campo.value.slice(0, -1) + '00';
-    }
+	valor = valor.replace(/[^\d]/g, '');
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
+
+	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	campo.value = 'R$ ' + valor;
+	if (campo.value.endsWith(',0')) {
+		campo.value = campo.value.slice(0, -1) + '00';
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const campoValor = document.getElementById('valor');
-    if (campoValor) {
-        formatarMoeda(campoValor);
-        campoValor.addEventListener('input', function() {
-            formatarMoeda(this);
-        });
-    }
+   const campovalorUnitario = document.getElementById('valor');
+	if (campovalorUnitario) {
+		formatarMoeda(campovalorUnitario);
+		campovalorUnitario.addEventListener('input', function() {
+			formatarMoeda(this);
+		});
+	}   
 });

@@ -44,6 +44,25 @@ function validarFormulario(event) {
 				event.preventDefault();
 				return false;
 			}
+
+			// Validação para o campo de cliente
+			if (campo.id === "cliente" && campo.value === "0") {
+				alert("Por favor, selecione um cliente.");
+				campo.focus();
+				event.preventDefault();
+				return false;
+			}
+
+			// Validação para o Valor
+			if (campos[i].id === "valorTotal") {
+				var valor = parseFloat(campo.value.replace(/[^\d,]/g, '').replace(",", "."));
+				if (valor <= 0 || isNaN(valor)) {
+					alert("O campo " + campos[i].nome + " deve ser maior que R$ 0,00.");
+					campo.focus();
+					event.preventDefault();
+					return false;
+				}
+			}
 		}
 
 	} else if (botao === "Excluir") {
@@ -86,8 +105,9 @@ function updateEndereco() {
 	const numero = selectedOption.getAttribute("data-numero");
 	const complemento = selectedOption.getAttribute("data-complemento");
 	const bairro = selectedOption.getAttribute("data-bairro");
-	const cidade = selectedOption.getAttribute("data-cidade");
-	const estado = selectedOption.getAttribute("data-estado");
+	const localidade = selectedOption.getAttribute("data-localidade");
+	const UF = selectedOption.getAttribute("data-UF");
+	const telefone = selectedOption.getAttribute("data-telefone");
 
 	// Preenchendo os campos com os dados do cliente
 	document.getElementById("CEP").value = cep;
@@ -95,38 +115,39 @@ function updateEndereco() {
 	document.getElementById("numero").value = numero;
 	document.getElementById("complemento").value = complemento;
 	document.getElementById("bairro").value = bairro;
-	document.getElementById("cidade").value = cidade;
-	document.getElementById("estado").value = estado;
+	document.getElementById("localidade").value = localidade; telefone
+	document.getElementById("UF").value = UF;
+	document.getElementById("telefone").value = telefone;
 }
 
 function confirmarFinalizacao(estado) {
 	if (estado === "Pedido Finalizado") {
 		alert("Este pedido já está finalizado e não pode ser alterado.");
-		return false; 
+		return false;
 	}
 	return confirm("Gostaria de Finalizar este Pedido? Não será possível realizar alterações posteriores");
 }
 
 function formatarMoeda(campo) {
-    let valor = campo.value;
+	let valor = campo.value;
 
-    valor = valor.replace(/[^\d]/g, '');
-    valor = (valor / 100).toFixed(2) + '';
-    valor = valor.replace(".", ",");
- 
-    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    campo.value = 'R$ ' + valor;
-    if (campo.value.endsWith(',0')) {
-        campo.value = campo.value.slice(0, -1) + '00';
-    }
+	valor = valor.replace(/[^\d]/g, '');
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
+
+	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	campo.value = 'R$ ' + valor;
+	if (campo.value.endsWith(',0')) {
+		campo.value = campo.value.slice(0, -1) + '00';
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const campoValorTotal = document.getElementById('valorTotal');
-    if (campoValorTotal) {
-        formatarMoeda(campoValorTotal);
-        campoValorTotal.addEventListener('input', function() {
-            formatarMoeda(this);
-        });
-    }
+	const campovalorUnitario = document.getElementById('valorTotal');
+	if (campovalorUnitario) {
+		formatarMoeda(campovalorUnitario);
+		campovalorUnitario.addEventListener('input', function() {
+			formatarMoeda(this);
+		});
+	}
 });

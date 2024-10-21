@@ -69,9 +69,9 @@ public class DespesaController {
 	        if (nivelAcesso == null || !nivelAcesso.equals("admin")) {
 	            saida = "Você não possui acesso para visualizar esta página.";
 	        }
-	        entrada = "R$ " + Float.toString(calcularEntrada(despesas));
-	        gasto = "R$ " + Float.toString(calcularSaida(despesas));
-	        saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
+	        entrada = Float.toString(calcularEntrada(despesas));
+	        gasto = Float.toString(calcularSaida(despesas));
+	        saldo = (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
 	        model.addAttribute("erro", erro);
 	        model.addAttribute("saida", saida);
 	        model.addAttribute("entrada", entrada);
@@ -174,9 +174,9 @@ public class DespesaController {
 		} catch (ClassNotFoundException | SQLException e) {
 			erro = e.getMessage();
 		} finally {
-			entrada = "R$ " + Float.toString(calcularEntrada(despesas));
-			gasto = "R$ " + Float.toString(calcularSaida(despesas));
-			saldo = "R$ " + (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
+			entrada = Float.toString(calcularEntrada(despesas));
+			gasto = Float.toString(calcularSaida(despesas));
+			saldo = (Float.toString(calcularEntrada(despesas) - calcularSaida(despesas)));
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
 			model.addAttribute("despesa", d);

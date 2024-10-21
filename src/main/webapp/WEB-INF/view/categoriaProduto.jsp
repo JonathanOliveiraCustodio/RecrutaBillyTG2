@@ -112,7 +112,7 @@
 					<thead>
 						<tr>
 							<th class="titulo-tabela" colspan="8"
-								style="text-align: center; font-size: 35px;">Categoria de Produtos
+								style="text-align: center; font-size: 35px;">Lista de Categoria de Produtos
 						<tr class="table-dark">
 							<td></td>
 							<td>Código</td>

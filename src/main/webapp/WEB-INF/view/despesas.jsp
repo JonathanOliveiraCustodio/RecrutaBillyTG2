@@ -30,34 +30,51 @@
 							class="row g-2 justify-content-center align-items-center bg-body-secondary d-flex"
 							style="min-height: 120px;">
 							<div class="col-md-4">
+								<h5 class="text-center-custom">R$ de Entrada</h5>
 								<div class="form-floating">
-									<input type="text" id="entrada" name="entrada"
-										class="form-control" placeholder="R$ 0,00" value="${entrada}"
-										disabled> <label for="entrada">R$ de Entrada</label>
+									<input class="form-control text-center" type="text"
+										id="entrada" name="entrada" placeholder="R$ 0,00"
+										value='<fmt:formatNumber value="${entrada}" type="currency" currencySymbol="R$" />'
+										disabled /> <label for="entrada"></label>
 								</div>
 							</div>
 							<div class="col-md-4">
+								<h5 class="text-center-custom">R$ de Saída</h5>
 								<div class="form-floating">
-									<input type="text" id="gasto" name="gasto" class="form-control"
-										placeholder="R$ 0,00" value="${gasto}" disabled> <label
-										for="gasto">R$ de Saída</label>
+									<input type="text" id="gasto" name="gasto"
+										class="form-control text-center" placeholder="R$ 0,00"
+										value='<fmt:formatNumber value="${gasto}" type="currency" currencySymbol="R$" />'
+										disabled> <label for="gasto"></label>
 								</div>
 							</div>
 							<div class="col-md-4">
+								<h5 class="text-center-custom">Saldo Geral</h5>
 								<div class="form-floating">
-									<input type="text" id="saldo" name="saldo" class="form-control"
-										placeholder="R$ 0,00" value="${saldo}" disabled> <label
-										for="saldo">Saldo Geral</label>
+									<input type="text" id="saldo" name="saldo"
+										class="form-control text-center" placeholder="R$ 0,00"
+										value='<fmt:formatNumber value="${saldo}" type="currency" currencySymbol="R$" />'
+										disabled> <label for="saldo"></label>
 								</div>
 							</div>
+
 						</div>
 						<!-- O resto para operação de CRUD -->
 						<!-- Primeira Linha: Nome, Data, Data Vencimento -->
-						<div class="row g-3">
+						<!-- O resto para operação de CRUD 
+						
 							<input type="hidden" min="0" step="1" id="codigo" name="codigo"
 								class="form-control" placeholder="Código"
 								value='<c:out value="${despesa.codigo}"></c:out>'>
-
+-->
+						<div class="row g-3">
+							<div class="col-md-4">
+								<div class="form-floating">
+									<input type="number" min="0" step="1" id="codigo" name="codigo"
+										class="form-control" placeholder="Código"
+										value='<c:out value="${despesa.codigo }"></c:out>' readonly>
+									<label for="codigo">Código</label>
+								</div>
+							</div>
 							<div class="col-md-3">
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
@@ -83,9 +100,13 @@
 									<input type="date" id="data" name="data" class="form-control"
 										placeholder="Data"
 										value='<c:out value="${despesa.data}"></c:out>'> <label
-										for="data">Data</label>
+										for="data">Data de Registro</label>
 								</div>
 							</div>
+						</div>
+						
+						<!-- Segunda Linha:  -->
+						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
 									<input type="date" id="dataVencimento" name="dataVencimento"
@@ -94,10 +115,6 @@
 									<label for="dataVencimento">Data de Vencimento</label>
 								</div>
 							</div>
-
-						</div>
-						<!-- Segunda Linha:  -->
-						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="tipo" name="tipo" class="form-select">
@@ -110,13 +127,17 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-							<div class="form-floating">
-								<input class="form-control" type="text" id="valor"
-									name="valor" placeholder="Valor"
-									value='<fmt:formatNumber value="${despesa.valor}" type="currency" currencySymbol="R$" />'>
-								<label for="valor">Valor Total:</label>
+								<div class="form-floating">
+									<input class="form-control" type="text" id="valor" name="valor"
+										placeholder="Valor"
+										value='<fmt:formatNumber value="${despesa.valor}" type="currency" currencySymbol="R$" />'>
+									<label for="valor">Valor Total:</label>
+								</div>
 							</div>
+
 						</div>
+						<!-- Terceira Linha:  -->
+						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="estado" name="estado" class="form-select">
@@ -128,9 +149,6 @@
 									</select> <label for="estado">Estado</label>
 								</div>
 							</div>
-						</div>
-						<!-- Terceira Linha:  -->
-						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="pagamento" name="pagamento" class="form-select">
