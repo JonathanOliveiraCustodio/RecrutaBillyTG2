@@ -6,6 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
+<script
+	src="${pageContext.request.contextPath}/resources/js/login.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -26,7 +30,8 @@
 					Login</h1>
 				<div class="container">
 					<form action="<c:url value='/login' />" method="post"
-						class="row g-3 mt-3 justify-content-center">
+						class="row g-3 mt-3 justify-content-center"
+						onsubmit="return validarFormulario(event);">
 						<!-- Primeira Linha: E-mail -->
 						<div class="row g-3 justify-content-center">
 							<div class="col-md-4">
@@ -50,7 +55,7 @@
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Login"
-									class="btn btn-primary">
+									class="btn btn-primary btn-align">
 							</div>
 						</div>
 
@@ -58,7 +63,7 @@
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao"
-									value="Esqueceu a Senha?" class="btn btn-link">
+									value="Recuperar a Senha" class="btn btn-link">
 							</div>
 						</div>
 					</form>

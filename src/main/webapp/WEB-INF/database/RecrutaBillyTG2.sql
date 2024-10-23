@@ -49,13 +49,16 @@ nivelAcesso			VARCHAR(30)     NOT NULL,
 senha				VARCHAR(30)		NOT NULL,
 email				VARCHAR(100)	NOT NULL,
 dataNascimento      DATE			NOT NULL,
-telefone		    CHAR(12)		NOT NULL,
+telefone		    CHAR(14)		NOT NULL,
 cargo               VARCHAR(30)     NOT NULL,
 horario             VARCHAR(30)     NOT NULL,
 salario				DECIMAL (10,2)  NOT NULL,
 dataAdmissao        DATE			NOT NULL,
 dataDesligamento    DATE            NULL,
 observacao          VARCHAR(800)    NULL,
+tentativasFalhas    INT DEFAULT 0   NULL,                   
+contaBloqueada      BIT DEFAULT 0   NOT NULL, 
+codigoRecuperacao   CHAR(6)         NULL,
 PRIMARY KEY (CPF)
 )
 GO
@@ -200,11 +203,24 @@ qtdDespesasVencidas				  INT           NULL,
 valorTotalDespesasMes             DECIMAL(10,2) NULL
 )
 GO
+CREATE TABLE logFuncionario (
+    codigo              INT IDENTITY(1,1)     NOT NULL,
+    CPF                 CHAR(11)              NOT NULL,  
+    dataLogin           DATETIME              NOT NULL,  
+    dataLogout          DATETIME              NULL,      
+    duracaoSessao       TIME                  NULL,      
+    ipAddress           VARCHAR(45)           NULL,     
+    dispositivo         VARCHAR(100)          NULL,      
+    navegador           VARCHAR(100)          NULL,      
+    PRIMARY KEY (codigo),
+    FOREIGN KEY (CPF) REFERENCES funcionario(CPF)
+)
+GO
 -- Insert Usuario de Teste
 INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao) VALUES
 ('25525320045', 'Administrador', 'admin', 'admin', 'admin', '2000-01-01', '12345678901', 'Gerente', '08:00 às 17:00', 5000.0, '2020-01-01', NULL, NULL),
 ('76368440015', 'Evandro', 'admin', '123456', 'teste@teste.com', '1985-05-20', '12345678902', 'Supervisor', '09:00 às 18:00', 4000.0, '2021-01-01', NULL, NULL),
-('37848890007', 'John', 'Funcionário', '123456', 'john@john.com', '1990-08-15', '12345678903', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
+('37848890007', 'John', 'Funcionário', '123456', 'john.oliveira.custodio@gmail.com', '1990-08-15', '11956090706', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
 GO
 INSERT INTO cliente (nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento) VALUES
 ('Fabio de Lima', '11956432345', 'fdelima@email.com', 'CPF', '45230955074', '08120300', 'Rua Nogueira Viotti', 'Itaim Paulista', 'São Paulo', 'SP', NULL, '156B','1990-08-01'),
@@ -983,29 +999,80 @@ END
 GO
 -- Inicio Procedure de Login 
 CREATE PROCEDURE sp_login_funcionario
-    @Email NVARCHAR(100),
-    @Senha NVARCHAR(30),
-    @Resultado NVARCHAR(100) OUTPUT,
-    @NivelAcesso NVARCHAR(100) OUTPUT
+    @Email VARCHAR(100),
+    @Senha VARCHAR(30),
+    @Resultado VARCHAR(200) OUTPUT,
+    @NivelAcesso VARCHAR(100) OUTPUT
 AS
 BEGIN
-    DECLARE @SenhaDb NVARCHAR(30)  
-    -- Verifica se o usuário existe e obtém a senha armazenada
-    SELECT @SenhaDb = senha, @NivelAcesso = nivelAcesso
-    FROM funcionario
-    WHERE email = @Email
+    DECLARE @SenhaDb VARCHAR(30),
+            @Tentativas INT,
+            @CodigoRecuperacao INT,
+            @TentativasRestantes INT,
+            @MaxTentativas INT = 5;
 
-    -- Verifica se o usuário existe e a senha está correta
-    IF @SenhaDb IS NULL OR @SenhaDb != @Senha
+    -- Verifica se o usuário existe
+    IF NOT EXISTS (SELECT 1 FROM funcionario WHERE email = @Email)
     BEGIN
-        SET @Resultado = 'Usuário ou senha incorretos'
-        SET @NivelAcesso = NULL
+        SET @Resultado = 'Email não encontrado';
+        SET @NivelAcesso = NULL;
+        RETURN;
+    END
+
+    -- Obtém a senha armazenada e tentativas
+    SELECT @SenhaDb = senha, 
+           @NivelAcesso = nivelAcesso,
+           @Tentativas = tentativasFalhas
+    FROM funcionario
+    WHERE email = @Email;
+
+    -- Se a senha estiver incorreta
+    IF @SenhaDb != @Senha
+    BEGIN
+        -- Incrementa o número de tentativas de login falhas
+        UPDATE funcionario
+        SET tentativasFalhas = tentativasFalhas + 1
+        WHERE email = @Email;
+
+        -- Verifica o número atualizado de tentativas falhas
+        SELECT @Tentativas = tentativasFalhas 
+        FROM funcionario
+        WHERE email = @Email;
+
+        -- Calcula o número de tentativas restantes
+        SET @TentativasRestantes = @MaxTentativas - @Tentativas;
+
+        IF @Tentativas >= @MaxTentativas
+        BEGIN
+            -- Gerar um código aleatório de 6 dígitos numéricos
+            SET @CodigoRecuperacao = ABS(CHECKSUM(NEWID())) % 1000000;
+
+            -- Armazenar o código na coluna codigoRecuperacao
+            UPDATE funcionario
+            SET codigoRecuperacao = @CodigoRecuperacao
+            WHERE email = @Email;
+
+            -- Retorna mensagem de conta bloqueada
+            SET @Resultado = 'Conta bloqueada. Um código de recuperação foi enviado.';
+            SET @NivelAcesso = NULL;
+        END
+        ELSE
+        BEGIN
+            -- Retorna mensagem de erro de login com o número de tentativas restantes
+            SET @Resultado = 'Usuário ou senha incorretos. Tentativas restantes: ' + CAST(@TentativasRestantes AS VARCHAR(10));
+            SET @NivelAcesso = NULL;
+        END
     END
     ELSE
     BEGIN
-        SET @Resultado = 'Login bem-sucedido'
+        -- Se o login for bem-sucedido, reseta as tentativas
+        UPDATE funcionario
+        SET tentativasFalhas = 0, codigoRecuperacao = NULL
+        WHERE email = @Email;
+        -- Retorna mensagem de sucesso
+        SET @Resultado = 'Login bem-sucedido';
     END
-END
+END;
 GO
 -- Fim da Procedure
 CREATE PROCEDURE sp_finalizar_pedido(
@@ -1023,22 +1090,26 @@ END
 GO
 -- Inicio Procedure para alterar senha
 CREATE PROCEDURE sp_alterar_senha
-    @Email NVARCHAR(100),
-    @CPF NVARCHAR(11),
-    @NovaSenha NVARCHAR(30),
-    @Resultado NVARCHAR(100) OUTPUT
+    @Email VARCHAR(100),
+    @CPF VARCHAR(11),
+    @NovaSenha VARCHAR(30),
+    @CodigoRecuperacao CHAR(6),
+    @Resultado VARCHAR(100) OUTPUT
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM funcionario WHERE email = @Email AND cpf = @CPF)
+    IF EXISTS (SELECT 1 FROM funcionario WHERE email = @Email AND cpf = @CPF AND codigoRecuperacao = @CodigoRecuperacao)
     BEGIN
-        UPDATE funcionario
-        SET senha = @NovaSenha
-        WHERE email = @Email AND cpf = @CPF    
+         UPDATE funcionario
+        SET senha = @NovaSenha,
+            tentativasFalhas = 0,
+            codigoRecuperacao = NULL,
+            contaBloqueada = 0
+        WHERE email = @Email AND cpf = @CPF AND codigoRecuperacao = @CodigoRecuperacao
         SET @Resultado = 'Senha alterada com sucesso'
     END
     ELSE
     BEGIN
-        SET @Resultado = 'Email ou CPF incorretos'
+        SET @Resultado = 'Email, CPF ou Código de Recuperação incorretos'
     END
 END
 GO
@@ -2858,4 +2929,12 @@ BEGIN
     RETURN;
 END;
 GO
+--SELECT * FROM funcionario
+
+--UPDATE funcionario
+--SET codigoRecuperacao = '654321',  -- Novo código de recuperação
+--    contaBloqueada = 1,             -- 1 para bloquear a conta, 0 para desbloquear
+--	tentativasFalhas = 5,
+--	nivelAcesso = 'admin'
+--WHERE CPF = '37848890007';         -- CPF do funcionário a ser atualizado
 

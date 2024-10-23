@@ -31,6 +31,7 @@ public class EsqueceuSenhaController {
         String CPF = allRequestParam.get("CPF");
         String novaSenha = allRequestParam.get("novaSenha");
         String confirmarSenha = allRequestParam.get("confirmarSenha");
+        String codigoRecuperacao = allRequestParam.get("codigoRecuperacao");
         String mensagem = "";
 
         CPF = Util.removerMascara(CPF);
@@ -42,7 +43,7 @@ public class EsqueceuSenhaController {
         }
 
         try {
-            Map<String, String> resultado = esqueceuSenhaDao.alterarSenha(email, CPF, novaSenha);
+            Map<String, String> resultado = esqueceuSenhaDao.alterarSenha(email, CPF, novaSenha, codigoRecuperacao);
             mensagem = resultado.get("mensagem");
         } catch (Exception e) {
             mensagem = "Erro ao alterar a senha: " + e.getMessage();

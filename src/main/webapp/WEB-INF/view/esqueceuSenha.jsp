@@ -6,9 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js">
-	
 </script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/esqueceuSenha.js"></script>
@@ -22,11 +23,10 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Recuperação de Senha</h1>
-				<form action="esqueceuSenha" method="post"
-					onsubmit="return validarFormulario(event);"
-					class="row g-3 mt-3 justify-content-center">
+				<form action="esqueceuSenha" method="post" class="row g-3 mt-3"
+					onsubmit="return validarFormulario(event);">
 					<!-- Primeira Linha: E-mail e CPF -->
-					<div class="row g-3 justify-content-center">
+					<div class="row g-3">
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="email" name="email"
@@ -39,10 +39,6 @@
 									placeholder="CPF"> <label for="cpf">CPF</label>
 							</div>
 						</div>
-					</div>
-
-					<!-- Segunda Linha: Nova Senha e Confirmar Nova Senha -->
-					<div class="row g-3 mt-2 justify-content-center">
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input type="password" class="form-control" id="novaSenha"
@@ -50,6 +46,11 @@
 									for="novaSenha">Nova Senha</label>
 							</div>
 						</div>
+					</div>
+
+					<!-- Segunda Linha: Nova Senha e Confirmar Nova Senha -->
+					<div class="row g-3 mt-2">
+
 						<div class="col-md-4">
 							<div class="form-floating">
 								<input type="password" class="form-control" id="confirmarSenha"
@@ -57,14 +58,21 @@
 								<label for="confirmarSenha">Confirmar Nova Senha</label>
 							</div>
 						</div>
+
+						<div class="col-md-4">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="codigoRecuperacao"
+									name="codigoRecuperacao" placeholder="Código SMS" maxlength="6">
+								<label for="codigoRecuperacao">Código SMS</label>
+							</div>
+						</div>
 					</div>
 
-					<!-- Terceira Linha: Botão Alterar Senha -->
+					<!-- Quarta Linha: Botão Alterar Senha -->
 					<div class="row g-3 mt-2 justify-content-center">
 						<div class="col-md-2 d-grid text-center">
-							<button type="submit" class="btn btn-primary"
+							<button type="submit" class="btn btn-primary btn-align"
 								value="Alterar Senha">Alterar Senha</button>
-
 						</div>
 					</div>
 				</form>

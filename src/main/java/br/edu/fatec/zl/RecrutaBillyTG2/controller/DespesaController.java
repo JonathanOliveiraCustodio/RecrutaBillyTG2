@@ -2,6 +2,7 @@ package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -222,21 +223,26 @@ public class DespesaController {
 
 	@SuppressWarnings("deprecation")
 	private List<Despesa> listarDespesas(int filtro) throws ClassNotFoundException, SQLException {
-		List<Despesa> despesas = new ArrayList<>();
-		List<Despesa> auxDespesas = new ArrayList<>();
-		despesas = dDao.findAll();
+	    List<Despesa> despesas = new ArrayList<>();
+	    List<Despesa> auxDespesas = new ArrayList<>();
+	    despesas = dDao.findAll();
 
-		// Aplicação do filtro
-		if (filtro != 0) {
-			for (Despesa d : despesas) {
-				if (d.getData().getMonth() + 1 == filtro) {
-					auxDespesas.add(d);
-				}
-			}
-			return auxDespesas;
-		}
-		return despesas;
+	    // Obtém o ano atual
+	    int anoAtual = LocalDate.now().getYear();
+
+	    // Aplicação do filtro
+	    if (filtro != 0) {
+	        for (Despesa d : despesas) {
+	            // Verifica se o mês e o ano coincidem com o filtro e o ano atual
+	            if ((d.getData().getMonth() + 1 == filtro) && (d.getData().getYear() + 1900 == anoAtual)) {
+	                auxDespesas.add(d);
+	            }
+	        }
+	        return auxDespesas;
+	    }
+	    return despesas;
 	}
+
 
 	private float calcularEntrada(List<Despesa> despesas) {
 		float entrada = 0;

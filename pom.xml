@@ -106,6 +106,19 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.19.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		
+		<dependency>
+    <groupId>com.twilio.sdk</groupId>
+    <artifactId>twilio</artifactId>
+    <version>8.19.0</version> <!-- Verifique se há uma versão mais recente -->
+</dependency>
+
 	</dependencies>
 
 	<build>

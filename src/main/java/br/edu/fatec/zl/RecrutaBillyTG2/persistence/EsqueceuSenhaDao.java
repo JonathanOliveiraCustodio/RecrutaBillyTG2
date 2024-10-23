@@ -16,23 +16,24 @@ public class EsqueceuSenhaDao {
         this.gDao = gDao;
     }
 
-    public Map<String, String> alterarSenha(String email, String cpf, String novaSenha) {
+    public Map<String, String> alterarSenha(String email, String cpf, String novaSenha, String codigoRecuperacao) {
         Connection conn = null;
         CallableStatement cstmt = null;
         Map<String, String> resultado = new HashMap<>();
 
         try {
             conn = gDao.getConnection(); 
-
-            String sql = "{CALL sp_alterar_senha(?, ?, ?, ?)}";
+            
+            String sql = "{CALL sp_alterar_senha(?,?,?,?,?)}";
             cstmt = conn.prepareCall(sql);
             cstmt.setString(1, email);
             cstmt.setString(2, cpf);
             cstmt.setString(3, novaSenha);
-            cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); 
+            cstmt.setString(4, codigoRecuperacao);
+            cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); 
             cstmt.execute();
 
-            resultado.put("mensagem", cstmt.getString(4));
+            resultado.put("mensagem", cstmt.getString(5));
 
             return resultado;
         } catch (SQLException e) {
