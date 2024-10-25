@@ -1,12 +1,12 @@
 // categoriaProduto.js
 
 function editarCategoriaProduto(codigo) {
-    window.location.href = 'categoriaProduto?cmd=alterar&codigo=' + codigo;
+    window.location.href = 'categoriaproduto?cmd=alterar&codigo=' + codigo;
 }
 
 function excluirCategoriaProduto(codigo) {
     if (confirm("Tem certeza que deseja excluir esta Categoria?")) {
-        window.location.href = 'categoriaProduto?cmd=excluir&codigo=' + codigo;
+        window.location.href = 'categoriaproduto?cmd=excluir&codigo=' + codigo;
     }
 }
 

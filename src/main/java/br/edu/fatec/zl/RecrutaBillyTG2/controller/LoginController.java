@@ -64,7 +64,7 @@ public class LoginController {
 	        model.addAttribute("errorMessage", mensagem);
 	        return new ModelAndView("login");
 	    } else if ("Recuperar a Senha".equals(cmd)) {
-	        return new ModelAndView("redirect:/esqueceuSenha");
+	        return new ModelAndView("redirect:/recuperarsenha");
 	    } else {
 	        model.addAttribute("errorMessage", "Ação não reconhecida.");
 	        return new ModelAndView("login");

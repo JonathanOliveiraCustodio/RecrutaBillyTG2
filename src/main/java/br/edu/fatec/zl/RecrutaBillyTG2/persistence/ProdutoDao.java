@@ -28,7 +28,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	@Override
 	public String sp_iud_produto(String acao, Produto p) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "{CALL sp_iud_produto (?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{CALL sp_iud_produto (?,?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, p.getCodigo());
@@ -39,9 +39,10 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		cs.setString(7, p.getStatus());
 		cs.setInt(8, p.getQuantidade());
 		cs.setString(9, p.getRefEstoque());
-		cs.registerOutParameter(10, Types.VARCHAR);
+		cs.setDate(10, p.getData());
+		cs.registerOutParameter(11, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(10);
+		String saida = cs.getString(11);
 		cs.close();
 		c.close();
 
@@ -70,6 +71,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
+			p.setData(rs.getDate("data"));
 			return p;
 		} else {
 			rs.close();
@@ -101,6 +103,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
+			p.setData(rs.getDate("data"));
 			produtos.add(p);
 		}
 		rs.close();
@@ -135,10 +138,9 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			produtos.add(p);
-			
+			p.setData(rs.getDate("data"));
+			produtos.add(p);	
 		}
-
 		rs.close();
 		ps.close();
 		con.close();
@@ -172,6 +174,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
+			p.setData(rs.getDate("data"));
 			produtos.add(p);	
 		}
 		rs.close();
@@ -206,6 +209,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
+			p.setData(rs.getDate("data"));
 			produtos.add(p);			
 		}
 		rs.close();
@@ -218,12 +222,10 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	    List<Produto> produtos = new ArrayList<>();
 	    Connection con = gDao.getConnection();
 	    
-	    // Usando StringBuilder em vez de StringBuffer por ser mais eficiente neste contexto
 	    StringBuilder sql = new StringBuilder();
-	    sql.append("SELECT * FROM v_produto WHERE quantidade <= ?");  // Correção do operador e uso do parâmetro
-
+	    sql.append("SELECT * FROM v_produto WHERE quantidade <= ?");  
 	    PreparedStatement ps = con.prepareStatement(sql.toString());
-	    ps.setInt(1, qtd);  // Define o valor do parâmetro
+	    ps.setInt(1, qtd);  
 
 	    ResultSet rs = ps.executeQuery();
 
@@ -240,6 +242,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	        p.setStatus(rs.getString("status"));
 	        p.setQuantidade(rs.getInt("quantidade"));
 	        p.setRefEstoque(rs.getString("refEstoque"));
+	        p.setData(rs.getDate("data"));
 	        produtos.add(p);			
 	    }
 
@@ -275,6 +278,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
+			p.setData(rs.getDate("data"));
 			produtos.add(p);			
 		}
 		rs.close();

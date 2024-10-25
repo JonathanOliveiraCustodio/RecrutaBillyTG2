@@ -1,5 +1,6 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.controller;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class ProdutoController {
 		String status = allRequestParam.get("status");
 		String quantidade = allRequestParam.get("quantidade");
 		String refEstoque = allRequestParam.get("refEstoque");
+		String data = allRequestParam.get("data");
 		
 		String saida = "";
 		String erro = "";
@@ -130,6 +132,7 @@ public class ProdutoController {
 				p.setStatus(status);
 				p.setQuantidade(Integer.parseInt(quantidade));
 				p.setRefEstoque(refEstoque);
+				p.setData(Date.valueOf(data));
 			}
 			if (cmd.contains("Cadastrar") ) {
 				saida = cadastrarProduto(p);

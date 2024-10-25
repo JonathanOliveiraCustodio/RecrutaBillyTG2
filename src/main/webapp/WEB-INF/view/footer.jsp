@@ -13,12 +13,15 @@
 <body>
 	<footer class="py-3 my-4 border-top">
 		<div class="container text-center">
-			<p>&copy; 2024 Sistema Gerencial Recruta Billy 1.0 Todos os direitos reservados.</p>
+			<p>&copy; 2024 Sistema Gerencial Recruta Billy 1.0 Todos os
+				direitos reservados.</p>
 			<p>
-				<a href="#">Política de Privacidade</a> | <a href="#">Termos de
-					Serviço</a>
+				<a href="${pageContext.request.contextPath}/politicaprivacidade"
+					target="_blank">Política de Privacidade</a> | <a
+					href="${pageContext.request.contextPath}/termosservicos"
+					target="_blank">Termos de Serviço</a>
 			</p>
-			<p>Desenvolvido por Davi Romão, Jonathan Custodio e Luiz Antonio,</p>
+			<p>Desenvolvido por Davi Romão, Jonathan Custodio e Luiz Antonio.</p>
 		</div>
 	</footer>
 	<!-- Bootstrap JavaScript Bundle with Popper -->

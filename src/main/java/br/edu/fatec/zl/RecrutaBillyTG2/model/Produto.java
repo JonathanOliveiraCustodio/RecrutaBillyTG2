@@ -1,5 +1,7 @@
 package br.edu.fatec.zl.RecrutaBillyTG2.model;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,6 @@ public class Produto {
 	String status;
 	int quantidade;
 	String refEstoque;
+	Date data;
 	CategoriaProduto categoriaProduto;
 }

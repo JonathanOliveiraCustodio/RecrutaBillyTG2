@@ -55,7 +55,7 @@
 								<li><a class="dropdown-item"
 									href="${pageContext.request.contextPath}/insumo">Insumo</a></li>
 								<li><a class="dropdown-item"
-									href="${pageContext.request.contextPath}/categoriaProduto">Categoria
+									href="${pageContext.request.contextPath}/categoriaproduto">Categoria
 										de Produto</a></li>
 							</ul></li>
 						<li class="nav-item dropdown"><a
@@ -86,6 +86,8 @@
 								<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/configuracoes">Configurações Operacionais</a></li>
+							<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/log">Logs de Acesso</a></li>
 							</ul></li>
 
 						<li class="nav-item"><a

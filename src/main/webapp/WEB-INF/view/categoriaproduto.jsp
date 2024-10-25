@@ -25,7 +25,7 @@
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
 					<h1 class="display-6 fw-bold">Manutenção de Categoria de Produto</h1>
-					<form action="categoriaProduto" method="post" class="row g-3 mt-3"
+					<form action="categoriaproduto" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
 						<!-- Primeira Linha: Código, Nome, Telefone -->
 						<div class="row g-3">
@@ -33,7 +33,7 @@
 								<div class="form-floating">
 									<input type="number" min="0" step="1" id="codigo" name="codigo"
 										class="form-control" placeholder="Código"
-										value='<c:out value="${categoriaProduto.codigo }"></c:out>' readonly>
+										value='<c:out value="${categoriaproduto.codigo }"></c:out>' readonly>
 									<label for="codigo">Código</label>
 								</div>
 							</div>
@@ -41,7 +41,7 @@
 								<div class="form-floating">
 									<input type="text" id="nome" name="nome" class="form-control"
 										placeholder="Nome" maxlength="100"
-										value='<c:out value="${categoriaProduto.nome }"></c:out>'> <label
+										value='<c:out value="${categoriaproduto.nome }"></c:out>'> <label
 										for="nome">Nome</label>
 								</div>
 							</div>

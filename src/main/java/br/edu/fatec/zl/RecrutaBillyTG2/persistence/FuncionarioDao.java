@@ -23,40 +23,54 @@ public class FuncionarioDao implements ICrud<Funcionario>, IFuncionarioDao {
 		this.gDao = gDao;
 	}
 
-	@Override
 	public Funcionario findBy(Funcionario f) throws SQLException, ClassNotFoundException {
-		String sql = "SELECT * FROM fn_listar_funcionario_cpf(?)";
-		Connection c = gDao.getConnection();
-		PreparedStatement ps = c.prepareStatement(sql);
-		ps.setString(1, f.getCPF());
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
-			f.setCPF(rs.getString("CPF"));
-			f.setNome(rs.getString("nome"));
-			f.setNivelAcesso(rs.getString("nivelAcesso"));
-			f.setEmail(rs.getString("email"));
-			f.setSenha(rs.getString("senha"));
-			f.setDataNascimento(rs.getDate("dataNascimento"));
-			f.setTelefone(rs.getString("telefone"));
-			f.setCargo(rs.getString("cargo"));
-			f.setHorario(rs.getString("horario"));
-			f.setSalario(rs.getFloat("salario"));
-			f.setDataAdmissao(rs.getDate("dataAdmissao"));
-			f.setDataDesligamento(rs.getDate("dataDesligamento"));
-			f.setObservacao(rs.getString("observacao"));
-			
-			rs.close();
-			ps.close();
-			c.close();
-			return f;
-		} else {
-			rs.close();
-			ps.close();
-			c.close();
-			return null;
-		}
+	    String sql;
+	    Connection c = gDao.getConnection();
+	    PreparedStatement ps;
 
+	    if (f.getCPF() != null && !f.getCPF().isEmpty()) {
+	        // Busca por CPF
+	        sql = "SELECT * FROM fn_listar_funcionario_cpf(?)";
+	        ps = c.prepareStatement(sql);
+	        ps.setString(1, f.getCPF());
+	    } else if (f.getEmail() != null && !f.getEmail().isEmpty()) {
+	        // Busca por e-mail
+	        sql = "SELECT * FROM fn_listar_funcionario_email(?)"; // Supondo que você tenha uma função SQL para isso
+	        ps = c.prepareStatement(sql);
+	        ps.setString(1, f.getEmail());
+	    } else {
+	        throw new IllegalArgumentException("CPF ou e-mail deve ser fornecido.");
+	    }
+
+	    ResultSet rs = ps.executeQuery();
+	    if (rs.next()) {
+	        // Preenche o objeto Funcionario com os dados retornados
+	        f.setCPF(rs.getString("CPF"));
+	        f.setNome(rs.getString("nome"));
+	        f.setNivelAcesso(rs.getString("nivelAcesso"));
+	        f.setEmail(rs.getString("email"));
+	        f.setSenha(rs.getString("senha"));
+	        f.setDataNascimento(rs.getDate("dataNascimento"));
+	        f.setTelefone(rs.getString("telefone"));
+	        f.setCargo(rs.getString("cargo"));
+	        f.setHorario(rs.getString("horario"));
+	        f.setSalario(rs.getFloat("salario"));
+	        f.setDataAdmissao(rs.getDate("dataAdmissao"));
+	        f.setDataDesligamento(rs.getDate("dataDesligamento"));
+	        f.setObservacao(rs.getString("observacao"));
+	        
+	        rs.close();
+	        ps.close();
+	        c.close();
+	        return f;
+	    } else {
+	        rs.close();
+	        ps.close();
+	        c.close();
+	        return null;
+	    }
 	}
+
 
 	@Override
 	public List<Funcionario> findAll() throws SQLException, ClassNotFoundException {
@@ -195,4 +209,27 @@ public class FuncionarioDao implements ICrud<Funcionario>, IFuncionarioDao {
 
 		return funcionarios;
 	}
+	
+	public void atualizarCodigoRecuperacao(String cpfOuEmail, String codigoRecuperacao) throws SQLException, ClassNotFoundException {
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        conn = gDao.getConnection();  // Obtém a conexão com o banco de dados
+
+	        // SQL para atualizar o campo codigoRecuperacao baseado no CPF ou e-mail
+	        String sql = "UPDATE funcionario SET codigoRecuperacao = ? WHERE CPF = ? OR email = ?";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, codigoRecuperacao);  // Define o valor do código de recuperação
+	        pstmt.setString(2, cpfOuEmail);  // Define o valor do CPF (caso seja CPF)
+	        pstmt.setString(3, cpfOuEmail);  // Define o valor do e-mail (caso seja e-mail)
+
+	        // Executa o comando de update
+	        pstmt.executeUpdate();
+	    } finally {
+	        if (pstmt != null) pstmt.close();
+	        if (conn != null) conn.close();
+	    }
+	}
+
 }

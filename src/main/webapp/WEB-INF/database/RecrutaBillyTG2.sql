@@ -70,13 +70,14 @@ PRIMARY KEY (codigo)
 GO
 CREATE TABLE produto(
 codigo		   INT	         	NOT NULL IDENTITY (1,1),
-nome		   VARCHAR(100)      NOT NULL,
+nome		   VARCHAR(100)     NOT NULL,
 categoria      INT              NOT NULL,
 descricao      VARCHAR(200)     NOT NULL,
 valorUnitario  DECIMAL (10,2)   NOT NULL,
 status		   VARCHAR(30)		NOT NULL,
 quantidade	   INT				NOT NULL,
-refEstoque     VARCHAR(50)      NOT NULL 
+refEstoque     VARCHAR(50)      NOT NULL, 
+data		   DATE             NOT NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (categoria) REFERENCES categoriaProduto (codigo)
 )
@@ -204,16 +205,16 @@ valorTotalDespesasMes             DECIMAL(10,2) NULL
 )
 GO
 CREATE TABLE logFuncionario (
-    codigo              INT IDENTITY(1,1)     NOT NULL,
-    CPF                 CHAR(11)              NOT NULL,  
-    dataLogin           DATETIME              NOT NULL,  
-    dataLogout          DATETIME              NULL,      
-    duracaoSessao       TIME                  NULL,      
-    ipAddress           VARCHAR(45)           NULL,     
-    dispositivo         VARCHAR(100)          NULL,      
-    navegador           VARCHAR(100)          NULL,      
-    PRIMARY KEY (codigo),
-    FOREIGN KEY (CPF) REFERENCES funcionario(CPF)
+codigo              INT IDENTITY(1,1)     NOT NULL,
+CPF                 CHAR(11)              NOT NULL,  
+dataLogin           DATETIME              NOT NULL,  
+dataLogout          DATETIME              NULL,      
+duracaoSessao       TIME                  NULL,      
+ipAddress           VARCHAR(45)           NULL,     
+dispositivo         VARCHAR(100)          NULL,      
+navegador           VARCHAR(100)          NULL,      
+PRIMARY KEY (codigo),
+FOREIGN KEY (CPF) REFERENCES funcionario(CPF)
 )
 GO
 -- Insert Usuario de Teste
@@ -289,27 +290,27 @@ VALUES
 ('Papelaria'),
 ('Facas');
 GO
-INSERT INTO produto (nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque) VALUES
-('Caneca Personalizada', 2, 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01'),
-('Camiseta Personalizada', 2, 'Camiseta de algodão com estampa personalizada.', 24.99,'Em Produção',10,'CX02'),
-('Calendário de Parede Personalizado', 3, 'Calendário de parede personalizado com fotos.', 12.99,'Não Aplicável',100,'CX05'),
-('Caneta Personalizada', 1, 'Caneta esferográfica com nome gravado.', 13.49,'Em Produção',100,'AR01'),
-('Mouse Pad Personalizado', 4, 'Mouse pad com imagem personalizada.', 58.99,'Não Aplicável',5,'CX10'),
-('Caderno Personalizado', 2, 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03'),
-('Almofada Personalizada', 3, 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02'),
-('Chaveiro Personalizado', 1, 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01'),
-('Patach emborrados', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01'),
-('Maria O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 7, 'AR02'),
-('Carlos A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.50, 'Em Produção', 3, 'AR03'),
-('Ana AB+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.00, 'Pendente', 10, 'AR04'),
-('Pedro B-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.50, 'Em Produção', 6, 'AR05'),
-('João A-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.00, 'Em Produção', 4, 'AR06'),
-('Lucas O+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 8, 'AR07'),
-('Fernanda AB-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.00, 'Pendente', 9, 'AR08'),
-('Clara B+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.50, 'Em Produção', 5, 'AR09'),
-('Roberto O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.50, 'Finalizado', 6, 'AR10'),
-('Bruno A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.00, 'Pendente', 7, 'AR11'),
-('Alex B+', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Em Produção',5,'AR01');
+INSERT INTO produto (nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque,data) VALUES
+('Caneca Personalizada', 2, 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01','2024-04-27'),
+('Camiseta Personalizada', 2, 'Camiseta de algodão com estampa personalizada.', 24.99,'Em Produção',10,'CX02','2024-04-27'),
+('Calendário de Parede Personalizado', 3, 'Calendário de parede personalizado com fotos.', 12.99,'Não Aplicável',100,'CX05','2024-04-27'),
+('Caneta Personalizada', 1, 'Caneta esferográfica com nome gravado.', 13.49,'Em Produção',100,'AR01','2024-04-27'),
+('Mouse Pad Personalizado', 4, 'Mouse pad com imagem personalizada.', 58.99,'Não Aplicável',5,'CX10','2024-04-27'),
+('Caderno Personalizado', 2, 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03','2024-04-27'),
+('Almofada Personalizada', 3, 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02','2024-04-27'),
+('Chaveiro Personalizado', 1, 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01','2024-04-27'),
+('Patach emborrados', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01','2024-04-27'),
+('Maria O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 7, 'AR02','2024-04-27'),
+('Carlos A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.50, 'Em Produção', 3, 'AR03','2024-04-27'),
+('Ana AB+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.00, 'Pendente', 10, 'AR04','2024-04-27'),
+('Pedro B-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.50, 'Em Produção', 6, 'AR05','2024-04-27'),
+('João A-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.00, 'Em Produção', 4, 'AR06','2024-04-27'),
+('Lucas O+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 8, 'AR07','2024-04-27'),
+('Fernanda AB-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.00, 'Pendente', 9, 'AR08','2024-04-27'),
+('Clara B+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.50, 'Em Produção', 5, 'AR09','2024-04-27'),
+('Roberto O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.50, 'Finalizado', 6, 'AR10','2024-04-27'),
+('Bruno A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.00, 'Pendente', 7, 'AR11','2024-04-27'),
+('Alex B+', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Em Produção',5,'AR01','2024-04-27');
 GO
 INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
 VALUES
@@ -669,6 +670,7 @@ CREATE PROCEDURE sp_iud_produto
     @status VARCHAR(20),
     @quantidade INT, 
     @refEstoque VARCHAR(50),
+	@data DATE,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -683,17 +685,17 @@ BEGIN
             RETURN;
         END
         -- Insere o novo produto
-        INSERT INTO produto (nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque)
-        VALUES (@nome, @categoria, @descricao, @valorUnitario, @status, @quantidade, @refEstoque);
+        INSERT INTO produto (nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque, data)
+        VALUES (@nome, @categoria, @descricao, @valorUnitario, @status, @quantidade, @refEstoque,GETDATE());
         SET @saida = 'Produto inserido com sucesso';
     END
     ELSE IF (@acao = 'U')
     BEGIN
         -- Atualiza o produto existente
         UPDATE produto
-        SET nome = @nome, categoria = @categoria, descricao = @descricao, valorUnitario = @valorUnitario, status = @status, quantidade = @quantidade, refEstoque = @refEstoque
+        SET nome = @nome, categoria = @categoria, descricao = @descricao, valorUnitario = @valorUnitario, 
+		status = @status, quantidade = @quantidade, refEstoque = @refEstoque, data =@data
         WHERE codigo = @codigo;
-
         IF @@ROWCOUNT = 0
         BEGIN
             RAISERROR('Produto não encontrado.', 16, 1);
@@ -1583,6 +1585,56 @@ RETURN
     WHERE eq.codigo = @codigoEquipamento
 );
 GO
+CREATE FUNCTION fn_listar_funcionario_cpf(@CPF CHAR(11))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        CPF,
+        nome,
+        nivelAcesso,
+        senha,
+        email,
+		telefone,
+		dataNascimento,
+		cargo,
+		horario,
+		salario,
+		dataAdmissao,
+		dataDesligamento,
+		observacao
+    FROM 
+        funcionario
+    WHERE 
+        CPF = @CPF
+);
+GO
+CREATE FUNCTION fn_listar_funcionario_email(@Email VARCHAR(255))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        CPF,
+        nome,
+        nivelAcesso,
+        senha,
+        email,
+        telefone,
+        dataNascimento,
+        cargo,
+        horario,
+        salario,
+        dataAdmissao,
+        dataDesligamento,
+        observacao
+    FROM 
+        funcionario
+    WHERE 
+        email = @Email
+);
+GO
 CREATE VIEW v_pedidos
 AS
 SELECT 
@@ -1637,7 +1689,8 @@ SELECT
     p.valorUnitario,
     p.status,
     p.quantidade,
-    p.refEstoque
+    p.refEstoque,
+	p.data
 FROM 
     produto p
 INNER JOIN 
@@ -1696,31 +1749,6 @@ SELECT
     numero,
     dataNascimento
 FROM cliente;
-GO
-CREATE FUNCTION fn_listar_funcionario_cpf(@CPF CHAR(11))
-RETURNS TABLE
-AS
-RETURN
-(
-    SELECT 
-        CPF,
-        nome,
-        nivelAcesso,
-        senha,
-        email,
-		telefone,
-		dataNascimento,
-		cargo,
-		horario,
-		salario,
-		dataAdmissao,
-		dataDesligamento,
-		observacao
-    FROM 
-        funcionario
-    WHERE 
-        CPF = @CPF
-);
 GO
 CREATE VIEW v_despesa AS
 SELECT 
@@ -2420,7 +2448,8 @@ RETURNS @resultado TABLE (
     status VARCHAR(30),
     quantidade INT,
     refEstoque VARCHAR(50),
-    quantidadeRegistros INT
+    data       DATE,
+	quantidadeRegistros INT
 )
 AS
 BEGIN
@@ -2434,20 +2463,22 @@ BEGIN
         valorUnitario DECIMAL(10,2),
         status VARCHAR(30),
         quantidade INT,
-        refEstoque VARCHAR(50)
+        refEstoque VARCHAR(50),
+		data       DATE
     );
 
     INSERT INTO @produtos
     SELECT 
         p.codigo,
         p.nome,
-        cp.codigo AS codigoCategoria, -- Código da categoria
-        cp.nome AS nomeCategoria, -- Nome da categoria
+        cp.codigo AS codigoCategoria, 
+        cp.nome AS nomeCategoria, 
         p.descricao,
         p.valorUnitario,
         p.status,
         p.quantidade,
-        p.refEstoque
+        p.refEstoque,
+		p.data
     FROM 
         produto p
     INNER JOIN 

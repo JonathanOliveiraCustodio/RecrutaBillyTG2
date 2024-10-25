@@ -25,7 +25,7 @@ public class CategoriaProdutoController {
 	@Autowired
 	CategoriaProdutoDao cpDao;
 
-	@RequestMapping(name = "categoriaProduto", value = "/categoriaProduto", method = RequestMethod.GET)
+	@RequestMapping(name = "categoriaproduto", value = "/categoriaproduto", method = RequestMethod.GET)
 	public ModelAndView categoriaProdutoGet(@RequestParam Map<String, String> allRequestParam, ModelMap model,
 			HttpSession session) {
 
@@ -65,14 +65,14 @@ public class CategoriaProdutoController {
 			}
 			model.addAttribute("erro", erro);
 			model.addAttribute("saida", saida);
-			model.addAttribute("categoriaProduto", cp);
+			model.addAttribute("categoriaproduto", cp);
 			model.addAttribute("categoriaProdutos", categoriaProdutos);
 		}
 
-		return new ModelAndView("categoriaProduto");
+		return new ModelAndView("categoriaproduto");
 	}
 
-	@RequestMapping(name = "categoriaProduto", value = "/categoriaProduto", method = RequestMethod.POST)
+	@RequestMapping(name = "categoriaproduto", value = "/categoriaproduto", method = RequestMethod.POST)
 	public ModelAndView categoriaProdutoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
 		// Parâmetros de entrada
 		String cmd = allRequestParam.get("botao");
@@ -141,10 +141,10 @@ public class CategoriaProdutoController {
 		} finally {
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
-			model.addAttribute("categoriaProduto", cp);
+			model.addAttribute("categoriaproduto", cp);
 			model.addAttribute("categoriaProdutos", categoriaProdutos);
 		}
-		return new ModelAndView("categoriaProduto");
+		return new ModelAndView("categoriaproduto");
 	}
 
 	private String cadastrarCliente(CategoriaProduto c) throws ClassNotFoundException, SQLException {

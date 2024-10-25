@@ -126,6 +126,14 @@
 								<label for="refEstoque">Referência no Estoque</label>
 							</div>
 						</div>
+						<div class="col-md-4">
+								<div class="form-floating">
+									<input type="date" id="data" name="data"
+										class="form-control" placeholder="Data"
+										value='<c:out value="${produto.data}"></c:out>'>
+									<label for="data">Data</label>
+								</div>
+							</div>
 					</div>
 
 					<!-- Linha dos Botões -->
@@ -190,6 +198,7 @@
 							<th>Status</th>
 							<th>Quantidade</th>
 							<th>Ref Est</th>
+							<th>Data</th>
 							<th>Insumos</th>
 						</tr>
 					</thead>
@@ -219,6 +228,8 @@
 								<td><c:out value="${p.status}" /></td>
 								<td><c:out value="${p.quantidade}" /></td>
 								<td><c:out value="${p.refEstoque}" /></td>
+								<td><fmt:formatDate value="${p.data}"
+										pattern="dd/MM/yyyy" /></td>
 								<td>
 									<button
 										onclick="window.location.href='insumosProduto?produto=${p.codigo}'"

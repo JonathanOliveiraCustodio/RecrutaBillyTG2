@@ -30,7 +30,8 @@ function validarFormulario(event) {
 		{ id: "valorUnitario", nome: "Valor Unitário" },
 		{ id: "status", nome: "status" },
 		{ id: "quantidade", nome: "Quantidade" },
-		{ id: "refEstoque", nome: "Referência no Estoque" }
+		{ id: "refEstoque", nome: "Referência no Estoque" },
+		{ id: "data", nome: "Data" },
 
 	];
 
