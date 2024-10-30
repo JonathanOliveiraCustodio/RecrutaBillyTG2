@@ -6,7 +6,7 @@ import com.twilio.type.PhoneNumber;
 
 public class SMSService {
 	
-	// Account SID do Twilio
+	// Account SID do Twilio 
 	public static final String ACCOUNT_SID = "";
 	
 	// Auth Token do Twilio

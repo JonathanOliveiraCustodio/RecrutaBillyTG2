@@ -57,6 +57,10 @@
 								<li><a class="dropdown-item"
 									href="${pageContext.request.contextPath}/categoriaproduto">Categoria
 										de Produto</a></li>
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/patente">Patente</a></li>
+									<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/nometarjeta">Nome Tarjeta</a></li>
 							</ul></li>
 						<li class="nav-item dropdown"><a
 							class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
@@ -68,12 +72,22 @@
 								<li><a class="dropdown-item"
 									href="${pageContext.request.contextPath}/orcamento">Orçamento</a></li>
 							</ul></li>
+							
+							<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle px-3 link-body-emphasis" href="#"
+							id="financeDropdown" role="button" data-bs-toggle="dropdown"
+							aria-expanded="false"> Gestão de Estoque </a>
+							<ul class="dropdown-menu" aria-labelledby="financeDropdown">
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/produto">Produtos</a></li>
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/tarjeta">Tarjetas</a></li>
+							</ul></li>
+							
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/pedido">Pedido</a></li>
-						<li class="nav-item"><a
-							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/produto">Produto</a></li>
+				
 						<li class="nav-item"><a
 							class="nav-link px-3 link-body-emphasis"
 							href="${pageContext.request.contextPath}/relatorio">Relatório</a></li>
@@ -84,10 +98,12 @@
 							aria-expanded="false"> Configurações </a>
 							<ul class="dropdown-menu" aria-labelledby="financeDropdown">
 								<li class="nav-item"><a
-							class="nav-link px-3 link-body-emphasis"
-							href="${pageContext.request.contextPath}/configuracoes">Configurações Operacionais</a></li>
-							<li><a class="dropdown-item"
-									href="${pageContext.request.contextPath}/log">Logs de Acesso</a></li>
+									class="nav-link px-3 link-body-emphasis"
+									href="${pageContext.request.contextPath}/configuracoes">Configurações
+										Operacionais</a></li>
+								<li><a class="dropdown-item"
+									href="${pageContext.request.contextPath}/log">Logs de
+										Acesso</a></li>
 							</ul></li>
 
 						<li class="nav-item"><a

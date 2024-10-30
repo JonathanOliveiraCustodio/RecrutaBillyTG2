@@ -225,7 +225,6 @@ public class InsumoController {
 	private Fornecedor buscarFornecedor(Fornecedor f) throws SQLException, ClassNotFoundException {
 		f = fDao.findBy(f);
 		return f;
-
 	}
 
 	private List<Fornecedor> listarFornecedores() throws SQLException, ClassNotFoundException {

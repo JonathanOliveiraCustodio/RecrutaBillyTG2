@@ -25,51 +25,51 @@ public class LoginController {
 	}
 
 	@RequestMapping(name = "login", value = "/login", method = RequestMethod.POST)
-	public ModelAndView loginPost(@RequestParam Map<String, String> allRequestParam, ModelMap model, HttpSession session) {
-	    String email = allRequestParam.get("email");
-	    
-	    String senha = allRequestParam.get("senha");
-	    String mensagem = "";
-	    String cmd = allRequestParam.get("botao");
+	public ModelAndView loginPost(@RequestParam Map<String, String> allRequestParam, ModelMap model,
+			HttpSession session) {
+		String email = allRequestParam.get("email");
 
-	    if ("Login".equals(cmd)) {
-	    	
-	        try {
-	        //	SMSService.enviarCodigoRecuperacao("+5511956090706", "656412");
-	            Map<String, String> resultado = loginDao.validarCredenciais(email, senha);
-	            String nivelAcesso = resultado.get("nivelAcesso");
+		String senha = allRequestParam.get("senha");
+		String mensagem = "";
+		String cmd = allRequestParam.get("botao");
 
-	            if ("Login bem-sucedido".equals(resultado.get("mensagem"))) {
-	                session.setAttribute("usuarioLogado", email);
-	                session.setAttribute("nivelAcesso", nivelAcesso);
-	                return new ModelAndView("redirect:/index");
-	            } else if ("Conta bloqueada. Um código de recuperação foi enviado.".equals(resultado.get("mensagem"))) {
-	                // Se o login falhou por bloqueio de conta
-	                String codigoRecuperacao = loginDao.obterCodigoRecuperacao(email);
-	                String numeroTelefone = loginDao.obterNumeroTelefone(email); // Obtém o número de telefone
+		if ("Login".equals(cmd)) {
 
-	                // Envia o SMS com o código
-	                if (codigoRecuperacao != null && numeroTelefone != null) {
-	                    SMSService.enviarCodigoRecuperacao(numeroTelefone, codigoRecuperacao); // Envia SMS
-	                }
+			try {
+				// SMSService.enviarCodigoRecuperacao("+5511956090706", "656412");
+				Map<String, String> resultado = loginDao.validarCredenciais(email, senha);
+				String nivelAcesso = resultado.get("nivelAcesso");
 
-	                mensagem = "Conta bloqueada. Um código de recuperação foi enviado para o seu telefone.";
-	            } else {
-	                mensagem = resultado.get("mensagem");
-	            }
-	        } catch (Exception e) {
-	            mensagem = "Ocorreu um erro: " + e.getMessage();
-	        }
+				if ("Login bem-sucedido".equals(resultado.get("mensagem"))) {
+					session.setAttribute("usuarioLogado", email);
+					session.setAttribute("nivelAcesso", nivelAcesso);
+					return new ModelAndView("redirect:/index");
+				} else if ("Conta bloqueada. Um código de recuperação foi enviado.".equals(resultado.get("mensagem"))) {
+					// Se o login falhou por bloqueio de conta
+					String codigoRecuperacao = loginDao.obterCodigoRecuperacao(email);
+					String numeroTelefone = loginDao.obterNumeroTelefone(email); // Obtém o número de telefone
 
-	        model.addAttribute("errorMessage", mensagem);
-	        return new ModelAndView("login");
-	    } else if ("Recuperar a Senha".equals(cmd)) {
-	        return new ModelAndView("redirect:/recuperarsenha");
-	    } else {
-	        model.addAttribute("errorMessage", "Ação não reconhecida.");
-	        return new ModelAndView("login");
-	    }
+					// Envia o SMS com o código
+					if (codigoRecuperacao != null && numeroTelefone != null) {
+						SMSService.enviarCodigoRecuperacao(numeroTelefone, codigoRecuperacao); // Envia SMS
+					}
+
+					mensagem = "Conta bloqueada. Um código de recuperação foi enviado para o seu telefone.";
+				} else {
+					mensagem = resultado.get("mensagem");
+				}
+			} catch (Exception e) {
+				mensagem = "Ocorreu um erro: " + e.getMessage();
+			}
+
+			model.addAttribute("errorMessage", mensagem);
+			return new ModelAndView("login");
+		} else if ("Recuperar a Senha".equals(cmd)) {
+			return new ModelAndView("redirect:/recuperarsenha");
+		} else {
+			model.addAttribute("errorMessage", "Ação não reconhecida.");
+			return new ModelAndView("login");
+		}
 	}
-
 
 }

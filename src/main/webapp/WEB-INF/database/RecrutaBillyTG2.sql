@@ -217,6 +217,57 @@ PRIMARY KEY (codigo),
 FOREIGN KEY (CPF) REFERENCES funcionario(CPF)
 )
 GO
+CREATE TABLE patente(
+codigo              INT IDENTITY(1,1)   NOT NULL,
+nome                VARCHAR(100)	    NOT NULL,
+instituicao		    VARCHAR(150)        NULL,
+PRIMARY KEY (codigo)
+);
+GO
+CREATE TABLE tarjeta (
+codigo					INT				NOT NULL IDENTITY (1,1),
+nome					VARCHAR(100)	NOT NULL,
+categoriaProduto		INT				NOT NULL,
+descricao				VARCHAR(200)	NOT NULL,
+valorProduto			DECIMAL(10,2)	NOT NULL,
+status					VARCHAR(100)	NOT NULL,
+refEstoque				VARCHAR(50)		NULL,
+quantidade				INT				NOT NULL,
+data					DATE			NULL,
+tamanhoTarjeta		   VARCHAR(50)		NULL,
+tamanhoLetra			VARCHAR(50)		NULL,
+espacoEntreLinhas		VARCHAR(50)		NULL,
+fardaColete				VARCHAR(50)		NULL,
+formato					VARCHAR(50)		NULL,
+corBordas				VARCHAR(30)		NULL,
+corFundo				VARCHAR(30)		NULL,
+corLetras				VARCHAR(30)		NULL,
+corTipoSanguineo		VARCHAR(30)		NULL,
+corFatorRH				VARCHAR(30)		NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (categoriaProduto) REFERENCES categoriaProduto(codigo)  
+);
+GO
+CREATE TABLE nomesTarjetas (
+codigo				INT				NOT NULL IDENTITY (1,1),
+nome				VARCHAR(100)	NOT NULL,
+tipoSanguineo		VARCHAR(3)		NOT NULL,
+fatorRH				VARCHAR(10)		NOT NULL,
+patente				INT				NOT NULL,
+quantidade			INT				NOT NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (patente) REFERENCES patente(codigo) 
+);
+GO
+CREATE TABLE tarjetasNomes(
+codigo				    INT				NOT NULL IDENTITY (1,1),
+codigoTarjeta		INT				NOT NULL,
+codigoNomeTarjeta	INT NOT NULL
+PRIMARY KEY(codigo,codigoTarjeta, codigoNomeTarjeta)
+FOREIGN KEY(codigoTarjeta) REFERENCES tarjeta(codigo),
+FOREIGN KEY(codigoNomeTarjeta) REFERENCES nomesTarjetas(codigo)
+);
+GO
 -- Insert Usuario de Teste
 INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao) VALUES
 ('25525320045', 'Administrador', 'admin', 'admin', 'admin', '2000-01-01', '12345678901', 'Gerente', '08:00 às 17:00', 5000.0, '2020-01-01', NULL, NULL),
@@ -414,6 +465,42 @@ VALUES
 ('Pagamento de Impostos', 'Saída', 'Boleto', '2024-11-05', '2024-11-15', 1500.00, 'Pendente'),
 ('Serviço de Consultoria', 'Saída', 'Boleto', '2024-11-10', NULL, 1300.00, 'Pendente'),
 ('Serviços de Limpeza', 'Saída', 'Boleto', '2024-11-15', '2024-11-25', 250.00, 'Pendente');
+GO
+INSERT INTO patente (nome, instituicao) VALUES 
+('CORONEL','Policia Militar'),
+('TENENTE','Policia Militar'), 
+('CORONEL','Policia Militar'),
+('MAJOR','Policia Militar'),
+('CAPITÃO','Policia Militar'),
+('1° TENENTE','Policia Militar'),
+('2° TENENTE','Policia Militar'),
+('ASPIRANTE','Policia Militar'),
+('SUBTENENTE','Policia Militar'),
+('1° SARJENTO','Policia Militar'),
+('2° SARJENTO','Policia Militar'),
+('3° SARJENTO','Policia Militar'),
+('CABO','Policia Militar'),
+('SOLDADO','Policia Militar')
+GO
+INSERT INTO tarjeta (nome,categoriaProduto, descricao,valorProduto, status,refEstoque,quantidade,data,tamanhoTarjeta,
+tamanhoLetra,espacoEntreLinhas,fardaColete,formato,corBordas,corFundo,corLetras,corTipoSanguineo,corFatorRH) VALUES 
+('Tarjeta A', 1, 'Tarjeta para uso geral.', 15.99, 'Disponível', 'REF123', 100, '2024-10-01', '10x20', '9', '1.5', 'Farda', 'Retangular', 'Preto', 'Branco', 'Vermelho', 'Azul', 'Verde'),
+('Tarjeta B', 1, 'Tarjeta especial para eventos.', 20.50, 'Disponível', 'REF124', 50, '2024-10-02', '5x7', '9', '1.0', 'Colete', 'Quadrado', 'Verde', 'Amarelo', 'Azul', 'Verde', 'Amarelo'),
+('Tarjeta C', 2, 'Tarjeta para uso militar.', 25.00, 'Em falta', 'REF125', 0, '2024-10-03', '2x10', '9', '2.0', 'Farda', 'Oval', 'Cinza', 'Preto', 'Branco', 'Preto', 'Cinza');
+GO
+INSERT INTO nomesTarjetas (nome, tipoSanguineo, fatorRH, patente, quantidade) 
+VALUES 
+('João da Silva', 'A', 'Positivo', 1, 10),
+('Maria de Souza', 'O', 'Negativo', 2, 5),
+('Carlos Pereira', 'B', 'Positivo', 1, 15),
+('Ana Clara', 'AB', 'Negativo', 3, 8);
+GO
+INSERT INTO tarjetasNomes (codigoTarjeta, codigoNomeTarjeta) 
+VALUES 
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 4);
 GO
 CREATE PROCEDURE sp_iud_fornecedor
     @acao CHAR(1),
@@ -1314,7 +1401,145 @@ BEGIN
     END
 END
 GO
-
+CREATE PROCEDURE sp_iud_tarjeta
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @nome VARCHAR(100),
+    @categoriaProduto INT,
+    @descricao VARCHAR(200),
+    @valorProduto DECIMAL(10,2),
+    @status VARCHAR(100),
+    @quantidade INT = NULL,
+    @refEstoque VARCHAR(50),
+    @data DATE,
+    @tamanhoTarjeta VARCHAR(50) = NULL,
+    @tamanhoLetra VARCHAR(50) = NULL,
+    @espacoEntreLinhas VARCHAR(50) = NULL,
+    @fardaColete VARCHAR(50) = NULL,
+    @formato VARCHAR(50) = NULL,
+    @corBordas VARCHAR(30) = NULL,
+    @corFundo VARCHAR(30) = NULL,
+    @corLetras VARCHAR(30) = NULL,
+    @corTipoSanguineo VARCHAR(30) = NULL,
+    @corFatorRH VARCHAR(30) = NULL,
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    -- Verifica a ação a ser executada
+    IF (@acao = 'I')
+    BEGIN
+        -- Verifica se o código já existe na tabela tarjeta
+        IF EXISTS (SELECT 1 FROM tarjeta WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código já existe. Não é possível inserir a tarjeta.', 16, 1);
+            SET @saida = 'Código já existe. Não é possível inserir a tarjeta.';
+            RETURN;
+        END
+        -- Insere a nova tarjeta
+        INSERT INTO tarjeta (nome, categoriaProduto, descricao, valorProduto, status, quantidade, refEstoque, data,
+                             tamanhoTarjeta, tamanhoLetra, espacoEntreLinhas, fardaColete, formato,
+                             corBordas, corFundo, corLetras, corTipoSanguineo, corFatorRH)
+        VALUES (@nome, @categoriaProduto, @descricao, @valorProduto, @status, @quantidade, @refEstoque, 
+                GETDATE(), @tamanhoTarjeta, @tamanhoLetra, @espacoEntreLinhas, @fardaColete, @formato,
+                @corBordas, @corFundo, @corLetras, @corTipoSanguineo, @corFatorRH);
+        SET @saida = 'Tarjeta inserida com sucesso';
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Atualiza a tarjeta existente
+        UPDATE tarjeta
+        SET nome = @nome, categoriaProduto = @categoriaProduto, descricao = @descricao, valorProduto = @valorProduto, 
+            status = @status, quantidade = @quantidade, refEstoque = @refEstoque, data = @data,
+            tamanhoTarjeta = @tamanhoTarjeta, tamanhoLetra = @tamanhoLetra, espacoEntreLinhas = @espacoEntreLinhas, 
+            fardaColete = @fardaColete, formato = @formato, corBordas = @corBordas, corFundo = @corFundo,
+            corLetras = @corLetras, corTipoSanguineo = @corTipoSanguineo, corFatorRH = @corFatorRH
+        WHERE codigo = @codigo;
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Tarjeta não encontrada.', 16, 1);
+            SET @saida = 'Tarjeta não encontrada.';
+            RETURN;
+        END
+        SET @saida = 'Tarjeta alterada com sucesso';
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        -- Exclui a tarjeta
+        DELETE FROM tarjeta WHERE codigo = @codigo;
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Tarjeta não encontrada.', 16, 1);
+            SET @saida = 'Tarjeta não encontrada.';
+            RETURN;
+        END
+        SET @saida = 'Tarjeta excluída com sucesso';
+    END
+    ELSE
+    BEGIN
+        -- Ação inválida
+        RAISERROR('Operação inválida', 16, 1);
+        SET @saida = 'Operação inválida';
+        RETURN;
+    END
+END
+GO
+CREATE PROCEDURE sp_iud_nomesTarjetas
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @nome VARCHAR(100),
+    @tipoSanguineo VARCHAR(3),
+    @fatorRH VARCHAR(10),
+    @patente INT,
+    @quantidade INT,
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    -- Verifica a ação a ser executada
+    IF (@acao = 'I')
+    BEGIN
+        -- Insere um novo registro em nomesTarjetas
+        INSERT INTO nomesTarjetas (nome, tipoSanguineo, fatorRH, patente, quantidade)
+        VALUES (@nome, @tipoSanguineo, @fatorRH, @patente, @quantidade);
+        SET @saida = 'Nome da tarjeta inserido com sucesso';
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Atualiza o registro existente em nomesTarjetas
+        UPDATE nomesTarjetas
+        SET nome = @nome, tipoSanguineo = @tipoSanguineo, fatorRH = @fatorRH,
+            patente = @patente, quantidade = @quantidade
+        WHERE codigo = @codigo;
+        
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Nome da tarjeta não encontrado.', 16, 1);
+            SET @saida = 'Nome da tarjeta não encontrado.';
+            RETURN;
+        END
+        SET @saida = 'Nome da tarjeta atualizado com sucesso';
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        -- Exclui o registro em nomesTarjetas
+        DELETE FROM nomesTarjetas WHERE codigo = @codigo;
+        
+        IF @@ROWCOUNT = 0
+        BEGIN
+            RAISERROR('Nome da tarjeta não encontrado.', 16, 1);
+            SET @saida = 'Nome da tarjeta não encontrado.';
+            RETURN;
+        END
+        SET @saida = 'Nome da tarjeta excluído com sucesso';
+    END
+    ELSE
+    BEGIN
+        -- Ação inválida
+        RAISERROR('Operação inválida', 16, 1);
+        SET @saida = 'Operação inválida';
+        RETURN;
+    END
+END
+GO
 
 CREATE PROCEDURE sp_iud_endereco
     @acao CHAR(1),
@@ -1423,6 +1648,66 @@ BEGIN
         -- Excluir categoria
         DELETE FROM categoriaProduto WHERE codigo = @codigo
         SET @saida = 'Categoria excluída com sucesso'
+    END
+    -- Caso a ação seja inválida
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
+GO
+CREATE PROCEDURE sp_iud_patente
+    @acao CHAR(1),
+    @codigo INT NULL,
+    @nome VARCHAR(100),
+	@instituicao VARCHAR(150),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    -- Inserir nova categoria
+    IF (@acao = 'I')
+    BEGIN
+        -- Verificar se o código já existe
+        IF EXISTS (SELECT 1 FROM patente WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código já existe. Não é possível inserir a categoria.', 16, 1)
+            RETURN
+        END     
+        -- Inserir nova categoria
+        INSERT INTO patente (nome,instituicao)
+        VALUES (@nome,@instituicao)
+        SET @saida = 'Patente inserida com sucesso'
+    END
+
+    -- Atualizar categoria existente
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Verificar se o código existe
+        IF NOT EXISTS (SELECT 1 FROM patente WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código não existe. Não é possível atualizar a categoria.', 16, 1)
+            RETURN
+        END
+        -- Atualizar categoria
+        UPDATE patente
+        SET nome = @nome, instituicao = @instituicao
+        WHERE codigo = @codigo
+        SET @saida = 'Categoria alterada com sucesso'
+    END
+    -- Excluir categoria
+    ELSE IF (@acao = 'D')
+    BEGIN
+        -- Verificar se o código existe
+        IF NOT EXISTS (SELECT 1 FROM patente WHERE codigo = @codigo)
+        BEGIN
+            RAISERROR('Código não existe. Não é possível excluir a categoria.', 16, 1)
+            RETURN
+        END
+
+        -- Excluir categoria
+        DELETE FROM patente WHERE codigo = @codigo
+        SET @saida = 'Patente excluída com sucesso'
     END
     -- Caso a ação seja inválida
     ELSE
@@ -1610,6 +1895,7 @@ RETURN
         CPF = @CPF
 );
 GO
+
 CREATE FUNCTION fn_listar_funcionario_email(@Email VARCHAR(255))
 RETURNS TABLE
 AS
@@ -1761,6 +2047,54 @@ SELECT
     valor,
     estado
 FROM despesa;
+GO
+CREATE VIEW v_patente AS
+SELECT 
+    codigo,
+    nome,
+    instituicao
+FROM patente;
+GO
+CREATE VIEW v_tarjeta AS
+SELECT 
+    t.codigo,
+    t.nome,
+    t.categoriaProduto AS categoria,
+    cp.nome AS nomeCategoria,
+    t.descricao,
+    t.valorProduto,
+    t.status,
+    t.refEstoque,
+    t.quantidade,
+    t.data,
+    t.tamanhoTarjeta,
+    t.tamanhoLetra,
+    t.espacoEntreLinhas,
+    t.fardaColete,
+    t.formato,
+    t.corBordas,
+    t.corFundo,
+    t.corLetras,
+    t.corTipoSanguineo,
+    t.corFatorRH
+FROM 
+    tarjeta t
+JOIN 
+    categoriaProduto cp ON t.categoriaProduto = cp.codigo;
+GO
+CREATE VIEW v_nomeTarjeta AS
+SELECT 
+    nt.codigo, 
+    nt.nome, 
+    nt.tipoSanguineo, 
+    nt.fatorRH, 
+    nt.quantidade, 
+    nt.patente AS codigoPatente,
+    p.nome AS nomePatente 
+FROM 
+    nomesTarjetas nt
+INNER JOIN 
+    patente p ON nt.patente = p.codigo;
 GO
 CREATE TRIGGER t_valortotal ON produtosPedido
 AFTER INSERT, UPDATE, DELETE
@@ -2960,7 +3294,7 @@ BEGIN
     RETURN;
 END;
 GO
---SELECT * FROM funcionario
+--SELECT * FROM tarjeta
 
 --UPDATE funcionario
 --SET codigoRecuperacao = '654321',  -- Novo código de recuperação
