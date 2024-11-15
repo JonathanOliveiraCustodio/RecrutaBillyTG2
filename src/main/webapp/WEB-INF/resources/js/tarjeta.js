@@ -1,4 +1,4 @@
-// categoriaProduto.js
+// tarjeta.js
 
 function editarTarjeta(codigo) {
 	window.location.href = 'tarjeta?cmd=alterar&codigo=' + codigo;
@@ -7,6 +7,12 @@ function editarTarjeta(codigo) {
 function excluirTarjeta(codigo) {
 	if (confirm("Tem certeza que deseja excluir esta Tarjeta?")) {
 		window.location.href = 'tarjeta?cmd=excluir&codigo=' + codigo;
+	}
+}
+
+function excluirNomeTarjeta(codigo) {
+	if (confirm("Tem certeza que deseja excluir esta Nome Tarjeta?")) {
+		window.location.href = 'tarjeta?cmd=excluirNomeTarjeta&codigo=' + codigo;
 	}
 }
 
@@ -67,8 +73,8 @@ function validarFormulario(event) {
 		{ id: "status", nome: "status" },
 		{ id: "quantidade", nome: "Quantidade" },
 		{ id: "refEstoque", nome: "Referência no Estoque" },
-		{ id: "data", nome: "Data" },
-
+		{ id: "data", nome: "Data" }
+		
 	];
 
 	if (botao === "Cadastrar" || botao === "Alterar") {
@@ -116,6 +122,43 @@ function validarFormulario(event) {
 		}
 	}
 	return true;
+}
+
+function validarNovo() {
+    const novoNome = document.querySelector('[name="novoNome"]');
+    const novoTipoSanguineo = document.querySelector('[name="novoTipoSanguineo"]');
+    const novoFatorRH = document.querySelector('[name="novoFatorRH"]');
+    const novoQuantidade = document.querySelector('[name="novoQuantidade"]');
+    const novoPatente = document.querySelector('[name="novoPatente"]');
+
+    // Verifica se algum campo obrigatório está vazio
+    if (!novoNome.value.trim()) {
+        alert("Por favor, preencha o campo Nome.");
+        novoNome.focus();
+        return false;
+    }
+    if (!novoTipoSanguineo.value) {
+        alert("Por favor, selecione um Tipo Sanguíneo.");
+        novoTipoSanguineo.focus();
+        return false;
+    }
+    if (!novoFatorRH.value) {
+        alert("Por favor, selecione o Fator RH.");
+        novoFatorRH.focus();
+        return false;
+    }
+    if (!novoQuantidade.value || novoQuantidade.value <= 0) {
+        alert("Por favor, insira uma Quantidade válida.");
+        novoQuantidade.focus();
+        return false;
+    }
+    if (!novoPatente.value) {
+        alert("Por favor, selecione uma Patente.");
+        novoPatente.focus();
+        return false;
+    }
+
+    return true; // Permite o envio se todos os campos estão preenchidos
 }
 
 function formatarMoeda(campo) {

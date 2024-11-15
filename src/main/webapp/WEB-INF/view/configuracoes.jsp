@@ -27,6 +27,23 @@
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
 					<h1 class="display-6 fw-bold">Configurações Operacionais</h1>
+
+					<div align="center">
+						<!-- Mensagem de Erro -->
+						<c:if test="${not empty erro}">
+							<div class="alert alert-danger fs-5" role="alert">
+								<c:out value="${erro}" />
+							</div>
+						</c:if>
+
+						<!-- Mensagem de Sucesso -->
+						<c:if test="${not empty saida}">
+							<div class="alert alert-success fs-5" role="alert">
+								<c:out value="${saida}" />
+							</div>
+						</c:if>
+					</div>
+
 					<form action="configuracoes" method="post"
 						onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
 						<!-- Campo para definir a quantidade máxima de orçamentos em aberto -->
@@ -121,22 +138,6 @@
 					</form>
 				</div>
 			</div>
-		</c:if>
-	</div>
-
-	<div class="text-center">
-		<c:if test="${not empty erro}">
-			<h2 class="text-danger">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-
-	<div class="text-center">
-		<c:if test="${not empty saida}">
-			<h2 class="text-success">
-				<b><c:out value="${saida}" /></b>
-			</h2>
 		</c:if>
 	</div>
 

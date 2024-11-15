@@ -25,6 +25,24 @@
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
 					<h1 class="display-6 fw-bold">Manutenção de Cliente</h1>
+
+					<div align="center">
+						<!-- Mensagem de Erro -->
+						<c:if test="${not empty erro}">
+							<div class="alert alert-danger fs-5" role="alert">
+								<c:out value="${erro}" />
+							</div>
+						</c:if>
+
+						<!-- Mensagem de Sucesso -->
+						<c:if test="${not empty saida}">
+							<div class="alert alert-success fs-5" role="alert">
+								<c:out value="${saida}" />
+							</div>
+						</c:if>
+					</div>
+
+
 					<form action="cliente" method="post" class="row g-3 mt-3"
 						onsubmit="return validarFormulario(event);">
 						<!-- Primeira Linha: Código, Nome, Telefone -->
@@ -70,8 +88,8 @@
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
-									<input type="email" id="email" name="email" class="form-control"
-										placeholder="Email" maxlength="100"
+									<input type="email" id="email" name="email"
+										class="form-control" placeholder="Email" maxlength="100"
 										value='<c:out value="${cliente.email }"></c:out>'> <label
 										for="email">Email</label>
 								</div>
@@ -189,9 +207,14 @@
 						<!-- Linha dos Botões -->
 						<div class="row g-3 mt-3">
 							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success btn-align">
+								<button type="submit" id="botao" name="botao" value="Cadastrar"
+									class="btn btn-success btn-align" onclick="exibirSpinner()">
+									<span class="spinner-border spinner-border-sm d-none"
+										role="status" aria-hidden="true" id="spinner"></span>
+									Cadastrar
+								</button>
 							</div>
+
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Alterar"
 									class="btn btn-warning btn-align">
@@ -200,7 +223,7 @@
 								<input type="submit" id="botao" name="botao" value="Excluir"
 									class="btn btn-danger btn-align">
 							</div>
-							<div class="col-md-2 d-grid text-center"></div>
+
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao" value="Listar"
 									class="btn btn-dark btn-align">
@@ -209,26 +232,81 @@
 								<input type="submit" id="botao" name="botao" value="Limpar"
 									class="btn btn-secondary btn-align">
 							</div>
+
+							<div class="col-md-2 d-grid text-center">
+								<!-- Botão para abrir o modal de visualização de material -->
+								<button type="button" class="btn btn-info btn-align"
+									onclick="abrirModalCliente('${cliente.codigo}')">Ver
+									Detalhes</button>
+							</div>
 						</div>
 					</form>
+
+					<div class="modal fade" id="clienteModal" tabindex="-1"
+						aria-labelledby="clienteModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="clienteModalLabel">Detalhes do
+										Cliente</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>
+										<strong>Código:</strong> <span id="modalCodigo"></span>
+									</p>
+									<p>
+										<strong>Nome:</strong> <span id="modalNome"></span>
+									</p>
+									<p>
+										<strong>Telefone:</strong> <span id="modalTelefone"></span>
+									</p>
+									<p>
+										<strong>Email:</strong> <span id="modalEmail"></span>
+									</p>
+									<p>
+										<strong>Tipo de Documento:</strong> <span id="modalTipo"></span>
+									</p>
+									<p>
+										<strong>Documento:</strong> <span id="modalDocumento"></span>
+									</p>
+									<p>
+										<strong>CEP:</strong> <span id="modalCEP"></span>
+									</p>
+									<p>
+										<strong>Logradouro:</strong> <span id="modalLogradouro"></span>
+									</p>
+									<p>
+										<strong>Bairro:</strong> <span id="modalBairro"></span>
+									</p>
+									<p>
+										<strong>UF:</strong> <span id="modalUF"></span>
+									</p>
+									<p>
+										<strong>Localidade:</strong> <span id="modalLocalidade"></span>
+									</p>
+									<p>
+										<strong>Número:</strong> <span id="modalNumero"></span>
+									</p>
+									<p>
+										<strong>Complemento:</strong> <span id="modalComplemento"></span>
+									</p>
+									<p>
+										<strong>Data de Nascimento:</strong> <span
+											id="modalDataNascimento"></span>
+									</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
-		</c:if>
-	</div>
-
-	<div align="center">
-		<c:if test="${not empty erro}">
-			<h2 style="color: black;">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-
-	<div align="center">
-		<c:if test="${not empty saida }">
-			<h2 style="color: black;">
-				<b><c:out value="${saida}" /></b>
-			</h2>
 		</c:if>
 	</div>
 

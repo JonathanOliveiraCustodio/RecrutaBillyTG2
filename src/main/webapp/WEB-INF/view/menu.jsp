@@ -79,9 +79,9 @@
 							aria-expanded="false"> Gestão de Estoque </a>
 							<ul class="dropdown-menu" aria-labelledby="financeDropdown">
 								<li><a class="dropdown-item"
-									href="${pageContext.request.contextPath}/produto">Produtos</a></li>
+									href="${pageContext.request.contextPath}/produto">Produto</a></li>
 								<li><a class="dropdown-item"
-									href="${pageContext.request.contextPath}/tarjeta">Tarjetas</a></li>
+									href="${pageContext.request.contextPath}/tarjeta">Tarjeta</a></li>
 							</ul></li>
 							
 						<li class="nav-item"><a

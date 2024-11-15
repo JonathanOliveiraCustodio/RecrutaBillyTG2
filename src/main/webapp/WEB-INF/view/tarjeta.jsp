@@ -28,18 +28,20 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Manutenção de Tarjetas</h1>
+
 				<div align="center">
+					<!-- Mensagem de Erro -->
 					<c:if test="${not empty erro}">
-						<h2 style="color: #dc3545;">
-							<b><c:out value="${erro}" /></b>
-						</h2>
+						<div class="alert alert-danger fs-5" role="alert">
+							<c:out value="${erro}" />
+						</div>
 					</c:if>
-				</div>
-				<div align="center">
+
+					<!-- Mensagem de Sucesso -->
 					<c:if test="${not empty saida}">
-						<h2 style="color: black;">
-							<b><c:out value="${saida}" /></b>
-						</h2>
+						<div class="alert alert-success fs-5" role="alert">
+							<c:out value="${saida}" />
+						</div>
 					</c:if>
 				</div>
 
@@ -247,114 +249,106 @@
 					<div
 						class="container py-4 text-center d-flex justify-content-center"
 						align="center">
-							<!-- Adicione o método e a ação do formulário -->
-							<div class="table-responsive">
-								<table class="table table-striped">
-									<thead>
+						<div class="table-responsive w-100">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="titulo-tabela" colspan="10"
+											style="text-align: center; font-size: 35px;">Lista de
+											Nomes Tarjetas</th>
+									</tr>
+									<tr class="table-dark">
+										<th>Código</th>
+										<th>Nome</th>
+										<th>Tipo Sanguíneo</th>
+										<th>Fator RH</th>
+										<th>Quantidade</th>
+										<th>Patente</th>
+										<th>Remover</th>
+									</tr>
+								</thead>
+								<tbody class="table-group-divider">
+									<c:forEach var="nt" items="${nomesTarjetas}" varStatus="status">
 										<tr>
-											<th class="titulo-tabela" colspan="7"
-												style="text-align: center; font-size: 35px;">Lista de
-												Nomes</th>
-										</tr>
-										<tr class="table-dark">
-											<th>Posto/Graduação</th>
-											<th>Nome</th>
-											<th>Tipo Sanguíneo</th>
-											<th>Fator RH</th>
-											<th>Quantidade</th>
-											<th>Ação</th>
-										</tr>
-									</thead>
-									<tbody id="registroTabela">
-										<c:forEach var="registro" items="${registros}">
-											<tr>
-												<td><input type="text"
-													name="registros[${loop.index}].postoGraduacao"
-													value="<c:out value='${registro.postoGraduacao}'/>"
-													class="form-control" /></td>
-												<td><input type="text"
-													name="registros[${loop.index}].nome"
-													value="<c:out value='${registro.nome}'/>"
-													class="form-control" /></td>
-												<td><select
-													name="registros[${loop.index}].tipoSanguineo"
-													class="form-select">
-														<option value="A+"
-															<c:if test="${registro.tipoSanguineo == 'A+'}">selected</c:if>>A+</option>
-														<option value="A-"
-															<c:if test="${registro.tipoSanguineo == 'A-'}">selected</c:if>>A-</option>
-														<option value="B+"
-															<c:if test="${registro.tipoSanguineo == 'B+'}">selected</c:if>>B+</option>
-														<option value="B-"
-															<c:if test="${registro.tipoSanguineo == 'B-'}">selected</c:if>>B-</option>
-														<option value="AB+"
-															<c:if test="${registro.tipoSanguineo == 'AB+'}">selected</c:if>>AB+</option>
-														<option value="AB-"
-															<c:if test="${registro.tipoSanguineo == 'AB-'}">selected</c:if>>AB-</option>
-														<option value="O+"
-															<c:if test="${registro.tipoSanguineo == 'O+'}">selected</c:if>>O+</option>
-														<option value="O-"
-															<c:if test="${registro.tipoSanguineo == 'O-'}">selected</c:if>>O-</option>
-												</select></td>
-												<td><select name="registros[${loop.index}].fatorRH"
-													class="form-select">
-														<option value="Positivo"
-															<c:if test="${registro.fatorRH == 'Positivo'}">selected</c:if>>Positivo</option>
-														<option value="Negativo"
-															<c:if test="${registro.fatorRH == 'Negativo'}">selected</c:if>>Negativo</option>
-												</select></td>
-												<td><input type="number"
-													name="registros[${loop.index}].quantidade" min="1"
-													value="<c:out value='${registro.quantidade}'/>"
-													class="form-control" /></td>
-												<td><button type="button" class="btn btn-danger"
-														onclick="removerLinha(this)">Remover</button></td>
-											</tr>
-										</c:forEach>
 
-										<!-- Linha para adicionar novos registros -->
-										<tr>
-											<td>
-												<div class="form-floating">
-													<select name="novoRegistro.postoGraduacao"
-														class="form-select">
-														<option value="">Escolha uma Patente</option>
-														<c:forEach var="patente" items="${patentes}">
-															<option value="${patente.codigo}">${patente.nome}</option>
-														</c:forEach>
-													</select> <label for="postoGraduacao">Posto ou Graduação</label>
-												</div>
-											</td>
-											<td><input type="text" name="novoRegistro.nome"
-												class="form-control" placeholder="Nome" /></td>
-											<td><select name="novoRegistro.tipoSanguineo"
-												class="form-select">
-													<option value="">Escolha um Tipo Sanguíneo</option>
-													<option value="A+">A+</option>
-													<option value="A-">A-</option>
-													<option value="B+">B+</option>
-													<option value="B-">B-</option>
-													<option value="AB+">AB+</option>
-													<option value="AB-">AB-</option>
-													<option value="O+">O+</option>
-													<option value="O-">O-</option>
+											<td><input type="text" name="codigo[${status.index}]"
+												value="${nt.codigo}" readonly style="width: 80px;" /></td>
+											<td><input type="text" name="nome[${status.index}]"
+												value="${nt.nome}" /></td>
+											<td><select name="tipoSanguineo[${status.index}]"
+												class="form-select" style="min-width: 80px;">
+													<option value=""></option>
+													<option value="A"
+														${nt.tipoSanguineo == 'A' ? 'selected' : ''}>A</option>
+													<option value="B"
+														${nt.tipoSanguineo == 'B' ? 'selected' : ''}>B</option>
+													<option value="AB"
+														${nt.tipoSanguineo == 'AB' ? 'selected' : ''}>AB</option>
+													<option value="O"
+														${nt.tipoSanguineo == 'O' ? 'selected' : ''}>O</option>
 											</select></td>
-											<td><select name="novoRegistro.fatorRH"
-												class="form-select">
+											<td><select name="fatorRH[${status.index}]"
+												class="form-select" style="min-width: 80px;">
 													<option value="">Escolha um Fator RH</option>
-													<option value="Positivo">Positivo</option>
-													<option value="Negativo">Negativo</option>
+													<option value="Positivo"
+														${nt.fatorRH == 'Positivo' ? 'selected' : ''}>Positivo</option>
+													<option value="Negativo"
+														${nt.fatorRH == 'Negativo' ? 'selected' : ''}>Negativo</option>
 											</select></td>
-											<td><input type="number" name="novoRegistro.quantidade"
-												min="1" class="form-control" placeholder="Quantidade" /></td>
-											<td>
-												<button type="button" class="btn btn-success"
-													onclick="adicionarLinha()">Adicionar</button>
+											<td><input type="number"
+												name="quantidade[${status.index}]" value="${nt.quantidade}"
+												style="width: 80px;" /></td>
+											<td><select name="patente[${status.index}]"
+												class="form-select">
+													<c:forEach var="pat" items="${patentes}">
+														<option value="${pat.codigo}"
+															${nt.patente.codigo eq pat.codigo ? 'selected' : ''}>${pat.nome}</option>
+													</c:forEach>
+											</select></td>
+											<td style="text-align: center;">
+												<button type="button" class="btn btn-danger"
+													value="excluirNomeTarjeta"
+													onclick="excluirNomeTarjeta('${nt.codigo}')">Remover</button>
 											</td>
 										</tr>
-									</tbody>
-								</table>
-							</div>
+									</c:forEach>
+									<!-- Linha para adicionar um novo registro -->
+									<tr>
+										<td colspan="1" style="text-align: center;">
+											<button type="submit" class="btn btn-success" name="botao"
+												value="Novo" onclick="return validarNovo()">Novo</button>
+
+										</td>
+										<td><input type="text" name="novoNome"
+											placeholder="Novo Nome" /></td>
+										<td><select name="novoTipoSanguineo" class="form-select"
+											style="min-width: 80px;">
+												<option value="">Tipo Sanguíneo</option>
+												<option value="A">A</option>
+												<option value="B">B</option>
+												<option value="AB">AB</option>
+												<option value="O">O</option>
+										</select></td>
+										<td><select name="novoFatorRH" class="form-select"
+											style="min-width: 80px;">
+												<option value="">Fator RH</option>
+												<option value="Positivo">Positivo</option>
+												<option value="Negativo">Negativo</option>
+										</select></td>
+										<td><input type="number" name="novoQuantidade"
+											placeholder="Quantidade" style="width: 80px;" /></td>
+										<td><select name="novoPatente" class="form-select">
+												<c:forEach var="pat" items="${patentes}">
+													<option value="${pat.codigo}">${pat.nome}</option>
+												</c:forEach>
+										</select></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<button type="submit" class="btn btn-primary" name="botao"
+								value="Salvar Todos">Salvar Todos</button>
+						</div>
 					</div>
 
 

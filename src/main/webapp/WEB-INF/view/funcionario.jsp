@@ -22,7 +22,22 @@
 		<c:if test="${nivelAcesso == 'admin'}">
 			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
-					<h3 class="display-6 fw-bold">Manutenção de Funcionário</h3>
+					<h1 class="display-6 fw-bold">Manutenção de Funcionário</h1>
+					<div align="center">
+						<!-- Mensagem de Erro -->
+						<c:if test="${not empty erro}">
+							<div class="alert alert-danger fs-5" role="alert">
+								<c:out value="${erro}" />
+							</div>
+						</c:if>
+
+						<!-- Mensagem de Sucesso -->
+						<c:if test="${not empty saida}">
+							<div class="alert alert-success fs-5" role="alert">
+								<c:out value="${saida}" />
+							</div>
+						</c:if>
+					</div>
 					<form action="funcionario" method="post"
 						class="row g-3 mt-3 justify-content-center"
 						onsubmit="return validarFormulario(event);">
@@ -227,20 +242,6 @@
 		</c:if>
 	</div>
 
-	<div align="center">
-		<c:if test="${not empty erro}">
-			<h2 style="color: black;">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-	<div align="center">
-		<c:if test="${not empty saida }">
-			<h2 style="color: black;">
-				<b><c:out value="${saida}" /></b>
-			</h2>
-		</c:if>
-	</div>
 	<div class="container py-4 text-center d-flex justify-content-center"
 		align="center">
 		<c:if test="${nivelAcesso == 'admin' && not empty funcionarios}">

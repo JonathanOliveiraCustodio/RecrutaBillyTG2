@@ -8,8 +8,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/styles.css">
-<script
-	src="${pageContext.request.contextPath}/resources/js/login.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/login.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -29,6 +28,21 @@
 				<h1 class="display-5 fw-bold">Sistema Gerencial Recruta Billy -
 					Login</h1>
 				<div class="container">
+					<div align="center">
+						<!-- Mensagem de Erro -->
+						<c:if test="${not empty erro}">
+							<div class="alert alert-danger fs-5" role="alert">
+								<c:out value="${erro}" />
+							</div>
+						</c:if>
+
+						<!-- Mensagem de Sucesso -->
+						<c:if test="${not empty saida}">
+							<div class="alert alert-success fs-5" role="alert">
+								<c:out value="${saida}" />
+							</div>
+						</c:if>
+					</div>
 					<form action="<c:url value='/login' />" method="post"
 						class="row g-3 mt-3 justify-content-center"
 						onsubmit="return validarFormulario(event);">
@@ -67,13 +81,7 @@
 							</div>
 						</div>
 					</form>
-					<c:if test="${not empty errorMessage}">
-						<div class="error-message">
-							<h2 class="text-danger">
-								<b><c:out value="${errorMessage}" /></b>
-							</h2>
-						</div>
-					</c:if>
+
 					<div>
 						<jsp:include page="footer.jsp" />
 					</div>

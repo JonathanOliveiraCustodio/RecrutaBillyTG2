@@ -30,6 +30,21 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Recuperação de Senha</h1>
+				<div align="center">
+					<!-- Mensagem de Erro -->
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger fs-5" role="alert">
+							<c:out value="${erro}" />
+						</div>
+					</c:if>
+
+					<!-- Mensagem de Sucesso -->
+					<c:if test="${not empty saida}">
+						<div class="alert alert-success fs-5" role="alert">
+							<c:out value="${saida}" />
+						</div>
+					</c:if>
+				</div>
 				<form action="recuperarsenha" method="post" class="row g-3 mt-3"
 					onsubmit="return validarFormulario(event);">
 					<!-- Primeira Linha: E-mail e CPF -->
@@ -124,21 +139,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<div align="center">
-		<c:if test="${not empty erro}">
-			<h2 style="color: #dc3545;">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-	<div align="center">
-		<c:if test="${not empty saida}">
-			<h2 style="color: #198754;">
-				<b><c:out value="${saida}" /></b>
-			</h2>
-		</c:if>
 	</div>
 	<div>
 		<jsp:include page="footer.jsp" />

@@ -26,6 +26,23 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Manutenção de Produto</h1>
+
+				<div align="center">
+					<!-- Mensagem de Erro -->
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger fs-5" role="alert">
+							<c:out value="${erro}" />
+						</div>
+					</c:if>
+
+					<!-- Mensagem de Sucesso -->
+					<c:if test="${not empty saida}">
+						<div class="alert alert-success fs-5" role="alert">
+							<c:out value="${saida}" />
+						</div>
+					</c:if>
+				</div>
+
 				<form action="produto" method="post"
 					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
 					<!-- Primeira Linha: Código, Nome, Categoria -->
@@ -59,18 +76,18 @@
 							</button>
 						</div>
 						<div class="col-md-4">
-								<div class="form-floating">
-									<select id="categoria" name="categoria" class="form-select">
-										<option value="0">Escolha uma Categoria</option>
-										<c:forEach var="c" items="${categorias }">
-											<option value="${c.codigo}"
-												<c:if test="${c.codigo eq produto.categoria.codigo}">selected</c:if>>
-												<c:out value="${c}" />
-											</option>
-										</c:forEach>
-									</select> <label for="categoria">Categoria</label>
-								</div>
+							<div class="form-floating">
+								<select id="categoria" name="categoria" class="form-select">
+									<option value="0">Escolha uma Categoria</option>
+									<c:forEach var="c" items="${categorias }">
+										<option value="${c.codigo}"
+											<c:if test="${c.codigo eq produto.categoria.codigo}">selected</c:if>>
+											<c:out value="${c}" />
+										</option>
+									</c:forEach>
+								</select> <label for="categoria">Categoria</label>
 							</div>
+						</div>
 					</div>
 
 					<!-- Segunda Linha: Descrição, Valor, Status -->
@@ -127,13 +144,13 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-								<div class="form-floating">
-									<input type="date" id="data" name="data"
-										class="form-control" placeholder="Data"
-										value='<c:out value="${produto.data}"></c:out>'>
-									<label for="data">Data</label>
-								</div>
+							<div class="form-floating">
+								<input type="date" id="data" name="data" class="form-control"
+									placeholder="Data"
+									value='<c:out value="${produto.data}"></c:out>'> <label
+									for="data">Data</label>
 							</div>
+						</div>
 					</div>
 
 					<!-- Linha dos Botões -->
@@ -161,20 +178,6 @@
 				</form>
 			</div>
 		</div>
-	</div>
-	<div align="center">
-		<c:if test="${not empty erro}">
-			<h2 style="color: #dc3545;">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-	<div align="center">
-		<c:if test="${not empty saida}">
-			<h2 style="color: black;">
-				<b><c:out value="${saida}" /></b>
-			</h2>
-		</c:if>
 	</div>
 
 	<div class="container py-4 text-center d-flex justify-content-center"
@@ -228,8 +231,7 @@
 								<td><c:out value="${p.status}" /></td>
 								<td><c:out value="${p.quantidade}" /></td>
 								<td><c:out value="${p.refEstoque}" /></td>
-								<td><fmt:formatDate value="${p.data}"
-										pattern="dd/MM/yyyy" /></td>
+								<td><fmt:formatDate value="${p.data}" pattern="dd/MM/yyyy" /></td>
 								<td>
 									<button
 										onclick="window.location.href='insumosProduto?produto=${p.codigo}'"

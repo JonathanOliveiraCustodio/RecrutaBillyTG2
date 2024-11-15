@@ -65,6 +65,73 @@ function excluirCliente(codigo) {
 	}
 }
 
+function abrirModalCliente(codigo) {
+	// Validação do código
+	if (codigo == 0 || codigo.trim() === "") {
+		alert("O código do cliente não pode estar vazio.");
+		return; // Interrompe a função se o código estiver vazio
+	}
+
+	// Seleciona os campos de entrada com os dados preenchidos no formulário
+	var codigoInput = document.getElementById('codigo');
+	var nomeInput = document.getElementById('nome');
+	var telefoneInput = document.getElementById('telefone');
+	var emailInput = document.getElementById('email');
+	var tipoSelect = document.getElementById('tipo');
+	var documentoInput = document.getElementById('documento');
+	var cepInput = document.getElementById('CEP');
+	var logradouroInput = document.getElementById('logradouro');
+	var bairroInput = document.getElementById('bairro');
+	var ufInput = document.getElementById('UF');
+	var localidadeInput = document.getElementById('localidade');
+	var numeroInput = document.getElementById('numero');
+	var complementoInput = document.getElementById('complemento');
+	var dataNascimentoInput = document.getElementById('dataNascimento');
+
+	// Função para formatar a data de "yyyy-MM-dd" para "dd/MM/yyyy"
+	function formatarData(data) {
+		var partesData = data.split("-");
+		return partesData[2] + "/" + partesData[1] + "/" + partesData[0];
+	}
+
+	// Preenche os dados no modal
+	document.getElementById('modalCodigo').innerText = codigoInput.value;
+	document.getElementById('modalNome').innerText = nomeInput.value;
+	document.getElementById('modalTelefone').innerText = telefoneInput.value;
+	document.getElementById('modalEmail').innerText = emailInput.value;
+
+	// Pega o texto do tipo de documento selecionado
+	var tipoNome = tipoSelect.options[tipoSelect.selectedIndex].text;
+	document.getElementById('modalTipo').innerText = tipoNome;
+
+	document.getElementById('modalDocumento').innerText = documentoInput.value;
+	document.getElementById('modalCEP').innerText = cepInput.value;
+	document.getElementById('modalLogradouro').innerText = logradouroInput.value;
+	document.getElementById('modalBairro').innerText = bairroInput.value;
+	document.getElementById('modalUF').innerText = ufInput.value;
+	document.getElementById('modalLocalidade').innerText = localidadeInput.value;
+	document.getElementById('modalNumero').innerText = numeroInput.value;
+	document.getElementById('modalComplemento').innerText = complementoInput.value;
+
+	// Formata a data de nascimento e preenche no modal
+	var dataFormatada = formatarData(dataNascimentoInput.value);
+	document.getElementById('modalDataNascimento').innerText = dataFormatada;
+
+	// Exibe o modal
+	let clienteModal = new bootstrap.Modal(document.getElementById('clienteModal'));
+	clienteModal.show();
+}
+
+
+function exibirSpinner() {
+	const spinner = document.getElementById("spinner");
+	const botao = document.getElementById("botao");
+
+	// Exibe o spinner e desativa o botão para evitar múltiplos envios
+	spinner.classList.remove("d-none");
+	botao.setAttribute("disabled", true);
+}
+
 function validarBusca() {
 	var codigo = document.getElementById("nome").value;
 	if (codigo.trim() === "") {
@@ -236,41 +303,41 @@ function validarIdadeMinima(dataNascimento) {
 
 
 function validarDataNascimento(dataNascimento) {
-    var hoje = new Date();
-    var nascimento = new Date(dataNascimento);
+	var hoje = new Date();
+	var nascimento = new Date(dataNascimento);
 
-    // Zera as horas, minutos e segundos de ambas as datas para comparar apenas as datas
-    hoje.setHours(0, 0, 0, 0);
-    nascimento.setHours(0, 0, 0, 0);
+	// Zera as horas, minutos e segundos de ambas as datas para comparar apenas as datas
+	hoje.setHours(0, 0, 0, 0);
+	nascimento.setHours(0, 0, 0, 0);
 
-    // A data de nascimento deve ser anterior ao dia de hoje
-    return nascimento < hoje;
+	// A data de nascimento deve ser anterior ao dia de hoje
+	return nascimento < hoje;
 }
 
 
 function validarIdade() {
-        var inputDataNascimento = document.getElementById('dataNascimento').value;
-        var dataNascimento = new Date(inputDataNascimento);
-        var dataAtual = new Date();
+	var inputDataNascimento = document.getElementById('dataNascimento').value;
+	var dataNascimento = new Date(inputDataNascimento);
+	var dataAtual = new Date();
 
-        // Calcula a diferença em anos
-        var idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
-        var mesAtual = dataAtual.getMonth() - dataNascimento.getMonth();
-        var diaAtual = dataAtual.getDate() - dataNascimento.getDate();
+	// Calcula a diferença em anos
+	var idade = dataAtual.getFullYear() - dataNascimento.getFullYear();
+	var mesAtual = dataAtual.getMonth() - dataNascimento.getMonth();
+	var diaAtual = dataAtual.getDate() - dataNascimento.getDate();
 
-        // Ajusta a idade se o aniversário ainda não aconteceu neste ano
-        if (mesAtual < 0 || (mesAtual === 0 && diaAtual < 0)) {
-            idade--;
-        }
+	// Ajusta a idade se o aniversário ainda não aconteceu neste ano
+	if (mesAtual < 0 || (mesAtual === 0 && diaAtual < 0)) {
+		idade--;
+	}
 
-        // Verifica se é maior de 18 anos
-        if (idade < 18) {
-            alert('O cliente deve ter mais de 18 anos.');
-            return false; // Impede o envio do formulário
-        }
+	// Verifica se é maior de 18 anos
+	if (idade < 18) {
+		alert('O cliente deve ter mais de 18 anos.');
+		return false; // Impede o envio do formulário
+	}
 
-        return true; // Prossegue com o envio se a validação estiver correta
-    }
+	return true; // Prossegue com o envio se a validação estiver correta
+}
 
 function redirectToWhatsApp() {
 	// Obtém o valor do campo de telefone

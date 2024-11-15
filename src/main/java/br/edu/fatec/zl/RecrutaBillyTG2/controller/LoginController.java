@@ -62,12 +62,12 @@ public class LoginController {
 				mensagem = "Ocorreu um erro: " + e.getMessage();
 			}
 
-			model.addAttribute("errorMessage", mensagem);
+			model.addAttribute("erro", mensagem);
 			return new ModelAndView("login");
 		} else if ("Recuperar a Senha".equals(cmd)) {
 			return new ModelAndView("redirect:/recuperarsenha");
 		} else {
-			model.addAttribute("errorMessage", "Ação não reconhecida.");
+			model.addAttribute("erro", "Ação não reconhecida.");
 			return new ModelAndView("login");
 		}
 	}

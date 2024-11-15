@@ -61,7 +61,6 @@ function validarFormulario(event) {
 			}
 		}
 
-
 	} else if (botao === "Excluir") {
 		var codigo = document.getElementById("codigo").value.trim();
 		if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
@@ -115,8 +114,6 @@ function validarSalvarNovo() {
 
     return true; // Permite o envio se todos os campos estão preenchidos
 }
-
-
 
 function formatarMoeda(campo) {
 	let valor = campo.value;
