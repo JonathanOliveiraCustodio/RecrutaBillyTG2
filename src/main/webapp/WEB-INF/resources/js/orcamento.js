@@ -1,4 +1,4 @@
-// pedido.js
+// Orçamento.js
 
 function validarBusca() {
 	var codigo = document.getElementById("codigo").value;
@@ -79,20 +79,6 @@ function validarFormulario(event) {
 	return true;
 }
 
-function formatarMoeda(campo) {
-	let valor = campo.value;
-
-	valor = valor.replace(/[^\d]/g, '');
-	valor = (valor / 100).toFixed(2) + '';
-	valor = valor.replace(".", ",");
-
-	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-	campo.value = 'R$ ' + valor;
-	if (campo.value.endsWith(',0')) {
-		campo.value = campo.value.slice(0, -1) + '00';
-	}
-}
-
 function confirmarConversao() {
 	return confirm("Gostaria de converter este orçamento em pedido?");
 }
@@ -135,13 +121,26 @@ function updateEndereco() {
 	document.getElementById("telefone").value = telefone;
 }
 
+function formatarMoeda(campo) {
+	let valor = campo.value;
+
+	valor = valor.replace(/[^\d]/g, '');
+	valor = (valor / 100).toFixed(2) + '';
+	valor = valor.replace(".", ",");
+
+	valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	campo.value = 'R$ ' + valor;
+	if (campo.value.endsWith(',0')) {
+		campo.value = campo.value.slice(0, -1) + '00';
+	}
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-	 aplicarMascaraTelefone();
-   const campovalorUnitario = document.getElementById('valorTotal');
+	const campovalorUnitario = document.getElementById('valorTotal');
 	if (campovalorUnitario) {
 		formatarMoeda(campovalorUnitario);
 		campovalorUnitario.addEventListener('input', function() {
 			formatarMoeda(this);
 		});
-	}   
+	}
 });

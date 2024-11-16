@@ -79,6 +79,16 @@ function validarFormulario(event) {
 			return false;
 		}
 	}
+	else if (botao === "Adicionar") {
+		var codigo = document.getElementById("codigo").value.trim();
+		if (codigo === "" || isNaN(codigo) || parseInt(codigo) <= 0) {
+			alert("Por favor, preencha o campo de código corretamente.");
+			document.getElementById("codigo").focus(); // Coloca o foco no campo código
+			event.preventDefault();
+			return false;
+		}
+	}
+	
 	return true;
 }
 

@@ -290,6 +290,12 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning btn-align">
 						</div>
+					
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" class="btn btn-info"
+								onclick="window.location.href='produtosPedido?pedido=1'">
+								Adicionar Produtos</button>
+						</div>
 
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>

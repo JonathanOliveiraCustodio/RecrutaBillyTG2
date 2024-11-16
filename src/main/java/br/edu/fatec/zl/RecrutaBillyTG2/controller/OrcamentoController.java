@@ -46,24 +46,27 @@ public class OrcamentoController {
         Cliente c = new Cliente();
         List<Cliente> clientes = new ArrayList<>();
         List<Orcamento> orcamentos = new ArrayList<>();
-        try {
-            clientes = cDao.findAll();
-            if (codigo != null) {
-                o.setCodigo(Integer.parseInt(codigo));
-                o = buscarOrcamento(o);
-            }
+	    try {
+	        clientes = cDao.findAll();
+	        
+	        // Verifica se um código foi fornecido e busca o pedido correspondente
+	        if (codigo != null) {
+	            o.setCodigo(Integer.parseInt(codigo));
+	            o = buscarOrcamento(o);
+	        }
 
-            if (cmd != null) {
-                if (cmd.contains("alterar")) {
-                    o = buscarOrcamento(o);
-                } else if (cmd.contains("excluir")) {
-                    o = buscarOrcamento(o);
-                    saida = excluirOrcamento(o);
-                    o = null;
-                } else if (cmd.contains("Listar")) {
-                    orcamentos = listarOrcamentos();
-                }
-            }
+	        // Comando para alterar, excluir ou listar pedidos
+	        if (cmd != null) {
+	            if (cmd.contains("alterar")) {
+	                o = buscarOrcamento(o);
+	            } else if (cmd.contains("excluir")) {
+	                o = buscarOrcamento(o);
+	                saida = excluirOrcamento(o);
+	                o = null;
+	            } else if (cmd.contains("Listar")) {
+	                orcamentos = listarOrcamentos();
+	            }
+	        }
         } catch (SQLException | ClassNotFoundException e) {
             erro = e.getMessage();
         } finally {
@@ -124,6 +127,7 @@ public class OrcamentoController {
 				
 				// Remover a máscara de moeda
 				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
+
 				o.setValorTotal(Float.parseFloat(valorTotal));
 				
 				o.setFormaPagamento(formaPagamento);

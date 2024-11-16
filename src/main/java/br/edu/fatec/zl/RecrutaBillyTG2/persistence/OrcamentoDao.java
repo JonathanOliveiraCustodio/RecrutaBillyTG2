@@ -56,15 +56,29 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			o.setCodigo(rs.getInt("codigo"));
 			o.setNome(rs.getString("nome"));
 			o.setDescricao(rs.getString("descricao"));
-			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("codigoCliente"));
-			cl.setNome(rs.getString("nomeCliente"));
-			o.setCliente(cl);
+			
+			
 			o.setValorTotal(rs.getFloat("valorTotal"));
 			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setStatus(rs.getString("status"));
 			o.setObservacao(rs.getString("observacao"));
 			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
+			o.setCliente(cl);
+			
 			rs.close();
 			ps.close();
 			c.close();
@@ -82,7 +96,7 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 	public List<Orcamento> findAll() throws SQLException, ClassNotFoundException {
 		List<Orcamento> orcamentos = new ArrayList<>();
 		Connection c = gDao.getConnection();
-		String sql = "SELECT * FROM vw_orcamento";
+		String sql = "SELECT * FROM vw_orcamento WHERE status = 'Orçamento'";
 		PreparedStatement ps = c.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
@@ -90,15 +104,27 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			o.setCodigo(rs.getInt("codigo"));
 			o.setNome(rs.getString("nome"));
 			o.setDescricao(rs.getString("descricao"));
-			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("codigoCliente"));
-			cl.setNome(rs.getString("nomeCliente"));
-			o.setCliente(cl);
 			o.setValorTotal(rs.getFloat("valorTotal"));
 			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setStatus(rs.getString("status"));
 			o.setObservacao(rs.getString("observacao"));
 			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
+			o.setCliente(cl);
+			
 			orcamentos.add(o);
 		}
 		rs.close();
@@ -124,20 +150,28 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 		while (rs.next()) {
 			Orcamento o = new Orcamento();
 			o.setCodigo(rs.getInt("codigo"));
-			o.setNome(rs.getString("nomePedido"));
-
+			o.setNome(rs.getString("nome"));
+			o.setDescricao(rs.getString("descricao"));
+			o.setValorTotal(rs.getFloat("valorTotal"));
+			o.setFormaPagamento(rs.getString("formaPagamento"));
+			o.setStatus(rs.getString("status"));
+			o.setObservacao(rs.getString("observacao"));
+			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
 			Cliente cl = new Cliente();
 			cl.setCodigo(rs.getInt("codigoCliente"));
 			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
 			o.setCliente(cl);
-
-			o.setFormaPagamento(rs.getString("formaPagamento"));
-			o.setDescricao(rs.getString("descricao"));
-			o.setStatus(rs.getString("estado"));
-			o.setDataOrcamento(rs.getDate("dataPedido"));
-			o.setObservacao(rs.getString("observacao"));
-			o.setValorTotal(rs.getFloat("valorTotal"));
-			orcamentos.add(o);
 		}
 
 		rs.close();
@@ -178,18 +212,28 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			Orcamento o = new Orcamento();
 			o.setCodigo(rs.getInt("codigo"));
 			o.setNome(rs.getString("nome"));
-
+			o.setDescricao(rs.getString("descricao"));
+			o.setValorTotal(rs.getFloat("valorTotal"));
+			o.setFormaPagamento(rs.getString("formaPagamento"));
+			o.setStatus(rs.getString("status"));
+			o.setObservacao(rs.getString("observacao"));
+			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
 			Cliente cl = new Cliente();
 			cl.setCodigo(rs.getInt("codigoCliente"));
 			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
 			o.setCliente(cl);
-
-			o.setFormaPagamento(rs.getString("formaPagamento"));
-			o.setDescricao(rs.getString("descricao"));
-			o.setStatus(rs.getString("status"));
-			o.setDataOrcamento(rs.getDate("dataOrcamento"));
-			o.setObservacao(rs.getString("observacao"));
-			o.setValorTotal(rs.getFloat("valorTotal"));
+			
 			orcamentos.add(o);
 		}
 
@@ -216,15 +260,26 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			o.setCodigo(rs.getInt("codigo"));
 			o.setNome(rs.getString("nome"));
 			o.setDescricao(rs.getString("descricao"));
-			Cliente cl = new Cliente();
-			cl.setCodigo(rs.getInt("cliente"));
-			cl.setNome(rs.getString("nomeCliente"));
-			o.setCliente(cl);
 			o.setValorTotal(rs.getFloat("valorTotal"));
 			o.setFormaPagamento(rs.getString("formaPagamento"));
 			o.setStatus(rs.getString("status"));
 			o.setObservacao(rs.getString("observacao"));
 			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
+			Cliente cl = new Cliente();
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
+			o.setCliente(cl);
 			orcamentos.add(o);
 		}
 		rs.close();
@@ -249,18 +304,27 @@ public class OrcamentoDao implements ICrud<Orcamento>, IOrcamentoDao {
 			Orcamento o = new Orcamento();
 			o.setCodigo(rs.getInt("codigo"));
 			o.setNome(rs.getString("nome"));
-
+			o.setDescricao(rs.getString("descricao"));
+			o.setValorTotal(rs.getFloat("valorTotal"));
+			o.setFormaPagamento(rs.getString("formaPagamento"));
+			o.setStatus(rs.getString("status"));
+			o.setObservacao(rs.getString("observacao"));
+			o.setDataOrcamento(rs.getDate("dataOrcamento"));
+			
 			Cliente cl = new Cliente();
 			cl.setCodigo(rs.getInt("codigoCliente"));
 			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCodigo(rs.getInt("codigoCliente"));
+			cl.setNome(rs.getString("nomeCliente"));
+			cl.setCEP(rs.getString("CEP"));
+			cl.setLogradouro(rs.getString("logradouro"));
+			cl.setNumero(rs.getString("numero"));
+			cl.setUF(rs.getString("UF"));
+			cl.setLocalidade(rs.getString("localidade"));
+			cl.setBairro(rs.getString("bairro"));
+			cl.setComplemento(rs.getString("complemento"));
+			cl.setTelefone(rs.getString("telefone"));
 			o.setCliente(cl);
-
-			o.setFormaPagamento(rs.getString("formaPagamento"));
-			o.setDescricao(rs.getString("descricao"));
-			o.setStatus(rs.getString("status"));
-			o.setDataOrcamento(rs.getDate("dataOrcamento"));
-			o.setObservacao(rs.getString("observacao"));
-			o.setValorTotal(rs.getFloat("valorTotal"));
 			orcamentos.add(o);
 		}
 

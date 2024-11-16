@@ -27,11 +27,27 @@
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-1">
 				<h1 class="display-6 fw-bold">Gerenciar Produtos de um Pedido</h1>
+
+				<div align="center">
+					<!-- Mensagem de Erro -->
+					<c:if test="${not empty erro}">
+						<div class="alert alert-danger fs-5" role="alert">
+							<c:out value="${erro}" />
+						</div>
+					</c:if>
+
+					<!-- Mensagem de Sucesso -->
+					<c:if test="${not empty saida}">
+						<div class="alert alert-success fs-5" role="alert">
+							<c:out value="${saida}" />
+						</div>
+					</c:if>
+				</div>
 				<form action="produtosPedido" method="post"
 					onsubmit="return validarFormulario(event);" class="container mt-3">
 					<input type="hidden" id="pedido" name="pedido"
 						value='<c:out value="${pedido}"></c:out>'>
-						<!-- Linha do Formulário -->
+					<!-- Linha do Formulário -->
 					<div class="row g-3">
 						<div class="col-md-4">
 							<div class="form-floating">
@@ -89,22 +105,6 @@
 					</div>
 				</form>
 			</div>
-		</div>
-
-		<div align="center">
-			<c:if test="${not empty erro}">
-				<h2 style="color: #dc3545;">
-					<b><c:out value="${erro}" /></b>
-				</h2>
-			</c:if>
-		</div>
-
-		<div align="center">
-			<c:if test="${not empty saida}">
-				<h2 style="color: #198754;">
-					<b><c:out value="${saida}" /></b>
-				</h2>
-			</c:if>
 		</div>
 
 		<div align="center" class="mt-4">

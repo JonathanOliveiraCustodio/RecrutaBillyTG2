@@ -96,7 +96,7 @@
 											data-complemento="${c.complemento}" data-bairro="${c.bairro}"
 											data-localidade="${c.localidade}" data-UF="${c.UF}"
 											data-telefone="${c.telefone}"
-											<c:if test="${c.codigo eq pedido.cliente.codigo}"> selected</c:if>>
+											<c:if test="${c.codigo eq orcamento.cliente.codigo}"> selected</c:if>>
 											<c:out value="${c.nome}" />
 										</option>
 									</c:forEach>
@@ -269,7 +269,14 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning btn-align">
 						</div>
-						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" class="btn btn-info"
+								onclick="window.location.href='produtosOrcamento?orcamento=${orcamento.codigo}'">
+								Adicionar Produtos</button>
+						</div>
+						
+						
+						
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"

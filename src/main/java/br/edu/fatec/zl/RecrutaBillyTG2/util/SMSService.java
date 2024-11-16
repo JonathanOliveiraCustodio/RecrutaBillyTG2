@@ -13,7 +13,7 @@ public class SMSService {
 	public static final String AUTH_TOKEN = "";
 	
 	// Número de telefone Twilio
-	public static final String TWILIO_PHONE_NUMBER = "";
+	public static final String TWILIO_PHONE_NUMBER = ""; 
 
 	public static void enviarCodigoRecuperacao(String telefone, String codigo) {
 		// Inicializa o Twilio com as credenciais

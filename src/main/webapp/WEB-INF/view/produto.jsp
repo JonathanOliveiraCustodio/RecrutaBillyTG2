@@ -164,6 +164,13 @@
 								class="btn btn-warning btn-align">
 						</div>
 
+						<!--
+						<div class="col-md-2 d-grid text-center">
+							<button type="submit" class="btn btn-info" name="botao"
+								value="Adicionar"
+								formaction="insumosProduto?produto=${produto.codigo}">
+								Adicionar Insumos</button>
+						</div> -->
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
