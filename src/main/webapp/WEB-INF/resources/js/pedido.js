@@ -92,6 +92,19 @@ function validarFormulario(event) {
 	return true;
 }
 
+function validarERedirecionar() {
+	// Obtenha o CPF do campo
+	var codigo = document.getElementById("codigo").value.trim();
+
+	if (codigo === "") {
+		alert("O código não pode estar vazio.");
+		document.getElementById("codigo").focus(); // Coloca o foco no campo CPF
+		return;
+	}
+
+	// Se o CPF estiver correto, redirecione para a URL desejada
+	window.location.href = 'produtosPedido?pedido=' + encodeURIComponent(codigo);
+}
 
 function redirectToWhatsApp() {
 	// Obtém o valor do campo de telefone
@@ -153,6 +166,84 @@ function formatarMoeda(campo) {
 	}
 }
 
+function gerarEtiqueta() {
+	const form = document.getElementById("form-relatorio");
+	form.action = "etiqueta";
+	form.method = "post";
+	form.target = "_blank";
+	form.submit();
+	resetarFormulario();
+}
+
+function resetarFormulario() {
+	const form = document.getElementById("form-relatorio");
+	form.action = "pedido";
+	form.method = "post";
+	form.target = "_self";
+}
+
+function abrirModalPedido(codigo) {
+    // Validação do código
+    if (codigo == 0 || codigo.trim() === "") {
+        alert("O pedido não pode estar vazio, selecione um pedido para visualizar!");
+        return; // Interrompe a função se o código estiver vazio
+    }
+
+    // Seleciona os campos de entrada com os dados preenchidos no formulário
+    var codigoInput = document.getElementById('codigo');
+    var nomeInput = document.getElementById('nome');
+    var descricaoInput = document.getElementById('descricao');
+    var clienteInput = document.getElementById('cliente');
+    var estadoSelect = document.getElementById('estado');
+    var valorTotalInput = document.getElementById('valorTotal');
+    var tipoPagamentoSelect = document.getElementById('tipoPagamento');
+    var statusPagamentoSelect = document.getElementById('statusPagamento');
+    var dataPagamentoInput = document.getElementById('dataPagamento');
+    var cepInput = document.getElementById('CEP');
+    var logradouroInput = document.getElementById('logradouro');
+    var numeroInput = document.getElementById('numero');
+    var complementoInput = document.getElementById('complemento');
+    var bairroInput = document.getElementById('bairro');
+    var localidadeInput = document.getElementById('localidade');
+    var ufInput = document.getElementById('UF');
+    var telefoneInput = document.getElementById('telefone');
+
+    // Função para formatar a data de "yyyy-MM-dd" para "dd/MM/yyyy"
+    function formatarData(data) {
+        var partesData = data.split("-");
+        return partesData[2] + "/" + partesData[1] + "/" + partesData[0];
+    }
+
+    // Preenche os dados no modal
+    document.getElementById('modalCodigo').innerText = codigoInput.value;
+    document.getElementById('modalNome').innerText = nomeInput.value;
+    document.getElementById('modalDescricao').innerText = descricaoInput.value;
+    document.getElementById('modalCliente').innerText = clienteInput.options[clienteInput.selectedIndex].text;
+    document.getElementById('modalEstado').innerText = estadoSelect.options[estadoSelect.selectedIndex].text;
+    document.getElementById('modalValorTotal').innerText = valorTotalInput.value;
+    document.getElementById('modalTipoPagamento').innerText = tipoPagamentoSelect.options[tipoPagamentoSelect.selectedIndex].text;
+    document.getElementById('modalStatusPagamento').innerText = statusPagamentoSelect.options[statusPagamentoSelect.selectedIndex].text;
+
+    // Formata a data de pagamento e preenche no modal
+    var dataFormatada = formatarData(dataPagamentoInput.value);
+    document.getElementById('modalDataPagamento').innerText = dataFormatada;
+
+    // Preenche os dados de endereço no modal
+    document.getElementById('modalCEP').innerText = cepInput.value;
+    document.getElementById('modalLogradouro').innerText = logradouroInput.value;
+    document.getElementById('modalNumero').innerText = numeroInput.value;
+    document.getElementById('modalComplemento').innerText = complementoInput.value;
+    document.getElementById('modalBairro').innerText = bairroInput.value;
+    document.getElementById('modalLocalidade').innerText = localidadeInput.value;
+    document.getElementById('modalUF').innerText = ufInput.value;
+    document.getElementById('modalTelefone').innerText = telefoneInput.value;
+
+    // Exibe o modal
+    let pedidoModal = new bootstrap.Modal(document.getElementById('pedidoModal'));
+    pedidoModal.show();
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
 	const campovalorUnitario = document.getElementById('valorTotal');
 	if (campovalorUnitario) {
@@ -161,4 +252,51 @@ document.addEventListener('DOMContentLoaded', function() {
 			formatarMoeda(this);
 		});
 	}
+});
+
+function aplicarMascaraTelefone() {
+	var telefoneInput = document.getElementById('telefone');
+	telefoneInput.addEventListener('input', function() {
+		this.value = formatarTelefone(this.value);
+	});
+	// Formata o valor inicial se o campo já tiver um valor
+	if (telefoneInput.value) {
+		telefoneInput.value = formatarTelefone(telefoneInput.value);
+	}
+}
+
+function formatarTelefone(telefone) {
+	telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+	telefone = telefone.slice(0, 11); // Limita a 11 dígitos
+
+	if (telefone.length <= 2) {
+		return telefone;
+	} else if (telefone.length <= 6) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2);
+	} else if (telefone.length <= 10) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 6) + '-' + telefone.slice(6);
+	} else {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 7) + '-' + telefone.slice(7);
+	}
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const codigoInput = document.getElementById("codigo");
+    const linhaBotoes = document.getElementById("linhaBotoes");
+    aplicarMascaraTelefone();
+
+    function verificarCodigo() {
+        const valorCodigo = codigoInput.value.trim();
+        if (valorCodigo !== "" && valorCodigo !== "0") {
+            linhaBotoes.style.display = "flex"; // Torna visível
+        } else {
+            linhaBotoes.style.display = "none"; // Esconde
+        }
+    }
+
+    // Verifica o valor inicial do campo ao carregar a página
+    verificarCodigo();
+
+    // Escuta mudanças no campo para atualizar a visibilidade
+    codigoInput.addEventListener("input", verificarCodigo);
 });

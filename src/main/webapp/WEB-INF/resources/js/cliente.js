@@ -68,7 +68,7 @@ function excluirCliente(codigo) {
 function abrirModalCliente(codigo) {
 	// Validação do código
 	if (codigo == 0 || codigo.trim() === "") {
-		alert("O código do cliente não pode estar vazio.");
+		alert("O cliente não pode estar vazio, selecione um cliente para visualizar!");
 		return; // Interrompe a função se o código estiver vazio
 	}
 

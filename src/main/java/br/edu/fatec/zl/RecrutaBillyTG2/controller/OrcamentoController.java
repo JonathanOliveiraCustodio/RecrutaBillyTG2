@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Orcamento;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.ProdutoOrcamento;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.OrcamentoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ProdutoOrcamentoDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -31,54 +35,67 @@ public class OrcamentoController {
 
 	@Autowired
 	ClienteDao cDao;
+	
+	@Autowired
+	ProdutoOrcamentoDao poDao;
 
 	@RequestMapping(name = "orcamento", value = "/orcamento", method = RequestMethod.GET)
-    public ModelAndView orcamentoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
-            ModelMap model) {
-        HttpSession session = request.getSession();
-        session.removeAttribute("orcamento");
-        String cmd = allRequestParam.get("cmd");
-        String codigo = allRequestParam.get("codigo");
+	public ModelAndView orcamentoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
+			ModelMap model) {
+		HttpSession session = request.getSession();
+		session.removeAttribute("orcamento");
 
-        String saida = "";
-        String erro = "";
-        Orcamento o = new Orcamento();
-        Cliente c = new Cliente();
-        List<Cliente> clientes = new ArrayList<>();
-        List<Orcamento> orcamentos = new ArrayList<>();
-	    try {
-	        clientes = cDao.findAll();
-	        
-	        // Verifica se um código foi fornecido e busca o pedido correspondente
-	        if (codigo != null) {
-	            o.setCodigo(Integer.parseInt(codigo));
-	            o = buscarOrcamento(o);
-	        }
+		String saida = "";
+		String erro = "";
+		Orcamento o = null;
+		Cliente c = null;
 
-	        // Comando para alterar, excluir ou listar pedidos
-	        if (cmd != null) {
-	            if (cmd.contains("alterar")) {
-	                o = buscarOrcamento(o);
-	            } else if (cmd.contains("excluir")) {
-	                o = buscarOrcamento(o);
-	                saida = excluirOrcamento(o);
-	                o = null;
-	            } else if (cmd.contains("Listar")) {
-	                orcamentos = listarOrcamentos();
-	            }
-	        }
-        } catch (SQLException | ClassNotFoundException e) {
-            erro = e.getMessage();
-        } finally {
-            model.addAttribute("saida", saida);
-            model.addAttribute("erro", erro);
-            model.addAttribute("orcamento", o);
-            model.addAttribute("orcamentos", orcamentos);
-            model.addAttribute("clientes", clientes);
-            model.addAttribute("cliente", c);
-        }
-        return new ModelAndView("orcamento");
-    }
+		List<Cliente> clientes = new ArrayList<>();
+		List<Orcamento> orcamentos = new ArrayList<>();
+		List<ProdutoOrcamento> produtosOrcamento = new ArrayList<>();
+		
+		try {
+
+			String cmd = allRequestParam.get("cmd");
+			String codigo = allRequestParam.get("codigo");
+			clientes = cDao.findAll();
+
+			// Verifica se um código foi fornecido e busca o pedido correspondente
+			if (codigo != null) {
+				o = new Orcamento();
+				o.setCodigo(Integer.parseInt(codigo));
+				o = buscarOrcamento(o);
+			}
+
+			// Comando para alterar, excluir ou listar pedidos
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+					o.setCodigo(Integer.parseInt(codigo));
+					o = buscarOrcamento(o);
+					produtosOrcamento = poDao.findAll(o); 
+				} else if (cmd.contains("excluir")) {
+					o = new Orcamento();
+					o.setCodigo(Integer.parseInt(codigo));
+					o = buscarOrcamento(o);
+					saida = excluirOrcamento(o);
+					o = null;
+				} else if (cmd.contains("Listar")) {
+					orcamentos = listarOrcamentos();
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			erro = e.getMessage();
+		} finally {
+			model.addAttribute("saida", saida);
+			model.addAttribute("erro", erro);
+			model.addAttribute("orcamento", o);
+			model.addAttribute("orcamentos", orcamentos);
+			model.addAttribute("clientes", clientes);
+			model.addAttribute("cliente", c);
+			model.addAttribute("produtosOrcamento", produtosOrcamento);
+		}
+		return new ModelAndView("orcamento");
+	}
 
 	@RequestMapping(name = "orcamento", value = "/orcamento", method = RequestMethod.POST)
 	public ModelAndView orcamentoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
@@ -93,7 +110,7 @@ public class OrcamentoController {
 		String formaPagamento = allRequestParam.get("formaPagamento");
 		String observacao = allRequestParam.get("observacao");
 		String dataOrcamento = allRequestParam.get("dataOrcamento");
-		
+
 		// Parâmetros de saida
 		String saida = "";
 		String erro = "";
@@ -101,6 +118,7 @@ public class OrcamentoController {
 		Cliente c = new Cliente();
 		List<Orcamento> orcamentos = new ArrayList<>();
 		List<Cliente> clientes = new ArrayList<>();
+		List<ProdutoOrcamento> produtosOrcamento = new ArrayList<>();
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			o = null;
@@ -124,21 +142,21 @@ public class OrcamentoController {
 				o.setStatus(status);
 				o.setDescricao(descricao);
 				o.setObservacao(observacao);
-				
+
 				// Remover a máscara de moeda
 				valorTotal = valorTotal.replace("R$", "").replace(".", "").replace(",", ".");
 
 				o.setValorTotal(Float.parseFloat(valorTotal));
-				
+
 				o.setFormaPagamento(formaPagamento);
-				
+
 				// A Data do Pagamento pode ser vazia
 				if (dataOrcamento != null && !dataOrcamento.isEmpty()) {
 					o.setDataOrcamento(Date.valueOf(dataOrcamento));
 				} else {
 					o.setDataOrcamento(null);
 				}
-				
+
 			}
 
 			if (cmd.contains("Cadastrar")) {
@@ -163,7 +181,10 @@ public class OrcamentoController {
 				} else if (orcamentos.size() == 1) {
 					Orcamento orcamento = orcamentos.get(0);
 					saida = "Orçamento encontrado: " + orcamento.getNome();
+					o = new Orcamento();
+					o.setCodigo(Integer.parseInt(codigo));
 					o = buscarOrcamento(orcamento);
+					produtosOrcamento = poDao.findAll(o); 
 				} else {
 					// Caso encontre mais de um orçamento
 					saida = "Foram encontrados " + orcamentos.size() + " pedidos com o Nome '" + nome + "'";
@@ -183,7 +204,7 @@ public class OrcamentoController {
 					o = null;
 				}
 			}
-			if (cmd.contains("Adicionar")) {
+			if (cmd.contains("Adicionar Produto")) {
 				o = buscarOrcamento(o);
 				if (o == null) {
 					saida = "Nenhum Orçamento encontrado com o codigo especificado.";
@@ -193,11 +214,17 @@ public class OrcamentoController {
 					return new ModelAndView("forward:/produtosOrcamento", model);
 				}
 			}
+		
+			if (o == null) {
+			    o = new Orcamento();
+			}
+			
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
 		} finally {
 			model.addAttribute("saida", saida);
 			model.addAttribute("erro", erro);
+			model.addAttribute("produtosOrcamento", produtosOrcamento);
 			model.addAttribute("orcamento", o);
 			model.addAttribute("orcamentos", orcamentos);
 			model.addAttribute("cliente", c);

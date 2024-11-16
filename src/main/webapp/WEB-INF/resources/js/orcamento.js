@@ -1,9 +1,9 @@
 // Orçamento.js
 
 function validarBusca() {
-	var codigo = document.getElementById("codigo").value;
+	var codigo = document.getElementById("nome").value;
 	if (codigo.trim() === "") {
-		alert("Por favor, insira um Código.");
+		alert("Por favor, insira um Nome.");
 		return false;
 	}
 	return true;
@@ -20,6 +20,20 @@ function excluirOrcamento(codigo) {
 }
 function mostrarValor(codigo) {
 	console.log(codigo);
+}
+
+function validarERedirecionar() {
+	// Obtenha o CPF do campo
+	var codigo = document.getElementById("codigo").value.trim();
+
+	if (codigo === "") {
+		alert("O código não pode estar vazio.");
+		document.getElementById("codigo").focus(); // Coloca o foco no campo CPF
+		return;
+	}
+
+	// Se o CPF estiver correto, redirecione para a URL desejada
+	window.location.href = 'produtosOrcamento?orcamento=' + encodeURIComponent(codigo);
 }
 
 function validarFormulario(event) {
@@ -135,6 +149,89 @@ function formatarMoeda(campo) {
 	}
 }
 
+function aplicarMascaraTelefone() {
+	var telefoneInput = document.getElementById('telefone');
+	telefoneInput.addEventListener('input', function() {
+		this.value = formatarTelefone(this.value);
+	});
+	// Formata o valor inicial se o campo já tiver um valor
+	if (telefoneInput.value) {
+		telefoneInput.value = formatarTelefone(telefoneInput.value);
+	}
+}
+
+function formatarTelefone(telefone) {
+	telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+	telefone = telefone.slice(0, 11); // Limita a 11 dígitos
+
+	if (telefone.length <= 2) {
+		return telefone;
+	} else if (telefone.length <= 6) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2);
+	} else if (telefone.length <= 10) {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 6) + '-' + telefone.slice(6);
+	} else {
+		return '(' + telefone.slice(0, 2) + ') ' + telefone.slice(2, 7) + '-' + telefone.slice(7);
+	}
+}
+
+function abrirModalOrcamento(codigo) {
+    // Validação do código
+    if (codigo == 0 || codigo.trim() === "") {
+        alert("O orçamento não pode estar vazio. Selecione um orçamento para visualizar!");
+        return;
+    }
+
+    // Seleciona os campos de entrada do formulário
+    var codigoInput = document.getElementById('codigo');
+    var nomeInput = document.getElementById('nome');
+    var descricaoInput = document.getElementById('descricao');
+    var clienteInput = document.getElementById('cliente');
+    var statusInput = document.getElementById('status');
+    var valorTotalInput = document.getElementById('valorTotal');
+    var formaPagamentoInput = document.getElementById('formaPagamento');
+    var dataOrcamentoInput = document.getElementById('dataOrcamento');
+    var cepInput = document.getElementById('CEP');
+    var logradouroInput = document.getElementById('logradouro');
+    var numeroInput = document.getElementById('numero');
+    var complementoInput = document.getElementById('complemento');
+    var bairroInput = document.getElementById('bairro');
+    var localidadeInput = document.getElementById('localidade');
+    var ufInput = document.getElementById('UF');
+
+    // Função para formatar data
+    function formatarData(data) {
+        var partesData = data.split("-");
+        return partesData[2] + "/" + partesData[1] + "/" + partesData[0];
+    }
+
+    // Preenche os dados no modal
+    document.getElementById('modalCodigo').innerText = codigoInput.value;
+    document.getElementById('modalNome').innerText = nomeInput.value;
+    document.getElementById('modalDescricao').innerText = descricaoInput.value;
+    document.getElementById('modalCliente').innerText = clienteInput.options[clienteInput.selectedIndex].text;
+    document.getElementById('modalStatus').innerText = statusInput.value;
+    document.getElementById('modalValorTotal').innerText = valorTotalInput.value;
+    document.getElementById('modalFormaPagamento').innerText = formaPagamentoInput.options[formaPagamentoInput.selectedIndex].text;
+
+    var dataFormatada = formatarData(dataOrcamentoInput.value);
+    document.getElementById('modalDataOrcamento').innerText = dataFormatada;
+
+    // Preenche os dados de endereço
+    document.getElementById('modalCEP').innerText = cepInput.value;
+    document.getElementById('modalLogradouro').innerText = logradouroInput.value;
+    document.getElementById('modalNumero').innerText = numeroInput.value;
+    document.getElementById('modalComplemento').innerText = complementoInput.value;
+    document.getElementById('modalBairro').innerText = bairroInput.value;
+    document.getElementById('modalLocalidade').innerText = localidadeInput.value;
+    document.getElementById('modalUF').innerText = ufInput.value;
+
+    // Exibe o modal
+    let orcamentoModal = new bootstrap.Modal(document.getElementById('orcamentoModal'));
+    orcamentoModal.show();
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
 	const campovalorUnitario = document.getElementById('valorTotal');
 	if (campovalorUnitario) {
@@ -143,4 +240,25 @@ document.addEventListener('DOMContentLoaded', function() {
 			formatarMoeda(this);
 		});
 	}
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const codigoInput = document.getElementById("codigo");
+    const linhaBotoes = document.getElementById("linhaBotoes");
+    aplicarMascaraTelefone();
+
+    function verificarCodigo() {
+        const valorCodigo = codigoInput.value.trim();
+        if (valorCodigo !== "" && valorCodigo !== "0") {
+            linhaBotoes.style.display = "flex"; // Torna visível
+        } else {
+            linhaBotoes.style.display = "none"; // Esconde
+        }
+    }
+
+    // Verifica o valor inicial do campo ao carregar a página
+    verificarCodigo();
+
+    // Escuta mudanças no campo para atualizar a visibilidade
+    codigoInput.addEventListener("input", verificarCodigo);
 });

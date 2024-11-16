@@ -269,15 +269,10 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning btn-align">
 						</div>
-						<div class="col-md-2 d-grid text-center">
-							<button type="button" class="btn btn-info"
-								onclick="window.location.href='produtosOrcamento?orcamento=${orcamento.codigo}'">
-								Adicionar Produtos</button>
-						</div>
-						
-						
-						
+
 						<div class="col-md-2 d-grid text-center"></div>
+
+
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
 								class="btn btn-dark btn-align">
@@ -286,9 +281,134 @@
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary btn-align">
 						</div>
+
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" class="btn-purple btn-align"
+								onclick="abrirModalOrcamento('${orcamento.codigo}')">Ver
+								Detalhes</button>
+						</div>
+
 					</div>
 
+					<!-- Linha dos Botões de Ação -->
+					<div class="row g-3 mt-3" id="linhaBotoes" style="display: none;">
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" id="botaoEndereco"
+								class="btn btn-info btn-align w-100 d-flex justify-content-center align-items-center"
+								onclick="validarERedirecionar()">Adicionar Produto</button>
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Efetivar Pedido" class="btn btn-outline-dark btn-align"
+								onclick="return confirmarConversao();">
+						</div>
+						<div class="col-md-2 d-grid text-center"></div>
+					</div>
 				</form>
+
+				<div class="modal fade" id="orcamentoModal" tabindex="-1"
+					aria-labelledby="orcamentoModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="orcamentoModalLabel">Detalhes
+									do Orçamento</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Fechar"></button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<strong>Código:</strong> <span id="modalCodigo"></span>
+								</p>
+								<p>
+									<strong>Nome do Orçamento:</strong> <span id="modalNome"></span>
+								</p>
+								<p>
+									<strong>Descrição:</strong> <span id="modalDescricao"></span>
+								</p>
+								<p>
+									<strong>Cliente:</strong> <span id="modalCliente"></span>
+								</p>
+								<p>
+									<strong>Status:</strong> <span id="modalStatus"></span>
+								</p>
+								<p>
+									<strong>Valor Total:</strong> <span id="modalValorTotal"></span>
+								</p>
+								<p>
+									<strong>Forma de Pagamento:</strong> <span
+										id="modalFormaPagamento"></span>
+								</p>
+								<p>
+									<strong>Data do Orçamento:</strong> <span
+										id="modalDataOrcamento"></span>
+								</p>
+
+								<!-- Endereço -->
+								<p>
+									<strong>CEP:</strong> <span id="modalCEP"></span>
+								</p>
+								<p>
+									<strong>Logradouro:</strong> <span id="modalLogradouro"></span>
+								</p>
+								<p>
+									<strong>Número:</strong> <span id="modalNumero"></span>
+								</p>
+								<p>
+									<strong>Complemento:</strong> <span id="modalComplemento"></span>
+								</p>
+								<p>
+									<strong>Bairro:</strong> <span id="modalBairro"></span>
+								</p>
+								<p>
+									<strong>Localidade:</strong> <span id="modalLocalidade"></span>
+								</p>
+								<p>
+									<strong>UF:</strong> <span id="modalUF"></span>
+								</p>
+								<c:if test="${not empty produtosOrcamento}">
+									<div class="table-responsive w-100 mt-4">
+										<table class="table table-bordered table-hover">
+											<thead class="table-dark">
+												<tr>
+													<th class="titulo-tabela" colspan="6"
+														style="text-align: center; font-size: 20px;">Lista de
+														Produtos do Orçamento</th>
+												</tr>
+												<tr class="table-dark">
+													<th>Nome</th>
+													<th>Categoria</th>
+													<th>Descrição</th>
+													<th>Valor</th>
+													<th>Quantidade</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="p" items="${produtosOrcamento}">
+													<tr>
+														<td><c:out value="${p.produto.nome}" /></td>
+														<td><c:out value="${p.produto.categoria}" /></td>
+														<td><c:out value="${p.produto.descricao}" /></td>
+														<td><fmt:formatNumber
+																value="${p.produto.valorUnitario}" type="currency"
+																currencySymbol="R$" /></td>
+														<td><c:out value="${p.quantidade}" /></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
+								</c:if>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 

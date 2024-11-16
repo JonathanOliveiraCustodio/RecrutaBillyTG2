@@ -28,9 +28,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Cliente;
 import br.edu.fatec.zl.RecrutaBillyTG2.model.Pedido;
+import br.edu.fatec.zl.RecrutaBillyTG2.model.PedidoProduto;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.ClienteDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.GenericDao;
 import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoDao;
+import br.edu.fatec.zl.RecrutaBillyTG2.persistence.PedidoProdutoDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JRException;
@@ -49,61 +51,68 @@ public class PedidoController {
 	PedidoDao pDao;
 
 	@Autowired
+	PedidoProdutoDao ppDao;
+
+	@Autowired
 	ClienteDao cDao;
 
 	@RequestMapping(name = "pedido", value = "/pedido", method = RequestMethod.GET)
 	public ModelAndView pedidoGet(@RequestParam Map<String, String> allRequestParam, HttpServletRequest request,
-	        ModelMap model) {
-	    HttpSession session = request.getSession();
-	    session.removeAttribute("pedido");
-	    
-	    String cmd = allRequestParam.get("cmd");
-	    String codigo = allRequestParam.get("codigo");
+			ModelMap model) {
+		HttpSession session = request.getSession();
+		session.removeAttribute("pedido");
 
-	    String saida = "";
-	    String erro = "";
-	    Pedido p = new Pedido();
-	    Cliente c = new Cliente();
-	    List<Cliente> clientes = new ArrayList<>();
-	    List<Pedido> pedidos = new ArrayList<>();
+		String cmd = allRequestParam.get("cmd");
+		String codigo = allRequestParam.get("codigo");
 
-	    try {
-	        clientes = cDao.findAll();
-	        
-	        // Verifica se um código foi fornecido e busca o pedido correspondente
-	        if (codigo != null) {
-	            p.setCodigo(Integer.parseInt(codigo));
-	            p = buscarPedido(p);
-	        }
+		String saida = "";
+		String erro = "";
+		Pedido p = new Pedido();
+		Cliente c = new Cliente();
+		List<Cliente> clientes = new ArrayList<>();
+		List<Pedido> pedidos = new ArrayList<>();
+		List<PedidoProduto> pedidoProdutos = new ArrayList<>();
 
-	        // Comando para alterar, excluir ou listar pedidos
-	        if (cmd != null) {
-	            if (cmd.contains("alterar")) {
-	                p = buscarPedido(p);
-	            } else if (cmd.contains("excluir")) {
-	                p = buscarPedido(p);
-	                saida = excluirPedido(p);
-	                p = null;
-	            } else if (cmd.contains("Listar")) {
-	                pedidos = listarPedidos();
-	            }
-	        }
-	    } catch (SQLException | ClassNotFoundException e) {
-	        erro = e.getMessage();
-	    } finally {
-	        model.addAttribute("saida", saida);
-	        model.addAttribute("erro", erro);
-	        model.addAttribute("pedido", p);
-	        model.addAttribute("pedidos", pedidos);
-	        model.addAttribute("clientes", clientes);
-	        model.addAttribute("cliente", c);
-	    }
+		try {
+			clientes = cDao.findAll();
 
-	    return new ModelAndView("pedido");
+			// Verifica se um código foi fornecido e busca o pedido correspondente
+			if (codigo != null) {
+				p.setCodigo(Integer.parseInt(codigo));
+				p = buscarPedido(p);
+			}
+
+			// Comando para alterar, excluir ou listar pedidos
+			if (cmd != null) {
+				if (cmd.contains("alterar")) {
+					p = buscarPedido(p);
+					pedidoProdutos = ppDao.findAll(p); 
+				} else if (cmd.contains("excluir")) {
+					p = buscarPedido(p);
+					saida = excluirPedido(p);
+					p = null;
+				} else if (cmd.contains("Listar")) {
+					pedidos = listarPedidos();
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			erro = e.getMessage();
+		} finally {
+			model.addAttribute("saida", saida);
+			model.addAttribute("erro", erro);
+			model.addAttribute("pedido", p);
+			model.addAttribute("pedidos", pedidos);
+			model.addAttribute("pedidoProdutos", pedidoProdutos);
+			model.addAttribute("clientes", clientes);
+			model.addAttribute("cliente", c);
+		}
+
+		return new ModelAndView("pedido");
 	}
 
 	@RequestMapping(name = "pedido", value = "/pedido", method = RequestMethod.POST)
-	public ModelAndView pedidoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model) {
+	public ModelAndView pedidoPost(@RequestParam Map<String, String> allRequestParam, ModelMap model)
+			throws ClassNotFoundException, SQLException {
 		// Parâmetros de entrada
 		String cmd = allRequestParam.get("botao");
 		String codigo = allRequestParam.get("codigo");
@@ -122,8 +131,10 @@ public class PedidoController {
 		String erro = "";
 		Pedido p = new Pedido();
 		Cliente c = new Cliente();
+
 		List<Pedido> pedidos = new ArrayList<>();
 		List<Cliente> clientes = new ArrayList<>();
+		List<PedidoProduto> pedidoProdutos = new ArrayList<>();
 
 		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
 			p = null;
@@ -133,6 +144,7 @@ public class PedidoController {
 				p.setNome(nome);
 			}
 		}
+
 		try {
 			clientes = cDao.findAll();
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
@@ -184,6 +196,7 @@ public class PedidoController {
 					Pedido pedido = pedidos.get(0);
 					saida = "Pedido encontrado: " + pedido.getNome();
 					p = buscarPedido(pedido);
+					pedidoProdutos = ppDao.findAll(p); 
 				} else {
 					// Caso encontre mais de um pedido
 					saida = "Foram encontrados " + pedidos.size() + " pedidos com o Nome '" + nome + "'";
@@ -193,8 +206,10 @@ public class PedidoController {
 				pedidos = listarPedidos();
 			}
 			if (cmd.contains("Finalizar")) {
+
 				p.setCodigo(Integer.parseInt(codigo));
 				c.setCodigo(Integer.parseInt(cliente));
+				p = buscarPedido(p);
 				c = cDao.findBy(c);
 				p.setCliente(c);
 				saida = finalizarPedido(p);
@@ -210,6 +225,9 @@ public class PedidoController {
 					return new ModelAndView("forward:/produtosPedido", model);
 				}
 			}
+			if (p == null) {
+				p = new Pedido();
+			}
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
 		} finally {
@@ -218,6 +236,7 @@ public class PedidoController {
 			model.addAttribute("pedido", p);
 			model.addAttribute("pedidos", pedidos);
 			model.addAttribute("cliente", c);
+			model.addAttribute("pedidoProdutos", pedidoProdutos);
 			model.addAttribute("clientes", clientes);
 		}
 		return new ModelAndView("pedido");

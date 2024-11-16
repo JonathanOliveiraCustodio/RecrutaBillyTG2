@@ -164,14 +164,6 @@
 								class="btn btn-warning btn-align">
 						</div>
 
-						<!--
-						<div class="col-md-2 d-grid text-center">
-							<button type="submit" class="btn btn-info" name="botao"
-								value="Adicionar"
-								formaction="insumosProduto?produto=${produto.codigo}">
-								Adicionar Insumos</button>
-						</div> -->
-						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
@@ -181,8 +173,108 @@
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary btn-align">
 						</div>
+
+						<div class="col-md-2 d-grid text-center">
+							<!-- Botão para abrir o modal de visualização de material -->
+							<button type="button" class="btn-purple btn-align"
+								onclick="abrirModalProduto('${produto.codigo}')">Ver
+								Detalhes</button>
+						</div>
 					</div>
+
+					<!-- Linha dos Botões de Ação -->
+					<div class="row g-3 mt-3" id="linhaBotoes" style="display: none;">
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" id="botaoAdicionarProdutos"
+								class="btn btn-info btn-align w-100 d-flex justify-content-center align-items-center"
+								onclick="validarERedirecionar()">Adicionar Insumos</button>
+						</div>
+
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+					</div>
+
 				</form>
+
+				<div class="modal fade" id="produtoModal" tabindex="-1"
+					aria-labelledby="produtoModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="produtoModalLabel">Detalhes do
+									Produto</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Fechar"></button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<strong>Código:</strong> <span id="modalCodigo"></span>
+								</p>
+								<p>
+									<strong>Nome:</strong> <span id="modalNome"></span>
+								</p>
+								<p>
+									<strong>Categoria:</strong> <span id="modalCategoria"></span>
+								</p>
+								<p>
+									<strong>Descrição:</strong> <span id="modalDescricao"></span>
+								</p>
+								<p>
+									<strong>Valor Unitário:</strong> <span id="modalValorUnitario"></span>
+								</p>
+								<p>
+									<strong>Status:</strong> <span id="modalStatus"></span>
+								</p>
+								<p>
+									<strong>Quantidade:</strong> <span id="modalQuantidade"></span>
+								</p>
+								<p>
+									<strong>Referência no Estoque:</strong> <span
+										id="modalRefEstoque"></span>
+								</p>
+								<p>
+									<strong>Data:</strong> <span id="modalData"></span>
+								</p>
+
+								<c:if test="${not empty insumosProduto}">
+									<div class="table-responsive w-100 mt-4">
+										<table class="table table-bordered table-hover">
+											<thead class="table-dark">
+												<tr>
+													<th class="text-center" colspan="5"
+														style="text-align: center; font-size: 20px;">Lista de
+														Insumos do Produto</th>
+												</tr>
+												<tr class="table-dark">
+													<th>Código Insumo</th>
+													<th>Nome Insumo</th>
+													<th>Unidade</th>
+													<th>Quantidade</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="ai" items="${insumosProduto}">
+													<tr>
+														<td><c:out value="${ai.insumo.codigo}" /></td>
+														<td><c:out value="${ai.insumo.nome}" /></td>
+														<td><c:out value="${ai.insumo.unidade}" /></td>
+														<td><c:out value="${ai.quantidade}" /></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
+								</c:if>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -194,7 +286,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th class="titulo-tabela" colspan="10"
+							<th class="titulo-tabela" colspan="11"
 								style="text-align: center; font-size: 35px;">Lista de
 								Produtos</th>
 						</tr>

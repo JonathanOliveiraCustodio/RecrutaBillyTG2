@@ -39,7 +39,8 @@
 				</div>
 
 				<form action="pedido" method="post"
-					onsubmit="return validarFormulario(event);" class="row g-3 mt-3">
+					onsubmit="return validarFormulario(event);" class="row g-3 mt-3"
+					id="form-relatorio">
 					<!-- Primeira Linha: Código, Nome, Descrição -->
 					<div class="row g-3">
 						<div class="col-md-4">
@@ -290,14 +291,7 @@
 							<input type="submit" id="botao" name="botao" value="Alterar"
 								class="btn btn-warning btn-align">
 						</div>
-					
-						<div class="col-md-2 d-grid text-center">
-							<button type="button" class="btn btn-info"
-								onclick="window.location.href='produtosPedido?pedido=1'">
-								Adicionar Produtos</button>
-						</div>
 
-						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center"></div>
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
@@ -307,8 +301,149 @@
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary btn-align">
 						</div>
+						<div class="col-md-2 d-grid text-center">
+							<!-- Botão para abrir o modal de visualização de material -->
+							<button type="button" class="btn-purple btn-align"
+								onclick="abrirModalPedido('${pedido.codigo}')">Ver
+								Detalhes</button>
+						</div>
+					</div>
+
+					<!-- Linha dos Botões de Ação -->
+					<div class="row g-3 mt-3" id="linhaBotoes" style="display: none;">
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center"></div>
+
+						<div class="col-md-2 d-grid text-center">
+							<button type="button" id="botaoAdicionarProdutos"
+								class="btn btn-info btn-align w-100 d-flex justify-content-center align-items-center"
+								onclick="validarERedirecionar()">Adicionar Produto</button>
+						</div>
+
+						<div class="col-md-2 d-grid text-center">
+							<input type="hidden" name="cliente"
+								value="${pedido.cliente.codigo}"> <input type="hidden"
+								name="pedido" value="${pedido.codigo}"> <input
+								type="button" id="botaoPdf" name="botaoPdf" value="Etiqueta"
+								class="btn btn-success btn-align" onclick="gerarEtiqueta()">
+						</div>
+
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" value="Finalizar"
+								class="btn btn-outline-dark btn-align"
+								onclick="return confirmarFinalizacao('${pedido.estado}')">
+						</div>
+
+						<div class="col-md-2 d-grid text-center"></div>
 					</div>
 				</form>
+
+				<div class="modal fade" id="pedidoModal" tabindex="-1"
+					aria-labelledby="pedidoModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="pedidoModalLabel">Detalhes do
+									Pedido</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Fechar"></button>
+							</div>
+							<div class="modal-body">
+								<p>
+									<strong>Código:</strong> <span id="modalCodigo"></span>
+								</p>
+								<p>
+									<strong>Nome do Pedido:</strong> <span id="modalNome"></span>
+								</p>
+								<p>
+									<strong>Descrição:</strong> <span id="modalDescricao"></span>
+								</p>
+								<p>
+									<strong>Cliente:</strong> <span id="modalCliente"></span>
+								</p>
+								<p>
+									<strong>Estado:</strong> <span id="modalEstado"></span>
+								</p>
+								<p>
+									<strong>Valor Total:</strong> <span id="modalValorTotal"></span>
+								</p>
+								<p>
+									<strong>Tipo de Pagamento:</strong> <span
+										id="modalTipoPagamento"></span>
+								</p>
+								<p>
+									<strong>Status do Pagamento:</strong> <span
+										id="modalStatusPagamento"></span>
+								</p>
+								<p>
+									<strong>Data de Pagamento:</strong> <span
+										id="modalDataPagamento"></span>
+								</p>
+								<p>
+									<strong>CEP:</strong> <span id="modalCEP"></span>
+								</p>
+								<p>
+									<strong>Logradouro:</strong> <span id="modalLogradouro"></span>
+								</p>
+								<p>
+									<strong>Número:</strong> <span id="modalNumero"></span>
+								</p>
+								<p>
+									<strong>Complemento:</strong> <span id="modalComplemento"></span>
+								</p>
+								<p>
+									<strong>Bairro:</strong> <span id="modalBairro"></span>
+								</p>
+								<p>
+									<strong>Localidade:</strong> <span id="modalLocalidade"></span>
+								</p>
+								<p>
+									<strong>UF:</strong> <span id="modalUF"></span>
+								</p>
+								<p>
+									<strong>Telefone:</strong> <span id="modalTelefone"></span>
+								</p>
+
+								<!-- Tabela de Produtos -->
+								<c:if test="${not empty pedidoProdutos}">
+									<div class="table-responsive w-100 mt-4">
+										<table class="table table-bordered table-hover">
+											<thead class="table-dark">
+												<tr>
+													<th class="text-center" colspan="6"
+														style="font-size: 20px;">Lista de Produtos de um
+														Pedido</th>
+												</tr>
+												<tr>
+													<th>Nome</th>
+													<th>Categoria</th>
+													<th>Descrição</th>
+													<th>Valor</th>
+													<th>Quantidade</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach var="p" items="${pedidoProdutos}">
+													<tr>
+														<td><c:out value="${p.produto.nome}" /></td>
+														<td><c:out value="${p.produto.categoria}" /></td>
+														<td><c:out value="${p.produto.descricao}" /></td>
+														<td><fmt:formatNumber
+																value="${p.produto.valorUnitario}" type="currency"
+																currencySymbol="R$" /></td>
+														<td><c:out value="${p.quantidade}" /></td>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
+								</c:if>
+							</div>
+						</div>
+					</div>
+				</div>
+
 
 
 			</div>

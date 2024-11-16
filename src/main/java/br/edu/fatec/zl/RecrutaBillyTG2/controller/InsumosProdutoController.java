@@ -153,7 +153,6 @@ public class InsumosProdutoController {
 
 	}
 
-
 	private String excluirProdutoInsumo(InsumoProduto pi, Insumo i) throws SQLException, ClassNotFoundException {	
 		String saida = piDao.iudProdutoInsumo("D", pi, i);
 		System.out.println(pi.getProduto().getCodigo());

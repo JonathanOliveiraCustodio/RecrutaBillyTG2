@@ -106,6 +106,85 @@ function formatarMoeda(campo) {
 	}
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const codigoInput = document.getElementById("codigo");
+    const linhaBotoes = document.getElementById("linhaBotoes");
+
+    function verificarCodigo() {
+        const valorCodigo = codigoInput.value.trim();
+        if (valorCodigo !== "" && valorCodigo !== "0") {
+            linhaBotoes.style.display = "flex"; // Torna visível
+        } else {
+            linhaBotoes.style.display = "none"; // Esconde
+        }
+    }
+
+    // Verifica o valor inicial do campo ao carregar a página
+    verificarCodigo();
+
+    // Escuta mudanças no campo para atualizar a visibilidade
+    codigoInput.addEventListener("input", verificarCodigo);
+});
+
+function validarERedirecionar() {
+	// Obtenha o CPF do campo
+	var codigo = document.getElementById("codigo").value.trim();
+
+	if (codigo === "") {
+		alert("O código não pode estar vazio.");
+		document.getElementById("codigo").focus(); // Coloca o foco no campo CPF
+		return;
+	}
+
+	// Se o CPF estiver correto, redirecione para a URL desejada
+	window.location.href = 'insumosProduto?produto=' + encodeURIComponent(codigo);
+}
+
+function abrirModalProduto(codigo) {
+    // Validação do código
+    if (codigo == 0 || codigo.trim() === "") {
+        alert("O produto não pode estar vazio. Selecione um produto para visualizar!");
+        return; // Interrompe a função se o código estiver vazio
+    }
+
+    // Seleciona os campos de entrada com os dados preenchidos no formulário
+    var codigoInput = document.getElementById('codigo');
+    var nomeInput = document.getElementById('nome');
+    var categoriaSelect = document.getElementById('categoria');
+    var descricaoInput = document.getElementById('descricao');
+    var valorUnitarioInput = document.getElementById('valorUnitario');
+    var statusSelect = document.getElementById('status');
+    var quantidadeInput = document.getElementById('quantidade');
+    var refEstoqueInput = document.getElementById('refEstoque');
+    var dataInput = document.getElementById('data');
+
+    // Formata a data de "yyyy-MM-dd" para "dd/MM/yyyy"
+    function formatarData(data) {
+        var partesData = data.split("-");
+        return partesData[2] + "/" + partesData[1] + "/" + partesData[0];
+    }
+
+    // Preenche os dados no modal
+    document.getElementById('modalCodigo').innerText = codigoInput.value;
+    document.getElementById('modalNome').innerText = nomeInput.value;
+    document.getElementById('modalCategoria').innerText = categoriaSelect.options[categoriaSelect.selectedIndex].text;
+    document.getElementById('modalDescricao').innerText = descricaoInput.value;
+    document.getElementById('modalValorUnitario').innerText = valorUnitarioInput.value;
+    document.getElementById('modalStatus').innerText = statusSelect.options[statusSelect.selectedIndex].text;
+    document.getElementById('modalQuantidade').innerText = quantidadeInput.value;
+    document.getElementById('modalRefEstoque').innerText = refEstoqueInput.value;
+
+    // Formata a data e preenche no modal
+    if (dataInput.value) {
+        document.getElementById('modalData').innerText = formatarData(dataInput.value);
+    }
+
+    // Exibe o modal
+    let produtoModal = new bootstrap.Modal(document.getElementById('produtoModal'));
+    produtoModal.show();
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
 	const campovalorUnitario = document.getElementById('valorUnitario');
 	if (campovalorUnitario) {
