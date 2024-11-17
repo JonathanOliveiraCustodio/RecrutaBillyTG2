@@ -277,7 +277,7 @@
 								</div>
 							</div>
 							<!-- Lista de Pedidos Recentes -->
-							<div class="row mt-5">
+							<div class="row mt-5" id="tabelas">
 								<div class="col-md-12">
 									<div class="card shadow-sm">
 										<div class="card-body">
@@ -438,10 +438,6 @@
 																	</tr>
 																</c:forEach>
 															</c:when>
-
-
-
-
 															<c:otherwise>
 																<c:forEach var="pedido" items="${pedidos}">
 																	<tr>

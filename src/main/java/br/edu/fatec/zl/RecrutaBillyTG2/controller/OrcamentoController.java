@@ -182,7 +182,7 @@ public class OrcamentoController {
 					Orcamento orcamento = orcamentos.get(0);
 					saida = "Orçamento encontrado: " + orcamento.getNome();
 					o = new Orcamento();
-					o.setCodigo(Integer.parseInt(codigo));
+					//o.setCodigo(Integer.parseInt(codigo));
 					o = buscarOrcamento(orcamento);
 					produtosOrcamento = poDao.findAll(o); 
 				} else {
