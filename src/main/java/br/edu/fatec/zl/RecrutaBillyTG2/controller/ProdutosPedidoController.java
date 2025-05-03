@@ -49,7 +49,6 @@ public class ProdutosPedidoController {
 			session.setAttribute("pedido", pedido);
 		}
 		String erro = "";
-		List<Produto> produtos = new ArrayList<>();
 		List<PedidoProduto> pedidoProdutos = new ArrayList<>();
 		List<CategoriaProduto> categorias = new ArrayList<>();
 		Pedido pe = new Pedido();
@@ -64,7 +63,6 @@ public class ProdutosPedidoController {
 			erro = e.getMessage();
 		} finally {
 			model.addAttribute("erro", erro);
-			model.addAttribute("produtos", produtos);
 			model.addAttribute("pedidoProdutos", pedidoProdutos);
 			model.addAttribute("categorias", categorias);
 		}
@@ -75,6 +73,7 @@ public class ProdutosPedidoController {
 	public ModelAndView produtosPedidoPost(@RequestParam Map<String, String> allRequestParam,
 			HttpServletRequest request, ModelMap model) {
 		HttpSession session = request.getSession();
+		
 		String cmd = allRequestParam.get("botao");
 		String codigoPedido = (String) session.getAttribute("pedido");
 		String codigoProduto = allRequestParam.get("produto");
@@ -92,13 +91,14 @@ public class ProdutosPedidoController {
 		List<CategoriaProduto> categorias = new ArrayList<>();
 		String saida = "";
 		String erro = "";
-		//System.out.println("Categoria selecionada: " + categoria);
+		System.out.println("Categoria selecionada: " + categoria);
 		try {
 			pe.setCodigo(Integer.parseInt(codigoPedido));
 			pe = buscarPedido(pe);
 			pedidoProdutos = listarProdutos(pe);
 			categorias = listarCategorias();
 			cp.setNome(categoria);
+			
 			produtos = listarProdutosCategoria(categoria);
 			
 			pr.setCodigo(Integer.parseInt(codigoProduto));

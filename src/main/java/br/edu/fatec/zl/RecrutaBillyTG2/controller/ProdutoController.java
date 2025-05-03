@@ -61,6 +61,7 @@ public class ProdutoController {
 				p = new Produto();
 				p.setCodigo(Integer.parseInt(codigo));
 				p = buscarProduto(p);
+				insumosProduto = piDao.listarCodigo(p.getCodigo()); 
 			}
 
 			// Comando para alterar ou excluir o produto
@@ -102,7 +103,7 @@ public class ProdutoController {
 		String status = allRequestParam.get("status");
 		String quantidade = allRequestParam.get("quantidade");
 		String refEstoque = allRequestParam.get("refEstoque");
-		String data = allRequestParam.get("data");
+		String dataProduto = allRequestParam.get("dataProduto");
 
 		String saida = "";
 		String erro = "";
@@ -142,7 +143,7 @@ public class ProdutoController {
 				p.setStatus(status);
 				p.setQuantidade(Integer.parseInt(quantidade));
 				p.setRefEstoque(refEstoque);
-				p.setData(Date.valueOf(data));
+				p.setDataProduto(Date.valueOf(dataProduto));
 			}
 			if (cmd.contains("Cadastrar")) {
 				saida = cadastrarProduto(p);

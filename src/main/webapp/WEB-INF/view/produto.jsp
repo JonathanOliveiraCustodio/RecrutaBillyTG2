@@ -145,9 +145,9 @@
 						</div>
 						<div class="col-md-4">
 							<div class="form-floating">
-								<input type="date" id="data" name="data" class="form-control"
+								<input type="date" id="dataProduto" name="dataProduto" class="form-control"
 									placeholder="Data"
-									value='<c:out value="${produto.data}"></c:out>'> <label
+									value='<c:out value="${produto.dataProduto}"></c:out>'> <label
 									for="data">Data</label>
 							</div>
 						</div>
@@ -330,7 +330,7 @@
 								<td><c:out value="${p.status}" /></td>
 								<td><c:out value="${p.quantidade}" /></td>
 								<td><c:out value="${p.refEstoque}" /></td>
-								<td><fmt:formatDate value="${p.data}" pattern="dd/MM/yyyy" /></td>
+								<td><fmt:formatDate value="${p.dataProduto}" pattern="dd/MM/yyyy" /></td>
 								<td>
 									<button
 										onclick="window.location.href='insumosProduto?produto=${p.codigo}'"

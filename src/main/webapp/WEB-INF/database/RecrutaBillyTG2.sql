@@ -77,7 +77,7 @@ valorUnitario  DECIMAL (10,2)   NOT NULL,
 status		   VARCHAR(30)		NOT NULL,
 quantidade	   INT				NOT NULL,
 refEstoque     VARCHAR(50)      NOT NULL, 
-data		   DATE             NOT NULL
+dataProduto	   DATE             NOT NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (categoria) REFERENCES categoriaProduto (codigo)
 )
@@ -93,16 +93,16 @@ FOREIGN KEY (codigoInsumo) REFERENCES insumo (codigo)
 GO
 CREATE TABLE cliente(
 codigo			INT				NOT NULL IDENTITY (1,1),
-nome			VARCHAR(100)	NOT NULL,
-telefone		CHAR(11)		NOT NULL,
-email			VARCHAR(100)	NOT NULL,
-tipo			VARCHAR(10)	    NOT NULL,
-documento		CHAR(14)	    NOT NULL,
-CEP		        CHAR(09)	    NOT NULL,
-logradouro      VARCHAR(150)	NOT NULL, 
-bairro          VARCHAR(150)	NOT NULL,
-localidade      VARCHAR(100)	NOT NULL,
-UF              CHAR(02)	    NOT NULL,
+nome			VARCHAR(100)	NULL,
+telefone		CHAR(11)		NULL,
+email			VARCHAR(100)	NULL,
+tipo			VARCHAR(10)	    NULL,
+documento		CHAR(14)	    NULL,
+CEP		        CHAR(09)	    NULL,
+logradouro      VARCHAR(150)	NULL, 
+bairro          VARCHAR(150)	NULL,
+localidade      VARCHAR(100)	NULL,
+UF              CHAR(02)	    NULL,
 complemento     VARCHAR(100)	NULL,
 numero          VARCHAR (20)	NOT NULL,
 dataNascimento  DATE	NOT NULL
@@ -271,9 +271,172 @@ GO
 -- Insert Usuario de Teste
 INSERT INTO funcionario (CPF, nome, nivelAcesso, senha, email, dataNascimento, telefone, cargo, horario, salario, dataAdmissao, dataDesligamento, observacao) VALUES
 ('25525320045', 'Administrador', 'admin', 'admin', 'admin', '2000-01-01', '12345678901', 'Gerente', '08:00 às 17:00', 5000.0, '2020-01-01', NULL, NULL),
-('76368440015', 'Evandro', 'admin', '123456', 'teste@teste.com', '1985-05-20', '12345678902', 'Supervisor', '09:00 às 18:00', 4000.0, '2021-01-01', NULL, NULL),
-('37848890007', 'John', 'Funcionário', '123456', 'john.oliveira.custodio@gmail.com', '1990-08-15', '11956090706', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
+('76368440015', 'Evandro', 'Funcionário', '123456', 'teste@teste.com', '1985-05-20', '12345678902', 'Supervisor', '09:00 às 18:00', 4000.0, '2021-01-01', NULL, NULL),
+('38942231896', 'John', 'admin', '123456', 'john.oliveira.custodio@gmail.com', '1990-08-15', '11956090706', 'Funcionário', '10:00 às 19:00', 3000.0, '2022-01-01', NULL, NULL);
 GO
+<<<<<<< Updated upstream
+=======
+INSERT INTO cliente (nome, telefone, email, tipo, documento, CEP, logradouro, bairro, localidade, UF, complemento, numero, dataNascimento) VALUES
+('Fabio de Lima', '11956090745', 'fdelima@email.com', 'CPF', '45230955074', '08120300', 'Rua Nogueira Viotti', 'Itaim Paulista', 'São Paulo', 'SP', NULL, '156B','1990-08-01'),
+('Manoel Gonçalves Costa', '11956090705', 'manoelgoncosta@email.com', 'CPF', '14568711029', '09154900', 'Estrada de Ferro Santos Jundiaí', 'Vila Elclor', 'Santo André', 'SP', NULL, '45','1996-10-03'),
+('Astolfo Melo de Cunha', '11984823716', 'astolfocunha@email.com', 'CNPJ', '70295892000180', '01531000', 'Rua da Glória', 'Liberdade', 'São Paulo', 'SP', NULL, '234','2000-05-03'),
+('Gabriela Bittencourt', '11965428657', 'gabiit@email.com', 'CNPJ', '32596552000109', '01002000', 'Rua Boa Vista', 'Centro', 'São Paulo', 'SP', NULL, '90','1997-11-01'),
+('Yasmin Ribeiro Faganello', '11912438547', 'yasribeiro@email.com', 'CPF', '61837422010', '04050001', 'Avenida Jabaquara', 'Mirandópolis', 'São Paulo', 'SP', NULL, '452A','1984-02-02'),
+('Rafaela Ferrari', '11943758121', 'raferrari@email.com', 'CPF', '28348483004', '01310000', 'Avenida Paulista', 'Bela Vista', 'São Paulo', 'SP', 'Apt 202', '1500','1945-08-08'),
+('Carlos Eduardo Mendes', '11976543210', 'carlosmendes@email.com', 'CPF', '32856987001', '04534011', 'Rua Bandeira Paulista', 'Itaim Bibi', 'São Paulo', 'SP', NULL, '123','1978-12-12'),
+('Mariana Alves', '11987654321', 'marianaalves@email.com', 'CPF', '42396587002', '01323001', 'Rua Haddock Lobo', 'Cerqueira César', 'São Paulo', 'SP', NULL, '456','1985-03-15'),
+('Fernando Pereira', '11998765432', 'fernandopereira@email.com', 'CPF', '53048792003', '01402001', 'Alameda Santos', 'Jardim Paulista', 'São Paulo', 'SP', NULL, '789','1992-07-23'),
+('Ana Beatriz Rocha', '11909876543', 'anabrocha@email.com', 'CPF', '61934876004', '01310930', 'Rua Bela Cintra', 'Consolação', 'São Paulo', 'SP', NULL, '101','1980-01-05'),
+('Pedro Henrique Costa', '11921098765', 'pedrohcosta@email.com', 'CPF', '79856723005', '05414020', 'Rua Teodoro Sampaio', 'Pinheiros', 'São Paulo', 'SP', NULL, '202','1975-05-25'),
+('Lucas Silva', '11932109876', 'lucassilva@email.com', 'CPF', '98366168026', '05013020', 'Rua Caiubi', 'Perdizes', 'São Paulo', 'SP', NULL, '303','1988-10-10'),
+('Joana Souza', '11943210987', 'joanasouza@email.com', 'CPF', '24228714021', '02012001', 'Rua Voluntários da Pátria', 'Santana', 'São Paulo', 'SP', NULL, '404','1995-11-11'),
+('Thiago Santos', '11954321098', 'thiagosantos@email.com', 'CPF', '14532477000', '03015001', 'Rua Siqueira Bueno', 'Belenzinho', 'São Paulo', 'SP', NULL, '505','1983-09-09'),
+('Laura Martins', '11965432109', 'lauramartins@email.com', 'CPF', '30269360069', '04013002', 'Avenida Indianópolis', 'Indianópolis', 'São Paulo', 'SP', NULL, '606','1990-04-04'),
+('Bruno Oliveira', '11976543201', 'brunooliveira@email.com', 'CPF', '08971895071', '05015020', 'Rua Turiassu', 'Perdizes', 'São Paulo', 'SP', NULL, '707','1982-12-20'),
+('Julia Rodrigues', '11987654320', 'juliarodrigues@email.com', 'CPF', '47648143070', '03012001', 'Rua Tobias Barreto', 'Belém', 'São Paulo', 'SP', NULL, '808','1987-07-17'),
+('Marcelo Lima', '11998765421', 'marcelolima@email.com', 'CPF', '93240037041', '04012002', 'Avenida Jurema', 'Indianópolis', 'São Paulo', 'SP', NULL, '909','1991-03-03'),
+('Patricia Andrade', '11909876542', 'patriciaandrade@email.com', 'CPF', '72410957072', '05017030', 'Rua Apinajés', 'Perdizes', 'São Paulo', 'SP', NULL, '1010','1979-08-18'),
+('Felipe Costa', '11921098754', 'felipecosta@email.com', 'CPF', '50794757065', '03012002', 'Rua Tuiuti', 'Tatuapé', 'São Paulo', 'SP', NULL, '1111','1986-02-22'),
+('Amanda Silva', '11932109865', 'amandasilva@email.com', 'CPF', '24872469011', '04012003', 'Avenida Moreira Guimarães', 'Moema', 'São Paulo', 'SP', NULL, '1212','1993-05-09');
+GO
+INSERT INTO fornecedor (nome, telefone, email, empresa, CEP, logradouro, numero, bairro, complemento, cidade, UF) VALUES
+('Tech Solutions Ltda.','1234567890', 'contato@techsolutions.com', 'Tecnologia e Soluções', '12345-678', 'Rua das Inovações', '123', 'Centro', NULL, 'São Paulo', 'SP'),
+('Eco Supply Co.', '2345678901', 'contato@ecosupply.com', 'Fornecimento Ecológico', '23456-789', 'Avenida Sustentável', '456', 'Jardim', NULL, 'Rio de Janeiro', 'RJ'),
+('ArtisanCraft Inc.', '3456789012', 'contato@artisancraft.com', 'Arte e Design', '34567-890', 'Praça dos Artesãos', '789', 'Vila', NULL, 'Belo Horizonte', 'MG'),
+('Gourmet Essentials', '4567890123', 'contato@gourmetessentials.com', 'Alimentos Gourmet', '45678-901', 'Travessa dos Sabores', '101', 'Centro', NULL, 'Curitiba', 'PR'),
+('BioTech Innovations', '5678901234', 'contato@biotechinnovations.com', 'Inovações Biomédicas', '56789-012', 'Alameda da Ciência', '202', 'Zona Industrial', NULL, 'Porto Alegre', 'RS'),
+('EduSmart Solutions', '6789012345', 'contato@edusmart.com', 'Soluções Educacionais', '67890-123', 'Avenida do Conhecimento', '303', 'Bairro Universitário', NULL, 'Brasília', 'DF'),
+('Fashion Trends Inc.', '7890123456', 'contato@fashiontrends.com', 'Tendências de Moda', '78901-234', 'Rua da Moda', '404', 'Centro', NULL, 'Florianópolis', 'SC'),
+('GreenGrow Gardens', '8901234567', 'contato@greengrowgardens.com', 'Jardins Sustentáveis', '89012-345', 'Estrada das Plantas', '505', 'Jardins', NULL, 'Salvador', 'BA'),
+('TechNova Industries','9012345678', 'contato@technovaindustries.com', 'Indústria Tecnológica', '90123-456', 'Boulevard da Tecnologia', '606', 'Distrito Tecnológico', NULL, 'Campinas', 'SP'),
+('Tranquil Retreats Ltd.', '0123456789', 'contato@tranquilretreats.com', 'Retiros Tranquilos', '01234-567', 'Rua da Serenidade', '707', 'Centro', NULL, 'Fortaleza', 'CE');
+GO
+INSERT INTO insumo (nome, precoCompra,precoVenda, quantidade,unidade, fornecedor,dataCompra) VALUES
+('Solvente', 30.00,35.00, 500,'unidade', 1.5,'2024-05-05'),
+('Verniz', 50.00,55.00, 100,'unidade', 2,'2024-04-07'),
+('Papel Offset', 15.00,20.00, 1000,'unidade', 3,'2024-11-10'),
+('Tinta Branca PU', 50.00,55.00, 50,'unidade', 4,'2024-02-01'),
+('Tinta Preta PU', 40.00,45.00, 300,'ml', 5,'2024-09-03'),
+('Molecula Verrmelha', 25.00,30.00, 400,'kg', 1,'2024-06-04'),
+('Molecula Cinza', 120.00,150.00, 5.5,'kg', 8,'2024-06-03'),
+('Filamento Azul', 42.50, 48.90,200,'kg', 7,'2023-12-12'),
+('Poliester', 30.00, 35.00, 10,'ml', 8,'2024-07-15'),
+('Tinta Metálica', 20.10,27.50, 20,'unidade', 6, '2024-07-10');
+GO
+INSERT INTO equipamento (nome, descricao, fabricante, dataAquisicao) VALUES 
+('Impressora Offset', 'Impressora Offset de alta velocidade', 'HP', '2024-04-27'),
+('Guilhotina', 'Guilhotina de corte automático', 'Guilhotinas S.A.', '2024-04-27'),
+('Encadernadora', 'Encadernadora para acabamento de livros', 'Encadernações Ltda.', '2024-04-27'),
+('Máquina de Corte e Vinco', 'Máquina para corte e vinco de papelão', 'Máquinas Inc.', '2024-04-27'),
+('Plotter de Impressão', 'Plotter para impressão de grandes formatos', 'Plotter Solutions', '2024-04-27'),
+('Dobradeira', 'Dobradeira de papel automática', 'Dobras & Cia.', '2024-04-27'),
+('Laminadora', 'Laminadora para aplicação de filmes plásticos', 'Laminadoras S.A.', '2024-04-27'),
+('Grampeadora Automática', 'Grampeadora automática para acabamento de revistas', 'Grampeadoras Ltda.', '2024-04-27'),
+('Sistema de Impressão Digital', 'Impressora digital de alta resolução', 'Digital Print', '2024-04-27'),
+('Fresadora CNC', 'Fresadora de controle numérico computadorizado para usinagem de peças', 'CNC Solutions', '2024-04-27');
+GO
+INSERT INTO categoriaProduto(nome)
+VALUES 
+('Utensílio Doméstico'),
+('Patch Emborrachado'),
+('Decoração'),
+('Papelaria'),
+('Facas');
+GO
+INSERT INTO produto (nome, categoria, descricao, valorUnitario,status, quantidade,refEstoque,dataProduto) VALUES
+('Caneca Personalizada', 2, 'Caneca de cerâmica com personalização de foto ou texto.', 15.99,'Em Produção',2,'CX01','2024-04-27'),
+('Camiseta Personalizada', 2, 'Camiseta de algodão com estampa personalizada.', 24.99,'Em Produção',10,'CX02','2024-04-27'),
+('Calendário de Parede Personalizado', 3, 'Calendário de parede personalizado com fotos.', 12.99,'Não Aplicável',100,'CX05','2024-04-27'),
+('Caneta Personalizada', 1, 'Caneta esferográfica com nome gravado.', 13.49,'Em Produção',100,'AR01','2024-04-27'),
+('Mouse Pad Personalizado', 4, 'Mouse pad com imagem personalizada.', 58.99,'Não Aplicável',5,'CX10','2024-04-27'),
+('Caderno Personalizado', 2, 'Caderno com capa personalizada.', 19.99, 'Em Produção',15,'CX03','2024-04-27'),
+('Almofada Personalizada', 3, 'Almofada com foto personalizada.', 17.99, 'Em Produção',20,'CX02','2024-04-27'),
+('Chaveiro Personalizado', 1, 'Chaveiro com nome gravado.', 5.99,'Não Aplicável',2,'AR01','2024-04-27'),
+('Patach emborrados', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Não Aplicável',5,'AR01','2024-04-27'),
+('Maria O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 7, 'AR02','2024-04-27'),
+('Carlos A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.50, 'Em Produção', 3, 'AR03','2024-04-27'),
+('Ana AB+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.00, 'Pendente', 10, 'AR04','2024-04-27'),
+('Pedro B-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.50, 'Em Produção', 6, 'AR05','2024-04-27'),
+('João A-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.00, 'Em Produção', 4, 'AR06','2024-04-27'),
+('Lucas O+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 12.00, 'Finalizado', 8, 'AR07','2024-04-27'),
+('Fernanda AB-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 9.00, 'Pendente', 9, 'AR08','2024-04-27'),
+('Clara B+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 11.50, 'Em Produção', 5, 'AR09','2024-04-27'),
+('Roberto O-', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 10.50, 'Finalizado', 6, 'AR10','2024-04-27'),
+('Bruno A+', 2, 'Emborrachado personalizado com nome e tipo sanguíneo.', 8.00, 'Pendente', 7, 'AR11','2024-04-27'),
+('Alex B+', 2, 'Emborachados personalizado com nome e tipo sanguineo.', 10.00,'Em Produção',5,'AR01','2024-04-27');
+GO
+INSERT INTO pedido (nome, descricao, cliente, valorTotal, estado, dataPedido, tipoPagamento, observacao, statusPagamento, dataPagamento)
+VALUES
+('Pedido 001', 'Descrição do Pedido 001', 1, 150.00, 'Em andamento', '2025-07-01', 'PIX', NULL, 'Pago', '2024-07-02'),
+('Pedido 002', 'Descrição do Pedido 002', 2, 200.00, 'Recebido', '2025-07-02', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 003', 'Descrição do Pedido 003', 3, 50.00, 'Pedido Finalizado', '2025-02-03', 'Dinheiro', NULL, 'Pago', '2024-07-03'),
+('Pedido 004', 'Descrição do Pedido 004', 4, 300.00, 'Despachado', '2025-02-04', 'Cartão de Crédito', NULL, 'Pendente', NULL),
+('Pedido 005', 'Descrição do Pedido 005', 5, 120.00, 'Em andamento', '2025-04-05', 'Transferência Bancária', NULL, 'Pago', '2024-07-06'),
+('Pedido 006', 'Descrição do Pedido 006', 6, 180.00, 'Recebido', '2025-04-06', 'Mercado Pago', NULL, 'Pendente', NULL),
+('Pedido 007', 'Descrição do Pedido 007', 1, 90.00, 'Pedido Finalizado', '2025-04-07', 'PIX', NULL, 'Pago', '2024-07-08'),
+('Pedido 008', 'Descrição do Pedido 008', 2, 220.00, 'Despachado', '2025-01-08', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 009', 'Descrição do Pedido 009', 3, 110.00, 'Em andamento', '2025-01-09', 'Cartão de Crédito', NULL, 'Pago', '2024-07-10'),
+('Pedido 010', 'Descrição do Pedido 010', 4, 250.00, 'Recebido', '2025-01-10', 'Transferência Bancária', NULL, 'Pendente', NULL),
+('Pedido 011', 'Descrição do Pedido 011', 5, 130.00, 'Pedido Finalizado', '2025-11-11', 'Mercado Pago', NULL, 'Pago', '2024-07-12'),
+('Pedido 012', 'Descrição do Pedido 012', 6, 160.00, 'Despachado', '2025-11-12', 'PIX', NULL, 'Pendente', NULL),
+('Pedido 013', 'Descrição do Pedido 013', 1, 200.00, 'Em andamento', '2025-11-13', 'Boleto', NULL, 'Pago', '2024-07-14'),
+('Pedido 014', 'Descrição do Pedido 014', 2, 80.00, 'Recebido', '2025-11-14', 'Cartão de Crédito', NULL, 'Pendente', NULL),
+('Pedido 015', 'Descrição do Pedido 015', 3, 220.00, 'Pedido Finalizado', '2025-08-15', 'Transferência Bancária', NULL, 'Pago', '2024-07-16'),
+('Pedido 016', 'Descrição do Pedido 016', 4, 140.00, 'Despachado', '2025-08-16', 'Mercado Pago', NULL, 'Pendente', NULL),
+('Pedido 017', 'Descrição do Pedido 017', 5, 170.00, 'Em andamento', '2025-08-17', 'PIX', NULL, 'Pago', '2024-07-18'),
+('Pedido 018', 'Descrição do Pedido 018', 6, 190.00, 'Recebido', '2025-07-18', 'Boleto', NULL, 'Pendente', NULL),
+('Pedido 019', 'Descrição do Pedido 019', 1, 210.00, 'Pedido Finalizado', '2025-10-19', 'Cartão de Crédito', NULL, 'Pago', '2024-07-20'),
+('Pedido 020', 'Descrição do Pedido 020', 2, 230.00, 'Despachado', '2025-10-20', 'Transferência Bancária', NULL, 'Pendente', NULL);
+GO
+INSERT INTO manutencoesEquipamento (codigoEquipamento, dataManutencao, descricaoManutencao) VALUES
+(1, '2023-01-15', 'Substituição de peças desgastadas'),
+(2, '2023-02-20', 'Lubrificação completa'),
+(3, '2023-03-10', 'Revisão geral do equipamento'),
+(4, '2023-04-05', 'Troca de óleo'),
+(5, '2023-05-25', 'Ajuste de calibragem'),
+(6, '2023-06-30', 'Reparo no sistema elétrico'),
+(7, '2023-07-15', 'Substituição de filtros'),
+(8, '2023-08-20', 'Verificação de segurança'),
+(9, '2023-09-10', 'Limpeza interna e externa'),
+(10, '2023-10-05', 'Atualização de software'),
+(1, '2023-11-25', 'Inspeção de rotina'),
+(2, '2023-12-30', 'Reparação de falhas mecânicas'),
+(3, '2024-01-15', 'Teste de performance'),
+(4, '2024-02-20', 'Revisão de sistemas hidráulicos'),
+(5, '2024-03-10', 'Substituição de correias'),
+(6, '2024-04-05', 'Ajuste de alinhamento'),
+(7, '2024-05-25', 'Teste de funcionamento'),
+(8, '2024-06-30', 'Atualização de firmware'),
+(9, '2024-07-15', 'Inspeção de cabos e conexões'),
+(10, '2024-08-20', 'Reparo em componentes desgastados');
+GO
+INSERT INTO orcamento (nome, descricao, cliente, valorTotal,formaPagamento, status, observacao, dataOrcamento) VALUES
+('Orçamento A', 'Descrição do orçamento A', 1, 1500.00, 'PIX','Orçamento', 'Observação A', '2024-08-01'),
+('Orçamento B', 'Descrição do orçamento B', 2, 2500.50,'PIX', 'Orçamento', 'Observação B', '2024-08-02'),
+('Orçamento C', 'Descrição do orçamento C', 1, 3200.75,'Mercado  Pago', 'Orçamento', 'Observação C', '2024-08-03'),
+('Orçamento D', 'Descrição do orçamento D', 4, 450.30,'PIX', 'Orçamento', 'Observação D', '2024-08-04'),
+('Orçamento E', 'Descrição do orçamento E', 5, 5700.80,'Mercado  Pago', 'Orçamento', 'Observação E', '2024-08-05'),
+('Orçamento F', 'Descrição do orçamento F', 6, 1200.40,'PIX', 'Orçamento', 'Observação F', '2024-08-06'),
+('Orçamento G', 'Descrição do orçamento G', 7, 2300.90,'Mercado  Pago', 'Orçamento', 'Observação G', '2024-08-07'),
+('Orçamento H', 'Descrição do orçamento H', 8, 750.00,'PIX', 'Orçamento', 'Observação H', '2024-08-08'),
+('Orçamento I', 'Descrição do orçamento I', 9, 1340.10,'Boleto', 'Orçamento', 'Observação I', '2024-08-09'),
+('Orçamento J', 'Descrição do orçamento J', 10, 250.20,'PIX', 'Orçamento', 'Observação J', '2024-08-10'),
+('Orçamento K', 'Descrição do orçamento K', 11, 4900.30,'Boleto', 'Orçamento', 'Observação K', '2024-08-11'),
+('Orçamento L', 'Descrição do orçamento L', 12, 3100.00,'PIX', 'Orçamento', 'Observação L', '2024-08-12'),
+('Orçamento M', 'Descrição do orçamento M', 13, 870.70,'Boleto', 'Orçamento', 'Observação M', '2024-08-13'),
+('Orçamento N', 'Descrição do orçamento N', 14, 670.80,'PIX', 'Aprovado', 'Observação N', '2024-08-14'),
+('Orçamento O', 'Descrição do orçamento O', 15, 2950.20,'Boleto', 'Em aberto', 'Observação O', '2024-08-15'),
+('Orçamento P', 'Descrição do orçamento P', 16, 1450.60,'PIX', 'Rejeitado', 'Observação P', '2024-08-16'),
+('Orçamento Q', 'Descrição do orçamento Q', 17, 2000.00,'Boleto', 'Em aberto', 'Observação Q', '2024-08-17'),
+('Orçamento R', 'Descrição do orçamento R', 18, 5000.50,'PIX', 'Aprovado', 'Observação R', '2024-08-18'),
+('Orçamento S', 'Descrição do orçamento S', 19, 330.00,'Mercado  Pago', 'Em aberto', 'Observação S', '2024-08-19'),
+('Orçamento T', 'Descrição do orçamento T', 20, 7700.90,'PIX', 'Rejeitado', 'Observação T', '2024-08-20')
+GO
+INSERT INTO endereco (CPF, CEP, logradouro, bairro, localidade, UF, complemento, numero, tipoEndereco) VALUES 
+('25525320045','01001-000','Praça da Sé','Sé','São Paulo','SP','Centro','1','Residencial'),
+('76368440015','20040-003','Avenida Rio Branco','Centro','Rio de Janeiro','RJ','Edifício ABC','100','Comercial')
+GO
+>>>>>>> Stashed changes
 INSERT INTO configuracoes(qtdMaximaOrcamento,qtdMinimaProdutoEstoque,qtdMediaPedidoAndamento,
 qtdMediaPedidosRecebidos,qtdMediaPedidosDespachados,qtdMediaProducaoProdutos,qtdDespesasPendentes,qtdDespesasVencidas,valorTotalDespesasMes) VALUES 
 (14,5,4,5,5,5,7,6,4000.0)
@@ -533,7 +696,7 @@ CREATE PROCEDURE sp_iud_produto
     @status VARCHAR(20),
     @quantidade INT, 
     @refEstoque VARCHAR(50),
-	@data DATE,
+	@dataProduto DATE,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -548,7 +711,7 @@ BEGIN
             RETURN;
         END
         -- Insere o novo produto
-        INSERT INTO produto (nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque, data)
+        INSERT INTO produto (nome, categoria, descricao, valorUnitario, status, quantidade, refEstoque, dataProduto)
         VALUES (@nome, @categoria, @descricao, @valorUnitario, @status, @quantidade, @refEstoque,GETDATE());
         SET @saida = 'Produto inserido com sucesso';
     END
@@ -557,7 +720,7 @@ BEGIN
         -- Atualiza o produto existente
         UPDATE produto
         SET nome = @nome, categoria = @categoria, descricao = @descricao, valorUnitario = @valorUnitario, 
-		status = @status, quantidade = @quantidade, refEstoque = @refEstoque, data =@data
+		status = @status, quantidade = @quantidade, refEstoque = @refEstoque, dataProduto =@dataProduto
         WHERE codigo = @codigo;
         IF @@ROWCOUNT = 0
         BEGIN
@@ -1752,7 +1915,7 @@ SELECT
     p.status,
     p.quantidade,
     p.refEstoque,
-	p.data
+	p.dataProduto
 FROM 
     produto p
 INNER JOIN 
@@ -2192,7 +2355,15 @@ SELECT
     o.observacao,
     o.dataOrcamento,
     e.nome AS nomeCliente,
-    e.codigo AS codigoCliente 
+    e.codigo AS codigoCliente,
+	e.CEP,
+    e.logradouro,
+    e.numero,
+    e.UF,
+    e.localidade,
+    e.bairro,
+    e.complemento,
+    e.telefone
 FROM 
     orcamento o
 JOIN 
@@ -2477,11 +2648,14 @@ RETURNS @resultado TABLE (
     codigoCliente INT,
     nomeCliente VARCHAR(100),
     dataPedido DATE,
-    quantidadeRegistros INT
+    quantidadeRegistros INT,
+    somaValorTotal DECIMAL(10,2)
 )
 AS
 BEGIN
     DECLARE @count INT;
+    DECLARE @somaValorTotal DECIMAL(10,2);
+    
     DECLARE @pedidos TABLE (
         codigo INT,
         nomePedido VARCHAR(100),
@@ -2513,15 +2687,30 @@ BEGIN
         (@tipoPesquisa = 'Estado' AND p.estado LIKE '%' + @valorPesquisa + '%') OR
         (@tipoPesquisa = 'Data' AND p.dataPedido = TRY_CAST(@valorPesquisa AS DATE)) OR
         (@tipoPesquisa = 'Maior Que' AND p.valorTotal > TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
-        (@tipoPesquisa = 'Menor Que' AND p.valorTotal < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR    
+        (@tipoPesquisa = 'Menor Que' AND p.valorTotal < TRY_CAST(@valorPesquisa AS DECIMAL(10,2))) OR
+        (@tipoPesquisa = 'Último Mês' AND p.dataPedido >= DATEADD(MONTH, -1, GETDATE())) OR
+        (@tipoPesquisa = 'Último Semana' AND p.dataPedido >= DATEADD(DAY, -7, GETDATE())) OR
+        (@tipoPesquisa = 'Janeiro' AND MONTH(p.dataPedido) = 1 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Fevereiro' AND MONTH(p.dataPedido) = 2 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Março' AND MONTH(p.dataPedido) = 3 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Abril' AND MONTH(p.dataPedido) = 4 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Maio' AND MONTH(p.dataPedido) = 5 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Junho' AND MONTH(p.dataPedido) = 6 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Julho' AND MONTH(p.dataPedido) = 7 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Agosto' AND MONTH(p.dataPedido) = 8 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Setembro' AND MONTH(p.dataPedido) = 9 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Outubro' AND MONTH(p.dataPedido) = 10 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Novembro' AND MONTH(p.dataPedido) = 11 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
+        (@tipoPesquisa = 'Dezembro' AND MONTH(p.dataPedido) = 12 AND YEAR(p.dataPedido) = YEAR(GETDATE())) OR
         (@tipoPesquisa = 'Todos');
 
     SET @count = (SELECT COUNT(*) FROM @pedidos);
+    SET @somaValorTotal = (SELECT ISNULL(SUM(valorTotal), 0) FROM @pedidos);
 
     IF @count = 0
     BEGIN
-        INSERT INTO @resultado (codigo, nomePedido, descricao, cliente, valorTotal, estado, codigoCliente, nomeCliente, dataPedido, quantidadeRegistros)
-        VALUES (0, 'Nenhum registro encontrado', '', 0, 0.0, '', 0, '', NULL, 0);
+        INSERT INTO @resultado (codigo, nomePedido, descricao, cliente, valorTotal, estado, codigoCliente, nomeCliente, dataPedido, quantidadeRegistros, somaValorTotal)
+        VALUES (0, 'Nenhum registro encontrado', '', 0, 0.0, '', 0, '', NULL, 0, 0.0);
     END
     ELSE
     BEGIN
@@ -2536,13 +2725,15 @@ BEGIN
             codigoCliente,
             nomeCliente,
             dataPedido,
-            @count AS quantidadeRegistros
+            @count AS quantidadeRegistros,
+            @somaValorTotal AS somaValorTotal
         FROM @pedidos;
     END
 
     RETURN;
 END;
 GO
+SELECT * FROM dbo.fn_buscar_pedido('Janeiro', '');
 -- Função fn_buscar_produto ajustada com código da categoria
 CREATE FUNCTION fn_buscar_produto (
     @tipoPesquisa VARCHAR(50),
@@ -2588,7 +2779,7 @@ BEGIN
         p.status,
         p.quantidade,
         p.refEstoque,
-		p.data
+		p.dataProduto
     FROM 
         produto p
     INNER JOIN 
@@ -3070,12 +3261,3 @@ BEGIN
     RETURN;
 END;
 GO
---SELECT * FROM tarjeta
-
---UPDATE funcionario
---SET codigoRecuperacao = '654321',  -- Novo código de recuperação
---    contaBloqueada = 1,             -- 1 para bloquear a conta, 0 para desbloquear
---	tentativasFalhas = 5,
---	nivelAcesso = 'admin'
---WHERE CPF = '37848890007';         -- CPF do funcionário a ser atualizado
-

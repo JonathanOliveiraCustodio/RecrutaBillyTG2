@@ -39,7 +39,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 		cs.setString(7, p.getStatus());
 		cs.setInt(8, p.getQuantidade());
 		cs.setString(9, p.getRefEstoque());
-		cs.setDate(10, p.getData());
+		cs.setDate(10, p.getDataProduto());
 		cs.registerOutParameter(11, Types.VARCHAR);
 		cs.execute();
 		String saida = cs.getString(11);
@@ -71,7 +71,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+			//p.setDataProduto(rs.getDate("dataProduto"));
 			return p;
 		} else {
 			rs.close();
@@ -103,7 +103,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+		//	p.setDataProduto(rs.getDate("dataProduto"));
 			produtos.add(p);
 		}
 		rs.close();
@@ -138,7 +138,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+		//	p.setDataProduto(rs.getDate("dataProduto"));
 			produtos.add(p);	
 		}
 		rs.close();
@@ -174,7 +174,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+		//	p.setDataProduto(rs.getDate("dataProduto"));
 			produtos.add(p);	
 		}
 		rs.close();
@@ -209,7 +209,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+		//	p.setDataProduto(rs.getDate("dataProduto"));
 			produtos.add(p);			
 		}
 		rs.close();
@@ -242,7 +242,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 	        p.setStatus(rs.getString("status"));
 	        p.setQuantidade(rs.getInt("quantidade"));
 	        p.setRefEstoque(rs.getString("refEstoque"));
-	        p.setData(rs.getDate("data"));
+	     //   p.setDataProduto(rs.getDate("dataProduto"));
 	        produtos.add(p);			
 	    }
 
@@ -278,7 +278,7 @@ public class ProdutoDao implements ICrud<Produto>, IProdutoDao {
 			p.setStatus(rs.getString("status"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setRefEstoque(rs.getString("refEstoque"));
-			p.setData(rs.getDate("data"));
+		//	p.setDataProduto(rs.getDate("dataProduto"));
 			produtos.add(p);			
 		}
 		rs.close();

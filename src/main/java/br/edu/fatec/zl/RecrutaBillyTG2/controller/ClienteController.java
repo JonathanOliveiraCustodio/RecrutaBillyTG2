@@ -99,8 +99,8 @@ public class ClienteController {
 
 		Cliente c = new Cliente();
 		List<Cliente> clientes = new ArrayList<>();
-		
-		 // Remover a máscara do Documento
+
+		// Remover a máscara do Documento
 		telefone = Util.removerMascara(telefone);
 		documento = Util.removerMascara(documento);
 
@@ -127,7 +127,12 @@ public class ClienteController {
 			c.setUF(UF);
 			c.setComplemento(complemento);
 			c.setNumero(numero);
-			c.setDataNascimento(Date.valueOf(dataNascimento));
+			if (dataNascimento != null && !dataNascimento.isEmpty()) {
+				c.setDataNascimento(Date.valueOf(dataNascimento));
+			} else {
+				// Exemplo de data padrão: 1º de Janeiro de 1900
+				c.setDataNascimento(Date.valueOf("1900-01-01"));
+			}
 		}
 
 		try {

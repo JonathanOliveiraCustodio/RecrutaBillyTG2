@@ -72,7 +72,7 @@ public class TarjetaController {
 					// Inicializando antes de utilizá-lo
 					t = new Tarjeta();
 					t.setCodigo(Integer.parseInt(codigo));
-					System.out.println("Código enviado" + codigo );
+					System.out.println("Código enviado " + codigo );
 					t = buscarTarjeta(t);
 					saida = excluirTarjeta(t);
 					t = null;

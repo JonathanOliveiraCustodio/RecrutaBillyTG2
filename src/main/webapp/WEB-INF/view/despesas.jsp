@@ -6,12 +6,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <script
 	src="${pageContext.request.contextPath}/resources/js/scriptsBootStrap.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/despesa.js"></script>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/styles.css">
 <title>Despesas</title>
+
+<script>
+	function buscarPessoa() {
+		document.forms[0].submit(); // Submete o primeiro formulário da página
+	}
+</script>
 </head>
 <body>
 	<div>
@@ -19,10 +32,10 @@
 	</div>
 	<div class="container py-4">
 		<c:if test="${nivelAcesso == 'admin' }">
-			<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
+			<div class="p-5 mb-4 bg-light rounded-3 text-center shadow">
 				<div class="container-fluid py-1">
 					<h1 class="display-6 fw-bold">Gestão de Despesas</h1>
-					
+
 					<div align="center">
 						<!-- Mensagem de Erro -->
 						<c:if test="${not empty erro}">
@@ -38,13 +51,13 @@
 							</div>
 						</c:if>
 					</div>
-					
+
 					<form action="despesas" method="post"
 						class="row g-3 mt-3 justify-content-center"
 						onsubmit="return validarFormulario(event);">
 						<!-- Linha de visualização das métricas -->
 						<div
-							class="row g-2 justify-content-center align-items-center bg-body-secondary d-flex"
+							class="row g-2 justify-content-center align-items-center bg-light d-flex"
 							style="min-height: 120px;">
 							<div class="col-md-4">
 								<h5 class="text-center-custom">R$ de Entrada</h5>
@@ -73,16 +86,9 @@
 										disabled> <label for="saldo"></label>
 								</div>
 							</div>
-
 						</div>
-						<!-- O resto para operação de CRUD -->
+
 						<!-- Primeira Linha: Nome, Data, Data Vencimento -->
-						<!-- O resto para operação de CRUD 
-						
-							<input type="hidden" min="0" step="1" id="codigo" name="codigo"
-								class="form-control" placeholder="Código"
-								value='<c:out value="${despesa.codigo}"></c:out>'>
--->
 						<div class="row g-3">
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -107,9 +113,9 @@
 									<!-- Ícone SVG dentro do botão -->
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 										fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path
+                                        <path
 											d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
+                                    </svg>
 								</button>
 							</div>
 							<div class="col-md-4">
@@ -121,8 +127,8 @@
 								</div>
 							</div>
 						</div>
-						
-						<!-- Segunda Linha:  -->
+
+						<!-- Segunda Linha: Data de Vencimento, Tipo, Valor -->
 						<div class="row g-3 mt-2 justify-content-center">
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -151,9 +157,9 @@
 									<label for="valor">Valor Total:</label>
 								</div>
 							</div>
-
 						</div>
-						<!-- Terceira Linha:  -->
+
+						<!-- Terceira Linha: Estado, Forma de Pagamento, Filtro -->
 						<div class="row g-3 mt-2">
 							<div class="col-md-4">
 								<div class="form-floating">
@@ -177,27 +183,7 @@
 									</select> <label for="pagamento">Forma de Pagamento</label>
 								</div>
 							</div>
-						</div>
-
-						<!-- Linha dos Botões -->
-						<div class="row g-3 mt-3">
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Cadastrar"
-									class="btn btn-success btn-align">
-							</div>
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Alterar"
-									class="btn btn-warning btn-align">
-							</div>
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Excluir"
-									class="btn btn-danger btn-align">
-							</div>
-							<div class="col-md-2 d-grid text-center">
-								<input type="submit" id="botao" name="botao" value="Listar"
-									class="btn btn-secondary btn-align">
-							</div>
-							<div class="col-md-2">
+							<div class="col-md-4">
 								<div class="form-floating">
 									<select id="filtro" name="filtro" class="form-select">
 										<option value="0">Todos</option>
@@ -216,30 +202,40 @@
 									</select> <label for="filtro">Filtrar por</label>
 								</div>
 							</div>
+						</div>
+
+						<!-- Linha dos Botões -->
+						<div class="row g-3 mt-3">
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Cadastrar"
+									class="btn btn-success btn-align">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Alterar"
+									class="btn btn-warning btn-align">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Excluir"
+									class="btn btn-danger btn-align">
+							</div>
+							<div class="col-md-2 d-grid text-center">
+								<input type="submit" id="botao" name="botao" value="Listar"
+									class="btn btn-dark btn-align">
+							</div>
 							<div class="col-md-2 d-grid text-center">
 								<input type="submit" id="botao" name="botao"
 									value="Limpar Campos" class="btn btn-secondary">
 							</div>
+							<div class="col-md-2 d-grid text-center">
+								<!-- Botão para abrir o modal de visualização de material -->
+								<button type="button" class="btn btn-purple btn-align"
+									onclick="abrirModalCliente('${cliente.codigo}')">Ver
+									Detalhes</button>
+							</div>
 						</div>
-						<div class="col-md-2 d-grid text-center"></div>
 					</form>
 				</div>
 			</div>
-		</c:if>
-	</div>
-	<div align="center">
-		<c:if test="${not empty erro}">
-			<h2 style="color: black;">
-				<b><c:out value="${erro}" /></b>
-			</h2>
-		</c:if>
-	</div>
-
-	<div align="center">
-		<c:if test="${not empty saida }">
-			<h2 style="color: black;">
-				<b><c:out value="${saida}" /></b>
-			</h2>
 		</c:if>
 	</div>
 
@@ -277,11 +273,11 @@
 										<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"
 											fill="currentColor" class="bi bi-pencil-square"
 											viewBox="0 0 16 16">
-						<path
+                                            <path
 												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path fill-rule="evenodd"
+                                            <path fill-rule="evenodd"
 												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-					</svg>
+                                        </svg>
 									</button>
 								</td>
 								<td><c:out value="${d.codigo }" /></td>

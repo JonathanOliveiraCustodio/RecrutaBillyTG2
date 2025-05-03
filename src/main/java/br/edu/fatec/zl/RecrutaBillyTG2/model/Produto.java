@@ -20,6 +20,6 @@ public class Produto {
 	String status;
 	int quantidade;
 	String refEstoque;
-	Date data;
+	Date dataProduto;
 	CategoriaProduto categoriaProduto;
 }

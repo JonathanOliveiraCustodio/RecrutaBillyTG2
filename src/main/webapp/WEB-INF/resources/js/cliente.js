@@ -214,12 +214,12 @@ function validarFormulario(event) {
 	var botao = event.submitter.value;
 	var campos = [
 		{ id: "nome", nome: "Nome" },
-		{ id: "telefone", nome: "Telefone" },
-		{ id: "email", nome: "E-mail" },
-		{ id: "numero", nome: "Número" },
-		{ id: "tipo", nome: "Tipo de Documento" },
-		{ id: "documento", nome: "Documento" },
-		{ id: "dataNascimento", nome: "Data de Nascimento" }
+		{ id: "telefone", nome: "Telefone" }
+		//{ id: "email", nome: "E-mail" },
+		//{ id: "numero", nome: "Número" },
+		//{ id: "tipo", nome: "Tipo de Documento" },
+		//{ id: "documento", nome: "Documento" },
+		//{ id: "dataNascimento", nome: "Data de Nascimento" }
 	];
 
 	if (botao === "Cadastrar" || botao === "Alterar") {
@@ -233,39 +233,39 @@ function validarFormulario(event) {
 			}
 		}
 
-		var tipo = document.getElementById("tipo").value;
-		var documento = document.getElementById("documento").value.trim();
-		var dataNascimento = document.getElementById("dataNascimento").value;
+		//	var tipo = document.getElementById("tipo").value;
+		//	var documento = document.getElementById("documento").value.trim();
+		//	var dataNascimento = document.getElementById("dataNascimento").value;
 
-		if (tipo === "CPF" && !validarCPF(documento)) {
-			alert("CPF inválido.");
-			document.getElementById("documento").focus(); // Coloca o foco no campo documento
-			event.preventDefault();
-			return false;
-		}
+		//	if (tipo === "CPF" && !validarCPF(documento)) {
+		//		alert("CPF inválido.");
+		//		document.getElementById("documento").focus(); // Coloca o foco no campo documento
+		//	event.preventDefault();
+		//	return false;
+		//}
 
-		if (tipo === "CNPJ" && !validarCNPJ(documento)) {
-			alert("CNPJ inválido.");
-			document.getElementById("documento").focus(); // Coloca o foco no campo documento
-			event.preventDefault();
-			return false;
-		}
+		//	if (tipo === "CNPJ" && !validarCNPJ(documento)) {
+		//	alert("CNPJ inválido.");
+		//	document.getElementById("documento").focus(); // Coloca o foco no campo documento
+		//	event.preventDefault();
+		//	return false;
+		//}
 
 		// Validação da data de nascimento
-		if (!validarDataNascimento(dataNascimento)) {
-			alert("Data de nascimento inválida. Por favor, insira uma data no passado.");
-			document.getElementById("dataNascimento").focus(); // Coloca o foco no campo dataNascimento
-			event.preventDefault();
-			return false;
-		}
+		//	if (!validarDataNascimento(dataNascimento)) {
+		//		alert("Data de nascimento inválida. Por favor, insira uma data no passado.");
+		//		document.getElementById("dataNascimento").focus(); // Coloca o foco no campo dataNascimento
+		//		event.preventDefault();
+		//		return false;
+		//	}
 
 		// Validação da idade mínima de 18 anos
-		if (!validarIdadeMinima(dataNascimento)) {
-			alert("O cliente deve ter mais de 18 anos.");
-			document.getElementById("dataNascimento").focus(); // Coloca o foco no campo dataNascimento
-			event.preventDefault();
-			return false;
-		}
+		//if (!validarIdadeMinima(dataNascimento)) {
+		//alert("O cliente deve ter mais de 18 anos.");
+		//	document.getElementById("dataNascimento").focus(); // Coloca o foco no campo dataNascimento
+		//		event.preventDefault();
+		//			return false;
+		//	}
 
 	} else if (botao === "Excluir") {
 		var codigo = document.getElementById("codigo").value.trim();

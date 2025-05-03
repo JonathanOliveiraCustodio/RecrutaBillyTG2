@@ -74,7 +74,21 @@ function atualizarOpcoes() {
 		opcaoSelect.add(new Option("Estado", "Estado"));
 		opcaoSelect.add(new Option("Data", "Data"));
 		opcaoSelect.add(new Option("Valor Maior que", "Valor Maior que"));
-		opcaoSelect.add(new Option("Valor Menor que", "Valor Menor que"));
+		opcaoSelect.add(new Option("Último Mês", "Último Mês"));
+		opcaoSelect.add(new Option("Último Semana", "Último Semana"));
+		opcaoSelect.add(new Option("Janeiro", "Janeiro"));
+		opcaoSelect.add(new Option("Fevereiro", "Fevereiro"));
+		opcaoSelect.add(new Option("Março", "Março"));
+		opcaoSelect.add(new Option("Abril", "Abril"));
+		opcaoSelect.add(new Option("Maio", "Maio"));
+		opcaoSelect.add(new Option("Junho", "Junho"));
+		opcaoSelect.add(new Option("Julho", "Julho"));
+		opcaoSelect.add(new Option("Agosto", "Agosto"));
+		opcaoSelect.add(new Option("Setembro", "Setembro"));
+		opcaoSelect.add(new Option("Outubro", "Outubro"));
+		opcaoSelect.add(new Option("Novembro", "Novembro"));
+		opcaoSelect.add(new Option("Dezembro", "Dezembro"));
+		
 
 	} else if (categoria === "funcionario") {
 		opcaoSelect.add(new Option("Escolha Uma opção", ""));

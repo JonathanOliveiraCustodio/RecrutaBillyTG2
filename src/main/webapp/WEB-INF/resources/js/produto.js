@@ -31,7 +31,7 @@ function validarFormulario(event) {
 		{ id: "status", nome: "status" },
 		{ id: "quantidade", nome: "Quantidade" },
 		{ id: "refEstoque", nome: "Referência no Estoque" },
-		{ id: "data", nome: "Data" },
+		{ id: "dataProduto", nome: "Data" },
 
 	];
 
@@ -156,7 +156,7 @@ function abrirModalProduto(codigo) {
     var statusSelect = document.getElementById('status');
     var quantidadeInput = document.getElementById('quantidade');
     var refEstoqueInput = document.getElementById('refEstoque');
-    var dataInput = document.getElementById('data');
+    var dataInput = document.getElementById('dataProduto');
 
     // Formata a data de "yyyy-MM-dd" para "dd/MM/yyyy"
     function formatarData(data) {

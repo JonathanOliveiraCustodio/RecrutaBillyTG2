@@ -140,7 +140,7 @@
 							<input type="submit" id="botao" name="botao" value="Excluir"
 								class="btn btn-danger btn-align">
 						</div>
-						<div class="col-md-2 d-grid text-center"></div>
+
 						<div class="col-md-2 d-grid text-center">
 							<input type="submit" id="botao" name="botao" value="Listar"
 								class="btn btn-dark btn-align">
@@ -149,6 +149,12 @@
 							<input type="submit" id="botao" name="botao" value="Limpar"
 								class="btn btn-secondary btn-align">
 						</div>
+							<div class="col-md-2 d-grid text-center">
+								<!-- Botão para abrir o modal de visualização de material -->
+								<button type="button" class="btn-purple btn-align"
+									onclick="abrirModalCliente('${cliente.codigo}')">Ver
+									Detalhes</button>
+							</div>
 					</div>
 				</form>
 			</div>
