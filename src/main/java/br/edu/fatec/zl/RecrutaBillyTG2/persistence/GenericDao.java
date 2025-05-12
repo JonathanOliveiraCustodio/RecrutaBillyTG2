@@ -14,8 +14,8 @@ public class GenericDao {
 		String hostname = "localhost";
 		String port = "1433";
 		String db = "RecrutaBillyTG2";
-		String user ="davi";
-		String pass ="12345678";
+		String user ="sa";
+		String pass ="123456";
 		String host = "jdbc:jtds:sqlserver://";
 		String uri = host+hostname+":"+port+";databaseName="+db+";user="+user+";password="+pass;
 		Class.forName("net.sourceforge.jtds.jdbc.Driver");
